@@ -12,23 +12,22 @@ const Player = () => {
 
             </div>
         </div>
-        <div className='flex flex-col items-center gap-1 m-auto'>
-            <div className='flex gap-4 '>
-                <img className='w-4 corsor-pointer' src={assets.shuffle_icon}></img>
-                <img className='w-4 corsor-pointer' src={assets.prev_icon}></img>
-                <img className='w-4 corsor-pointer' src={assets.play_icon}></img>
-                <img className='w-4 corsor-pointer' src={assets.next_icon}></img>
-                <img className='w-4 corsor-pointer' src={assets.loop_icon}></img>
-
-            </div>
-            <div className='flex items-center gap-5 '>
-                <p>1:14</p>
-                <div className='w-[60vw] max-w-[500px] bg-gray-300 rounded-full corsor-pointer'>
-                    <hr className='h-1 border-none w-10 bg-green-800 rounded-full'></hr>
-                </div>
-                <p>3:20</p>
-            </div>
+        <div className='absolute buttom-0 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1'>
+        <div className='flex gap-4 '>
+            <img className='w-4 cursor-pointer' src={assets.shuffle_icon}></img>
+            <img className='w-4 cursor-pointer' src={assets.prev_icon}></img>
+            <img className='w-4 cursor-pointer' src={assets.play_icon}></img>
+            <img className='w-4 cursor-pointer' src={assets.next_icon}></img>
+            <img className='w-4 cursor-pointer' src={assets.loop_icon}></img>
         </div>
+        <div className='flex items-center gap-5 '>
+            <p>1:14</p>
+            <div className='w-[60vw] max-w-[500px] bg-gray-300 rounded-full cursor-pointer'>
+                <hr className='h-1 border-none w-10 bg-green-800 rounded-full'></hr>
+            </div>
+            <p>3:20</p>
+        </div>
+    </div>
 
         <div className='hidden lg:flex items-center gap-2 opacity-75'>
             <img className='w-3' src={assets.plays_icon}/>

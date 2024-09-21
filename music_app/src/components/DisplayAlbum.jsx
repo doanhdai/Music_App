@@ -14,14 +14,14 @@ const DisplayAlbum = () => {
         <NavBar />
         <div className='mt-10 flex gap-8 flex-col md:flex-row md:items-col'>
             <img className='w-48 rounded' src={albumData.image}></img>
-            <div className='flex flex-col'>
+            <div className='flex flex-col justify-center'>
                 <p>Playlist</p>
                 <h2 className='text-5xl font-bold mb-4 md:text-7xl'>{albumData.name}</h2>
                 <p className='mt-1'>
                     <img className='inline-block w-5' src={assets.spotify_logo}></img>
-                    <b>Spotify</b>
-                    <b>234.321 yêu thích</b>
-                    <b>23 bài hát</b>
+                    <b className='pl-2'>Spotify -</b>
+                    <b className='pl-2'>234.321 yêu thích,</b>
+                    <b className='pl-2'>23 bài hát</b>
                 </p>
             </div>
         </div>
