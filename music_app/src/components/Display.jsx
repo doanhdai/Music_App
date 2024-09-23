@@ -3,11 +3,15 @@ import DisplayHome from './DisplayHome'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import DisplayAlbum from './DisplayAlbum'
 import { albumsData } from '../assets/assets'
+import FullArtists from './FullArtists'
+import FullAlbums from './FullAlbums'
+import FullSongPopular from './FullSongPopular'
 
 const Display = () => {
   const displayColor = useRef()
   const location = useLocation()
-  const isAlbum = location.pathname.includes("album")
+  // const isAlbum = location.pathname.includes("album")
+  const isAlbum = /\/album(\/|$)/.test(location.pathname);
   const albumId = isAlbum ? location.pathname.slice(-1) : ""
   const bgColor = albumsData[Number(albumId)].bgColor
   console.log(albumId)
@@ -24,6 +28,11 @@ const Display = () => {
         <Routes className=''>
           <Route path='/' element={<DisplayHome /> }></Route>
           <Route path='/album/:id' element={<DisplayAlbum /> }></Route>
+          <Route path='/artist' element={<FullArtists/>}></Route>
+          <Route path='/albums' element={<FullAlbums/>}></Route>
+          <Route path='/songs' element={<FullSongPopular/>}></Route>
+
+
 
         </Routes>
     </div>

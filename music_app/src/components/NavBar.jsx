@@ -1,4 +1,4 @@
-    import React from 'react'
+   import React, { useState } from 'react';
     import { IoIosSearch } from "react-icons/io";
     import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
@@ -6,9 +6,12 @@ import { useNavigate } from 'react-router-dom'
     const NavBar = () => {
     const navigate =useNavigate()
 
+    
+
     return (
-        <>
-            <div className='w-full flex justify-between items-center font-semibold'>
+        // className='sticky bg-[#121212] top-0 z-50'
+        <div >
+            <div className='w-full flex justify-between items-center font-semibold '>
                 <div className='flex items-center gap-2'>
                     <img onClick={()=> navigate(-1)} className='w-8 h-8 bg-black p-2 rounded-full cursor-pointer' src={assets.arrow_left} alt="Arrow left" />
                     <img onClick={()=> navigate(1)} className='w-8 h-8 bg-black p-2 rounded-full cursor-pointer' src={assets.arrow_right} alt="Arrow right" />
@@ -32,14 +35,14 @@ import { useNavigate } from 'react-router-dom'
                 </div>
             </div>
             <div className='flex items-center gap-2 mt-4'>
-                <p className='bg-white text-black px-4 py-0 rounded-2xl cursor-pointer'>All</p>
-                <p className='bg-black  px-4 py-0 rounded-2xl cursor-pointer'>Music</p>
-                <p className='bg-black  px-4 py-0 rounded-2xl cursor-pointer'>Album</p>
-                <p className='bg-black  px-4 py-0 rounded-2xl cursor-pointer'>Poscast</p>
+                <p className='bg-white text-black px-4 py-0 rounded-2xl cursor-pointer'>Tất cả</p>
+                <p className='bg-black  px-4 py-0 rounded-2xl cursor-pointer' onClick={()=> navigate(`/songs`)}>Bài hát</p>
+                <p className='bg-black  px-4 py-0 rounded-2xl cursor-pointer' onClick={()=> navigate(`/albums`)}>Album</p>
+                <p className='bg-black  px-4 py-0 rounded-2xl cursor-pointer' onClick={()=> navigate(`/songs`)}>Poscast</p>
 
 
             </div>
-        </>
+        </div>
     )
     }
 
