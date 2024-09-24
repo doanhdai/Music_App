@@ -48,16 +48,19 @@ const Footer = () => {
         </div>
 
         {/* Cột 5: Icons */}
-        <div className="flex justify-center lg:justify-start gap-6 mt-4">
-          <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
-            <FaFacebookF className="text-2xl hover:text-gray-400" />
-          </a>
-          <a href="https://www.instagram.com" target="_blank" rel="noreferrer">
-            <FaInstagram className="text-2xl hover:text-gray-400" />
-          </a>
-          <a href="https://www.github.com" target="_blank" rel="noreferrer">
-            <FaGithub className="text-2xl hover:text-gray-400" />
-          </a>
+        <div className="flex flex-col justify-between">
+          <div className="flex justify-center lg:justify-start gap-6 mt-4">
+            <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
+              <FaFacebookF className="text-2xl hover:text-gray-400" />
+            </a>
+            <a href="https://www.instagram.com" target="_blank" rel="noreferrer">
+              <FaInstagram className="text-2xl hover:text-gray-400" />
+            </a>
+            <a href="https://www.github.com" target="_blank" rel="noreferrer">
+              <FaGithub className="text-2xl hover:text-gray-400" />
+            </a>
+          </div>
+          <div className="w-full h-1/3 bg-auto bg-[url('./src/assets/logo2.png')]  bg-cover bg-center "></div>
         </div>
       </div>
     </footer>
