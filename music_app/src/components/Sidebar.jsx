@@ -1,18 +1,20 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
     <div className='w-[25%] h-full p-2 flex-col gap-2 text-white hidden lg:flex '>
-        <div className='bg-[#121212] h-[15%] rounded flex flex-col justify-around'>
-            <div className='flex items-center gap-3 pl-8 cursor-pointer'>
+        <div className='h-[15%] rounded flex flex-col justify-around pl-8'>
+            <Link to='/' className='m-0 p-0 no-underline'><img src='./src/assets/logo1.png' className='w-[20%] '/></Link>
+            {/* <div className='flex items-center gap-3 pl-8 cursor-pointer'>
                 <img className='w-6' src={assets.home_icon} alt="Home icon"/>
                 <p className='font-bold'>Home</p>
             </div>
             <div className='flex items-center gap-3 pl-8 cursor-pointer'>
                 <img className='w-6' src={assets.search_icon} alt="" />
                 <p className='font-bold'>Tìm kiếm</p>
-            </div>
+            </div> */}
         </div>
         
         <div className='bg-[#121212] h-[85%] rounded '>
