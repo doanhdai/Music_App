@@ -18,3 +18,4 @@ const ArtistItems = ({id, name, desc, img}) => {
 }
 
 export default ArtistItems
+
