@@ -1,13 +1,12 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { albumsData, assets, songsData } from '../assets/assets'
-import NavBar from './NavBar'
+// import { useNavigate } from 'react-router-dom'
+import { songsData } from '../assets/assets'
 import SongItems from './SongItems'
-import Footer from './Footer'
+
 const FullSongPopular = () => {
   return (
     <>
-    <NavBar/>
+
     <div className='mb-4 pt-10'>
           <div className='flex justify-between'>
             <h1 className='my-4 font-bold text-2xl'>Bài hát thịch hành</h1>
@@ -19,7 +18,7 @@ const FullSongPopular = () => {
             ))}
           </div>
         </div>
-    <Footer/>
+
     </>
   )
 }
