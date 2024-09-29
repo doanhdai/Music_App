@@ -9,7 +9,6 @@ const NavBar = () => {
 
 
     return (
-        // className='sticky bg-[#121212] top-0 z-50'
         <div >
             <div className='w-full flex justify-between items-center font-semibold '>
                 <div className='flex items-center gap-2'>

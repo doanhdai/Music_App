@@ -1,14 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
-import React from "react";
+import React, { Component } from "react";
 import config from "../config";
 import DisplayHome from "../components/DisplayHome";
-
+import FullAlbums from "../components/FullAlbums";
+import LoadLazy from "../components/LoadLazy";
 
 
 const Home = React.lazy(() => import("../pages/User/Home/Home"))
-const FullAlbums =React.lazy(()=> import("../components/FullAlbums"))
+// const FullAlbums =React.lazy(()=> import("../components/FullAlbums"))
 const FullArtists = React.lazy(()=>import("../components/FullArtists"))
 const FullSongPopular = React.lazy(()=>import("../components/FullSongPopular"))
+const AlbumSongs = React.lazy(()=>import("../components/DisplayAlbum"))
+const ArtistSongs = React.lazy(()=>import("../components/DisplayArtist"))
+
 
 
 const routes = createBrowserRouter([
@@ -17,7 +21,7 @@ const routes = createBrowserRouter([
         Component : Home,
         children : [
             {
-                index: true,
+                index : true,
                 Component : DisplayHome
             },
             {
@@ -31,9 +35,19 @@ const routes = createBrowserRouter([
             {
                 path : config.routes.Artist,
                 Component : FullArtists
+            },
+            {
+                path : config.routes.AlbumSongs,
+                Component : AlbumSongs
+            },
+            {
+                path : config.routes.ArtistSongs,
+                Component : ArtistSongs
             }
+            
         ]
-    }
+    },
+   
 ])
 
 
