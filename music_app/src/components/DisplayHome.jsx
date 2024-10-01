@@ -1,20 +1,18 @@
 import React from 'react'
-import NavBar from './NavBar'
 import { albumsData } from '../assets/assets'
 import { songsData } from '../assets/assets'
 import AlbumItems from './AlbumItems'
 import SongItems from './SongItems'
 import ArtistItems from './ArtistItems'
 import { useNavigate } from 'react-router-dom'
-
-import Footer from './Footer'
 const DisplayHome = () => {
 
       const navigate= useNavigate()
+      console.log(albumsData);
 
   return (
     <>
-        <NavBar/>
+
 
         {/* nghệ sĩ */}
         <div className='mb-4 pt-6'>
@@ -24,8 +22,10 @@ const DisplayHome = () => {
           </div>
           {/* <h1 className='my-4 font-bold'>Nghệ sĩ đề xuất</h1> */}
           <div className='flex overflow-auto'>
+            
             {albumsData.map((item, index) => (
               <ArtistItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />
+              
             ) )}
           </div>
           
@@ -58,7 +58,6 @@ const DisplayHome = () => {
           </div>
           
         </div>
-        <Footer/>
         
     </>
   )

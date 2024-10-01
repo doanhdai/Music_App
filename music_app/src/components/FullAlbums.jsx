@@ -1,15 +1,13 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { albumsData, assets, songsData } from '../assets/assets'
-import NavBar from './NavBar'
-import ArtistItems from './ArtistItems'
 import AlbumItems from './AlbumItems'
-import Footer from './Footer'
+
 
 const FullAlbums = () => {
   return (
     <div>
-        <NavBar/>
+
             <div className='mb-4 pt-10'>
                 <div className='flex justify-between'>
                     <h1 className='my-4 font-bold text-2xl'>Album đề xuất đề xuất</h1>
@@ -22,7 +20,6 @@ const FullAlbums = () => {
                 </div>
                 
                 </div>
-            <Footer/>
 
     </div>
   )
