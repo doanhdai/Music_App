@@ -30,15 +30,17 @@ const NavBar = () => {
                 </div>
 
                 <div className='flex items-center gap-4'>
-                    {/* <p className='bg-white text-black text-[15px] px-4 py-1 rounded-2xl hidden md:block cursor-pointer '>Primeum</p> */}
+                    {/* <Link to='/premium' className='no-underline text-white text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:scale-105' 
+                        style={{
+                            background: 'linear-gradient(153deg, rgba(185, 90, 120, 1) 34%, rgba(224, 6, 111, 1) 99%)'
+                    }}>Khám phá Premium</Link> */}
                     <p className='text-gray-400 text-[15px] px-5 p-3 rounded-3xl hidden md:block cursor-pointer hover:text-white hover:scale-110'>Đăng kí</p>
                     <p className='text-white text-[15px] px-5 p-3 rounded-3xl hidden md:block cursor-pointer hover:scale-105' 
                         style={{
                             background: 'linear-gradient(153deg, rgba(185, 90, 120, 1) 34%, rgba(224, 6, 111, 1) 99%)'
                     }}>Đăng nhập</p>
-                    
-                    {/* <p className='bg-black py-1 px-3 rounded-2xl text-[15px] cursor-pointer'>Install App</p> */}
-                    {/* <p className='bg-purple-500 text-black w-7 h-7 rounded-full flex items-center justify-center cursor-pointer'>Đ</p> */}
+                    {/* <p className='cursor-pointer text-xl'><abbr title="Thông báo mới" className='text-white font-bold hover:text-yellow-400'><i class="fa-solid fa-bell"></i></abbr></p> */}
+                    {/* <p className='bg-purple-500 text-black w-9 h-9 rounded-full flex items-center justify-center cursor-pointer'>Đ</p> */}
                 </div>
             </div>
             <div className='flex items-center gap-2 mt-4'>
