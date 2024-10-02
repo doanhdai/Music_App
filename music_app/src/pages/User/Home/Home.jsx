@@ -42,7 +42,7 @@ console.log("bgColor", bgColor);
   }, [bgColor]); 
 
   return (
-    <Suspense  fallback={<Spin size="large" />}>
+    <Suspense  >
       <div  className="h-screen bg-black">
         <div className="h-[90%] flex">
           <Sidebar />

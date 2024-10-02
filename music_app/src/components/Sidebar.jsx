@@ -26,21 +26,17 @@ const Sidebar = () => {
                     <p className='font-semibold'>Thư viện</p>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <img className='w-4' src={assets.arrow_icon} alt="" />
+                    {/* <img className='w-4' src={assets.arrow_icon} alt="" /> */}
                     <img className='w-4' src={assets.plus_icon} alt="" />
-                    {/* <p className='font-semibold'>Thư viện</p> */}
+                   
                 </div>
             </div>
             <div className='p-4 bg-[#242424] m-2 rounded font-semibold flex  flex-col items-start gap-1 pl-4'>
-                <h1 className=''>Creat your playlist</h1>
+                <h1 className=''>Tạo danh sách phát</h1>
                 <p className='font-light'>Hãy tạo danh sách phát cho riêng bạn</p>
-                <button className='px-4 py-1.5 bg-white tex-[15px] text-black rounded-full mt-4'>Create playlist</button>
+                <button className='px-4 py-1.5 bg-white tex-[15px] text-black rounded-full mt-4'>Tạo danh sách phát</button>
             </div>
-            <div className='p-4 bg-[#242424] m-2 rounded font-semibold flex  flex-col items-start gap-1 pl-4'>
-                <h1 className=''>Let's findsome podcasts to follow</h1>
-                <p className='font-light'>We'll keep you update on new episodes </p>
-                <button className='px-4 py-1.5 bg-white tex-[15px] text-black rounded-full mt-4'>Create playlist</button>
-            </div>
+            
         </div>
     </div>
   )
