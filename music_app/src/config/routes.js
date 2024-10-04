@@ -8,6 +8,7 @@ const routes = {
     FullSong    :   '/songs',
     signIn :"/sign-in",
     signUp :"/sign-Up",
+    notFound :"*"
 
 }
 

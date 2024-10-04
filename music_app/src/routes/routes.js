@@ -10,6 +10,7 @@ const FullSongPopular = React.lazy(()=>import("../components/FullSongPopular"))
 const AlbumSongs = React.lazy(()=>import("../components/DisplayAlbum"))
 const ArtistSongs = React.lazy(()=>import("../components/DisplayArtist"))
 const Song = React.lazy(()=>import("../components/DetailSong"))
+const NotFound = React.lazy(()=> import("../pages/NotFound"))
 
 const routes = createBrowserRouter([
     {
@@ -47,6 +48,10 @@ const routes = createBrowserRouter([
             
         ]
     },
+    {
+        path : config.routes.notFound,
+        Component : NotFound
+    }
    
 ])
 
