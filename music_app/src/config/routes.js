@@ -4,10 +4,11 @@ const routes = {
     Albums: '/albums',
     AlbumSongs : '/albums/:id',
     ArtistSongs : '/artist/:id',
-    // Songs : '/albums/:id',
-    Song    :   '/songs',
+    Song : '/song/:id',
+    FullSong    :   '/songs',
     signIn :"/sign-in",
     signUp :"/sign-Up",
+    notFound :"*"
 
 }
 

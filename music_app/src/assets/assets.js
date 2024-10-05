@@ -41,8 +41,11 @@ import img16 from './img16.jpg'
 import song1 from  './song1.mp3'
 import song2 from  './song2.mp3'
 import song3 from  './song3.mp3'
-
+import mck from './mck.jpg'
+import not_found from './404-not-found.png'
 export const assets = {
+    not_found,
+    mck,
     bell_icon,
     home_icon,
     like_icon,

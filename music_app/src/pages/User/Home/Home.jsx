@@ -1,35 +1,36 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useEffect, useRef } from "react";
 import Sidebar from "../../../components/Sidebar";
 import Player from "../../../components/Player";
 import { Outlet } from "react-router-dom";
-import { useEffect, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
-import { albumsData } from '../../../assets/assets'
-import { artistData } from '../../../assets/assets'
-
+import { useLocation } from 'react-router-dom';
+import { albumsData, artistData } from '../../../assets/assets';
 import NavBar from "../../../components/NavBar";
 import Footer from "../../../components/Footer";
-import { Spin } from "antd";
+import Poster from "../../../components/Poster";
 
 const Home = () => {
   const displayColor = useRef(null);
   const location = useLocation();
-const isAlbum = /\/albums(\/|$)/.test(location.pathname);
-const isArtist = /\/artist(\/|$)/.test(location.pathname);
+  const [isLoading, setIsLoading] = useState(true);
+  const isAlbum = /\/albums(\/|$)/.test(location.pathname);
+  const isArtist = /\/artist(\/|$)/.test(location.pathname);
 
-// Lấy albumId hoặc artistId dựa trên điều kiện
-const id = isAlbum || isArtist ? location.pathname.split("/").pop() : "";
+  const id = isAlbum || isArtist ? location.pathname.split("/").pop() : "";
 
-// Nếu là album, lấy bgColor từ albumsData, nếu là artist thì lấy từ artistsData
-// Giả sử bạn có một mảng `artistsData` tương tự như `albumsData`
-const bgColor = isAlbum
-  ? albumsData[Number(id)]?.bgColor
-  : isArtist
-  ? artistData[Number(id)]?.bgColor
-  : "#121212";
 
-console.log("id", id);
-console.log("bgColor", bgColor);
+  const bgColor = isAlbum
+    ? albumsData[Number(id)]?.bgColor
+    : isArtist
+    ? artistData[Number(id)]?.bgColor
+    : "#121212";
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (displayColor.current) {
@@ -39,12 +40,22 @@ console.log("bgColor", bgColor);
         displayColor.current.style.background = `#121212`;
       }
     }
-  }, [bgColor]); 
+  }, [bgColor]);
 
+  // Nếu đang loading, hiển thị màn hình loading
+  if (isLoading) {
+    return (
+      <div className="h-screen bg-black text-white flex justify-center items-center">
+        <p>Loading, please wait...</p>
+      </div>
+    );
+  }
+
+  // Khi hết loading, hiển thị giao diện chính
   return (
-    <Suspense  fallback={<Spin size="large" />}>
-      <div  className="h-screen bg-black">
-        <div className="h-[90%] flex">
+    <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
+      <div className="h-screen bg-black">
+        <div className="h-[92%] flex">
           <Sidebar />
           <div ref={displayColor} className="w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0">
             <NavBar />
@@ -52,7 +63,8 @@ console.log("bgColor", bgColor);
             <Footer />
           </div>
         </div>
-        <Player />
+        {/* <Player /> */}
+        <Poster/>
       </div>
     </Suspense>
   );
