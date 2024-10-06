@@ -1,18 +1,37 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { Component } from "react";
 import config from "../config";
-import DisplayHome from "../components/DisplayHome";
-import FullAlbums from "../components/FullAlbums";
-import LoadLazy from "../components/LoadLazy";
 
 const Home = React.lazy(() => import("../pages/User/Home/Home"));
-// const FullAlbums =React.lazy(()=> import("../components/FullAlbums"))
+const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
+const FullAlbum = React.lazy(() => import("../components/FullAlbums"));
 const FullArtists = React.lazy(() => import("../components/FullArtists"));
 const FullSongPopular = React.lazy(() =>
   import("../components/FullSongPopular")
 );
 const AlbumSongs = React.lazy(() => import("../components/DisplayAlbum"));
 const ArtistSongs = React.lazy(() => import("../components/DisplayArtist"));
+const Song = React.lazy(() => import("../components/DetailSong"));
+const Login = React.lazy(() => import("../pages/User/Authentication/Login"));
+const LoginIndex = React.lazy(() =>
+  import("../components/authentication/DisplayLogin")
+);
+const ForgetPass = React.lazy(() =>
+  import("../components/authentication/ForgetPassword")
+);
+const ResetPass = React.lazy(() =>
+  import("../components/authentication/ResetPassword")
+);
+const Signin = React.lazy(() => import("../pages/User/Authentication/Signin"));
+const SigninIndex = React.lazy(() =>
+  import("../components/authentication/SignName")
+);
+const SignPass = React.lazy(() =>
+  import("../components/authentication/SignPassword")
+);
+const SignInfo = React.lazy(() =>
+  import("../components/authentication/SignInfo")
+);
 
 const routes = createBrowserRouter([
   {
@@ -21,14 +40,14 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: DisplayHome,
+        Component: HomeIndex,
       },
       {
         path: config.routes.Albums,
-        Component: FullAlbums,
+        Component: FullAlbum,
       },
       {
-        path: config.routes.Song,
+        path: config.routes.FullSong,
         Component: FullSongPopular,
       },
       {
@@ -42,6 +61,48 @@ const routes = createBrowserRouter([
       {
         path: config.routes.ArtistSongs,
         Component: ArtistSongs,
+      },
+      {
+        path: config.routes.Song,
+        Component: Song,
+      },
+    ],
+  },
+
+  {
+    path: config.routes.logIn,
+    Component: Login,
+    children: [
+      {
+        index: true,
+        Component: LoginIndex,
+      },
+      {
+        path: config.routes.forgetPass,
+        Component: ForgetPass,
+      },
+      {
+        path: config.routes.resetPass,
+        Component: ResetPass,
+      },
+    ],
+  },
+
+  {
+    path: config.routes.signIn,
+    Component: Signin,
+    children: [
+      {
+        index: true, // Trang con mặc định
+        Component: SigninIndex,
+      },
+      {
+        path: config.routes.signPass,
+        Component: SignPass,
+      },
+      {
+        path: config.routes.signInfo,
+        Component: SignInfo,
       },
     ],
   },

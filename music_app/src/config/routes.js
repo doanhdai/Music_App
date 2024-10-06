@@ -1,15 +1,17 @@
 const routes = {
-    Home : '/',
-    Artist : '/artist',
-    Albums: '/albums',
-    AlbumSongs : '/albums/:id',
-    ArtistSongs : '/artist/:id',
-    // Songs : '/albums/:id',
-    Song    :   '/songs',
-    signIn :"/sign-in",
-    signUp :"/sign-Up",
-
-}
+  Home: "/",
+  Artist: "/artist",
+  Albums: "/albums",
+  AlbumSongs: "/albums/:id",
+  ArtistSongs: "/artist/:id",
+  Song: "/song/:id",
+  FullSong: "/songs",
+  logIn: "/authentication/log-in",
+  forgetPass: "/authentication/log-in/forgetPass",
+  resetPass: "/authentication/log-in/resetPass",
+  signIn: "/authentication/sign-in",
+  signPass: "/authentication/sign-in/signPass",
+  signInfo: "/authentication/sign-in/signInfo",
+};
 
 export default routes;
-
