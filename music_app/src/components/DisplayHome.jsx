@@ -31,7 +31,7 @@ const DisplayHome = () => {
           
         </div>
 
-            {/* bài hát */}
+           
         <div className='mb-4 pt-10'>
           <div className='flex justify-between'>
             <h1 className='my-4 font-bold text-2xl'>Album đề xuất đề xuất</h1>
@@ -45,7 +45,7 @@ const DisplayHome = () => {
           
         </div>
 
-            {/* album đề xuất  */}
+           
         <div className='mb-4 pt-10'>
           <div className='flex justify-between'>
             <h1 className='my-4 font-bold text-2xl'>Bài hát thịch hành</h1>
