@@ -4,7 +4,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { albumsData, artistData, assets, songsData} from "../assets/assets";
-
+import AlbumItems from './AlbumItems'
 const DisplayArtist = () => {
   const { id } = useParams();
   const artistDatas = artistData[id];
@@ -67,7 +67,20 @@ const DisplayArtist = () => {
           </div>
         
       ))}
+
       </div>
+      <div className='mb-4 pt-10'>
+          <div className='flex justify-between'>
+            <h1 className='my-4 font-bold text-2xl'>Danh sách album</h1>
+            <h1 className='font-bold mr-3 cursor-pointer' onClick={()=>navigate(`/albums`)}> Xem tất cả</h1>
+          </div>
+          <div className='flex overflow-auto'>
+            {albumsData.map((item, index) => (
+              <AlbumItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />
+            ) )}
+          </div>
+          
+        </div>
     </>
   );
 };
