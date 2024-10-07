@@ -24,7 +24,7 @@ const NavBar = () => {
           />
         </div>
         <div className="flex gap-2 items-center">
-          <Link to="/" className="m-0  no-underline bg-black p-3 rounded-full ">
+          <Link to="/" className="m-0  no-underline bg-[#E0066F] p-3 rounded-full ">
             <img
               className="w-6 hover:scale-110"
               src={assets.home_icon}
