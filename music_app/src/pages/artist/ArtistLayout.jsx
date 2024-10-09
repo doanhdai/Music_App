@@ -16,7 +16,7 @@ const ArtistLayout = () => {
         <div className="h-[100%] flex">
           <ArtistSlidebar/>
           <div className="w-[100%] m-0 pt-4 rounded text-white overflow-auto lh:w-[75%] lg:ml-0">
-            <NavBar />
+            <h1>chua xu li</h1>
 
             <Outlet />
           </div>
