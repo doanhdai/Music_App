@@ -4,7 +4,7 @@ import { Button } from 'antd'
 
 const Poster = () => {
   return (
-    <div className='h[8%] bg-white flex justify-between items-center text-black px-4 py-2 '>
+    <div className='h[8%] bg-white flex justify-between items-center text-black px-4 py-1'>
        <div>
         <p className='font-bold text-lg'>Bạn muốn đắm chìm vào âm nhạc của Gnine ?</p>
         <h5>Đăng kí để xem toàn bộ bài hát và danh sách phát không giới hạn.</h5>
