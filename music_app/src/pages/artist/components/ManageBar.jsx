@@ -4,8 +4,17 @@ import { GoPlus } from "react-icons/go";
 import { TfiPencil } from "react-icons/tfi";
 import { FaTrash } from "react-icons/fa";
 import { BsSendPlus } from "react-icons/bs";
+import AddSongModal from "./AddSongModal";
+import { useState } from "react";
 
 const ManageBar = (props) => {
+  const [showAddSongModal, setShowAddSongModal] = useState(false);
+  const handleShowDetails = () =>{
+    setShowAddSongModal(true); 
+  }
+  const handleCloseAddSongModal = () => {
+    setShowAddSongModal(false);
+  }
   return (
     <div className="grid grid-cols-2 justify-center ">
       <form action="">
@@ -20,20 +29,24 @@ const ManageBar = (props) => {
       </form>
 
       <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
-        <div className="relative h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
+        <button
+        
+        className="relative h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
         <BsSendPlus className="absolute text-xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-        </div>
-        <div className="relative text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+        </button>
+        <button onClick={() => handleShowDetails()} className="relative text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
           <GoPlus className="absolute text-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-        </div>
+        </button>
 
-        <div className="relative text-xl   h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+        <button className="relative text-xl   h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
         <TfiPencil className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-        </div> 
-        <div className="relative  text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+        </button> 
+        <button className="relative  text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
         <FaTrash className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-        </div> 
+        </button> 
       </div>
+      <AddSongModal onClose={handleCloseAddSongModal} modalState={showAddSongModal}/>
+
     </div>
   );
 };

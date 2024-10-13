@@ -158,7 +158,7 @@ const SongList = ({ songs }) => {
         </table>
       </div>
       {/* Modal for song details */}
-      <SongDetailModal song={selectedSong} onClose={handleCloseModal} />
+      <SongDetailModal className="float-start" song={selectedSong} onClose={handleCloseModal} />
     </div>
   );
 };
