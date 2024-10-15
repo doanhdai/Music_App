@@ -23,7 +23,9 @@ const NavBar = () => {
             alt="Arrow right"
           />
         </div>
-        <div className="flex gap-2 items-center">
+
+
+        <div className="flex gap-2 items-center justify-center mr-10">
           <Link to="/" className="m-0  no-underline bg-[#E0066F] p-3 rounded-full ">
             <img
               className="w-6 hover:scale-110"
@@ -42,7 +44,7 @@ const NavBar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <p
+          {/* <p
             className="text-gray-400 text-[15px] px-5 p-3 rounded-3xl hidden md:block cursor-pointer hover:text-white hover:scale-110"
             onClick={() => {
               startTransition(() => {
@@ -65,7 +67,8 @@ const NavBar = () => {
             }}
           >
             Đăng nhập
-          </p>
+          </p> */}
+           <p className='bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center '>Đ</p>
         </div>
       </div>
       
