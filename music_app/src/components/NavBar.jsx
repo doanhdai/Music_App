@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <div>
@@ -68,7 +69,34 @@ const NavBar = () => {
           >
             Đăng nhập
           </p> */}
-           <p className='bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center '>Đ</p>
+
+           <div
+              className="relative"
+              onMouseEnter={() => setIsOpen(true)}
+              
+            >
+              {/* Thẻ P cho người dùng */}
+              <p className="bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center">
+                Đ
+              </p>
+
+              {/* Cửa sổ thông tin người dùng */}
+              {isOpen && (
+                <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
+                  <ul className="text-white">
+                    <li className="hover:bg-black p-2 rounded-md cursor-pointer">
+                      Quản lý
+                    </li>
+                    <li className="hover:bg-black p-2 rounded-md cursor-pointer">
+                      Tài khoản
+                    </li>
+                    <li className="hover:bg-black p-2 rounded-md cursor-pointer">
+                      Đăng xuất
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
         </div>
       </div>
       
