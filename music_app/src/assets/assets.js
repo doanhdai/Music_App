@@ -69,7 +69,7 @@ export const assets = {
     arrow_left,
     arrow_right,
     spotify_logo,
-    clock_icon
+    clock_icon,
 }
 
 export const albumsData = [
@@ -228,3 +228,147 @@ export const songsData = [
         duration:"2:35"
     }
 ]
+
+export const songData2 = [
+    {
+      "ma_bai_hat": "BH001",
+      "ten_bai_hat": "Bài hát 1",
+      "thoi_luong": 6,
+      "trang_thai": 1,
+      "luot_nghe": 3298,
+      "hinh_anh": "https://example.com/image1.jpg",
+      "ma_album": "AL001",
+      "link_bai_hat": "https://example.com/song1.mp3",
+      "ngay_phat_hanh": "2023-11-19",
+      "ma_artist": "AR004",
+      "ma_gia_luot_nghe": "GM002",
+      "doanh_thu": 47600
+    },
+    {
+      "ma_bai_hat": "BH002",
+      "ten_bai_hat": "Bài hát 2",
+      "thoi_luong": 5,
+      "trang_thai": 1,
+      "luot_nghe": 771,
+      "hinh_anh": "https://example.com/image2.jpg",
+      "ma_album": "AL002",
+      "link_bai_hat": "https://example.com/song2.mp3",
+      "ngay_phat_hanh": "2023-08-10",
+      "ma_artist": "AR010",
+      "ma_gia_luot_nghe": "GM005",
+      "doanh_thu": 41062
+    },
+    {
+      "ma_bai_hat": "BH003",
+      "ten_bai_hat": "Bài hát 3",
+      "thoi_luong": 3,
+      "trang_thai": 0,
+      "luot_nghe": 3117,
+      "hinh_anh": "https://example.com/image3.jpg",
+      "ma_album": "AL004",
+      "link_bai_hat": "https://example.com/song3.mp3",
+      "ngay_phat_hanh": "2023-08-02",
+      "ma_artist": "AR006",
+      "ma_gia_luot_nghe": "GM002",
+      "doanh_thu": 4383
+    },
+    {
+      "ma_bai_hat": "BH004",
+      "ten_bai_hat": "Bài hát 4",
+      "thoi_luong": 6,
+      "trang_thai": 0,
+      "luot_nghe": 7753,
+      "hinh_anh": "https://example.com/image4.jpg",
+      "ma_album": "AL001",
+      "link_bai_hat": "https://example.com/song4.mp3",
+      "ngay_phat_hanh": "2024-06-10",
+      "ma_artist": "AR006",
+      "ma_gia_luot_nghe": "GM003",
+      "doanh_thu": 22265
+    },
+    {
+      "ma_bai_hat": "BH005",
+      "ten_bai_hat": "Bài hát 5",
+      "thoi_luong": 6,
+      "trang_thai": 1,
+      "luot_nghe": 6656,
+      "hinh_anh": "https://example.com/image5.jpg",
+      "ma_album": "AL005",
+      "link_bai_hat": "https://example.com/song5.mp3",
+      "ngay_phat_hanh": "2023-12-18",
+      "ma_artist": "AR010",
+      "ma_gia_luot_nghe": "GM002",
+      "doanh_thu": 15458
+    },
+    {
+      "ma_bai_hat": "BH006",
+      "ten_bai_hat": "Bài hát 6",
+      "thoi_luong": 3,
+      "trang_thai": 0,
+      "luot_nghe": 8194,
+      "hinh_anh": "https://example.com/image6.jpg",
+      "ma_album": "AL002",
+      "link_bai_hat": "https://example.com/song6.mp3",
+      "ngay_phat_hanh": "2023-03-16",
+      "ma_artist": "AR001",
+      "ma_gia_luot_nghe": "GM003",
+      "doanh_thu": 41797
+    },
+    {
+      "ma_bai_hat": "BH007",
+      "ten_bai_hat": "Bài hát 7",
+      "thoi_luong": 3,
+      "trang_thai": 0,
+      "luot_nghe": 1727,
+      "hinh_anh": "https://example.com/image7.jpg",
+      "ma_album": "AL002",
+      "link_bai_hat": "https://example.com/song7.mp3",
+      "ngay_phat_hanh": "2023-09-12",
+      "ma_artist": "AR010",
+      "ma_gia_luot_nghe": "GM001",
+      "doanh_thu": 1507
+    },
+    {
+      "ma_bai_hat": "BH008",
+      "ten_bai_hat": "Bài hát 8",
+      "thoi_luong": 5,
+      "trang_thai": 0,
+      "luot_nghe": 1424,
+      "hinh_anh": "https://example.com/image8.jpg",
+      "ma_album": "AL005",
+      "link_bai_hat": "https://example.com/song8.mp3",
+      "ngay_phat_hanh": "2023-02-18",
+      "ma_artist": "AR005",
+      "ma_gia_luot_nghe": "GM001",
+      "doanh_thu": 36591
+    },
+    {
+      "ma_bai_hat": "BH009",
+      "ten_bai_hat": "Bài hát 9",
+      "thoi_luong": 2,
+      "trang_thai": 1,
+      "luot_nghe": 2179,
+      "hinh_anh": "https://example.com/image9.jpg",
+      "ma_album": "AL002",
+      "link_bai_hat": "https://example.com/song9.mp3",
+      "ngay_phat_hanh": "2024-07-17",
+      "ma_artist": "AR006",
+      "ma_gia_luot_nghe": "GM004",
+      "doanh_thu": 35857
+    },
+    {
+      "ma_bai_hat": "BH010",
+      "ten_bai_hat": "Bài hát 10",
+      "thoi_luong": 5,
+      "trang_thai": 0,
+      "luot_nghe": 2029,
+      "hinh_anh": "https://example.com/image10.jpg",
+      "ma_album": "AL005",
+      "link_bai_hat": "https://example.com/song10.mp3",
+      "ngay_phat_hanh": "2022-05-29",
+      "ma_artist": "AR007",
+      "ma_gia_luot_nghe": "GM004",
+      "doanh_thu": 37243
+    }
+  ]
+  

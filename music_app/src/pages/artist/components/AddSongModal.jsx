@@ -84,7 +84,7 @@ const SongUpload = ({closeModal}) => {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} className="w-56 flex-none" />
+            <ImageUpload ref={ImgRef} />
 
             <div className="w-sm">
               {/* Song Name */}
@@ -129,7 +129,7 @@ const SongUpload = ({closeModal}) => {
                     {genresList
                       .filter((genre) =>
                         genre.toLowerCase().includes(genreSearch.toLowerCase())
-                      )
+                      ).slice(0,6) // only show 6 items
                       .map((genre) => (
                         <label
                           key={genre}
@@ -177,7 +177,7 @@ const SongUpload = ({closeModal}) => {
                         artist
                           .toLowerCase()
                           .includes(artistSearch.toLowerCase())
-                      )
+                      ).slice(0,6)
                       .map((artist) => (
                         <label
                           key={artist}

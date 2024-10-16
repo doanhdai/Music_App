@@ -5,9 +5,11 @@ import { TfiPencil } from "react-icons/tfi";
 import { FaTrash } from "react-icons/fa";
 import { BsSendPlus } from "react-icons/bs";
 import AddSongModal from "./AddSongModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 
 const ManageBar = (props) => {
+
   const [showAddSongModal, setShowAddSongModal] = useState(false);
   const handleShowDetails = () =>{
     setShowAddSongModal(true); 
@@ -17,7 +19,7 @@ const ManageBar = (props) => {
   }
   return (
     <div className="grid grid-cols-2 justify-center ">
-      <form action="">
+      <form action="" >
         <div className="flex items-center p-1 w-[500px] bg-[#1E1E1E] justify-between rounded-3xl">
           <CiSearch className="text-3xl font-bold" />
           <input
@@ -45,7 +47,7 @@ const ManageBar = (props) => {
         <FaTrash className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
         </button> 
       </div>
-      <AddSongModal onClose={handleCloseAddSongModal} modalState={showAddSongModal}/>
+      <AddSongModal onClose={handleCloseAddSongModal}  modalState={showAddSongModal}/>
 
     </div>
   );
