@@ -60,7 +60,7 @@ const AlbumUpLoad = ({closeModal}) => {
                   placeholder="Nhap ten album"
                 />
                 {/* drop box bai hat */}
-                <CheckboxSearch placeholderText="Chon bai hat" dataKey="" onSelect={handleSelectionSongChange}/>
+                <CheckboxSearch selectedSongs={selectedSongs} placeholderText="Chon bai hat" dataKey="" onSelect={handleSelectionSongChange}/>
               </div>
             </div>
           </div>
@@ -79,8 +79,7 @@ const AlbumUpLoad = ({closeModal}) => {
   );
 };
 const AlbumSongList = ({selectedSongs,removeSong}) => {
-  
-    console.log(selectedSongs);
+  if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Empty album</h3> </div> 
 
     const songsArray = Object.values(selectedSongs);
     return (
@@ -107,7 +106,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
     );
   };
   
-  const CheckboxSearch = ({ placeholderText, dataKey, onSelect }) => {
+  const CheckboxSearch = ({selectedSongs, placeholderText, dataKey, onSelect }) => {
     // dataKey is the key of data when api return result ex: { songs: [....]}
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
@@ -139,7 +138,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
     };
   
     const handleCheckboxChange = (item) => {
-      const updatedSelection = { ...selectedItems };
+      const updatedSelection = { ...selectedSongs };
   
       // Toggle selection of the item
       if (updatedSelection[item.ma_bai_hat]) {
@@ -148,7 +147,6 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
         updatedSelection[item.ma_bai_hat] = item; // Add item with all details
       }
   
-      setSelectedItems(updatedSelection);
       if (onSelect) {
         onSelect(updatedSelection);
       }
@@ -186,7 +184,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
                   >
                     <input
                       type="checkbox"
-                      checked={!!selectedItems[item.ma_bai_hat]}
+                      checked={!!selectedSongs[item.ma_bai_hat]}
                       onChange={() => handleCheckboxChange(item)}
                       className="mr-2"
                     />
