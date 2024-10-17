@@ -1,5 +1,5 @@
 import React from 'react'
-import { albumsData, assets } from '../assets/assets'
+import { albumsData, assets, songsData } from '../assets/assets'
 import { Link, useParams } from 'react-router-dom';
 import { FaPlay } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
@@ -8,6 +8,8 @@ import { IoIosMore } from "react-icons/io";
 
 
 import ArtistItems from './ArtistItems'
+import AlbumItems from './AlbumItems';
+import SongItems from './SongItems';
 
 
 
@@ -70,16 +72,14 @@ const DetailSong = () => {
 
         <div className='mb-4 pt-6'>
           <div className='flex justify-between'>
-            <h1 className='my-4 font-bold text-2xl'>Nghệ sĩ đề xuất</h1>
+            <h1 className='my-4 font-bold text-2xl'>Bài hát đề xuất</h1>
             <Link to='/artist' className='text-slate-200 font-bold mr-3 cursor-pointer hover:text-white'> Xem tất cả</Link>
           </div>
           {/* <h1 className='my-4 font-bold'>Nghệ sĩ đề xuất</h1> */}
           <div className='flex overflow-auto'>
-            
-            {albumsData.map((item, index) => (
-              <ArtistItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />
-              
-            ) )}
+            {songsData.map((item, index) => (
+              <SongItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />
+            ))}
           </div>
           
         </div>

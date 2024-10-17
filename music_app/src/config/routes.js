@@ -12,7 +12,9 @@ const routes = {
   signIn: "/authentication/sign-in",
   signPass: "/authentication/sign-in/signPass",
   signInfo: "/authentication/sign-in/signInfo",
-  notFound :"*"
+  notFound :"*",
+  AdminHome: "/admin"
+
 
 }
 

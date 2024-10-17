@@ -20,7 +20,7 @@ const SigninIndex = React.lazy(() => import("../components/authentication/SignNa
 const SignPass = React.lazy(() => import("../components/authentication/SignPassword"));
 const SignInfo = React.lazy(() => import("../components/authentication/SignInfo"));
 const NotFound = React.lazy(() => import("../pages/NotFound"));
-
+const AdminHome = React.lazy(()=>import("../pages/Admin/Admin"))
 
 const routes = createBrowserRouter([
   {
@@ -98,6 +98,10 @@ const routes = createBrowserRouter([
       },
     ],
   },
+  {
+    path :config.routes.AdminHome,
+    Component: AdminHome
+  }
 ]);
 
 export default routes;
