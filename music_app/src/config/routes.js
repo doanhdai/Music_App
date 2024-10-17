@@ -6,9 +6,15 @@ const routes = {
     ArtistSongs : '/artist/:id',
     Song : '/song/:id',
     FullSong    :   '/songs',
-    signIn :"/sign-in",
-    signUp :"/sign-Up",
+    logIn: "/authentication/log-in",
+    forgetPass: "/authentication/log-in/forgetPass",
+    resetPass: "/authentication/log-in/resetPass",
     
+    signIn: "/authentication/sign-in",
+    signPass: "/authentication/sign-in/signPass",
+    signInfo: "/authentication/sign-in/signInfo",
+    notFound :"*",
+
     artistSite: "/artist-site",
     artistSongPage: "song",
     artistAlbumPage: "album",
