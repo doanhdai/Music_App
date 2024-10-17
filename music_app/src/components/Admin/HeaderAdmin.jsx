@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaRegBell } from 'react-icons/fa6';
-import Select from 'react-select'; // Sử dụng react-select nếu bạn chưa có SelectBox component tùy chỉnh
+import { FaAngleDown } from "react-icons/fa6";
+
 
 const HeaderAdmin = () => {
     const dropDownOptions = [
@@ -14,13 +15,10 @@ const HeaderAdmin = () => {
             <p className='text-[25px] font-bold text-pink-500 sm:text-[20px]'>Quản lí tài khoản</p>
             <div className='flex items-center gap-5'>
                 <FaRegBell size={25} />
-                <p className='font-bold'>Admin</p>
-                {/* <Select
-                    name="Admin Dropdown"
-                    placeholder={`admin`}
-                    options={dropDownOptions}
-                    className="w-[62%] font-bold"
-                /> */}
+                <div className='flex items-center'>     
+                    <p className='font-bold'>Admin</p>
+                    <FaAngleDown className='mt-1' size={20}/>    
+                </div>
             </div>
         </header>
     );

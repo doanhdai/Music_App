@@ -91,7 +91,7 @@ const NavBar = () => {
             >
              
               <p className="bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center">
-                <img className="h-10 rounded-full" src={assets.mck}/>
+                  <img className="h-10 rounded-full" src={assets.mck}/>
               </p>
 
               {/* Cửa sổ thông tin người dùng */}

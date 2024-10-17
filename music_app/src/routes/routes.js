@@ -20,67 +20,105 @@ const SigninIndex = React.lazy(() => import("../components/authentication/SignNa
 const SignPass = React.lazy(() => import("../components/authentication/SignPassword"));
 const SignInfo = React.lazy(() => import("../components/authentication/SignInfo"));
 const NotFound = React.lazy(() => import("../pages/NotFound"));
+
+
+const ArtistLayout = React.lazy(() => import("../pages/artist/ArtistLayout"))
+const ArtistSongPage = React.lazy(() => import("../pages/artist/ArtistSongPage"))
+const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage"))
+
 const AdminHome = React.lazy(()=>import("../pages/Admin/Admin"))
 
 const routes = createBrowserRouter([
-  {
-    path: config.routes.Home,
-    Component: Home,
-    children: [
-      {
-        index: true,
-        Component: HomeIndex,
-      },
-      {
-        path: config.routes.Albums,
-        Component: FullAlbum,
-      },
-      {
-        path: config.routes.FullSong,
-        Component: FullSongPopular,
-      },
-      {
-        path: config.routes.Artist,
-        Component: FullArtists,
-      },
-      {
-        path: config.routes.AlbumSongs,
-        Component: AlbumSongs,
-      },
-      {
-        path: config.routes.ArtistSongs,
-        Component: ArtistSongs,
-      },
-      {
-        path: config.routes.Song,
-        Component: Song,
-      },
-    ],
-  },
-  {
-    path: config.routes.notFound,
-    Component: NotFound,
-  },
-  {
-    path: config.routes.logIn,
-    Component: Login,
-    children: [
-      {
-        index: true,
-        Component: LoginIndex,
-      },
-      {
-        path: config.routes.forgetPass,
-        Component: ForgetPass,
-      },
-      {
-        path: config.routes.resetPass,
-        Component: ResetPass,
-      },
-    ],
-  },
-
-  {
+    {
+      path: config.routes.Home,
+      Component: Home,
+      children: [
+        {
+          index: true,
+          Component: HomeIndex,
+        },
+        {
+          path: config.routes.Albums,
+          Component: FullAlbum,
+        },
+        {
+          path: config.routes.FullSong,
+          Component: FullSongPopular,
+        },
+        {
+          path: config.routes.Artist,
+          Component: FullArtists,
+        },
+        {
+          path: config.routes.AlbumSongs,
+          Component: AlbumSongs,
+        },
+        {
+          path: config.routes.ArtistSongs,
+          Component: ArtistSongs,
+        },
+        {
+          path: config.routes.Song,
+          Component: Song,
+        },
+      ],
+    },
+    {
+      path: config.routes.notFound,
+      Component: NotFound,
+    },
+    {
+      path: config.routes.logIn,
+      Component: Login,
+      children: [
+        {
+          index: true,
+          Component: LoginIndex,
+        },
+        {
+          path: config.routes.forgetPass,
+          Component: ForgetPass,
+        },
+        {
+          path: config.routes.resetPass,
+          Component: ResetPass,
+        },
+      ],
+    },
+  
+    {
+      path: config.routes.signIn,
+      Component: Signin,
+      children: [
+        {
+          index: true,
+          Component: SigninIndex,
+        },
+        {
+          path: config.routes.signPass,
+          Component: SignPass,
+        },
+        {
+          path: config.routes.signInfo,
+          Component: SignInfo,
+        },
+      ],
+    },
+    {
+        path: config.routes.artistSite,
+        Component : ArtistLayout,
+        children : [
+            {   index : true,
+                path:"song",
+                Component: ArtistSongPage
+            },
+            {
+                path:"album",
+                Component: ArtistAlbumPage
+            }
+        ]
+    },
+    {
     path: config.routes.signIn,
     Component: Signin,
     children: [
@@ -103,5 +141,8 @@ const routes = createBrowserRouter([
     Component: AdminHome
   }
 ]);
+
+  
+
 
 export default routes;
