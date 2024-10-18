@@ -10,10 +10,12 @@ import { BiCategory } from "react-icons/bi";
 import { IoAlbumsOutline } from "react-icons/io5";
 import { RiFolderMusicLine } from "react-icons/ri";
 import { MdOutlineSupervisorAccount } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 const SideBarAdmin = () => {
   // State để lưu trữ menuItem đang được active
   const [activeItem, setActiveItem] = useState(null);
+  const navigate =useNavigate()
 
   // Hàm xử lý khi click vào MenuItem
   const handleMenuItemClick = (item) => {
@@ -35,7 +37,7 @@ const SideBarAdmin = () => {
           button: {
             padding: "10px",
             gap: "11px",
-            color: "#a4a298",
+            color: "#ffff",
             fontWeight: 450,
             fontSize: "18px",
             borderColor: "transparent",
@@ -54,15 +56,22 @@ const SideBarAdmin = () => {
         <MenuItem 
           style={{ gap: "0", ...(activeItem === 'account' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
           icon={<MdOutlineSupervisorAccount size={20} />} 
-          onClick={() => handleMenuItemClick('account')}
+          onClick={() => {
+            handleMenuItemClick('account');
+            navigate("/admin");
+          }}
+       
         >
           Quản lý tài khoản
         </MenuItem>
         
         <MenuItem 
-          style={{ gap: "0", ...(activeItem === 'songs' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
+          style={{ gap: "0", ...(activeItem === 'songs' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F", fontWeight: 700 }) }} 
           icon={<RiFolderMusicLine size={20} />} 
-          onClick={() => handleMenuItemClick('songs')}
+          onClick={() => {
+            handleMenuItemClick('songs');
+            navigate("/admin/Manager_song");
+          }}
         >
           Quản lý bài hát
         </MenuItem>

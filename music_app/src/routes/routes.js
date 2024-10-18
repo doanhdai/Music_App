@@ -3,6 +3,7 @@ import React, { Component } from "react";
 
 
 import config from "../config";
+
 const Home = React.lazy(() => import("../pages/User/Home/Home"));
 const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
 const FullAlbum = React.lazy(() => import("../components/FullAlbums"));
@@ -27,7 +28,8 @@ const ArtistSongPage = React.lazy(() => import("../pages/artist/ArtistSongPage")
 const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage"))
 
 const AdminHome = React.lazy(()=>import("../pages/Admin/Admin"))
-
+const ManagerAccount = React.lazy(()=>import("../components/Admin/ManagerAccount"))
+const ManagerSong = React.lazy(()=>import("../components/Admin/ManagerSong"))
 const routes = createBrowserRouter([
     {
       path: config.routes.Home,
@@ -108,9 +110,9 @@ const routes = createBrowserRouter([
         path: config.routes.artistSite,
         Component : ArtistLayout,
         children : [
-            {   index : true,
-                path:"song",
-                Component: ArtistSongPage
+            {   
+              index : true,
+              Component: ArtistSongPage
             },
             {
                 path:"album",
@@ -138,7 +140,17 @@ const routes = createBrowserRouter([
   },
   {
     path :config.routes.AdminHome,
-    Component: AdminHome
+    Component: AdminHome,
+    children :[
+      {
+        index: true,
+        Component: ManagerAccount
+      },
+      {
+        path:config.routes.ManagerSong,
+        Component: ManagerSong
+      }
+    ]
   }
 ]);
 

@@ -1,3 +1,5 @@
+
+
 const routes = {
     Home : '/',
     Artist : '/artist',
@@ -19,7 +21,8 @@ const routes = {
     artistSongPage: "song",
     artistAlbumPage: "album",
     
-    AdminHome: "/admin"
+    AdminHome: "/admin",
+    ManagerSong:"Manager_song"
 
 
 }
