@@ -7,46 +7,14 @@ import { CiLogin } from "react-icons/ci";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+const ArtistNavbar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <div>
       <div className="w-full flex justify-between items-center font-semibold ">
-        <div className="flex items-center gap-2">
-          <img
-            onClick={() => navigate(-1)}
-            className="w-8 h-8 bg-black p-2 rounded-full cursor-pointer"
-            src={assets.arrow_left}
-            alt="Arrow left"
-          />
-          <img
-            onClick={() => navigate(1)}
-            className="w-8 h-8 bg-black p-2 rounded-full cursor-pointer"
-            src={assets.arrow_right}
-            alt="Arrow right"
-          />
-        </div>
-
-
-        <div className="flex gap-2 items-center justify-center">
-          <Link to="/" className="m-0  no-underline bg-[#E0066F] p-3 rounded-full ">
-            <img
-              className="w-6 hover:scale-110"
-              src={assets.home_icon}
-              alt="Home icon"
-            />
-          </Link>
-          <div className="flex items-center p-3 w-[500px] bg-black justify-between rounded-3xl">
-            <IoIosSearch className="text-white text-2xl cursor-pointer" />
-            <input
-              className="bg-black w-[100%] outline-none ml-3"
-              type="text"
-              placeholder="Tìm kiếm bài hát, album,..."
-            />
-          </div>
-        </div>
+        <h1 className="text-2xl">Trang chu</h1>
 
         <div className="flex items-center gap-4">
 
@@ -123,4 +91,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default ArtistNavbar;
