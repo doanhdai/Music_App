@@ -1,5 +1,7 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import { IoIosSearch } from "react-icons/io";
+import { TbFilterPlus } from "react-icons/tb";
 import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
@@ -8,15 +10,6 @@ const Sidebar = () => {
 
         <div className='h-[15%] rounded flex flex-col justify-around pl-8'>
             <Link to='/' className='m-0 p-0 no-underline'><img src={assets.home_icon} className='w-[20%] '/></Link>
-
-            {/* <div className='flex items-center gap-3 pl-8 cursor-pointer'>
-                <img className='w-6' src={assets.home_icon} alt="Home icon"/>
-                <p className='font-bold'>Home</p>
-            </div>
-            <div className='flex items-center gap-3 pl-8 cursor-pointer'>
-                <img className='w-6' src={assets.search_icon} alt="" />
-                <p className='font-bold'>Tìm kiếm</p>
-            </div> */}
         </div>
         
         <div className='bg-[#121212] h-[85%] rounded '>
@@ -31,10 +24,44 @@ const Sidebar = () => {
                    
                 </div>
             </div>
-            <div className='p-4 bg-[#242424] m-2 rounded font-semibold flex  flex-col items-start gap-1 pl-4'>
+            {/* <div className='p-4 bg-[#242424] m-2 rounded font-semibold flex  flex-col items-start gap-1 pl-4'>
                 <h1 className=''>Tạo danh sách phát</h1>
                 <p className='font-light'>Hãy tạo danh sách phát cho riêng bạn</p>
                 <button className='px-4 py-1.5 bg-white tex-[15px] text-black rounded-full mt-4'>Tạo danh sách phát</button>
+            </div> */}
+            <div className='flex items-center'>
+                <div className='flex items-center w-[230px] bg-black justify-between p-1 rounded-xl ml-2'>
+                    
+                    <IoIosSearch className="text-white text-2xl cursor-pointer" />
+                    <input className='bg-black w-[100%] outline-none ml-3' placeholder="Tìm trong thư viện" type='text' />
+                    
+                </div>
+                <div className='ml-5'>
+                    <TbFilterPlus />
+
+                </div>
+            </div>
+            
+            <div onClick={()=>navigate("/song/1")} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
+                <img className='rounded h-[50px] mr-3' src={assets.mck}></img>
+                <div>
+                    <p className='font-bold'>Danh sách phát của tôi #1</p>
+                    <h5 className='text-slate-200 text-sm'> Danh sách phát - Đài</h5>
+                </div>
+            </div>
+            <div onClick={()=>navigate("/song/1")} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
+                <img className='rounded h-[50px] mr-3' src={assets.mck}></img>
+                <div>
+                    <p className='font-bold'>Danh sách phát của tôi #1</p>
+                    <h5 className='text-slate-200 text-sm'> Danh sách phát - Đài</h5>
+                </div>
+            </div>
+            <div onClick={()=>navigate("/song/1")} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
+                <img className='rounded h-[50px] mr-3' src={assets.mck}></img>
+                <div>
+                    <p className='font-bold'>Danh sách phát của tôi #1</p>
+                    <h5 className='text-slate-200 text-sm'> Danh sách phát - Đài</h5>
+                </div>
             </div>
             
         </div>

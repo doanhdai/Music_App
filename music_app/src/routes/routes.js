@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { Component } from "react";
-import config from "../config";
 
+import config from "../config";
 const Home = React.lazy(() => import("../pages/User/Home/Home"));
 const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
 const FullAlbum = React.lazy(() => import("../components/FullAlbums"));
@@ -33,6 +33,7 @@ const SignInfo = React.lazy(() =>
   import("../components/authentication/SignInfo")
 );
 const NotFound = React.lazy(() => import("../pages/NotFound"));
+
 const routes = createBrowserRouter([
   {
     path: config.routes.Home,
@@ -68,7 +69,10 @@ const routes = createBrowserRouter([
       },
     ],
   },
-
+  {
+    path: config.routes.notFound,
+    Component: NotFound,
+  },
   {
     path: config.routes.logIn,
     Component: Login,
@@ -93,7 +97,7 @@ const routes = createBrowserRouter([
     Component: Signin,
     children: [
       {
-        index: true, // Trang con mặc định
+        index: true,
         Component: SigninIndex,
       },
       {

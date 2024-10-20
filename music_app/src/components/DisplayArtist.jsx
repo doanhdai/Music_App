@@ -4,7 +4,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { albumsData, artistData, assets, songsData} from "../assets/assets";
-
+import AlbumItems from './AlbumItems'
 const DisplayArtist = () => {
   const { id } = useParams();
   const artistDatas = artistData[id];
@@ -28,6 +28,7 @@ const DisplayArtist = () => {
       </div>
 
       <div>
+
         <div className="mt-10">
           <div className="flex gap-10 items-center">
             <button className="w-[60px] h-[60px] rounded-full bg-[#C26482] flex justify-center items-center"><FaPlay /></button>
@@ -35,7 +36,8 @@ const DisplayArtist = () => {
             <IoIosMore size={30}/>
           </div>
         </div>
-        <div className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr_1.5fr_1fr] mt-7 mb-4 pl-2 text-[#fff]">
+        <h1 className="font-bold text-2xl mt-7 mb-5">Danh sách phát</h1>
+        <div className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr_1.5fr_1fr] mb-4 pl-2 text-[#fff]">
           <p>
             <b className="mr-4">#</b>
             Title
@@ -67,7 +69,20 @@ const DisplayArtist = () => {
           </div>
         
       ))}
+
       </div>
+      <div className='mb-4 pt-10'>
+          <div className='flex justify-between'>
+            <h1 className='my-4 font-bold text-2xl'>Danh sách album</h1>
+            <h1 className='font-bold mr-3 cursor-pointer' onClick={()=>navigate(`/albums`)}> Xem tất cả</h1>
+          </div>
+          <div className='flex overflow-auto'>
+            {albumsData.map((item, index) => (
+              <AlbumItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />
+            ) )}
+          </div>
+          
+        </div>
     </>
   );
 };
