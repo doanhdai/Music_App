@@ -23,7 +23,7 @@ const SignInfo = React.lazy(() => import("../components/authentication/SignInfo"
 const NotFound = React.lazy(() => import("../pages/NotFound"));
 
 
-const ArtistLayout = React.lazy(() => import("../pages/artist/ArtistLayout"))
+const ArtistLayout2 = React.lazy(() => import("../pages/artist/ArtistLayout2"))
 const ArtistSongPage = React.lazy(() => import("../pages/artist/ArtistSongPage"))
 const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage"))
 
@@ -108,7 +108,7 @@ const routes = createBrowserRouter([
     },
     {
         path: config.routes.artistSite,
-        Component : ArtistLayout,
+        Component : ArtistLayout2,
         children : [
             {   
               index : true,

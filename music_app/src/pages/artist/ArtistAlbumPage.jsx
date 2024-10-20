@@ -73,21 +73,21 @@ const ArtistAlbumPage = () => {
           </form>
 
           <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
-            <button className="relative h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
-              <BsSendPlus className="absolute text-xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <button className="h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
+              <BsSendPlus className="m-auto" />
             </button>
             <button
               onClick={() => handleShowDetails()}
-              className="relative text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
+              className="text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
             >
-              <GoPlus className="absolute text-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              <GoPlus className="m-auto" />
             </button>
 
-            <button className="relative text-xl   h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
-              <TfiPencil className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <button className="text-xl   h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+              <TfiPencil className="m-auto" />
             </button>
-            <button className="relative  text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
-              <FaTrash className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <button className=" text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+              <FaTrash className="m-auto" />
             </button>
           </div>
           <AddAlbumModal
@@ -114,7 +114,7 @@ const AlbumList = ({ albums }) => {
   };
 
   return (
-    <div className="p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="min-h-screen p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {albums.map((album) => (
         <div
           key={album.albumId}
