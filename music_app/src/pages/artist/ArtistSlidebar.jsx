@@ -1,7 +1,7 @@
 import { assets } from "../../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 
-const Sidebar = () => {
+const ArtistSlidebar = () => {
   const activeLinkStyled = "hover:bg-[#6a6a6a]";
   const normalLinkStyled = "hover:bg-[#6a6a6a]";
 
@@ -15,7 +15,7 @@ const Sidebar = () => {
 
       <div className="bg-[#121212] font-bold h-[85%] rounded flex flex-col p-5 gap-5 ">
         <NavLink
-          to="/artist-site/song"
+          to="/artist-site"
           className={({ isActive }) =>
             isActive ? activeLinkStyled : normalLinkStyled
           }
@@ -71,4 +71,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default ArtistSlidebar;
