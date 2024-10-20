@@ -99,7 +99,8 @@ const NavBar = () => {
                 <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
                   <ul className="text-white">
                     <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center ">
-                      <div className="mr-3"><IoSettingsOutline size={20}/></div>
+                      <div onClick={() => navigate("/artist-site") } className="mr-3"><IoSettingsOutline size={20}/></div>
+                    {/* chua lien ket duoc */}
                       Quản lý
                     </li>
                     <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center">
