@@ -30,6 +30,11 @@ const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage
 const AdminHome = React.lazy(()=>import("../pages/Admin/Admin"))
 const ManagerAccount = React.lazy(()=>import("../components/Admin/ManagerAccount"))
 const ManagerSong = React.lazy(()=>import("../components/Admin/ManagerSong"))
+const ManagerAlbum = React.lazy(()=>import("../components/Admin/ManagerAlbum"))
+const ManagerType = React.lazy(()=>import("../components/Admin/ManagerType"))
+const ManagerPemium = React.lazy(()=>import("../components/Admin/ManagerPremium"))
+
+
 const routes = createBrowserRouter([
     {
       path: config.routes.Home,
@@ -149,7 +154,19 @@ const routes = createBrowserRouter([
       {
         path:config.routes.ManagerSong,
         Component: ManagerSong
-      }
+      },
+      {
+        path:config.routes.ManagerAlbum,
+        Component: ManagerAlbum
+      },
+      {
+        path:config.routes.ManagerType,
+        Component: ManagerType
+      },
+      {
+        path:config.routes.ManagerPremium,
+        Component: ManagerPemium
+      },
     ]
   }
 ]);

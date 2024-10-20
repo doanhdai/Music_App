@@ -22,7 +22,12 @@ const routes = {
     artistAlbumPage: "album",
     
     AdminHome: "/admin",
-    ManagerSong:"Manager_song"
+    ManagerSong:"Manager_song",
+    ManagerAlbum:"Manager_album",
+    ManagerType: "Manager_type",
+    ManagerPremium: "Manager_premium"
+
+
 
 
 }

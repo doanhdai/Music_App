@@ -8,7 +8,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
 
-const ManagerSong = () => {
+const ManagerPremium = () => {
   return (
    <div className='pt-3 mx-[38px]'>
         <div className='flex justify-between'>
@@ -17,14 +17,14 @@ const ManagerSong = () => {
                 
 
                 <div className='flex flex-col'>
-                  <label className='mb-2'>Tìm kiếm bài hát</label>
+                  <label className='mb-2'>Tìm kiếm gói premium</label>
 
                    <div className='flex items-center p-2.5 w-[300px] bg-black justify-between rounded-3xl'>
                     <IoIosSearch className="text-white text-2xl cursor-pointer" />
                     <input
                     className="bg-black w-[100%] outline-none ml-3 text-white"
                     type="text"
-                    placeholder="Tìm kiếm bài hát, album..."
+                    placeholder="Tên gói"
                     />
                   </div>
                 </div>
@@ -41,14 +41,12 @@ const ManagerSong = () => {
                     </select>
                 </div>
                 <div className='flex flex-col'>
-                  <label className='mb-2'>Ngày phát hành</label>
+                  <label className='mb-2'>Thời hạn</label>
 
                    <div className='flex items-center p-2.5 w-[200px] bg-black justify-between rounded-3xl'>
-                    {/* <IoIosSearch className="text-white text-2xl cursor-pointer" /> */}
                     <input
                     className="bg-black w-[100%] outline-none ml-3 text-white"
                     type="date"
-                    // placeholder="Tìm kiếm bài hát, album..."
                     />
                   </div>
                 </div>
@@ -78,14 +76,14 @@ const ManagerSong = () => {
             </div>
         </div>
         <div>
-            <p className='mt-7 '>Tổng có : 100 bài hát.</p>
+            <p className='mt-7 '>Tổng có : 100 Gói .</p>
         <div className="grid grid-cols-5 sm:grid-cols-[2.5fr_2.5fr_2fr_2fr_1.5fr] mt-7 p-4 text-[#fff]">
           <p>
-            Mã bài hát
+            Mã gói
           </p>
-          <p>Tên bài hát</p>
-          <p className="hidden sm:block">album</p>
-          <p>thời gian</p>
+          <p>Tên gói premium</p>
+          <p className="hidden sm:block">Giá</p>
+          <p>thời Hạn</p>
           
           <p>Trạng thái</p>
         </div>
@@ -113,4 +111,4 @@ const ManagerSong = () => {
   )
 }
 
-export default ManagerSong
+export default ManagerPremium

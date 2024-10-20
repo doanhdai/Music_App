@@ -8,7 +8,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
 
-const ManagerSong = () => {
+const ManagerAlbum = () => {
   return (
    <div className='pt-3 mx-[38px]'>
         <div className='flex justify-between'>
@@ -17,7 +17,7 @@ const ManagerSong = () => {
                 
 
                 <div className='flex flex-col'>
-                  <label className='mb-2'>Tìm kiếm bài hát</label>
+                  <label className='mb-2'>Tìm kiếm album</label>
 
                    <div className='flex items-center p-2.5 w-[300px] bg-black justify-between rounded-3xl'>
                     <IoIosSearch className="text-white text-2xl cursor-pointer" />
@@ -78,14 +78,14 @@ const ManagerSong = () => {
             </div>
         </div>
         <div>
-            <p className='mt-7 '>Tổng có : 100 bài hát.</p>
+            <p className='mt-7 '>Tổng có : 100 Album.</p>
         <div className="grid grid-cols-5 sm:grid-cols-[2.5fr_2.5fr_2fr_2fr_1.5fr] mt-7 p-4 text-[#fff]">
           <p>
-            Mã bài hát
+            Mã album
           </p>
-          <p>Tên bài hát</p>
-          <p className="hidden sm:block">album</p>
-          <p>thời gian</p>
+          <p>Tên album</p>
+          <p className="hidden sm:block">Nghệ sĩ</p>
+          <p>Ngày phát hành</p>
           
           <p>Trạng thái</p>
         </div>
@@ -113,4 +113,4 @@ const ManagerSong = () => {
   )
 }
 
-export default ManagerSong
+export default ManagerAlbum

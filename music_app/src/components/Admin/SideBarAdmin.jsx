@@ -79,7 +79,13 @@ const SideBarAdmin = () => {
         <MenuItem 
           style={{ gap: "0", ...(activeItem === 'albums' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
           icon={<IoAlbumsOutline size={20} />} 
-          onClick={() => handleMenuItemClick('albums')}
+          onClick={() =>{
+            handleMenuItemClick('albums');
+            navigate("/admin/Manager_Album");
+
+          }
+            
+          }
         >
           Quản lý album
         </MenuItem>
@@ -87,7 +93,11 @@ const SideBarAdmin = () => {
         <MenuItem 
           style={{ gap: "0", ...(activeItem === 'category' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
           icon={<BiCategory size={20} />} 
-          onClick={() => handleMenuItemClick('category')}
+          onClick={() => {
+            handleMenuItemClick('category');
+            navigate("/admin/Manager_type");
+
+          }}
         >
           Quản lý chủng loại
         </MenuItem>
@@ -95,7 +105,11 @@ const SideBarAdmin = () => {
         <MenuItem 
           style={{ gap: "0", ...(activeItem === 'premium' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
           icon={<MdOutlineWorkspacePremium size={20} />} 
-          onClick={() => handleMenuItemClick('premium')}
+          onClick={() => {
+            handleMenuItemClick('premium');
+            navigate("/admin/Manager_premium");
+
+          }}
         >
           Quản lý premium
         </MenuItem>
