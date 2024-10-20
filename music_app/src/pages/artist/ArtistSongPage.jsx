@@ -75,20 +75,20 @@ const ArtistSongPage = () => {
 
         <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
           <button className="relative h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
-            <BsSendPlus className="absolute text-xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <BsSendPlus className="m-auto" />
           </button>
           <button
             onClick={() => handleShowAddSongModal()}
             className="relative text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
           >
-            <GoPlus className="absolute text-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <GoPlus className="m-auto" />
           </button>
 
-          <button className="relative text-xl   h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
-            <TfiPencil className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          <button className="text-xl  h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+            <TfiPencil className="m-auto" />
           </button>
-          <button className="relative  text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
-            <FaTrash className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          <button className=" text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+            <FaTrash className="m-auto" />
           </button>
         </div>
         <AddSongModal
@@ -185,11 +185,9 @@ const SongList2 = (songsData) => {
   return (
     <>
       <div>
-        list 2
-        <h1 className="font-bold text-2xl mt-7 mb-5">Danh sách phát</h1>
-        <div className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mb-4 pl-2 text-[#fff]">
-          <p>
-            <b className="mr-4">#</b>
+        <div className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mb-4 pl-2 text-center text-[#fff]">
+          <p >
+            
             Title
           </p>
           <p>Album</p>
