@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect, useRef } from "react";
+import React, { Suspense, useState, useEffect, useRef, startTransition } from "react";
 import Sidebar from "../../../components/Sidebar";
 import Player from "../../../components/Player";
 import { Outlet } from "react-router-dom";
@@ -17,7 +17,6 @@ const Home = () => {
 
   const id = isAlbum || isArtist ? location.pathname.split("/").pop() : "";
 
-
   const bgColor = isAlbum
     ? albumsData[Number(id)]?.bgColor
     : isArtist
@@ -26,23 +25,26 @@ const Home = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
+      startTransition(() => {
+        setIsLoading(false);
+      });
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    if (displayColor.current) {
-      if (isAlbum) {
-        displayColor.current.style.background = `linear-gradient(${bgColor}, #121212)`;
-      } else {
-        displayColor.current.style.background = `#121212`;
-      }
-    }
-  }, [bgColor]);
+  // useEffect(() => {
+  //   startTransition(() => {
+  //     if (displayColor.current) {
+  //       if (isAlbum) {
+  //         displayColor.current.style.background = `linear-gradient(${bgColor}, #121212)`;
+  //       } else {
+  //         displayColor.current.style.background = `#121212`;
+  //       }
+  //     }
+  //   });
+  // }, [bgColor]);
 
-  // Nếu đang loading, hiển thị màn hình loading
   if (isLoading) {
     return (
       <div className="h-screen bg-black text-white flex justify-center items-center">
@@ -51,7 +53,6 @@ const Home = () => {
     );
   }
 
-  // Khi hết loading, hiển thị giao diện chính
   return (
     <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
       <div className="h-screen bg-black">
