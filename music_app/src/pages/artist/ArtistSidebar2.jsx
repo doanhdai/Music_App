@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, MenuItem, Sidebar } from 'react-pro-sidebar';
 import { assets } from '../../assets/assets';
-import { FaRegBell } from 'react-icons/fa6';
-import { FaChartBar } from "react-icons/fa";
-import { TbAlignBoxRightStretch } from "react-icons/tb";
-import { RiAdvertisementLine } from "react-icons/ri";
-import { MdOutlineWorkspacePremium } from "react-icons/md";
-import { BiCategory } from "react-icons/bi";
-import { IoAlbumsOutline } from "react-icons/io5";
-import { RiFolderMusicLine } from "react-icons/ri";
-import { MdOutlineSupervisorAccount } from "react-icons/md";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { RiAlbumLine } from "react-icons/ri";
 import { MdOutlineQueueMusic } from "react-icons/md";
-import ArtistSlidebar from './ArtistSlidebar';
 
-const ArtistSlidebar2 = () => {
+
+const ArtistSidebar2 = () => {
   // State để lưu trữ menuItem đang được active
   const [activeItem, setActiveItem] = useState(null);
   const navigate =useNavigate()
@@ -26,12 +17,21 @@ const ArtistSlidebar2 = () => {
   };
 
   return (
-    <Sidebar 
+    <Sidebar
       width='20%' 
+      backgroundColor='none'
+      style={{ border: 'none' }} 
+      className='mr-2 mb-2 sticky'
+    >
+      <div className='p-4 rounded flex flex-col justify-around pl-8'>
+            <a onClick={()=> navigate('/')} className='m-0 p-0 no-underline'><img src={assets.home_icon} className='w-[20%] '/></a>
+      </div>
+    <Sidebar 
+      width='100%' 
       backgroundColor='#121212'
       style={{ border: 'none' }} 
-      margin='10px' 
-      className='w-[24%] h-auto m-2 rounded p-2 flex-col gap-2 text-white hidden lg:flex !bg-[#121212] !sticky'>
+       
+      className='h-[100%] m-2 rounded p-2 flex-col gap-2 text-white hidden lg:flex !bg-[#121212] '>
       
       
       <Menu className='flex w-full flex-col self-stretch mt-5'
@@ -79,7 +79,8 @@ const ArtistSlidebar2 = () => {
         </MenuItem>
       </Menu>
     </Sidebar>
+    </Sidebar>       
   );
 };
 
-export default ArtistSlidebar2;
+export default ArtistSidebar2;
