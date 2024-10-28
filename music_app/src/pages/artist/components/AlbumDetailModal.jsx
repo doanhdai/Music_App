@@ -111,11 +111,11 @@ export default AlbumDetailModal;
 
 {/* Intruction how to use
   parent component
-  
+
   const [selectedAlbum, setSelectedAlbum] = useState(null);
 
   const handleCardClick = (album) => {
-    setSelectedAlbum(album);
+    setSelectedAlbum(album); thong tin album hien tai
   };
 
   const closeModal = () => {
