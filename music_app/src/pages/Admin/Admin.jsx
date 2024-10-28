@@ -14,7 +14,7 @@ const Admin = () => {
             <div className='my-2 px-6 pt-4 h-[60px] bg-[#121212] sticky top-0 '>
               <HeaderAdmin   />
             </div>
-            <div className='my-2 bg-[#121212] h-full'>
+            <div className='my-2 bg-gradient-to-b from-[#311523] to-[#121212] h-full'>
               <Outlet />
             </div>
             

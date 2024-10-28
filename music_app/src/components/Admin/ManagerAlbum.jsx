@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import { CiCirclePlus } from "react-icons/ci";
 import { IoIosMore, IoIosSearch } from 'react-icons/io'
 import { MdOutlineEdit } from "react-icons/md";
-
+import { MdDeleteOutline } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
 
@@ -71,7 +71,7 @@ const ManagerAlbum = () => {
                     <MdOutlineEdit  size={30} />
                 </div>
                 <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <CiCirclePlus size={30} />
+                    <MdDeleteOutline size={30}/>
                 </div>
                </div>
 
@@ -114,3 +114,48 @@ const ManagerAlbum = () => {
 }
 
 export default ManagerAlbum
+
+// const AlbumDetailModal = ({ album, onClose }) => {
+//   const closeModal = () => {
+//     setSelectedAlbum(null);
+//   };
+//   return (
+//     <div
+//       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+//     >
+//       <div className="max-w-2xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
+//         <div className="flex items-center justify-center ">
+//           <div className="flex items-stretch gap-2">
+//             <img
+//               src={assets.ss}
+//               alt={album.tenAlbum}
+//               className=" aspect-square h-40 flex-none"
+//             />
+
+//             <div className="album-infor flex flex-col justify-between ml-4  text-gray-400 p-2">
+//               <h5 className="text-sm ">
+//                 <span>{album.status === 1 ? "Công khai" : "Ẩn"}</span>
+//               </h5>
+//               <h5 className="text-xl text-white ">99%</h5>
+//               <h5 className="inline-flex items-center gap-2">
+//                 {" "}
+//                 2020 - 10000 <FaHeart />
+//               </h5>
+//             </div>
+//           </div>
+//         </div>
+//         <div className="static overflow-y-auto ">
+//           {/* <AlbumSongList /> */}
+//         </div>
+
+//         <button
+//           onClick={onClose}
+//           className="absolute top-2 right-2 text-white py-2 px-4 rounded"
+//         >
+//           {" "}
+//           X
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };

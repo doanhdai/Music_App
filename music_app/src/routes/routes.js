@@ -33,6 +33,12 @@ const ManagerSong = React.lazy(()=>import("../components/Admin/ManagerSong"))
 const ManagerAlbum = React.lazy(()=>import("../components/Admin/ManagerAlbum"))
 const ManagerType = React.lazy(()=>import("../components/Admin/ManagerType"))
 const ManagerPemium = React.lazy(()=>import("../components/Admin/ManagerPremium"))
+const ManagerAds = React.lazy(()=>import("../components/Admin/ManagerAds"))
+const ManagerQuyen = React.lazy(()=>import("../components/Admin/ManagerQuyen"))
+const ManagerStatistical = React.lazy(()=>import("../components/Admin/ManagerStatistical"))
+const AccountAdmin = React.lazy(()=> import("../components/Admin/AccountAdmin"))
+
+
 
 
 const routes = createBrowserRouter([
@@ -166,6 +172,22 @@ const routes = createBrowserRouter([
       {
         path:config.routes.ManagerPremium,
         Component: ManagerPemium
+      },
+      {
+        path:config.routes.ManagerAds,
+        Component: ManagerAds
+      },
+      {
+        path:config.routes.ManagerQuyen,
+        Component: ManagerQuyen
+      },
+      {
+        path:config.routes.ManagerStatistical,
+        Component: ManagerStatistical
+      },
+      {
+        path:config.routes.AccountAdmin,
+        Component: AccountAdmin
       },
     ]
   }

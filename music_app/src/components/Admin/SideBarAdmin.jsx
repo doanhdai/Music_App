@@ -117,7 +117,12 @@ const SideBarAdmin = () => {
         <MenuItem 
           style={{ gap: "0", ...(activeItem === 'ads' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
           icon={<RiAdvertisementLine size={20} />} 
-          onClick={() => handleMenuItemClick('ads')}
+          onClick={() =>{
+            handleMenuItemClick('ads');
+            navigate("/admin/Manager_ads")
+          }
+
+          }
         >
           Quản lý quảng cáo
         </MenuItem>
@@ -125,7 +130,10 @@ const SideBarAdmin = () => {
         <MenuItem 
           style={{ gap: "0", ...(activeItem === 'system' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
           icon={<TbAlignBoxRightStretch size={20} />} 
-          onClick={() => handleMenuItemClick('system')}
+          onClick={() =>{
+            handleMenuItemClick('system');
+            navigate("/admin/Manager_quyen")
+          }}
         >
           Phân quyền hệ thống
         </MenuItem>
@@ -133,7 +141,11 @@ const SideBarAdmin = () => {
         <MenuItem 
           style={{ gap: "0", ...(activeItem === 'statistics' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F",fontWeight: 700 }) }} 
           icon={<FaChartBar size={20} />} 
-          onClick={() => handleMenuItemClick('statistics')}
+          onClick={() =>{
+            handleMenuItemClick('ads');
+            navigate("/admin/Manager_statistical")
+          }
+          }
         >
           Thống kê
         </MenuItem>

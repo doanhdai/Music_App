@@ -12,8 +12,8 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div>
-      <div className="w-full flex justify-between items-center font-semibold ">
+    <div className="sticky top-0 z-50 px-7 py-4 backdrop-blur-md bg-opacity-1">
+      <div className="w-full flex  justify-between items-center font-semibold ">
         <div className="flex items-center gap-2">
           <img
             onClick={() => navigate(-1)}
@@ -98,7 +98,9 @@ const NavBar = () => {
               {isOpen && (
                 <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
                   <ul className="text-white">
-                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center " onClick={() => {navigate("/artist-site"); } }>
+                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center " onClick={() => {startTransition(() => {
+                        navigate("/artist-site");
+                      }); } }>
                       <div  className="mr-3"><IoSettingsOutline size={20}/></div>
                     {/* chua lien ket duoc */}
                       Quản lý
