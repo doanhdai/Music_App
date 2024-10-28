@@ -26,8 +26,6 @@ const NotFound = React.lazy(() => import("../pages/NotFound"));
 const ArtistLayout2 = React.lazy(() => import("../pages/artist/ArtistLayout2"))
 const ArtistSongPage = React.lazy(() => import("../pages/artist/ArtistSongPage"))
 const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage"))
-const ArtistWithdrawalRequestPage = React.lazy(() => import("../pages/artist/ArtistWithdrawalRequestPage"))
-const ArtistStatisticPage = React.lazy(() => import("../pages/artist/ArtistStatisticPage"))
 
 const AdminHome = React.lazy(()=>import("../pages/Admin/Admin"))
 const ManagerAccount = React.lazy(()=>import("../components/Admin/ManagerAccount"))
@@ -124,14 +122,6 @@ const routes = createBrowserRouter([
             {
                 path:"album",
                 Component: ArtistAlbumPage
-            },
-            {
-              path:"widthdrawal",
-              Component: ArtistWithdrawalRequestPage
-            },
-            {
-              path:"statistic",
-              Component: ArtistStatisticPage
             }
         ]
     },

@@ -20,8 +20,6 @@ const routes = {
     artistSite: "/artist-site",
     artistSongPage: "song",
     artistAlbumPage: "album",
-    artistWithdrawalPage: "withdrawal",
-    artistStatistcatPage: "statistic",
     
     AdminHome: "/admin",
     ManagerSong:"Manager_song",
