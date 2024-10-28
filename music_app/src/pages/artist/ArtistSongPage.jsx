@@ -74,12 +74,12 @@ const ArtistSongPage = () => {
         </form>
 
         <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
-          <button className="relative h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
+          <button className=" h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
             <BsSendPlus className="m-auto" />
           </button>
           <button
             onClick={() => handleShowAddSongModal()}
-            className="relative text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
+            className=" text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
           >
             <GoPlus className="m-auto" />
           </button>
