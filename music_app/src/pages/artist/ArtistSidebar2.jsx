@@ -77,6 +77,26 @@ const ArtistSidebar2 = () => {
         >
           Album
         </MenuItem>
+        <MenuItem 
+          style={{ gap: "0", ...(activeItem === 'songs' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F", fontWeight: 700 }) }} 
+          icon={<MdOutlineQueueMusic   size={20} />} 
+          onClick={() => {
+            handleMenuItemClick('widthdrawal');
+            navigate("/artist-site/widthdrawal");
+          }}
+        >
+          Rut tien
+        </MenuItem>
+        <MenuItem 
+          style={{ gap: "0", ...(activeItem === 'songs' && { color: "#E0066F", backgroundColor: "#000000", borderColor: "#E0066F", fontWeight: 700 }) }} 
+          icon={<MdOutlineQueueMusic   size={20} />} 
+          onClick={() => {
+            handleMenuItemClick('statistic');
+            navigate("/artist-site/statistic");
+          }}
+        >
+          Thong ke
+        </MenuItem>
       </Menu>
     </Sidebar>
     </Sidebar>       
