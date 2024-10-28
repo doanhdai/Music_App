@@ -60,8 +60,8 @@ const ArtistSongPage = () => {
   }, []);
 
   return (
-    <div className="p-5">
-      <div className="grid grid-cols-2 justify-center ">
+    <div className="mt-8">
+      <div className="ml-5 grid grid-cols-2 justify-center ">
         <form action="">
           <div className="flex items-center p-1 w-[500px] bg-[#1E1E1E] justify-between rounded-3xl">
             <CiSearch className="text-3xl font-bold" />
@@ -128,16 +128,22 @@ const SongDetailModal = ({ song, onClose }) => {
                 {songData.ten_bai_hat}
               </h3>
               <h5 className="text-sm text-gray-400">
-                Ngay phat hanh: <span className="text-white">{songData.ngay_phat_hanh}</span>
+                Ngay phat hanh:{" "}
+                <span className="text-white">{songData.ngay_phat_hanh}</span>
               </h5>
               <h5 className="text-sm text-gray-400">
-                Album: <span className="text-white">{songData.ma_album} ma album</span>
+                Album:{" "}
+                <span className="text-white">{songData.ma_album} ma album</span>
               </h5>
               <h5 className="text-sm text-gray-400">
-                The loai: <span className="text-white">99%{songData.theloa} the loai</span>
+                The loai:{" "}
+                <span className="text-white">
+                  99%{songData.theloa} the loai
+                </span>
               </h5>
               <h5 className="text-sm text-gray-400">
-                Nghe si: <span className="text-white">{songData.ma_artist}</span>
+                Nghe si:{" "}
+                <span className="text-white">{songData.ma_artist}</span>
               </h5>
             </div>
           </div>
@@ -171,7 +177,7 @@ const SongDetailModal = ({ song, onClose }) => {
 
 // Theo kieu cua dai
 const SongList2 = (songsData) => {
-  const baihat= songData2;
+  const baihat = songData2;
 
   const [selectedSong, setSelectedSong] = useState(null);
 
@@ -183,43 +189,44 @@ const SongList2 = (songsData) => {
     setSelectedSong(null);
   };
   return (
-    <>
-      <div>
-        <div className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mb-4 pl-2 text-center text-[#fff]">
-          <p >
-            
-            Title
+    <div className="mt-5 bg-[#121212]">
+      <div className=" py-2 grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
+        <p>Title</p>
+        <p>Album</p>
+        <p>Trang thai</p>
+        <img className="m-auto w-4 " src={assets.clock_icon}></img>{" "}
+        {/*  thoi luon*/}
+      </div>
+      <hr className="mx-5"/>
+
+      {baihat.map((item, index) => (
+        <div
+          key={index}
+          className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
+          onClick={() => handleShowDetails(item)}
+        >
+          <p className="text-white">
+            {/* src={item.hinh_anh} */}
+            <img
+              className="inline w-10 mx-4 aspect-square "
+              src="https://cloudinary-marketing-res.cloudinary.com/image/upload/ar_0.5,c_fill,g_auto,w_433/q_auto/f_auto/hiking_dog_mountain.jpg"
+            />
+            {item.ten_bai_hat}
           </p>
-          <p>Album</p>
-          <p>Trang thai</p>
-          <img className="m-auto w-4 " src={assets.clock_icon}></img>  {/*  thoi luon*/}
+
+          <p className="text-[15px] text-center">{item.ma_album}</p>
+          <p className="text-[15px] text-center">
+            {item.trang_thai === 1 ? "Cong khai" : "An"}
+          </p>
+          <p className="text-[15px] text-center">{item.thoi_luong}</p>
         </div>
-        <hr />
-
-        {baihat.map((item, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
-            onClick={() => handleShowDetails(item)}
-          >
-            <p className="text-white"> 
-              {/* src={item.hinh_anh} */}
-              <img className="inline w-10 mx-4 aspect-square " src="https://cloudinary-marketing-res.cloudinary.com/image/upload/ar_0.5,c_fill,g_auto,w_433/q_auto/f_auto/hiking_dog_mountain.jpg"/>
-              {item.ten_bai_hat}
-            </p>     
-
-            <p className="text-[15px] text-center">{item.ma_album}</p> 
-            <p className="text-[15px] text-center">{item.trang_thai === 1 ? "Cong khai" : "An"}</p> 
-            <p className="text-[15px] text-center">{item.thoi_luong}</p>        
-          </div>
-        ))}
-        <SongDetailModal
+      ))}
+      <SongDetailModal
         className="float-start"
         song={selectedSong}
         onClose={handleCloseModal}
       />
-      </div>
-    </>
+    </div>
   );
 };
 // De lai co gi sai sua

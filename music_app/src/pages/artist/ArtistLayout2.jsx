@@ -58,7 +58,7 @@ const ArtistLayout2 = () => {
       <div className="h-full bg-black">
         <div className=" flex">
           <ArtistSidebar2/>
-          <div ref={displayColor} className="w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0">
+          <div ref={displayColor} className="w-[100%] m-2 pt-4 rounded text-white overflow-auto lh:w-[75%] lg:ml-0">
             <ArtistNavbar className="mb-10"/>
             <Outlet />
             <hr/>
