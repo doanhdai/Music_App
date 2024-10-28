@@ -1,5 +1,5 @@
 import React, { Suspense, useState, useEffect, useRef } from "react";
-import ArtistSlidebar2 from "./ArtistSlidebar2";
+import ArtistSidebar2 from "./ArtistSidebar2";
 import Player from "../../components/Player"; 
 import { Outlet } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { albumsData, artistData } from '../../assets/assets';
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import Poster from "../../components/Poster";
-
+import ArtistNavbar from "./components/ArtisNavbar";
 
 const ArtistLayout2 = () => {
   const displayColor = useRef(null);
@@ -55,11 +55,11 @@ const ArtistLayout2 = () => {
   // Khi hết loading, hiển thị giao diện chính
   return (
     <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
-      <div className="h-screen bg-black">
-        <div className="h-[92%] flex">
-          <ArtistSlidebar2/>
-          <div ref={displayColor} className="w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0">
-            <NavBar />
+      <div className="h-full bg-black">
+        <div className=" flex">
+          <ArtistSidebar2/>
+          <div ref={displayColor} className="w-[100%] m-2 pt-4 rounded text-white overflow-auto lh:w-[75%] lg:ml-0">
+            <ArtistNavbar className="mb-10"/>
             <Outlet />
             <hr/>
             <Footer />

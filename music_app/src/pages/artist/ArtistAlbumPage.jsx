@@ -114,7 +114,7 @@ const AlbumList = ({ albums }) => {
   };
 
   return (
-    <div className="p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="min-h-screen p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {albums.map((album) => (
         <div
           key={album.albumId}
