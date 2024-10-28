@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import React, { Component } from "react";
 
 import config from "../config";
+
 const Home = React.lazy(() => import("../pages/User/Home/Home"));
 const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
 const FullAlbum = React.lazy(() => import("../components/FullAlbums"));
@@ -33,6 +34,30 @@ const SignInfo = React.lazy(() =>
   import("../components/authentication/SignInfo")
 );
 const NotFound = React.lazy(() => import("../pages/NotFound"));
+
+const ArtistLayout2 = React.lazy(() => import("../pages/artist/ArtistLayout2"));
+const ArtistSongPage = React.lazy(() =>
+  import("../pages/artist/ArtistSongPage")
+);
+const ArtistAlbumPage = React.lazy(() =>
+  import("../pages/artist/ArtistAlbumPage")
+);
+
+const AdminHome = React.lazy(() => import("../pages/Admin/Admin"));
+const ManagerAccount = React.lazy(() =>
+  import("../components/Admin/ManagerAccount")
+);
+const ManagerSong = React.lazy(() => import("../components/Admin/ManagerSong"));
+
+const UserInfoLayout = React.lazy(() =>
+  import("../pages/User/UserInfo/UserInfo")
+);
+const UserInfo = React.lazy(() =>
+  import("../components/UserInfo/ManagerUserInfo")
+);
+const ManagerPremium = React.lazy(() =>
+  import("../components/UserInfo/ManagerPremium")
+);
 
 const routes = createBrowserRouter([
   {
@@ -111,8 +136,65 @@ const routes = createBrowserRouter([
     ],
   },
   {
-    path: config.routes.notFound,
-    Component: NotFound,
+    path: config.routes.artistSite,
+    Component: ArtistLayout2,
+    children: [
+      {
+        index: true,
+        Component: ArtistSongPage,
+      },
+      {
+        path: "album",
+        Component: ArtistAlbumPage,
+      },
+    ],
+  },
+  {
+    path: config.routes.signIn,
+    Component: Signin,
+    children: [
+      {
+        index: true,
+        Component: SigninIndex,
+      },
+      {
+        path: config.routes.signPass,
+        Component: SignPass,
+      },
+      {
+        path: config.routes.signInfo,
+        Component: SignInfo,
+      },
+    ],
+  },
+  {
+    path: config.routes.AdminHome,
+    Component: AdminHome,
+    children: [
+      {
+        index: true,
+        Component: ManagerAccount,
+      },
+      {
+        path: config.routes.ManagerSong,
+        Component: ManagerSong,
+      },
+    ],
+  },
+
+  {
+    path: config.routes.UserInfo,
+    Component: UserInfoLayout,
+    children: [
+      {
+        index: true,
+        Component: UserInfo,
+      },
+      {
+        path: config.routes.ManagerPremium,
+        Component: ManagerPremium,
+      },
+    ],
   },
 ]);
 
