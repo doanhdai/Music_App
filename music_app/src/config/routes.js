@@ -33,6 +33,7 @@ const routes = {
 
     AccountAdmin: "account_admin",
     UserInfo: "/UserInfo",
+    ManagerPremiumUser:"/UserInfo/premium"
 };
 
 export default routes;

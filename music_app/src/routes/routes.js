@@ -20,7 +20,7 @@ const ManagerAccount = React.lazy(()=>import("../components/Admin/ManagerAccount
 const ManagerSong = React.lazy(()=>import("../components/Admin/ManagerSong"))
 const ManagerAlbum = React.lazy(()=>import("../components/Admin/ManagerAlbum"))
 const ManagerType = React.lazy(()=>import("../components/Admin/ManagerType"))
-const ManagerPemium = React.lazy(()=>import("../components/Admin/ManagerPremium"))
+const ManagerPremium = React.lazy(()=>import("../components/Admin/ManagerPremium"))
 const ManagerAds = React.lazy(()=>import("../components/Admin/ManagerAds"))
 const ManagerQuyen = React.lazy(()=>import("../components/Admin/ManagerQuyen"))
 const ManagerStatistical = React.lazy(()=>import("../components/Admin/ManagerStatistical"))
@@ -40,7 +40,7 @@ const SignInfo = React.lazy(() => import("../components/authentication/SignInfo"
 const NotFound = React.lazy(() => import("../pages/NotFound"));
 const UserInfoLayout = React.lazy(() => import("../pages/User/UserInfo/UserInfo"));
 const UserInfo = React.lazy(() => import("../components/UserInfo/ManagerUserInfo"));
-const ManagerPremium = React.lazy(() => import("../components/UserInfo/ManagerPremium"));
+const ManagerPremiumUser = React.lazy(() => import("../components/UserInfo/ManagerPremiumUser"));
 
 
 
@@ -169,7 +169,7 @@ const routes = createBrowserRouter([
       },
       {
         path: config.routes.ManagerPremium,
-        Component: ManagerPemium,
+        Component: ManagerPremium,
       },
       {
         path: config.routes.ManagerAds,
@@ -186,6 +186,19 @@ const routes = createBrowserRouter([
       {
         path: config.routes.AccountAdmin,
         Component: AccountAdmin,
+      },
+    ],
+  },{
+    path: config.routes.UserInfo,
+    Component: UserInfoLayout,
+    children: [
+      {
+        index: true,
+        Component: UserInfo,
+      },
+      {
+        path: config.routes.ManagerPremiumUser,
+        Component: ManagerPremiumUser,
       },
     ],
   },

@@ -45,13 +45,13 @@ const Home = () => {
   //   });
   // }, [bgColor]);
 
-  if (isLoading) {
-    return (
-      <div className="h-screen bg-black text-white flex justify-center items-center">
-        <p>Loading, please wait...</p>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="h-screen bg-black text-white flex justify-center items-center">
+  //       <p>Loading, please wait...</p>
+  //     </div>
+  //   );
+  // }
   return (
     <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
       <div className="h-screen bg-black">

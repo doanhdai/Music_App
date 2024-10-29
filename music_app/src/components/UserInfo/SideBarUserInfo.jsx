@@ -87,7 +87,7 @@ const SideBarAdmin = () => {
           icon={<FaBullseye size={35} />}
           onClick={() => {
             handleMenuItemClick("premium");
-            navigate("/UserInfo/Manager_premium");
+            navigate("/UserInfo/premium");
           }}
         >
           Goi premium da dang ky
