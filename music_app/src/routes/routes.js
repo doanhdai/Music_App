@@ -1,8 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { Component } from "react";
-
-
 import config from "../config";
+
 
 const Home = React.lazy(() => import("../pages/User/Home/Home"));
 const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
@@ -39,7 +38,7 @@ const ManagerAds = React.lazy(()=>import("../components/Admin/ManagerAds"))
 const ManagerQuyen = React.lazy(()=>import("../components/Admin/ManagerQuyen"))
 const ManagerStatistical = React.lazy(()=>import("../components/Admin/ManagerStatistical"))
 const AccountAdmin = React.lazy(()=> import("../components/Admin/AccountAdmin"))
-
+const search = React.lazy(()=> import("../components/Search"))
 
 
 
@@ -75,6 +74,10 @@ const routes = createBrowserRouter([
         {
           path: config.routes.Song,
           Component: Song,
+        },
+        {
+          path: config.routes.search,
+          Component: search
         },
       ],
     },

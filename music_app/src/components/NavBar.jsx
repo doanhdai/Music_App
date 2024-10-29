@@ -41,6 +41,7 @@ const NavBar = () => {
           <div className="flex items-center p-3 w-[500px] bg-black justify-between rounded-3xl">
             <IoIosSearch className="text-white text-2xl cursor-pointer" />
             <input
+              onClick={()=>navigate("/search")}
               className="bg-black w-[100%] outline-none ml-3"
               type="text"
               placeholder="Tìm kiếm bài hát, album,..."
@@ -81,10 +82,11 @@ const NavBar = () => {
 
           {/* đã đăng nhập */}
             <p className='bg-[#E0066F] text-while text-[15px] px-4 py-2 rounded-3xl hidden md:block cursor-pointer '>Khám phá Primeum</p>
-            <div className="cursor-pointer">
-              <FaRegBell size={25} />
-            </div>
-           <div
+            <div className="relative inline-block">
+                    <FaRegBell size={25} />
+                    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+                  </div>
+            <div
               className="relative"
               onMouseEnter={() => setIsOpen(true)}
               
@@ -98,11 +100,12 @@ const NavBar = () => {
               {isOpen && (
                 <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
                   <ul className="text-white">
-                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center " onClick={() => {startTransition(() => {
+                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center " 
+                    onClick={() => {
+                          (() => {
                         navigate("/artist-site");
                       }); } }>
                       <div  className="mr-3"><IoSettingsOutline size={20}/></div>
-                    {/* chua lien ket duoc */}
                       Quản lý
                     </li>
                     <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center">

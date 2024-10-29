@@ -17,8 +17,11 @@ const HeaderAdmin = () => {
             <p className='text-[25px] font-bold text-pink-500 sm:text-[20px]'>Quản lí tài khoản</p>
             <div className='flex items-center gap-5'>
             <div className='flex float-end gap-5'>
-                <FaRegBell size={25} />
-                
+                <div className="relative inline-block">
+                  <FaRegBell size={25} />
+                  <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+                </div>
+                                
                 <div className='flex'>     
                     <p className='font-bold'>Admin</p>
                     {/* <FaAngleDown className='mt-1' size={20}/>     */}

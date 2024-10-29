@@ -1,5 +1,4 @@
 
-
 const routes = {
     Home : '/',
     Artist : '/artist',
@@ -11,7 +10,7 @@ const routes = {
     logIn: "/authentication/log-in",
     forgetPass: "/authentication/log-in/forgetPass",
     resetPass: "/authentication/log-in/resetPass",
-    
+    search: "/search",
     signIn: "/authentication/sign-in",
     signPass: "/authentication/sign-in/signPass",
     signInfo: "/authentication/sign-in/signInfo",
