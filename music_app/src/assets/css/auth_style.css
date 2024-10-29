@@ -2,37 +2,39 @@
   margin: 10px auto;
 }
 .input-title {
-  font-size: 2.2rem;
+  font-size: 22px;
   font-weight: 500;
   color: #fff;
   user-select: none;
 }
 .input-text {
+  color: #fff;
   margin-top: 20px;
   width: 400px;
   padding: 10px;
   border: 1px solid #fff;
   border-radius: 5px;
-  font-size: 2.2rem;
+  font-size: 22px;
   outline: none;
   background-color: transparent;
 }
 .WarningText {
   margin: 10px;
   color: red;
-  font-size: 1.5rem;
+  font-size: 15px;
 }
 
 .Login-container {
   display: flex;
-  background: linear-gradient(to bottom, #b95a78 0%, #d02973 82%, #e0066f 100%);
+  background: #1e1e1e;
+  /* linear-gradient(to bottom, #b95a78 0%, #d02973 82%, #e0066f 100%); */
   height: 100vh;
 }
 .Auth-form {
   position: relative;
   margin: auto;
   width: 560px;
-  background-color: #c26482;
+  background-color: #141414;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -53,7 +55,7 @@
 }
 .Auth-title {
   margin: 60px auto 40px auto;
-  font-size: 4rem;
+  font-size: 40px;
   font-weight: bold;
   color: #fff;
   user-select: none;
@@ -79,11 +81,11 @@
 }
 .chk-title {
   margin-left: 10px;
-  font-size: 2rem;
+  font-size: 20px;
   cursor: pointer;
 }
 .forget-item {
-  font-size: 2rem;
+  font-size: 20px;
   color: #ccc;
   padding-bottom: 3px;
   border-bottom: 1px solid #ccc;
@@ -106,10 +108,10 @@
 }
 
 .AuthBtn-title {
-  font-size: 2.4rem;
+  font-size: 24px;
   color: #fff;
   font-weight: 600;
-  line-height: 2.4rem;
+  line-height: 24px;
 }
 
 .AuthBtn-container:hover {
@@ -126,13 +128,13 @@
 }
 
 .ClickableText-text {
-  font-size: 2rem;
+  font-size: 20px;
   color: #ccc;
   user-select: none;
 }
 
 .ClickableText-link {
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: 600;
   color: #fff;
   padding-bottom: 3px;
@@ -150,7 +152,7 @@
 
 .Signin-container {
   display: flex;
-  background-color: #c26482;
+  background-color: #141414;
   /* background-color: #fff; */
   height: 100vh;
 }
@@ -166,9 +168,9 @@
 }
 .SignName-text {
   color: #fff;
-  font-size: 4rem;
+  font-size: 40px;
   margin: 3px auto;
-  line-height: 4rem;
+  line-height: 40px;
   font-weight: 600;
   user-select: none;
 }
@@ -186,17 +188,18 @@
 }
 .checkBox-title {
   margin-left: 5px;
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: 400;
   transform: translateY(-1px);
+  color: #a4a298;
 }
 
 .circle {
   width: 22px; /* Đường kính của hình tròn */
   height: 22px; /* Đường kính của hình tròn */
-  border: 1px solid #000; /* Đường viền */
+  border: 1px solid #fff; /* Đường viền */
   border-radius: 50%; /* Tạo hình tròn */
-  background-color: transparent; /* Màu nền */
+  background-color: #fff; /* Màu nền */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -210,7 +213,7 @@
 .checkmark {
   display: none; /* Ẩn dấu tích mặc định */
   color: white; /* Màu của dấu tích */
-  font-size: 1.8rem; /* Kích thước của dấu tích */
+  font-size: 18px; /* Kích thước của dấu tích */
 }
 
 .checked .checkmark {
@@ -221,7 +224,7 @@
   display: flex;
   align-items: center;
   margin-left: 76px;
-  font-size: 2rem;
+  font-size: 20px;
   cursor: pointer;
   width: 110px;
   margin-bottom: 30px;
@@ -252,10 +255,10 @@
 }
 
 .PasswordRules-title {
-  font-size: 2rem;
-  color: #000;
+  font-size: 20px;
+  color: #a4a298;
   width: 294px;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #a4a298;
   padding-bottom: 2px;
   margin-top: 20px;
   user-select: none;
@@ -264,14 +267,14 @@
 /* ---------------------- */
 .SignInfo-text {
   margin-left: 80px;
-  font-size: 2rem;
+  font-size: 20px;
   color: #fff;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
 .input-describe {
-  font-size: 1.6rem;
+  font-size: 16px;
   color: #ccc;
   margin-top: 10px;
   margin-bottom: -5px;
@@ -284,7 +287,7 @@
 }
 
 .avatar-title {
-  font-size: 2.2rem;
+  font-size: 22px;
   font-weight: 500;
   color: #fff;
   user-select: none;
@@ -292,7 +295,7 @@
 }
 
 .avatar-describe {
-  font-size: 1.6rem;
+  font-size: 16px;
   color: #ccc;
   margin: 10px 0;
 }
@@ -309,7 +312,7 @@
 
 .file-describe {
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 12px;
 }
 
 .file-btn {
@@ -323,7 +326,7 @@
 
 .file-btn_title {
   color: #000;
-  font-size: 1.2rem;
+  font-size: 12px;
 }
 
 .avatar-frame {

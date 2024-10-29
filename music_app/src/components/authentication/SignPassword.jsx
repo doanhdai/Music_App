@@ -6,7 +6,7 @@ import BackBtn from "./BackBtn";
 import AuthBtn from "./AuthBtn";
 
 const SignPassword = () => {
-  const [password, setPassword] = useState(""); // state chứa giá trị mật khẩu
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   return (

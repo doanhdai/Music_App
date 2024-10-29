@@ -15,7 +15,7 @@ const DisplayHome = () => {
 
 
         {/* nghệ sĩ */}
-        <div className='mb-4 pt-6'>
+        <div>
           <div className='flex justify-between'>
             <h1 className='my-4 font-bold text-2xl'>Nghệ sĩ đề xuất</h1>
             <h1 className='text-slate-200 font-bold mr-3 cursor-pointer hover:text-white'  onClick={()=>navigate(`/artist`)}> Xem tất cả</h1>

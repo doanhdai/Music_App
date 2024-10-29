@@ -9,11 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div>
-      <div className="w-full flex justify-between items-center font-semibold ">
+    <div className="sticky top-0 z-50 px-7 py-4 backdrop-blur-md bg-opacity-1">
+      <div className="w-full flex  justify-between items-center font-semibold ">
         <div className="flex items-center gap-2">
           <img
             onClick={() => navigate(-1)}
@@ -29,9 +29,11 @@ const NavBar = () => {
           />
         </div>
 
-
         <div className="flex gap-2 items-center justify-center">
-          <Link to="/" className="m-0  no-underline bg-[#E0066F] p-3 rounded-full ">
+          <Link
+            to="/"
+            className="m-0  no-underline bg-[#E0066F] p-3 rounded-full "
+          >
             <img
               className="w-6 hover:scale-110"
               src={assets.home_icon}
@@ -41,6 +43,7 @@ const NavBar = () => {
           <div className="flex items-center p-3 w-[500px] bg-black justify-between rounded-3xl">
             <IoIosSearch className="text-white text-2xl cursor-pointer" />
             <input
+              onClick={()=>navigate("/search")}
               className="bg-black w-[100%] outline-none ml-3"
               type="text"
               placeholder="Tìm kiếm bài hát, album,..."
@@ -49,7 +52,6 @@ const NavBar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-
           {/* Chưa đăng nhập, đăng kí */}
           {/* <p
             className="text-gray-400 text-[15px] px-5 p-3 rounded-3xl hidden md:block cursor-pointer hover:text-white hover:scale-110"
@@ -77,14 +79,14 @@ const NavBar = () => {
           </p> */}
           {/* hết chưa đăng nhập,đăng kí */}
 
-
-
           {/* đã đăng nhập */}
+
             <p className='bg-[#E0066F] text-while text-[15px] px-4 py-2 rounded-3xl hidden md:block cursor-pointer '>Khám phá Primeum</p>
-            <div className="cursor-pointer">
-              <FaRegBell size={25} />
-            </div>
-           <div
+            <div className="relative inline-block">
+                    <FaRegBell size={25} />
+                    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+                  </div>
+            <div
               className="relative"
               onMouseEnter={() => setIsOpen(true)}
               
@@ -98,12 +100,22 @@ const NavBar = () => {
               {isOpen && (
                 <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
                   <ul className="text-white">
-                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center " onClick={() => {navigate("/artist-site"); } }>
+                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center " 
+                      onClick={() => {
+                        startTransition(() => {
+                          navigate("/artist-site");
+                        });
+                      }}>
                       <div  className="mr-3"><IoSettingsOutline size={20}/></div>
-                    {/* chua lien ket duoc */}
                       Quản lý
                     </li>
-                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center">
+                    <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
+                      onClick={() => {
+                        startTransition(() => {
+                          navigate("/UserInfo");
+                        });}}
+                    
+                    >
                       <div className="mr-3"><RiAccountCircleLine size={20}/></div>
                       Tài khoản
                     </li>
@@ -116,9 +128,9 @@ const NavBar = () => {
               )}
             </div>
             {/* hết đã đăng nhâp */}
+
         </div>
       </div>
-      
     </div>
   );
 };

@@ -38,7 +38,7 @@ const DetailSong = () => {
         <div>
           <div className="mt-10">
             <div className="flex gap-10 items-center">
-              <button className="w-[60px] h-[60px] rounded-full bg-[#C26482] flex justify-center items-center"><FaPlay /></button>
+              <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center"><FaPlay /></button>
               
               <button><FaRegHeart size={30} /></button>
               <IoIosMore size={30} />
@@ -67,6 +67,10 @@ const DetailSong = () => {
               <b className='uppercase'>mck</b>
             </div>
           </div>
+        </div>
+        <div className='flex flex-col mt-5'>
+          <label>Viết bình luận</label>
+          <textarea className='bg-black rounded-xl border-2 border-pink-500'></textarea>
         </div>
 
 

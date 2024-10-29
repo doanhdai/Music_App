@@ -8,6 +8,7 @@ const ManagerType = () => {
         + fix router
         + fix active manager
         + thêm icon sửa xóa cho đúng 
+        + thêm bình luân ở chi tiết bài hát
     </div>
   )
 }
