@@ -9,9 +9,7 @@ const Home = React.lazy(() => import("../pages/User/Home/Home"));
 const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
 const FullAlbum = React.lazy(() => import("../components/FullAlbums"));
 const FullArtists = React.lazy(() => import("../components/FullArtists"));
-const FullSongPopular = React.lazy(() =>
-  import("../components/FullSongPopular")
-);
+const FullSongPopular = React.lazy(() =>import("../components/FullSongPopular"));
 const ArtistLayout2 = React.lazy(() => import("../pages/artist/ArtistLayout2"))
 const ArtistSongPage = React.lazy(() => import("../pages/artist/ArtistSongPage"))
 const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage"))
@@ -156,35 +154,6 @@ const routes = createBrowserRouter([
       {
         index: true,
         Component: ManagerAccount,
-      },
-      {
-        path: config.routes.ManagerSong,
-        Component: ManagerSong,
-      },
-    ],
-  },
-
-  {
-    path: config.routes.UserInfo,
-    Component: UserInfoLayout,
-    children: [
-      {
-        index: true,
-        Component: UserInfo,
-      },
-      {
-        path: config.routes.ManagerPremium,
-        Component: ManagerPremium,
-      },
-    ],
-  },
-  {
-    path: config.routes.artistSite,
-    Component: ArtistLayout2,
-    children: [
-      {
-        index: true,
-        Component: ArtistSongPage,
       },
       {
         path: config.routes.ManagerSong,

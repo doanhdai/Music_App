@@ -1,5 +1,4 @@
 
-
 const routes = {
     Home : '/',
     Artist : '/artist',
