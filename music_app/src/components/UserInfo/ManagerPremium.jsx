@@ -2,7 +2,7 @@ import React from "react";
 import PremiumCard from "./PremiumCard";
 import NonPremium from "./NonPremium";
 
-const ManagerAccount = () => {
+const ManagerPremium = () => {
   return (
     <div className="pt-3 mx-[38px]">
       {/* <NonPremium /> */}
@@ -22,4 +22,4 @@ const ManagerAccount = () => {
   );
 };
 
-export default ManagerAccount;
+export default ManagerPremium;

@@ -12,10 +12,7 @@ const AccountProfileEdit = () => {
         Lưu
       </button>
       <InputItem title="Email" />
-      <div
-        className="mt-5 c"
-        style={{ marginBottom: "-5px", color: "#A4A298" }}
-      >
+      <div className="mt-5" style={{ marginBottom: "-5px", color: "#A4A298" }}>
         Thay đổi mật khẩu
       </div>
       <InputItem

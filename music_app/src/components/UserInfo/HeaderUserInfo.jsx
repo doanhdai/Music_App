@@ -6,7 +6,7 @@ import { CiLogin } from "react-icons/ci";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
-const HeaderAdmin = () => {
+const HeaderUserInfo = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -100,4 +100,4 @@ const HeaderAdmin = () => {
   );
 };
 
-export default HeaderAdmin;
+export default HeaderUserInfo;
