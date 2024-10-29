@@ -1,4 +1,5 @@
 
+
 const routes = {
     Home : '/',
     Artist : '/artist',
@@ -31,12 +32,8 @@ const routes = {
     ManagerQuyen: "Manager_quyen",
     ManagerStatistical: "Manager_statistical",
 
-    AccountAdmin: "account_admin"
-
-
-
-
-
-}
+    AccountAdmin: "account_admin",
+    UserInfo: "/UserInfo",
+};
 
 export default routes;
