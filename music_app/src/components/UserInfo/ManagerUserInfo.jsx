@@ -11,7 +11,7 @@ import AccountProfileEdit from "./AccountProfileEdit";
 import UserProfile from "./UserProfile";
 import AccountProfile from "./AccountProfile";
 
-const ManagerSong = () => {
+const ManagerUserInfo = () => {
   return (
     <div className="pt-3 mx-[38px] flex space-x-4">
       <div className="w-1/2">
@@ -26,4 +26,4 @@ const ManagerSong = () => {
   );
 };
 
-export default ManagerSong;
+export default ManagerUserInfo;

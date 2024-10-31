@@ -4,7 +4,7 @@ import { assets } from "../../assets/assets";
 import { FaBullseye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const SideBarAdmin = () => {
+const SideBarUserInfo = () => {
   // State để lưu trữ menuItem đang được active
   const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
@@ -97,4 +97,4 @@ const SideBarAdmin = () => {
   );
 };
 
-export default SideBarAdmin;
+export default SideBarUserInfo;
