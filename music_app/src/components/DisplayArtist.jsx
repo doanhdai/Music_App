@@ -31,7 +31,7 @@ const DisplayArtist = () => {
 
         <div className="mt-10">
           <div className="flex gap-10 items-center">
-            <button className="w-[60px] h-[60px] rounded-full bg-[#C26482] flex justify-center items-center"><FaPlay /></button>
+            <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center"><FaPlay /></button>
             
             <IoIosMore size={30}/>
           </div>

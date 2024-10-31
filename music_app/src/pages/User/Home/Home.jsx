@@ -28,7 +28,7 @@ const Home = () => {
       startTransition(() => {
         setIsLoading(false);
       });
-    }, 2000);
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);
@@ -45,30 +45,31 @@ const Home = () => {
   //   });
   // }, [bgColor]);
 
-  if (isLoading) {
-    return (
-      <div className="h-screen bg-black text-white flex justify-center items-center">
-        <p>Loading, please wait...</p>
-      </div>
-    );
-  }
-
+  // if (isLoading) {
+  //   return (
+  //     <div className="h-screen bg-black text-white flex justify-center items-center">
+  //       <p>Loading, please wait...</p>
+  //     </div>
+  //   );
+  // }
   return (
     <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
       <div className="h-screen bg-black">
         <div className="h-[92%] flex">
           <Sidebar />
-          <div ref={displayColor} className="w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0">
+          <div ref={displayColor} className="w-full rounded bg-gradient-to-b from-[#311523] to-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0">
+
             <NavBar />
-            <Outlet />
-            <Footer />
+            <div className="px-7 pt-4">
+              <Outlet />
+              <Footer />
+            </div>
           </div>
         </div>
-        {/* <Player /> */}
-        <Poster/>
+        <Player />
+        {/* <Poster/> */}
       </div>
     </Suspense>
   );
 };
-
 export default Home;

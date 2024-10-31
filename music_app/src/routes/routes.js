@@ -3,6 +3,8 @@ import React, { Component } from "react";
 
 
 import config from "../config";
+
+
 const Home = React.lazy(() => import("../pages/User/Home/Home"));
 const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
 const FullAlbum = React.lazy(() => import("../components/FullAlbums"));
@@ -39,6 +41,9 @@ const NotFound = React.lazy(() => import("../pages/NotFound"));
 const UserInfoLayout = React.lazy(() => import("../pages/User/UserInfo/UserInfo"));
 const UserInfo = React.lazy(() => import("../components/UserInfo/ManagerUserInfo"));
 const ManagerPremiumUser = React.lazy(() => import("../components/UserInfo/ManagerPremiumUser"));
+
+
+
 
 const routes = createBrowserRouter([
   {
@@ -191,7 +196,8 @@ const routes = createBrowserRouter([
         index: true,
         Component: UserInfo,
       },
-      {path: config.routes.ManagerPremiumUser,
+      {
+        path: config.routes.ManagerPremiumUser,
         Component: ManagerPremiumUser,
       },
     ],

@@ -11,7 +11,7 @@ const AccountProfileEdit = () => {
       <button className="absolute top-4 right-4 bg-gray-800 px-4 py-1 rounded-md">
         Lưu
       </button>
-      <InputItem title="Email" />
+      <InputItem title="Email" type_input="text" />
       <div className="mt-5" style={{ marginBottom: "-5px", color: "#A4A298" }}>
         Thay đổi mật khẩu
       </div>
@@ -19,8 +19,10 @@ const AccountProfileEdit = () => {
         title="Mật khẩu cũ"
         password={password}
         setPassword={setPassword}
+        type_input="password" 
       />
-      <InputItem title="Mật khẩu mới" />
+      
+      <InputItem title="Mật khẩu mới" type_input="password" />
       <PasswordRules password={password} />
     </div>
   );

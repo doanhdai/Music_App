@@ -3,10 +3,9 @@ import React from 'react'
 import { CiCirclePlus } from "react-icons/ci";
 import { IoIosMore, IoIosSearch } from 'react-icons/io'
 import { MdOutlineEdit } from "react-icons/md";
-import { MdDeleteOutline } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
-
+import { MdDeleteOutline } from "react-icons/md";
 
 const ManagerAccount = () => {
   return (
@@ -28,21 +27,20 @@ const ManagerAccount = () => {
                 
 
                 <div className='flex flex-col'>
-                    <lable className="mb-2">Loại người dùng</lable>
+                    <label className="mb-2">Loại người dùng</label>
                     <select className='bg-black text-white p-2.5 rounded-3xl border-none w-[200px] outline-none cursor-pointer'>
                         <option>Tất cả người dùng</option>
-                        <option>aaa</option>
-                        <option>bbb</option>
-                        <option>ccc</option>
+                        <option>Người nghe</option>
+                        <option>Nghệ sĩ</option>
                     </select>
                 </div>
                 <div className='flex flex-col'>
-                    <lable className="mb-2">Trạng thái</lable>
+                    <label className="mb-2">Trạng thái</label>
                     <select className='bg-black text-white p-2.5 rounded-3xl border-none w-[170px] outline-none cursor-pointer'>
                         <option>Tất cả </option>
-                        <option>aaa</option>
-                        <option>bbb</option>
-                        <option>ccc</option>
+                        <option>Hoạt động</option>
+                        <option>Bị khóa</option>
+                        <option>Chờ duyệt</option>
                     </select>
                 </div>
 
@@ -64,7 +62,7 @@ const ManagerAccount = () => {
                     <MdOutlineEdit  size={30} />
                 </div>
                 <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <CiCirclePlus size={30} />
+                    <MdDeleteOutline size={30}/>
                 </div>
                </div>
 

@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import { CiCirclePlus } from "react-icons/ci";
 import { IoIosMore, IoIosSearch } from 'react-icons/io'
 import { MdOutlineEdit } from "react-icons/md";
-
+import { MdDeleteOutline } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
 
@@ -69,7 +69,7 @@ const ManagerPremium = () => {
                     <MdOutlineEdit  size={30} />
                 </div>
                 <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <CiCirclePlus size={30} />
+                    <MdDeleteOutline size={30}/>
                 </div>
                </div>
 
