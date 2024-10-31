@@ -35,7 +35,7 @@ const Search = () => {
                 <div
                 key={genre.id}
                 id={`genre-${genre.id}`}
-                className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[16px]"
+                className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[18px]"
                 style={{ backgroundColor: getRandomColor() }}
                 >
                 {genre.name}

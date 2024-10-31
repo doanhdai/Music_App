@@ -11,7 +11,6 @@ import Poster from "../../../components/Poster";
 const Home = () => {
   const displayColor = useRef(null);
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
   const isAlbum = /\/albums(\/|$)/.test(location.pathname);
   const isArtist = /\/artist(\/|$)/.test(location.pathname);
 
@@ -24,15 +23,10 @@ const Home = () => {
     : "#121212";
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      startTransition(() => {
-        setIsLoading(false);
-      });
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
+    if (displayColor.current) {
+      displayColor.current.scrollTop = 0;
+    }
+  }, [location.pathname]);
   // useEffect(() => {
   //   startTransition(() => {
   //     if (displayColor.current) {
@@ -44,32 +38,31 @@ const Home = () => {
   //     }
   //   });
   // }, [bgColor]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="h-screen bg-black text-white flex justify-center items-center">
-  //       <p>Loading, please wait...</p>
-  //     </div>
-  //   );
-  // }
   return (
-    <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
-      <div className="h-screen bg-black">
-        <div className="h-[92%] flex">
-          <Sidebar />
-          <div ref={displayColor} className="w-full rounded bg-gradient-to-b from-[#311523] to-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0">
-
-            <NavBar />
+    <div className="h-screen bg-black">
+      <div className="h-[92%] flex">
+        <Sidebar />
+        <div
+          ref={displayColor}
+          className="w-full rounded bg-gradient-to-b from-[#311523] to-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0"
+        >
+          <NavBar />
+          <Suspense
+            fallback={
+              <div className="h-screen bg-black text-white flex justify-center items-center">
+                Loading...
+              </div>
+            }
+          >
             <div className="px-7 pt-4">
               <Outlet />
               <Footer />
             </div>
-          </div>
+          </Suspense>
         </div>
-        <Player />
-        {/* <Poster/> */}
       </div>
-    </Suspense>
+      <Player />
+    </div>
   );
 };
 export default Home;

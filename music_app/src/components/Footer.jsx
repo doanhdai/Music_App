@@ -60,7 +60,7 @@ const Footer = () => {
               <FaGithub className="text-2xl hover:text-gray-400" />
             </a>
           </div>
-          <div className="w-full h-1/3 bg-auto bg-[url('./src/assets/logo2.svg')]  bg-cover bg-center "></div>
+          <div className="w-full h-1/3 bg-auto bg-[url('./src/assets/logo2.svg') bg-center "></div>
         </div>
       </div>
     </footer>
