@@ -1,4 +1,4 @@
-import { FaHeart} from "react-icons"
+import { FaHeartl,FaXmark } from "react-icons"
 
 const AlbumDetailModal = ({ album, onClose }) => {
 
@@ -35,8 +35,7 @@ const AlbumDetailModal = ({ album, onClose }) => {
           onClick={onClose}
           className="absolute top-2 right-2 text-white py-2 px-4 rounded"
         >
-          {" "}
-          X
+          <FaXmark/>
         </button>
       </div>
     </div>
@@ -111,11 +110,11 @@ export default AlbumDetailModal;
 
 {/* Intruction how to use
   parent component
-  
+
   const [selectedAlbum, setSelectedAlbum] = useState(null);
 
   const handleCardClick = (album) => {
-    setSelectedAlbum(album);
+    setSelectedAlbum(album); thong tin album hien tai
   };
 
   const closeModal = () => {
