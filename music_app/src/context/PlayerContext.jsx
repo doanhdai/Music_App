@@ -44,18 +44,18 @@ const PlayerContextProvider = (props) => {
     };
 
     const playWithId = async (id) => {
-        // await songsData.map((item) => {
-        //     if (id === item._id) {
-        //         setTrack(item);
-        //         console.log(item);
-        //     }
-        // });
+        await songsData.map((item) => {
+            if (id === item._id) {
+                setTrack(item);
+                console.log(item);
+            }
+        });
         await setTrack(songsData[id]);
         await audioRef.current.play();
-        setPlayStatus(true);
+        setPlayStatus(true);``
     };
 
-    const currentPlaylist = songsData?.filter((song) => song.playlist === track?.playlist) || [];
+    // const currentPlaylist = songsData?.filter((song) => song.playlist === track?.playlist) || [];
 
     const previous = async () => {
         // if (track && currentPlaylist.length > 0) {
@@ -66,11 +66,12 @@ const PlayerContextProvider = (props) => {
         //         setPlayStatus(true);
         //     }
         // }
-        if(track.id > 1 ){
+
+        // if(track.id > 1 ){
             // await setTrack(songsData[track.id -1])
             // await audioRef.current.play()
             // await setPlayStatus(true)
-        }
+        // }
     };
 
     const next = async () => {
@@ -82,11 +83,12 @@ const PlayerContextProvider = (props) => {
         //         setPlayStatus(true);
         //     }
         // }
-         if(track.id < songsData.length -1 ){
-            // await setTrack(songsData[track.id + 1])
-            // await audioRef.current.play()
-            // await setPlayStatus(true)
-        }
+
+        //  if(track.id < songsData.length -1 ){
+        //     await setTrack(songsData[track.id + 1])
+        //     await audioRef.current.play()
+        //     await setPlayStatus(true)
+        // }
     };
 
     const seekSong = async (e) => {

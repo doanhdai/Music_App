@@ -8,7 +8,7 @@ const AdminContent = () => {
     const { isBgCover } = useContext(AdminContext);
 
     return (
-        <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
+        <>
             <div className={`h-screen w-screen fixed top-0 left-0 bg-[#A4A298] opacity-25 z-20 ${isBgCover ? 'block' : 'hidden'}`}></div>
             <div className="h-screen bg-black">
                 <div className="h-[100%] flex">
@@ -18,12 +18,14 @@ const AdminContent = () => {
                             <HeaderAdmin />
                         </div>
                         <div className='h-[88.5%] my-2 bg-gradient-to-b from-[#311523] to-[#121212]'>
-                            <Outlet />
+                            <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
+                                <Outlet />
+                            </Suspense>
                         </div>
                     </div>
                 </div>
             </div>
-        </Suspense>
+        </>
     );
 };
 
