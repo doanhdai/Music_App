@@ -34,33 +34,24 @@ const DateFilter = () => {
 
   return (
     <div className="inline-flex py-auto gap-x-5  mr-auto rounded-xl shadow-md text-nowrap text-center ">
-      <h2 className="text-lg  my-auto font-semibold">Tìm kiếm </h2>
-      
-        <label className="text-sm my-auto font-medium text-gray-700">Start Date</label>
+      <h2 className="  my-auto text-[#A4A298] ">Tìm kiếm </h2>
         <input
           type="date"
           placeholder="dd-mm-yyyy"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          className="text-black px-2  w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="text-black px-2  w-full border border-gray-300  shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       
       
-        <label className="text-sm  my-auto font-medium text-gray-700">End Date</label>
+        <label className="text-sm  my-auto font-medium text-[#A4A298]">đến</label>
         <input
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          className=" w-full px-2 text-black border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className=" w-full px-2 text-black border border-gray-300  shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       
-      
-      <button
-        onClick={handleSearch}
-        className="p-2 py-0 bg-[#EB2272] text-white font-semibold  rounded-md hover:bg-indigo-700"
-      >
-        Search
-      </button>
 
       
     </div>
