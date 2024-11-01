@@ -41,7 +41,7 @@ const NotFound = React.lazy(() => import("../pages/NotFound"));
 const UserInfoLayout = React.lazy(() => import("../pages/User/UserInfo/UserInfo"));
 const UserInfo = React.lazy(() => import("../components/UserInfo/ManagerUserInfo"));
 const ManagerPremiumUser = React.lazy(() => import("../components/UserInfo/ManagerPremiumUser"));
-
+const DisplayPlaylist = React.lazy(()=> import("../components/DisplayPlaylist"))
 
 
 
@@ -82,6 +82,10 @@ const routes = createBrowserRouter([
         path: config.routes.search,
         Component: search,
       },
+      {
+        path: config.routes.Playlist,
+        Component: DisplayPlaylist
+      }
     ],
   },
   {
