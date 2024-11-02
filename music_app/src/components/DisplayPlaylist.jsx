@@ -3,7 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { albumsData, artistData, assets, songsData} from "../assets/assets";
+import { albumsData, artistData, assets, songsData,playlistsData} from "../assets/assets";
 import AlbumItems from './AlbumItems'
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdArrowCircleDown } from "react-icons/md";
@@ -19,6 +19,8 @@ const DisplayPlaylist = () => {
     console.log(songId)
   };
   const closeMenu = () => setMenuSongId(null);
+
+
   return (
     <div onClick={closeMenu}>
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
@@ -42,7 +44,7 @@ const DisplayPlaylist = () => {
           <div className="flex gap-10 items-center">
             <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center"><FaPlay /></button>
             
-            {/* <IoIosMore size={30}/> */}
+
           </div>
         </div>
         <h1 className="font-bold text-2xl mt-7 mb-5">Danh sách phát</h1>

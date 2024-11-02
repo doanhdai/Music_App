@@ -10,7 +10,7 @@ const PlayerContextProvider = (props) => {
     const scrollHomeRef = useRef();
     const bgHomeHeader = useRef();
 
-
+    const [loadingTrack, setLoadingTrack] = useState(false);
     // const [user, setUser] = useState(false);
     // const [usersData, setUsersData] = useState([]);
     // const [songsData, setSongsData] = useState([]);
@@ -21,6 +21,7 @@ const PlayerContextProvider = (props) => {
     // const [concertsData, setConcertsData] = useState([]);
     const [track, setTrack] = useState(songsData[0] || { file: "" });
     const [playStatus, setPlayStatus] = useState(false);
+    const [volume, setVolume] = useState(1);
 
     const [time, setTime] = useState({
         currentTime: {
@@ -52,7 +53,13 @@ const PlayerContextProvider = (props) => {
         });
         await setTrack(songsData[id]);
         await audioRef.current.play();
-        setPlayStatus(true);``
+        setPlayStatus(true);
+    };
+    const updateVolume = (newVolume) => {
+        setVolume(newVolume);
+        if (audioRef.current) {
+            audioRef.current.volume = newVolume;
+        }
     };
 
     // const currentPlaylist = songsData?.filter((song) => song.playlist === track?.playlist) || [];
@@ -67,11 +74,13 @@ const PlayerContextProvider = (props) => {
         //     }
         // }
 
-        // if(track.id > 1 ){
-            // await setTrack(songsData[track.id -1])
-            // await audioRef.current.play()
-            // await setPlayStatus(true)
-        // }
+        if (track.id >= 1) {
+            setLoadingTrack(true);
+            await setTrack(songsData[track.id - 1]);
+            await audioRef.current.play();
+            setLoadingTrack(false);
+            setPlayStatus(true);
+        }
     };
 
     const next = async () => {
@@ -84,11 +93,13 @@ const PlayerContextProvider = (props) => {
         //     }
         // }
 
-        //  if(track.id < songsData.length -1 ){
-        //     await setTrack(songsData[track.id + 1])
-        //     await audioRef.current.play()
-        //     await setPlayStatus(true)
-        // }
+        if (track.id < songsData.length - 1) {
+        setLoadingTrack(true);
+        await setTrack(songsData[track.id + 1]);
+        await audioRef.current.play();
+        setLoadingTrack(false);
+        setPlayStatus(true);
+    }
     };
 
     const seekSong = async (e) => {
@@ -98,8 +109,11 @@ const PlayerContextProvider = (props) => {
     
 
     useEffect(() => {
-        setTimeout(() => {
-            audioRef.current.ontimeupdate = () => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume; // Thiết lập âm lượng ban đầu
+        }
+        const updateTime = () => {
+            if (audioRef.current.readyState >= 2) {
                 seekBar.current.style.width =
                     Math.floor((audioRef.current.currentTime / audioRef.current.duration) * 100) + '%';
                 setTime({
@@ -112,9 +126,20 @@ const PlayerContextProvider = (props) => {
                         minute: Math.floor(audioRef.current.duration / 60),
                     },
                 });
-            };
-        }, 1000);
-    }, [audioRef]);
+            }
+        };
+
+        if (audioRef.current) {
+            audioRef.current.ontimeupdate = updateTime;
+        }
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.ontimeupdate = null;
+            }
+        };
+    }, [audioRef, loadingTrack]);
+
 
     const contextValue = {
         // user,
@@ -143,6 +168,7 @@ const PlayerContextProvider = (props) => {
         // artistsData,
         // genresData,
         // concertsData,
+        setVolume: updateVolume,
     };
 
     return( 

@@ -42,7 +42,7 @@ const Home = () => {
   // }, [bgColor]);
   return (
     <div className="h-screen bg-black">
-      <div className="h-[92%] flex">
+      <div className="h-[90%] flex">
         <Sidebar />
         <div
           ref={displayColor}

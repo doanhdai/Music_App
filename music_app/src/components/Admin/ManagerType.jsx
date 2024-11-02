@@ -114,7 +114,7 @@ const ManagerType = () => {
         return (
             <form className="bg-[#1E1E1E] w-auto p-4">
                 <div className='flex mt-4 mb-4'>
-                    <p className='text-[#A4A298]'>Chọn chủng loai</p>
+                    <p className='text-[#A4A298]'>Chọn chủng loại</p>
                     <select className='bg-[#EB2272] text-white rounded-md border-none w-auto outline-none cursor-pointer ml-4 mr-4 text-center pt-1 pb-1 pr-1 text-sm'>
                         {
                             chungloaiList.map((chungloai) => {

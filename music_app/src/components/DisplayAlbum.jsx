@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaPlay, FaRegHeart } from "react-icons/fa";
-import { IoIosMore } from "react-icons/io";
+import { IoIosMore, IoMdPause } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { albumsData, assets, songsData } from "../assets/assets";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdArrowCircleDown } from "react-icons/md";
+import { PlayerContext } from "../context/PlayerContext";
 const DisplayAlbum = () => {
+  const{playWithId, playStatus,pause, track} = useContext(PlayerContext)
+
   const { id } = useParams();
   const albumData = albumsData[id];
 
-  const [menuSongId, setMenuSongId] = useState(null);
-
+    const [hoveredSong, setHoveredSong] = useState(null);
+    const [menuSongId, setMenuSongId] = useState(null);
+  
   const toggleMenu = (songId) => {
     setMenuSongId(menuSongId === songId ? null : songId);
     console.log(songId)
@@ -37,7 +41,11 @@ const DisplayAlbum = () => {
       <div className="mt-10">
         <div className="flex gap-10 items-center">
           <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center">
-            <FaPlay />
+            {
+              playStatus ?  
+              <IoMdPause onClick={pause} size={20} />:
+              <FaPlay onClick={()=>playWithId(id)}/>
+            }
           </button>
           <button><FaRegHeart size={30} /></button>
           <IoIosMore size={30} onClick={(e) => { e.stopPropagation(); toggleMenu(-1); }} />
@@ -58,31 +66,38 @@ const DisplayAlbum = () => {
 
       <hr />
 
-      {songsData.map((item) => (
-        <div
-          key={item.id}
-          className="relative grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr_1.5fr_1fr] mt-10 mb-4 pl-2 text-[#fff] items-center hover:bg-[#ffffff2b] cursor-pointer"
-        >
-          <Link to={`/song/${item.id}`} className="text-white">
-            <b>{item.id}</b>
-            <img className="inline w-10 mx-4" src={item.image} alt={item.name} />
-            {item.name}
-          </Link>
-          <Link to={`/song/${item.id}`} className="text-[15px]">{albumData.name}</Link>
-          <p className="text-[15px] hidden sm:block">2 ngày trước</p>
-          <p className="text-[15px]">1.000.950</p>
-          <p className="text-[15px] text-center">{item.duration}</p>
-          <div className="text-[15px] flex justify-center relative">
+      {songsData.map((item, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-7 sm:grid-cols-[0.3fr_2.8fr_3fr_2fr_2fr_1.5fr_1fr] mt-10 mb-4 pl-2 text-[#fff] items-center hover:bg-[#ffffff2b] cursor-pointer"
+              onMouseEnter={() => setHoveredSong(index)}
+              onMouseLeave={() => setHoveredSong(null)}
+          >
+            {
+              playStatus && track.id === item.id ?  
+                <p>{hoveredSong === index ? <IoMdPause onClick={pause} size={13} /> : index + 1}</p> :
+                <p>{hoveredSong === index ? <FaPlay onClick={()=>playWithId(item.id)} size={13} /> : index + 1}</p>
+            }
+            <Link to='/song/1' className="text-white flex items-center pr-2">
+              <img className="inline w-10 mx-4 " src={item.image} />
+              {item.name}
+            </Link>
+            <p className="text-[15px]">{albumData.name}</p>
+            <p className="text-[15px] hidden sm:block">2 ngày trước</p>
+            <p className="text-[15px]">1.000.950</p> 
+            <p className="text-[15px] text-center">{item.duration}</p>
+            <div className="text-[15px] flex justify-center relative">
              {menuSongId === item.id && (
-              <div className="absolute bottom-8 right-0 bg-gray-800 text-white p-2 rounded shadow-lg !z-50 w-[250px]">
-                <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"> <IoAddCircleOutline size={20} />Thêm vào danh sách phát</div>
-                <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"> <MdArrowCircleDown size={20} />Tải xuống</div>
-              </div>
-            )}
-            <IoIosMore onClick={(e) => { e.stopPropagation(); toggleMenu(item.id); }} />
+                <div className="absolute bottom-8 right-0 bg-gray-800 text-white p-2 rounded shadow-lg !z-50 w-[250px]">
+                  <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"> <IoAddCircleOutline size={20} />Thêm vào danh sách phát</div>
+                  <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"> <MdArrowCircleDown size={20} />Tải xuống</div>
+                </div>
+              )}
+              <IoIosMore onClick={(e) => { e.stopPropagation(); toggleMenu(item.id); }} />
            
+            </div>
           </div>
-        </div>
+        
       ))}
     </div>
   );
