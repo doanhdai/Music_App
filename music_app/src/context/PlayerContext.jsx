@@ -61,6 +61,9 @@ const PlayerContextProvider = (props) => {
             audioRef.current.volume = newVolume;
         }
     };
+    const muteVolume = async() => {
+        await setVolume(0)
+    }
 
     // const currentPlaylist = songsData?.filter((song) => song.playlist === track?.playlist) || [];
 
@@ -110,7 +113,7 @@ const PlayerContextProvider = (props) => {
 
     useEffect(() => {
         if (audioRef.current) {
-            audioRef.current.volume = volume; // Thiết lập âm lượng ban đầu
+            audioRef.current.volume = volume;
         }
         const updateTime = () => {
             if (audioRef.current.readyState >= 2) {
@@ -169,6 +172,7 @@ const PlayerContextProvider = (props) => {
         // genresData,
         // concertsData,
         setVolume: updateVolume,
+        muteVolume
     };
 
     return( 

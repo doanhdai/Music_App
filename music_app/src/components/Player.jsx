@@ -8,10 +8,11 @@ import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { IoMdPause } from "react-icons/io";
 import { IoShuffle } from "react-icons/io5";
 import { SlLoop } from "react-icons/sl";
-
+import { GoMute } from "react-icons/go";
+import { GoUnmute } from "react-icons/go";
 const Player = () => {
     const [volume, setVolume] = useState(0.5);
-
+    const [isMuted, setIsMuted] = useState(false);
     const formatTime = (minute, second) => {
         const formattedMinute = minute;
         const formattedSecond = second < 10 ? `0${second}` : second;
@@ -37,8 +38,15 @@ const Player = () => {
         const newVolume = parseFloat(e.target.value);
         setVolume(newVolume);
         setAudioVolume(newVolume);
+        newVolume >0 ? setIsMuted(false) : setIsMuted(true) 
     };
-
+    const handleMuteClick = () => {
+        isMuted ? setIsMuted(false): setIsMuted(true)
+        const newVolume = volume === 0 ? 0.5 : 0;
+        setVolume(newVolume);
+        setAudioVolume(newVolume);
+        
+    };
     return (
         <div className='h-[10%] bg-black flex justify-between items-center text-white px-5 py-2 '>
             <div className='hidden lg:flex items-center gap-4'>
@@ -81,12 +89,11 @@ const Player = () => {
             </div>
 
             <div className='hidden lg:flex items-center gap-2 opacity-75'>
-                <img 
-                    className='w-3 cursor-pointer' 
-                    src={assets.volume_icon} 
-                    alt="Volume Icon" 
-                    onClick={() => setVolume(volume === 0 ? 0.5 : 0)}
-                />
+                {
+                    isMuted ? <GoMute onClick={handleMuteClick}/> : < GoUnmute onClick={handleMuteClick}  />
+                }
+                
+                
                 <input 
                     type="range" 
                     min="0" 
