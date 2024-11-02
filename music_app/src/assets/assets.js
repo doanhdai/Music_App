@@ -165,10 +165,10 @@ export const artistData = [
 export const songsData = [
     {
         id:0,
-        name: "Song One",
+        name: "Anh đã ổn hơn",
         image: img1,
         file:song1,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Mck",
         duration:"3:00"
     },
     {

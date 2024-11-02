@@ -2,9 +2,11 @@ import React from 'react'
 import { assets } from '../assets/assets'
 import { IoIosSearch } from "react-icons/io";
 import { TbFilterPlus } from "react-icons/tb";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import config from '../config';
 
 const Sidebar = () => {
+    const navigate = useNavigate();
   return (
     <div className='w-[25%] h-full p-2 flex-col gap-2 text-white hidden lg:flex '>
 
@@ -42,21 +44,21 @@ const Sidebar = () => {
                 </div>
             </div>
             
-            <div onClick={()=>navigate("/song/1")} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
+            <div onClick={()=>navigate(`/playlist/${1}`)} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
                 <img className='rounded h-[50px] mr-3' src={assets.mck}></img>
                 <div>
                     <p className='font-bold'>Danh sách phát của tôi #1</p>
                     <h5 className='text-slate-200 text-sm'> Danh sách phát - Đài</h5>
                 </div>
             </div>
-            <div onClick={()=>navigate("/song/1")} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
+            <div onClick={()=>navigate(config.routes.Playlist + `${1}`)} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
                 <img className='rounded h-[50px] mr-3' src={assets.mck}></img>
                 <div>
                     <p className='font-bold'>Danh sách phát của tôi #1</p>
                     <h5 className='text-slate-200 text-sm'> Danh sách phát - Đài</h5>
                 </div>
             </div>
-            <div onClick={()=>navigate("/song/1")} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
+            <div onClick={()=>navigate(config.routes.Playlist + `${1}`)} className='min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#fffff26]'>
                 <img className='rounded h-[50px] mr-3' src={assets.mck}></img>
                 <div>
                     <p className='font-bold'>Danh sách phát của tôi #1</p>

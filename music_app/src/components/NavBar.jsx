@@ -1,4 +1,4 @@
-import React, { useState, startTransition } from "react";
+import React, { useState, startTransition, Component } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { assets } from "../assets/assets";
 import { FaRegBell } from "react-icons/fa6";
@@ -6,6 +6,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { CiLogin } from "react-icons/ci";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
+import config from "../config";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ const NavBar = () => {
                     <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center " 
                       onClick={() => {
                         startTransition(() => {
-                          navigate("/artist-site");
+                          navigate(config.routes.artistSite);
                         });
                       }}>
                       <div  className="mr-3"><IoSettingsOutline size={20}/></div>
@@ -112,8 +113,9 @@ const NavBar = () => {
                     <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
                       onClick={() => {
                         startTransition(() => {
-                          navigate("/UserInfo");
-                        });}}
+                          navigate(config.routes.UserInfo);
+                        });
+                      }}
                     
                     >
                       <div className="mr-3"><RiAccountCircleLine size={20}/></div>
