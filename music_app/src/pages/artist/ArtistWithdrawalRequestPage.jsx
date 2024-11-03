@@ -41,9 +41,6 @@ const ArtistWidthdrawalRequestPage = () => {
       </div>
       {/* xem hoa don rut */}
       <div className="mt-10">
-        <div className="">
-          <div><h2>Tổng cộng: 500000</h2></div>
-        </div>
         <div className="mt-5 bg-[#121212]">
           <div className=" py-2 mx-5 grid grid-cols-5 sm:grid-cols-[1fr_1fr_1fr_3fr_2fr_2fr] pl-2 text-center text-sm text-[#A4A298] ">
             <p>ID</p>

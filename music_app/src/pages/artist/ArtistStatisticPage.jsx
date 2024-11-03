@@ -3,7 +3,8 @@ import { useState } from "react";
 import DateFilter from "./components/DateFilter";
 
 import { RiArrowDownWideFill } from "react-icons/ri";
-
+import { BsHeadphones } from "react-icons/bs";
+import { LuClock2 } from "react-icons/lu";
 const ArtistStatisticPage = () => {
   
   const dropDownSelection = [
@@ -157,11 +158,11 @@ const CountViewStatisticList = () => {
       <div className="mt-5 bg-[#121212]">
         <div className=" py-2 mx-5 grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_1fr_2fr_1fr] pl-2 text-center text-sm text-[#A4A298] ">
           <p>STT</p>
-          <p>Ten bai hat</p>
+          <p>Tên bài hát</p>
           <p>Album</p>
-          <p>time</p>
-          <p>hea</p>
-          <p>Trang thai</p>
+          <p className="text-xl mx-auto"><LuClock2/></p>
+          <p className="text-xl mx-auto"><BsHeadphones/></p>
+          <p>Trạng thái</p>
         </div>
         <hr className="mx-5" />
 
@@ -180,11 +181,13 @@ const CountViewStatisticList = () => {
         
         </div>
       ))} */}
-        <div className="py-2 mx-5 grid grid-cols-5 sm:grid-cols-[1fr_2fr_2fr_2fr] pl-2 text-center hover:bg-[#ffffff2b]">
+        <div className="py-2 mx-5 grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_1fr_2fr_1fr] pl-2 text-center hover:bg-[#ffffff2b]">
           <p className="text-lg ">1</p>
           <p className="text-lg ">Sara perche</p>
-          <p className="text-lg ">10000</p>
-          <p className="text-lg ">Công khai</p>
+          <p className="text-lg ">Richi</p>
+          <p className="text-lg ">3:34</p>
+          <p className="text-lg ">10000000</p>
+          <p className="text-lg ">An</p>
         </div>
       </div>
     </div>
