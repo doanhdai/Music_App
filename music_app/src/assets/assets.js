@@ -165,10 +165,10 @@ export const artistData = [
 export const songsData = [
     {
         id:0,
-        name: "Song One",
+        name: "Anh đã ổn hơn",
         image: img1,
         file:song1,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Mck",
         duration:"3:00"
     },
     {
@@ -228,6 +228,48 @@ export const songsData = [
         duration:"2:35"
     }
 ]
+export const playlistsData = [
+    {
+        id: 0,
+        name: "Playlist Yêu Thích",
+        image: img8,
+        desc: "Những bài hát yêu thích của tôi",
+        songs: [songsData[0], songsData[1], songsData[2]],
+        bgColor: "#1a1a1a"
+    },
+    {
+        id: 1,
+        name: "Nhạc Tươi Mát",
+        image: img9,
+        desc: "Bài hát mang lại năng lượng tích cực",
+        songs: [songsData[3], songsData[4]], // Danh sách bài hát
+        bgColor: "#ffeb3b"
+    },
+    {
+        id: 2,
+        name: "Bài Hát Mới Nhất",
+        image: img10,
+        desc: "Cập nhật những bài hát mới phát hành",
+        songs: [songsData[5], songsData[6]], // Danh sách bài hát
+        bgColor: "#4caf50"
+    },
+    {
+        id: 3,
+        name: "Nhạc Chill",
+        image: img11,
+        desc: "Những bài hát thư giãn cho buổi tối",
+        songs: [songsData[7]], // Danh sách bài hát
+        bgColor: "#2196f3"
+    },
+    {
+        id: 4,
+        name: "Nhạc Quốc Tế",
+        image: img12,
+        desc: "Những bài hát nổi tiếng quốc tế",
+        songs: [songsData[0], songsData[3]], // Danh sách bài hát
+        bgColor: "#e91e63"
+    }
+];
 
 export const songData2 = [
     {

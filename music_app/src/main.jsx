@@ -1,18 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-// import App from './App.jsx'
-import { BrowserRouter, RouterProvider } from 'react-router-dom'
-import './index.css'
-import PlayerContextProvider from './context/PlayerContext.jsx'
-import routes from './routes/routes.js'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import './index.css';
+import PlayerContextProvider from './context/PlayerContext.jsx';
+import router from './routes/routes.js';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router= {routes}>
-
-        {/* <App /> */}
-
-    </RouterProvider>
-    
+    <PlayerContextProvider>
+      <RouterProvider router={router} />
+    </PlayerContextProvider>
   </StrictMode>
-)
+);

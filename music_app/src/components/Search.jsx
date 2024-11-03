@@ -1,7 +1,9 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Search = () => {
-  // Danh sách thể loại âm nhạc
+  const location = useLocation();
+  const { artistResults, albumResults, songResults, searchTerm } = location.state || {};
   const genres = [
     { id: 1, name: "Pop" },
     { id: 2, name: "Rock" },
@@ -17,7 +19,6 @@ const Search = () => {
     { id: 12, name: "Latin" }
   ];
 
-  // Hàm tạo màu ngẫu nhiên
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -27,24 +28,63 @@ const Search = () => {
     return color;
   };
 
+  const hasResults = artistResults?.length > 0  || albumResults?.length > 0 || songResults?.length > 0;
+
   return (
-    <>  
-        <div className='px-4 font-bold text-[20px]'>Thể loại:</div>
-        <div className="grid grid-cols-4 gap-4 p-4">
-            {genres.map((genre) => (
+    <>
+      {searchTerm && searchTerm.trim() ? (
+        hasResults ? (
+          <div>
+            <h2>Kết quả tìm kiếm:</h2>
+            <div>
+              <h3>Nghệ sĩ</h3>
+              {artistResults?.map((artist) => (
+                <p key={artist.id}>{artist.name}</p>
+              ))}
+              <h3>Album</h3>
+              {albumResults?.map((album) => (
+                <p key={album.id}>{album.name}</p>
+              ))}
+              <h3>Bài hát</h3>
+              {songResults?.map((song) => (
+                <p key={song.id}>{song.name}</p>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className='px-4 font-bold text-[20px]'>Thể loại:</div>
+            <div className="grid grid-cols-4 gap-4 p-4">
+              {genres.map((genre) => (
                 <div
-                key={genre.id}
-                id={`genre-${genre.id}`}
-                className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[16px]"
-                style={{ backgroundColor: getRandomColor() }}
+                  key={genre.id}
+                  className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[18px]"
+                  style={{ backgroundColor: getRandomColor() }}
                 >
-                {genre.name}
+                  {genre.name}
                 </div>
+              ))}
+            </div>
+          </div>
+        )
+      ) : (
+        <div>
+          <div className='px-4 font-bold text-[20px]'>Thể loại:</div>
+          <div className="grid grid-cols-4 gap-4 p-4">
+            {genres.map((genre) => (
+              <div
+                key={genre.id}
+                className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[18px]"
+                style={{ backgroundColor: getRandomColor() }}
+              >
+                {genre.name}
+              </div>
             ))}
+          </div>
         </div>
+      )}
     </>
-    
   );
-}
+};
 
 export default Search;

@@ -1,22 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { albumsData, assets, songsData } from '../assets/assets'
 import { Link, useParams } from 'react-router-dom';
 import { FaPlay } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
-import { IoIosMore } from "react-icons/io";
-
-
-
+import { IoIosMore, IoMdPause } from "react-icons/io";
 import ArtistItems from './ArtistItems'
 import AlbumItems from './AlbumItems';
 import SongItems from './SongItems';
+import { PlayerContext } from '../context/PlayerContext';
 
 
 
 const DetailSong = () => {
-    const { id } = useParams();
-    const albumData = albumsData[id];
-    console.log(albumData);
+  const { id } = useParams();
+  const albumData = albumsData[id];
+  console.log(albumData);
+  const{playWithId, playStatus,pause, track} = useContext(PlayerContext)
 
   return (
     <>
@@ -38,7 +37,13 @@ const DetailSong = () => {
         <div>
           <div className="mt-10">
             <div className="flex gap-10 items-center">
-              <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center"><FaPlay /></button>
+              <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center">
+                {
+                  playStatus ?  
+                    <IoMdPause onClick={pause} size={20} />:
+                    <FaPlay onClick={()=>playWithId(id)}/>
+                }
+              </button>
               
               <button><FaRegHeart size={30} /></button>
               <IoIosMore size={30} />
@@ -79,7 +84,6 @@ const DetailSong = () => {
             <h1 className='my-4 font-bold text-2xl'>Bài hát đề xuất</h1>
             <Link to='/artist' className='text-slate-200 font-bold mr-3 cursor-pointer hover:text-white'> Xem tất cả</Link>
           </div>
-          {/* <h1 className='my-4 font-bold'>Nghệ sĩ đề xuất</h1> */}
           <div className='flex overflow-auto'>
             {songsData.map((item, index) => (
               <SongItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />

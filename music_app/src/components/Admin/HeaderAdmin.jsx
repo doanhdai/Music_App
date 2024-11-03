@@ -34,7 +34,7 @@ const HeaderAdmin = () => {
                   <img className="h-10 rounded-full" src={assets.mck}/>
               </p>
             {isOpenn && (
-                <div onMouseLeave={() => setIsOpenn(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
+                <div onMouseLeave={() => setIsOpenn(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48 !z-500">
                   <ul className="text-white">
                     
                     <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center" onClick={() => navigate("/admin/account_admin")}>
