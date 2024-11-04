@@ -12,12 +12,13 @@ import { GoPlus } from "react-icons/go";
 import { TfiPencil } from "react-icons/tfi";
 import { FaTrash } from "react-icons/fa";
 import { BsSendPlus } from "react-icons/bs";
-import AddSongModal from "./components/AddSongModal";
-
 import { FaPlay } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
 import { songData2 } from "../../assets/assets";
+
+import AddSongModal from "./components/AddSongModal";
+import EditSongModal from "./components/EditSongModal";
 
 const ArtistSongPage = () => {
   const fakeSongData = [
@@ -39,14 +40,39 @@ const ArtistSongPage = () => {
     },
   ];
   const [songs, setSongs] = useState([]);
+  const [currentActionType, setCurrentActionType] = useState('');
   const [showAddSongModal, setShowAddSongModal] = useState(false);
 
+  
   const handleShowAddSongModal = () => {
     setShowAddSongModal(true);
   };
   const handleCloseAddSongModal = () => {
     setShowAddSongModal(false);
   };
+  const handleEditStatusChange = () => {
+    setCurrentActionType('edit');
+  }
+  const handleDeleteStatusChange = () => {
+    setCurrentActionType('delete');
+  }
+  const actionList = {
+    'delete': ' xóa',
+    'edit' : 'chỉnh sửa',
+    'details': ' xem chi tiết'
+  }
+  const handleClickStatusChange =(actionType) => {
+    // status include details,edit,delete
+    if (actionType === currentActionType) {
+      setCurrentActionType('details');
+      alert(`Thoát trạng thái ${actionList[actionType]}`);
+    }
+    else {
+      setCurrentActionType(actionType);
+      alert(`Đang ở trạng thái ${actionList[actionType]}`)
+    }
+  }
+  // fetch data from server
   useEffect(() => {
     // fetch("link")
     //   .then((res) => {
@@ -58,7 +84,7 @@ const ArtistSongPage = () => {
     //   });
     setSongs(fakeSongData);
   }, []);
-
+  
   return (
     <div className="mt-8">
       <div className="ml-5 grid grid-cols-2 justify-center ">
@@ -74,20 +100,30 @@ const ArtistSongPage = () => {
         </form>
 
         <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
+           {/* send */}
           <button className=" h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
             <BsSendPlus className="m-auto" />
+           
           </button>
           <button
             onClick={() => handleShowAddSongModal()}
             className=" text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
           >
-            <GoPlus className="m-auto" />
+            <GoPlus className="m-auto" /> 
+            {/* add song */}
           </button>
 
-          <button className="text-xl  h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
-            <TfiPencil className="m-auto" />
+           {/* edit */}
+          <button 
+          onClick={()=> handleClickStatusChange('edit')}
+          className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${currentActionType === "edit" ? 'bg-[#EB2272]' : '' }`}>
+            <TfiPencil className="m-auto" />          
           </button>
-          <button className=" text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+
+          {/* delete */}
+          <button 
+          onClick={()=> handleClickStatusChange('delete')}
+          className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${currentActionType === "delete" ? 'bg-[#EB2272]' : '' }`}>
             <FaTrash className="m-auto" />
           </button>
         </div>
@@ -97,13 +133,13 @@ const ArtistSongPage = () => {
         />
       </div>
       <h3 className="mt-3">Tong cong: {songs.length}</h3>
-      <SongList2 songsData={songData2} />
+      <SongList2 songsData={songData2} currentActionType={currentActionType} />
     </div>
   );
 };
 
-const SongDetailModal = ({ song, onClose }) => {
-  if (!song) return null;
+const SongDetailModal = ({detailsSongModalState, song, onClose }) => {
+  if (!detailsSongModalState) return null;
   const songData = songData2[1];
   return (
     <div
@@ -176,18 +212,51 @@ const SongDetailModal = ({ song, onClose }) => {
 };
 
 // Theo kieu cua dai
-const SongList2 = (songsData) => {
+const SongList2 = ({songsData, currentActionType}) => {
   const baihat = songData2;
 
   const [selectedSong, setSelectedSong] = useState(null);
+  const [editSongModalState, setEditSongModalState] = useState(false);
+  const [detailsSongModalState, setDetailsSongModalState] = useState(false);
 
   const handleShowDetails = (song) => {
     setSelectedSong(song);
+    setDetailsSongModalState(true);
+  };
+  const handleShowEditModal = (song) => {
+    setSelectedSong(song);
+    setEditSongModalState(true);
+  }
+  const handleCloseDetailModal = () => {
+    setSelectedSong(null);
+    setDetailsSongModalState(false);
+    setEditSongModalState(false);
   };
 
-  const handleCloseModal = () => {
-    setSelectedSong(null);
+  function deleteSong(song) {
+    //gửi data song để xóa
+    alert('xoa')
+  }
+  function editSong(song) {
+    //gửi data song để edit
+    alert('sửa')
+  }
+  const clickedAction = {
+    'details': (song) =>  handleShowDetails(song),
+    'edit': (song) =>  handleShowEditModal(song),
+    'delete': (song) =>  deleteSong(song),
   };
+
+
+  function handleClickedSongItem(actionType, songInformation) {
+    const action = clickedAction[actionType];
+    if (action) {
+      return clickedAction[actionType](songInformation);
+  } else {
+      alert(`Wrong action type ${actionType}`);
+  }
+  }
+
   return (
     <div className="mt-5 bg-[#121212]">
       <div className=" py-2 grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
@@ -203,7 +272,7 @@ const SongList2 = (songsData) => {
         <div
           key={index}
           className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
-          onClick={() => handleShowDetails(item)}
+          onClick={() => handleClickedSongItem(currentActionType, item)}
         >
           <p className="text-white">
             {/* src={item.hinh_anh} */}
@@ -224,74 +293,17 @@ const SongList2 = (songsData) => {
       <SongDetailModal
         className="float-start"
         song={selectedSong}
-        onClose={handleCloseModal}
+        detailsSongModalState={detailsSongModalState}
+        onClose={handleCloseDetailModal}
       />
-    </div>
-  );
-};
-// De lai co gi sai sua
-const SongList = ({ songs }) => {
-  const [selectedSong, setSelectedSong] = useState(null);
-
-  const handleShowDetails = (song) => {
-    setSelectedSong(song);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedSong(null);
-  };
-
-  return (
-    <div className="container mx-auto ">
-      <div className="bg-[#141414] p-5">
-        <table className=" min-w-full table-fixed">
-          <thead className="border-b-2">
-            <tr className="w-full ">
-              <th className="py-2 text-center"></th>
-              <th className="py-2 px-4 text-left ">Ten bai hat</th>
-              <th className="py-2 px-4 text-center">Album</th>
-              <th className="py-2 px-4 text-center">Trang thai</th>
-              <th className="py-2 px-4 text-center">Thoi luong</th>
-
-              <th className="py-2  text-center"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {songs.map((song) => (
-              <tr key={song.id}>
-                <td className="w-0 py-3 px-0 ">
-                  <img
-                    src={song.imgUrl}
-                    alt={song.title}
-                    className="w-16 h-16 object-cover"
-                  />
-                </td>
-                <td className="py-1 px-4">{song.title}</td>
-                <td className="py-1 px-4 text-center">{song.album}</td>
-                <td className="py-1 px-4 text-center">
-                  {song.status === 1 ? "Cong khai" : "An"}
-                </td>
-                <td className="py-1 px-4 text-center">{song.duration}</td>
-                <td className="w-2 py-1 px-0 text-center">
-                  <button
-                    onClick={() => handleShowDetails(song)}
-                    className="text-3xl text-white py-1 px-2 rounded"
-                  >
-                    <FiEye />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {/* Modal for song details */}
-      <SongDetailModal
+      <EditSongModal
         className="float-start"
-        song={selectedSong}
-        onClose={handleCloseModal}
-      />
+        songDetails={selectedSong}
+        editSongModalState={editSongModalState}
+        onClose={handleCloseDetailModal}
+        />
     </div>
   );
 };
+
 export default ArtistSongPage;

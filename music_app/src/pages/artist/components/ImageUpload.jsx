@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const ImageUpload = ({}, ref) => {
-  const [image, setImage] = useState(null);
+const ImageUpload = ({initialImage}, ref) => {
+  const [image, setImage] = useState(initialImage);
   React.useImperativeHandle(ref, () => ({
     getData: getData,
   }));
