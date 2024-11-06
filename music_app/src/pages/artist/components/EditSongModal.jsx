@@ -5,15 +5,16 @@ import { FaXmark } from "react-icons/fa6";
 const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   if (editSongModalState === false) return null;
 
-  const [songName, setSongName] = useState(songDetails?.name || "");
+  const [songName, setSongName] = useState(songDetails?.ma_bai_hat || "");
   const [selectedGenres, setSelectedGenres] = useState(songDetails?.genres || []);
   const [selectedArtists, setSelectedArtists] = useState(songDetails?.artists || []);
   const [genreSearch, setGenreSearch] = useState("");
   const [artistSearch, setArtistSearch] = useState("");
   const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
   const [artistDropdownOpen, setArtistDropdownOpen] = useState(false);
-  const ImgRef = useRef(null); // store img data
+  const ImgRef = useRef(null); // store img data not api link
 
+  console.log(songDetails)
   const toggleGenreDropdown = () => {
     setGenreDropdownOpen(!genreDropdownOpen);
     setArtistDropdownOpen(false); // Close artist dropdown if open
@@ -60,11 +61,11 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
       <div className="max-w-2xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
         <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={onClose} />
         <h2 className="text-2xl font-bold mb-5 text-center">
-          Edit Song Information
+          Sửa bài hát
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} initialImage={songDetails?.image} />
+            <ImageUpload ref={ImgRef} initialImage={songDetails?.hinh_anh} />
 
             <div className="w-sm">
               {/* Song Name */}

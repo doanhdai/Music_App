@@ -80,7 +80,7 @@ const SongUpload = ({closeModal}) => {
       <div className="max-w-2xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
         <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={closeModal}/>
         <h2 className="text-2xl font-bold mb-5 text-center">
-          Upload Song Information
+          Tạo bài hát mới
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row">

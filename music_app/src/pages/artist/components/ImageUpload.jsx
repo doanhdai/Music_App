@@ -33,7 +33,7 @@ const ImageUpload = ({initialImage}, ref) => {
       />
       <div
         id="image-preview"
-        className="flex bg-white aspect-square items-center justify-center w-40   border-2 border-dashed border-gray-300 rounded-lg cursor-pointer"
+        className="flex bg-white aspect-square items-center justify-center w-40   border-2  rounded-lg cursor-pointer"
         onClick={() => document.getElementById("file-input").click()} // Trigger file input on click
       >
         {image ? (

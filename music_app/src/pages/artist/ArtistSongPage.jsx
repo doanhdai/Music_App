@@ -40,7 +40,7 @@ const ArtistSongPage = () => {
     },
   ];
   const [songs, setSongs] = useState([]);
-  const [currentActionType, setCurrentActionType] = useState('');
+  const [currentActionType, setCurrentActionType] = useState('details');
   const [showAddSongModal, setShowAddSongModal] = useState(false);
 
   
@@ -237,10 +237,7 @@ const SongList2 = ({songsData, currentActionType}) => {
     //gửi data song để xóa
     alert('xoa')
   }
-  function editSong(song) {
-    //gửi data song để edit
-    alert('sửa')
-  }
+
   const clickedAction = {
     'details': (song) =>  handleShowDetails(song),
     'edit': (song) =>  handleShowEditModal(song),
@@ -260,9 +257,9 @@ const SongList2 = ({songsData, currentActionType}) => {
   return (
     <div className="mt-5 bg-[#121212]">
       <div className=" py-2 grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
-        <p>Title</p>
+        <p>Tên bài hất</p>
         <p>Album</p>
-        <p>Trang thai</p>
+        <p>Trạng thái</p>
         <img className="m-auto w-4 " src={assets.clock_icon}></img>{" "}
         {/*  thoi luon*/}
       </div>
