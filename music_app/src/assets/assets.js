@@ -278,7 +278,7 @@ export const songData2 = [
       "thoi_luong": 6,
       "trang_thai": 1,
       "luot_nghe": 3298,
-      "hinh_anh": "https://example.com/image1.jpg",
+      "hinh_anh": "https://cloudinary-marketing-res.cloudinary.com/image/upload/ar_0.5,c_fill,g_auto,w_433/q_auto/f_auto/hiking_dog_mountain.jpg",
       "ma_album": "AL001",
       "link_bai_hat": "https://example.com/song1.mp3",
       "ngay_phat_hanh": "2023-11-19",
