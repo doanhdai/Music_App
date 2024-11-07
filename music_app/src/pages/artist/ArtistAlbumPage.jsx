@@ -189,7 +189,7 @@ const AlbumList = ({ albums,currentActionType }) => {
           />
           <div className="p-2 pt-0  flex flex-row justify-between">
             <div className="flex-1 flex flex-col">
-              <h2 className="text-lg font-semibold">Hello</h2>
+              <h2 className="text-lg font-semibold">{album.tenAlbum}</h2>
               <p className="text-gray-600"> 2023 </p>
               <p className="text-lg text-gray-600 inline-flex items-center gap-1">
                 <FaHeart /> 123 {album.luot_yeu_thich}
