@@ -7,6 +7,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
+import PurchasedPremiumCard from '../premium/PurchasedPremiumCard';
 
 const ManagerPremium = () => {
   return (
@@ -32,7 +33,7 @@ const ManagerPremium = () => {
                 {/* User Type Filter */}
                
                 <div className='flex flex-col'>
-                    <lable className="mb-2">Trạng thái</lable>
+                    <label className="mb-2">Trạng thái</label>
                     <select className='bg-black text-white p-2.5 rounded-3xl border-none w-[150px] outline-none cursor-pointer'>
                         <option>Tất cả</option>
                         <option>aaa</option>
@@ -76,36 +77,44 @@ const ManagerPremium = () => {
             </div>
         </div>
         <div>
-            <p className='mt-7 '>Tổng có : 100 Gói .</p>
-        <div className="grid grid-cols-5 sm:grid-cols-[2.5fr_2.5fr_2fr_2fr_1.5fr] mt-7 p-4 text-[#fff]">
-          <p>
-            Mã gói
-          </p>
-          <p>Tên gói premium</p>
-          <p className="hidden sm:block">Giá</p>
-          <p>thời Hạn</p>
-          
-          <p>Trạng thái</p>
-        </div>
-
-        <hr />
-
-        {songsData.map((item, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-5 sm:grid-cols-[2.5fr_2.5fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
-          >
-            <Link to='/song/1' className="text-white">
-              {item.name}
-            </Link>
-            <Link to="/song/:id" className="text-[15px]">{albumsData.name}</Link>
-            <p className="text-[15px] hidden sm:block">2 ngày trước</p>
-            <p className="text-[15px]">1.000.950</p>
-            <p className="text-[15px] ml-5">{item.duration}</p>
-            {/* <p className="text-[15px] flex justify-center"><IoIosMore /></p>  */}
+          {/* <p className='mt-7 '>Tổng có : 100 Gói .</p> */}
+            <div className="grid grid-cols-4 gap-3 mt-5">
+              <PurchasedPremiumCard
+                isActive={false}
+                title="Ten Premium"
+                price="100.000"
+                duration="2 tháng"
+                descriptions={["không có quảng cáo", "chất lượng âm thanh tốt nhất", "tải xuống miễn phí"]}
+              />   
+              <PurchasedPremiumCard
+                isActive={true}
+                title="Ten Premium"
+                price="giá_gói"
+                duration="thoi_han"
+                descriptions={["mo ta", "mo ta", "mo ta"]}
+              />
+              <PurchasedPremiumCard
+                isActive={true}
+                title="Ten Premium"
+                price="giá_gói"
+                duration="thoi_han"
+                descriptions={["mo ta", "mo ta", "mo ta"]}
+              />
+              <PurchasedPremiumCard
+                isActive={true}
+                title="Ten Premium"
+                price="giá_gói"
+                duration="thoi_han"
+                descriptions={["mo ta", "mo ta", "mo ta"]}
+              />
+              <PurchasedPremiumCard
+                isActive={true}
+                title="Ten Premium"
+                price="giá_gói"
+                duration="thoi_han"
+                descriptions={["mo ta", "mo ta", "mo ta"]}
+              />
           </div>
-        
-      ))}
       </div>
     </div>
   )

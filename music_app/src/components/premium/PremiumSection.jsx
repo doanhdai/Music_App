@@ -18,15 +18,15 @@ const PremiumSection = () => {
         <PurchasedPremiumCard
           isActive={false}
           title="Ten Premium"
-          price="giá_gói"
-          duration="thoi_han"
+          price="100.000"
+          duration="thời hạn"
           descriptions={["mo ta", "mo ta", "mo ta"]}
         />
         <PurchasedPremiumCard
           isActive={true}
           title="Ten Premium"
           price="giá_gói"
-          duration="thoi_han"
+          duration="thời hạn"
           descriptions={["mo ta", "mo ta", "mo ta"]}
         />
       </div>
