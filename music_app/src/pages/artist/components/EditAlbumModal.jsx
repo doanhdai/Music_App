@@ -4,11 +4,11 @@ import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { songData2 } from "../../../assets/assets";
 
-const EditAlbumModal = ({ onClose, modalState, albumDetails }) => {
-  if (modalState === false) return null;
+const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
+  if (editAlbumModalState === false) return null;
 
   const ImgRef = useRef(null);
-  const [albumName, setAlbumName] = useState("");
+  const [albumName, setAlbumName] = useState(selectedAlbum.tenAlbum);
   const [selectedSongs,setSelectedSongs] = useState([]);
 
   const handleSelectionSongChange = (selected) => {
