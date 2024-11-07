@@ -4,12 +4,13 @@ import { assets } from '../../assets/assets';
 import { useNavigate, useLocation} from 'react-router-dom';
 import { RiAlbumLine } from "react-icons/ri";
 import { MdOutlineQueueMusic } from "react-icons/md";
-
+import { PiMoney } from "react-icons/pi";
+import { PiChartLineUpLight } from "react-icons/pi";
 const menuItems = [
   { label: 'Bài hát', icon: <RiAlbumLine  size={20} />, route: '/artist-site', id: 'song' },
   { label: 'Album', icon: <MdOutlineQueueMusic size={20} />, route: '/artist-site/album', id: 'album' },
-  { label: 'Rút tiền', icon: <MdOutlineQueueMusic size={20} />, route: '/artist-site/widthdrawal', id: 'widthdraw' },
-  { label: 'Thống kê', icon: <MdOutlineQueueMusic size={20} />, route: '/artist-site/statistic', id: 'statistic' },
+  { label: 'Rút tiền', icon: <PiMoney size={20} />, route: '/artist-site/widthdrawal', id: 'widthdraw' },
+  { label: 'Thống kê', icon: <PiChartLineUpLight size={20} />, route: '/artist-site/statistic', id: 'statistic' },
   ];
 const ArtistSidebar2 = () => {
   // State để lưu trữ menuItem đang được active
