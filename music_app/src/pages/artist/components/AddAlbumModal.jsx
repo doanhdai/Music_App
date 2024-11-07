@@ -38,7 +38,7 @@ const AlbumUpLoad = ({closeModal}) => {
       <div className="max-w-xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
         <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={closeModal}/>
         <h2 className="text-2xl font-bold mb-5 text-center">
-            Create new album
+            Tạo album mới
         </h2>
       {/*  submit form */}
         <form  id="albumForm" onSubmit={handleSubmit}>
@@ -48,7 +48,7 @@ const AlbumUpLoad = ({closeModal}) => {
             <div className="w-sm">
             <div className="mb-4">
                 <label className="text-lg font-semibold text-gray-400" >
-                    ten album
+                    Tên album
                 </label>          
                 <input
                   name="ten_album"
@@ -57,10 +57,10 @@ const AlbumUpLoad = ({closeModal}) => {
                   onChange={(e) => setAlbumName(e.target.value)}
               
                   className="w-full p-2 border border-gray-300 text-black rounded"
-                  placeholder="Nhap ten album"
+                  placeholder="Nhập tên album"
                 />
                 {/* drop box bai hat */}
-                <CheckboxSearch selectedSongs={selectedSongs} placeholderText="Chon bai hat" dataKey="" onSelect={handleSelectionSongChange}/>
+                <CheckboxSearch selectedSongs={selectedSongs} placeholderText="Chọn bài hát" dataKey="" onSelect={handleSelectionSongChange}/>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ const AlbumUpLoad = ({closeModal}) => {
             type="submit"
             className="w-full bg-[#EB2272] text-white py-2 rounded hover:bg-[#FE61A0] transition"
           >
-            Xac nhan
+            Xác nhận
           </button>
         </form>
       </div>
@@ -79,7 +79,7 @@ const AlbumUpLoad = ({closeModal}) => {
   );
 };
 const AlbumSongList = ({selectedSongs,removeSong}) => {
-  if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Empty album</h3> </div> 
+  if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
 
     const songsArray = Object.values(selectedSongs);
     return (
@@ -162,7 +162,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
           aria-expanded={isDropdownOpen}
 
         >
-          <span>Them bai hat</span> <FaAngleDown className="text-2xl"/>
+          <span>Thêm bài hát</span> <FaAngleDown className="text-2xl"/>
         </button>
   
         {isDropdownOpen && (

@@ -23,7 +23,7 @@ const ImageUpload = ({initialImage}, ref) => {
 
   return (
     <div className=" rounded-lg  mr-5 max-w-sm  ">
-      <h2 className="text-lg font-semibold text-gray-400 ">Chen anh</h2>
+      <h2 className="text-lg font-semibold text-gray-400 ">Chèn ảnh</h2>
       <input
         type="file"
         id="file-input"
@@ -43,7 +43,7 @@ const ImageUpload = ({initialImage}, ref) => {
             className="aspect-square object-cover rounded-lg"
           />
         ) : (
-          <span className="text-gray-400">Click to Upload Image</span>
+          <span className="text-gray-400">Click để tải ảnh</span>
         )}
       </div>
     </div>
