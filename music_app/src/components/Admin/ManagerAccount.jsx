@@ -13,9 +13,9 @@ const ManagerAccount = () => {
         <div className='flex justify-between items-center'>
             <div className='flex items-center  space-x-5'>
                 <div className='flex flex-col'>
-                  <label className='mb-2'>Tìm kiếm tài khoản</label>
+                  <label className='mb-1'>Tìm kiếm tài khoản</label>
 
-                  <div className='flex items-center p-2.5 w-[300px] bg-black justify-between rounded-3xl'>
+                  <div className='flex items-center p-2 w-[300px] bg-black justify-between rounded-3xl'>
                       <IoIosSearch className="text-white text-2xl cursor-pointer" />
                       <input
                       className="bg-black w-[100%] outline-none ml-3 text-white"
@@ -27,16 +27,16 @@ const ManagerAccount = () => {
                 
 
                 <div className='flex flex-col'>
-                    <label className="mb-2">Loại người dùng</label>
-                    <select className='bg-black text-white p-2.5 rounded-3xl border-none w-[200px] outline-none cursor-pointer'>
+                    <label className="mb-1">Loại người dùng</label>
+                    <select className='bg-black text-white p-2 rounded-3xl border-none w-[200px] outline-none cursor-pointer'>
                         <option>Tất cả người dùng</option>
                         <option>Người nghe</option>
                         <option>Nghệ sĩ</option>
                     </select>
                 </div>
                 <div className='flex flex-col'>
-                    <label className="mb-2">Trạng thái</label>
-                    <select className='bg-black text-white p-2.5 rounded-3xl border-none w-[170px] outline-none cursor-pointer'>
+                    <label className="mb-1">Trạng thái</label>
+                    <select className='bg-black text-white p-2 rounded-3xl border-none w-[170px] outline-none cursor-pointer'>
                         <option>Tất cả </option>
                         <option>Hoạt động</option>
                         <option>Bị khóa</option>
@@ -47,22 +47,22 @@ const ManagerAccount = () => {
 
                 <div className='flex flex-col'>
                   <label className='mb-1'>&nbsp;</label>
-                  <button type="primary" className='rounded-3xl bg-[#E0066F] h-[42px] w-[100px] hover:!bg-[#E0066F]'>
+                  <button type="primary" className='rounded-3xl bg-[#E0066F] h-[36px] w-[100px] hover:!bg-[#E0066F]'>
                     Tìm kiếm
                   </button>
                 </div>
             </div>
             <div className='flex flex-col'>
-              <label className='mb-1'>&nbsp;</label>
+              <label className='mb-2'>&nbsp;</label>
               <div className='flex space-x-5'>
-                <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <CiCirclePlus size={30} />
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <CiCirclePlus size={20} />
                 </div>
-                <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <MdOutlineEdit  size={30} />
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <MdOutlineEdit  size={20} />
                 </div>
-                <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <MdDeleteOutline size={30}/>
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <MdDeleteOutline size={20}/>
                 </div>
                </div>
 
@@ -70,8 +70,8 @@ const ManagerAccount = () => {
             
         </div>
         <div>
-            <p className='mt-7 '>Tổng có : 100 tài khoản.</p>
-        <div className="grid grid-cols-5 sm:grid-cols-[2.5fr_2.5fr_2fr_2fr_1.5fr_1fr] mt-7 p-4 text-[#fff]">
+            <p className='mt-4 '>Tổng có : 100 tài khoản.</p>
+        <div className="grid grid-cols-5 sm:grid-cols-[2.5fr_2.5fr_2fr_2fr_1.5fr_1fr] mt-2 p-4 text-[#fff]">
           <p className='text-[#E0066F]'>
             Mã tài khoản
           </p>

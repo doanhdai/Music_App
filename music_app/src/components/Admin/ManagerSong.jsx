@@ -35,8 +35,8 @@ const ManagerSong = () => {
         {/* Phần tìm kiếm và bộ lọc */}
         <div className="flex items-center space-x-5">
           <div className="flex flex-col">
-            <label className="mb-2">Tìm kiếm bài hát</label>
-            <div className="flex items-center p-2.5 w-[300px] bg-black justify-between rounded-3xl">
+            <label className="mb-1">Tìm kiếm bài hát</label>
+            <div className="flex items-center p-2 w-[300px] bg-black justify-between rounded-3xl">
               <IoIosSearch className="text-white text-2xl cursor-pointer" />
               <input
                 className="bg-black w-full outline-none ml-3 text-white"
@@ -46,8 +46,8 @@ const ManagerSong = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <label className="mb-2">Trạng thái</label>
-            <select className="bg-black text-white p-2.5 rounded-3xl border-none w-[150px] outline-none cursor-pointer">
+            <label className="mb-1">Trạng thái</label>
+            <select className="bg-black text-white p-2 rounded-3xl border-none w-[150px] outline-none cursor-pointer">
               <option>Tất cả</option>
               <option>Công khai</option>
               <option>Bị khóa</option>
@@ -55,8 +55,8 @@ const ManagerSong = () => {
             </select>
           </div>
           <div className="flex flex-col">
-            <label className="mb-2">Ngày phát hành</label>
-            <div className="flex items-center p-2.5 w-[200px] bg-black justify-between rounded-3xl">
+            <label className="mb-1">Ngày phát hành</label>
+            <div className="flex items-center p-1.5 w-[200px] bg-black justify-between rounded-3xl">
               <input
                 className="bg-black w-full outline-none ml-3 text-white"
                 type="date"
@@ -65,7 +65,7 @@ const ManagerSong = () => {
           </div>
           <div className="flex flex-col">
             <label className="mb-1">&nbsp;</label>
-            <Button type="primary" className="rounded-3xl bg-[#E0066F] h-[42px] w-[100px] hover:!bg-[#E0066F]">
+            <Button type="primary" className="rounded-3xl bg-[#E0066F] h-[36px] w-[100px] hover:!bg-[#E0066F]">
               Tìm kiếm
             </Button>
           </div>
@@ -73,17 +73,14 @@ const ManagerSong = () => {
         {/* Phần icon thêm, sửa, xóa */}
         <div className="flex flex-col">
           <label className="mb-1">&nbsp;</label>
-          <div className="flex space-x-5">
-            <div className="w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black">
-              <CiCirclePlus size={30} />
-            </div>
-            <div className="w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black">
-              <MdOutlineEdit size={30} />
-            </div>
-            <div className="w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black">
-              <MdDeleteOutline size={30} />
-            </div>
-          </div>
+              <div className='flex space-x-5'>
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <MdOutlineEdit  size={20} />
+                </div>
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <MdDeleteOutline size={20}/>
+                </div>
+               </div>
         </div>
       </div>
       

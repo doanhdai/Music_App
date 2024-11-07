@@ -18,9 +18,9 @@ const ManagerPremium = () => {
                 
 
                 <div className='flex flex-col'>
-                  <label className='mb-2'>Tìm kiếm gói premium</label>
+                  <label className='mb-1'>Tìm kiếm gói premium</label>
 
-                   <div className='flex items-center p-2.5 w-[300px] bg-black justify-between rounded-3xl'>
+                   <div className='flex items-center p-2 w-[300px] bg-black justify-between rounded-3xl'>
                     <IoIosSearch className="text-white text-2xl cursor-pointer" />
                     <input
                     className="bg-black w-[100%] outline-none ml-3 text-white"
@@ -33,8 +33,8 @@ const ManagerPremium = () => {
                 {/* User Type Filter */}
                
                 <div className='flex flex-col'>
-                    <label className="mb-2">Trạng thái</label>
-                    <select className='bg-black text-white p-2.5 rounded-3xl border-none w-[150px] outline-none cursor-pointer'>
+                    <label className="mb-1">Trạng thái</label>
+                    <select className='bg-black text-white p-2 rounded-3xl border-none w-[150px] outline-none cursor-pointer'>
                         <option>Tất cả</option>
                         <option>aaa</option>
                         <option>bbb</option>
@@ -42,9 +42,9 @@ const ManagerPremium = () => {
                     </select>
                 </div>
                 <div className='flex flex-col'>
-                  <label className='mb-2'>Thời hạn</label>
+                  <label className='mb-1'>Thời hạn</label>
 
-                   <div className='flex items-center p-2.5 w-[200px] bg-black justify-between rounded-3xl'>
+                   <div className='flex items-center p-2 w-[200px] bg-black justify-between rounded-3xl'>
                     <input
                     className="bg-black w-[100%] outline-none ml-3 text-white"
                     type="date"
@@ -55,7 +55,7 @@ const ManagerPremium = () => {
                 {/* Search Button */}
                 <div className='flex flex-col'>
                   <label className='mb-1'>&nbsp;</label> {/* Dùng label rỗng để giữ chiều cao tương tự */}
-                  <Button type="primary" className='rounded-3xl bg-[#E0066F] h-[42px] w-[100px] hover:!bg-[#E0066F]'>
+                  <Button type="primary" className='rounded-3xl bg-[#E0066F] h-[35px] w-[100px] hover:!bg-[#E0066F]'>
                     Tìm kiếm
                   </Button>
                 </div>
@@ -63,14 +63,14 @@ const ManagerPremium = () => {
             <div className='flex flex-col'>
               <label className='mb-1'>&nbsp;</label>
               <div className='flex space-x-5'>
-                <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <CiCirclePlus size={30} />
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <CiCirclePlus size={20} />
                 </div>
-                <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <MdOutlineEdit  size={30} />
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <MdOutlineEdit  size={20} />
                 </div>
-                <div className='w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black'>
-                    <MdDeleteOutline size={30}/>
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                    <MdDeleteOutline size={20}/>
                 </div>
                </div>
 

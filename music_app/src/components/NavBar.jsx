@@ -1,4 +1,4 @@
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { albumsData, artistData, assets, songsData } from "../assets/assets";
 import { FaRegBell } from "react-icons/fa6";
@@ -12,6 +12,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
 
   const removeVietnameseTones = (str) => {
     return str
@@ -133,8 +134,7 @@ const NavBar = () => {
                     className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
                     onClick={() => {
                       startTransition(() => {
-                        // Thực hiện điều hướng khi đăng xuất nếu có thêm logic
-                        navigate(config.routes.logout); // Thay 'config.routes.logout' bằng route phù hợp nếu cần
+                        navigate(config.routes.logout);
                       });
                     }}
                   >

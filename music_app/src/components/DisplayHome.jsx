@@ -37,7 +37,7 @@ const DisplayHome = () => {
             <h1 className='my-4 font-bold text-2xl'>Album đề xuất đề xuất</h1>
             <h1 className='mr-3 cursor-pointer' onClick={()=>navigate(`/albums`)}> Xem tất cả</h1>
           </div>
-          <div className='flex overflow-auto'>
+          <div className='flex overflow-auto justify-start'>
             {albumsData.map((item, index) => (
               <AlbumItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />
             ) )}
@@ -51,7 +51,7 @@ const DisplayHome = () => {
             <h1 className='my-4 font-bold text-2xl'>Bài hát thịch hành</h1>
             <h1 className='mr-3 cursor-pointer' onClick={()=>navigate(`/songs`)}> Xem tất cả</h1>
           </div>
-          <div className='flex overflow-auto'>
+          <div className='flex overflow-auto justify-start'>
             {songsData.map((item, index) => (
               <SongItems key={index} name={item.name} desc={item.desc} id={item.id} img={item.image} />
             ))}
