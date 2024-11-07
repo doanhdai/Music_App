@@ -175,26 +175,29 @@ const AlbumList = ({ albums,currentActionType }) => {
   }
 
   return (
-    <div className="min-h-screen p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-6 gap-4 mt-7 h-[540px] overflow-y-auto pb-8">
       {albums.map((album) => (
         <div
           key={album.albumId}
-          className="bg-[#1E1E1E]  shadow-lg  cursor-pointer h-64 flex flex-col justify-between"
+          className="bg-gradient-to-b from-gray-800 to-black shadow-lg cursor-pointer h-[280px] flex flex-col justify-between rounded-lg"
           onClick={() => handleClickedSongItem(currentActionType,album)}
         >
+          <div className='flex justify-center mt-1'>
           <img
             src={album.hinhAnh}
             alt={album.tenAlbum}
-            className="mb-2 h-40 aspect-square object-fit"
+            className="aspect-square object-fit h-[160px] w-[160px] rounded-lg"
           />
-          <div className="p-2 pt-0  flex flex-row justify-between">
-            <div className="flex-1 flex flex-col">
-              <h2 className="text-lg font-semibold">{album.tenAlbum}</h2>
-              <p className="text-gray-600"> 2023 </p>
-              <p className="text-lg text-gray-600 inline-flex items-center gap-1">
-                <FaHeart /> 123 {album.luot_yeu_thich}
-              </p>
-            </div>
+          </div>
+          <div className="flex flex-row items-baseline justify-between px-2">
+                  <div className="flex-1 flex flex-col">
+                    <h2 className="text-[16px] font-semibold py-2">{album.tenAlbum}</h2>
+                    <p className="text-white"> 2023 </p>
+                    <p className="text-lg text-white inline-flex items-center gap-1">
+                      <FaHeart size={15} />
+                      <span className='text-[14px]'>123</span>
+                    </p>
+                  </div>
             <div className="statusIcon flex-none text-xl ">
               {album.trang_thai === 1 ? <BiSolidLockOpen /> : <BiSolidLock />}
             </div>

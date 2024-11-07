@@ -41,7 +41,7 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
             <div className="w-sm">
             <div className="mb-4">
                 <label className="text-lg font-semibold text-gray-400" >
-                    ten album
+                    Tên album
                 </label>          
                 <input
                   name="ten_album"
@@ -50,10 +50,10 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
                   onChange={(e) => setAlbumName(e.target.value)}
               
                   className="w-full p-2 border border-gray-300 text-black rounded"
-                  placeholder="Nhap ten album"
+                  placeholder="Nhập tên album"
                 />
                 {/* drop box bai hat */}
-                <CheckboxSearch selectedSongs={selectedSongs} placeholderText="Chon bai hat" dataKey="" onSelect={handleSelectionSongChange}/>
+                <CheckboxSearch selectedSongs={selectedSongs} placeholderText="Chọn bài hát" dataKey="" onSelect={handleSelectionSongChange}/>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default EditAlbumModal;
 
 
 const AlbumSongList = ({selectedSongs,removeSong}) => {
-  if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Empty album</h3> </div> 
+  if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
 
     const songsArray = Object.values(selectedSongs);
     return (
@@ -158,7 +158,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
           aria-expanded={isDropdownOpen}
 
         >
-          <span>Them bai hat</span> <FaAngleDown className="text-2xl"/>
+          <span>Thêm bài hát</span> <FaAngleDown className="text-2xl"/>
         </button>
   
         {isDropdownOpen && (
