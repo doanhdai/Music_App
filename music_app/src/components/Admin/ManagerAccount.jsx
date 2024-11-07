@@ -46,10 +46,10 @@ const ManagerAccount = () => {
 
 
                 <div className='flex flex-col'>
-                  <label className='mb-1'>&nbsp;</label> {/* Dùng label rỗng để giữ chiều cao tương tự */}
-                  <Button type="primary" className='rounded-3xl bg-[#E0066F] h-[42px] w-[100px] hover:!bg-[#E0066F] !z-0'>
+                  <label className='mb-1'>&nbsp;</label>
+                  <button type="primary" className='rounded-3xl bg-[#E0066F] h-[42px] w-[100px] hover:!bg-[#E0066F]'>
                     Tìm kiếm
-                  </Button>
+                  </button>
                 </div>
             </div>
             <div className='flex flex-col'>

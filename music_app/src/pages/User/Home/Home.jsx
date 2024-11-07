@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect, useRef, startTransition } from "react";
+import React, { Suspense, useState, useEffect, useRef, startTransition, useContext } from "react";
 import Sidebar from "../../../components/Sidebar";
 import Player from "../../../components/Player";
 import { Outlet } from "react-router-dom";
@@ -7,11 +7,12 @@ import { albumsData, artistData } from '../../../assets/assets';
 import NavBar from "../../../components/NavBar";
 import Footer from "../../../components/Footer";
 import Poster from "../../../components/Poster";
+import { PlayerContext } from "../../../context/PlayerContext";
 
 const Home = () => {
+  const {audioRef, track} = useContext(PlayerContext)
   const displayColor = useRef(null);
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
   const isAlbum = /\/albums(\/|$)/.test(location.pathname);
   const isArtist = /\/artist(\/|$)/.test(location.pathname);
 
@@ -24,15 +25,10 @@ const Home = () => {
     : "#121212";
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      startTransition(() => {
-        setIsLoading(false);
-      });
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
+    if (displayColor.current) {
+      displayColor.current.scrollTop = 0;
+    }
+  }, [location.pathname]);
   // useEffect(() => {
   //   startTransition(() => {
   //     if (displayColor.current) {
@@ -44,32 +40,35 @@ const Home = () => {
   //     }
   //   });
   // }, [bgColor]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="h-screen bg-black text-white flex justify-center items-center">
-  //       <p>Loading, please wait...</p>
-  //     </div>
-  //   );
-  // }
   return (
-    <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
-      <div className="h-screen bg-black">
-        <div className="h-[92%] flex">
-          <Sidebar />
-          <div ref={displayColor} className="w-full rounded bg-gradient-to-b from-[#311523] to-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0">
-
-            <NavBar />
+    <div className="h-screen bg-black">
+      <div className="h-[90%] flex">
+        <Sidebar />
+        <div
+          ref={displayColor}
+          className="w-full rounded bg-gradient-to-b from-[#311523] to-[#121212] text-white overflow-auto lh:w-[75%] lg:ml-0"
+        >
+          <NavBar />
+          <Suspense
+            fallback={
+              <div className="h-screen bg-black text-white flex justify-center items-center">
+                Loading...
+              </div>
+            }
+          >
             <div className="px-7 pt-4">
               <Outlet />
               <Footer />
             </div>
-          </div>
+          </Suspense>
         </div>
-        <Player />
-        {/* <Poster/> */}
       </div>
-    </Suspense>
+      <Player />
+      <audio ref={audioRef} src={track.file} preload="auto"></audio>
+      {
+        console.log(track.file)
+      }
+    </div>
   );
 };
 export default Home;

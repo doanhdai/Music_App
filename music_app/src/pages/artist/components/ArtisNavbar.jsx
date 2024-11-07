@@ -13,7 +13,7 @@ const ArtistNavbar = () => {
 
   return (
     <div>
-      <div className="w-full flex justify-between items-center font-semibold ">
+      <div className="w-full flex justify-between  font-semibold ">
         <h1 className="text-2xl">Trang chu</h1>
 
         <div className="flex items-center gap-4">

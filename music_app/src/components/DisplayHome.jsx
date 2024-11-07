@@ -16,9 +16,9 @@ const DisplayHome = () => {
 
         {/* nghệ sĩ */}
         <div>
-          <div className='flex justify-between'>
+          <div className='flex items-center justify-between'>
             <h1 className='my-4 font-bold text-2xl'>Nghệ sĩ đề xuất</h1>
-            <h1 className='text-slate-200 font-bold mr-3 cursor-pointer hover:text-white'  onClick={()=>navigate(`/artist`)}> Xem tất cả</h1>
+            <h1 className='text-slate-200 mr-3 cursor-pointer hover:text-white'  onClick={()=>navigate(`/artist`)}> Xem tất cả</h1>
           </div>
           {/* <h1 className='my-4 font-bold'>Nghệ sĩ đề xuất</h1> */}
           <div className='flex overflow-auto'>
@@ -33,9 +33,9 @@ const DisplayHome = () => {
 
            
         <div className='mb-4 pt-10'>
-          <div className='flex justify-between'>
+          <div className='flex items-center justify-between'>
             <h1 className='my-4 font-bold text-2xl'>Album đề xuất đề xuất</h1>
-            <h1 className='font-bold mr-3 cursor-pointer' onClick={()=>navigate(`/albums`)}> Xem tất cả</h1>
+            <h1 className='mr-3 cursor-pointer' onClick={()=>navigate(`/albums`)}> Xem tất cả</h1>
           </div>
           <div className='flex overflow-auto'>
             {albumsData.map((item, index) => (
@@ -47,9 +47,9 @@ const DisplayHome = () => {
 
            
         <div className='mb-4 pt-10'>
-          <div className='flex justify-between'>
+          <div className='flex items-center justify-between'>
             <h1 className='my-4 font-bold text-2xl'>Bài hát thịch hành</h1>
-            <h1 className='font-bold mr-3 cursor-pointer' onClick={()=>navigate(`/songs`)}> Xem tất cả</h1>
+            <h1 className='mr-3 cursor-pointer' onClick={()=>navigate(`/songs`)}> Xem tất cả</h1>
           </div>
           <div className='flex overflow-auto'>
             {songsData.map((item, index) => (
