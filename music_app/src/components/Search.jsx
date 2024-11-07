@@ -42,6 +42,22 @@ const Search = () => {
     {searchTerm && searchTerm.trim() ? (
       hasResults ? (
         <div>
+         {songResults?.length > 0 && (
+            <>
+              <h1 className="mb-4 font-bold text-[20px]">Bài hát tìm thấy:</h1>
+              <div className="flex overflow-auto">
+                {songResults.map((song, index) => (
+                  <SongItems
+                    key={index}
+                    name={song.name}
+                    desc={song.desc}
+                    id={song.id}
+                    img={song.image}
+                  />
+                ))}
+              </div>
+            </>
+          )}
           {artistResults?.length > 0 && (
             <>
               <h1 className="mb-4 font-bold text-[20px]">Nghệ sĩ tìm thấy:</h1>
@@ -74,22 +90,7 @@ const Search = () => {
               </div>
             </>
           )}
-          {songResults?.length > 0 && (
-            <>
-              <h1 className="mb-4 font-bold text-[20px]">Bài hát tìm thấy:</h1>
-              <div className="flex overflow-auto">
-                {songResults.map((song, index) => (
-                  <SongItems
-                    key={index}
-                    name={song.name}
-                    desc={song.desc}
-                    id={song.id}
-                    img={song.image}
-                  />
-                ))}
-              </div>
-            </>
-          )}
+
         </div>
       ) : (
         <div>
