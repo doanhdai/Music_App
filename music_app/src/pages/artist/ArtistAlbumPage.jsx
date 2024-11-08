@@ -11,6 +11,7 @@ import { TfiPencil } from "react-icons/tfi";
 import { FaTrash } from "react-icons/fa";
 import { BsSendPlus } from "react-icons/bs";
 import AddAlbumModal from "./components/AddAlbumModal";
+import EditAlbumModal from "./components/EditAlbumModal";
 
 const ArtistAlbumPage = () => {
   const fakeAlbumData = [
@@ -49,13 +50,38 @@ const ArtistAlbumPage = () => {
   }, []);
 
   const [showAddAlbumModal, setShowAddAlbumModal] = useState(false);
-
-  const handleShowDetails = () => {
+  const [currentActionType, setCurrentActionType] = useState('details');
+  
+  const handleShowAddAlbumModal = () => {
+    
     setShowAddAlbumModal(true);
+    
   };
   const handleCloseAddAlbumModal = () => {
     setShowAddAlbumModal(false);
   };
+  const handleEditStatusChange = () => {
+    setCurrentActionType('edit');
+  }
+  const handleDeleteStatusChange = () => {
+    setCurrentActionType('delete');
+  }
+  const actionList = {
+    'delete': ' xóa',
+    'edit' : 'chỉnh sửa',
+    'details': ' xem chi tiết'
+  }
+  const handleClickStatusChange =(actionType) => {
+    // status include details,edit,delete
+    if (actionType === currentActionType) {
+      setCurrentActionType('details');
+      alert(`Thoát trạng thái ${actionList[actionType]}`);
+    }
+    else {
+      setCurrentActionType(actionType);
+      alert(`Đang ở trạng thái ${actionList[actionType]}`)
+    }
+  }
   return (
     <>
       <div className="p-5">
@@ -77,16 +103,20 @@ const ArtistAlbumPage = () => {
               <BsSendPlus className="m-auto" />
             </button>
             <button
-              onClick={() => handleShowDetails()}
+              onClick={() => handleShowAddAlbumModal()}
               className="text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
             >
               <GoPlus className="m-auto" />
             </button>
 
-            <button className="text-xl   h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
-              <TfiPencil className="m-auto" />
+            <button className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${currentActionType === "edit" ? 'bg-[#EB2272]' : '' }`}>
+              <TfiPencil 
+              onClick={() => handleClickStatusChange('edit')}
+              className="m-auto" />
             </button>
-            <button className=" text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white">
+            <button 
+            onClick={() => handleClickStatusChange('delete')}
+            className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${currentActionType === "delete" ? 'bg-[#EB2272]' : '' }`}>
               <FaTrash className="m-auto" />
             </button>
           </div>
@@ -96,44 +126,78 @@ const ArtistAlbumPage = () => {
           />
         </div>
         <h3 className="mt-3">Tong cong: {albums.length}</h3>
-        <AlbumList albums={albums} />
+        <AlbumList albums={albums} currentActionType={currentActionType}/>
       </div>
     </>
   );
 };
 
-const AlbumList = ({ albums }) => {
+const AlbumList = ({ albums,currentActionType }) => {
+
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+  const [editAlbumModalState, setEditAlbumModalState] = useState(false);
+  const [detailsAlbumSodalState, setDetailsAlbumModalState] = useState(false);
 
-  const handleCardClick = (album) => {
+
+  const handleShowDetails = (album) => {
     setSelectedAlbum(album);
+    setDetailsAlbumModalState(true);
+  };
+  const handleShowEditModal = (album) => {
+    setSelectedAlbum(album);
+    setEditAlbumModalState(true);
+  }
+  const handleCloseDetailModal = () => {
+    setSelectedAlbum(null);
+    setDetailsAlbumModalState(false);
+    setEditAlbumModalState(false);
   };
 
-  const closeModal = () => {
-    setSelectedAlbum(null);
+  function deleteAlbum(album) {
+    //gửi data song để xóa
+    alert('xoa')
+  }
+
+  const clickedAction = {
+    'details': (album) =>  handleShowDetails(album),
+    'edit': (album) =>  handleShowEditModal(album),
+    'delete': (album) =>  deleteAlbum(album),
   };
+
+
+  function handleClickedSongItem(actionType, albumInformation) {
+    const action = clickedAction[actionType];
+    if (action) {
+      return clickedAction[actionType](albumInformation);
+  } else {
+      alert(`Wrong action type ${actionType}`);
+  }
+  }
 
   return (
-    <div className="min-h-screen p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-6 gap-4 mt-7 h-[540px] overflow-y-auto pb-8">
       {albums.map((album) => (
         <div
           key={album.albumId}
-          className="bg-[#1E1E1E]  shadow-lg  cursor-pointer h-64 flex flex-col justify-between"
-          onClick={() => handleCardClick(album)}
+          className="bg-gradient-to-b from-gray-800 to-black shadow-lg cursor-pointer h-[280px] flex flex-col justify-between rounded-lg"
+          onClick={() => handleClickedSongItem(currentActionType,album)}
         >
+          <div className='flex justify-center mt-1'>
           <img
             src={album.hinhAnh}
             alt={album.tenAlbum}
-            className="mb-2 h-40 aspect-square object-fit"
+            className="aspect-square object-fit h-[160px] w-[160px] rounded-lg"
           />
-          <div className="p-2 pt-0  flex flex-row justify-between">
-            <div className="flex-1 flex flex-col">
-              <h2 className="text-lg font-semibold">Hello</h2>
-              <p className="text-gray-600"> 2023 </p>
-              <p className="text-lg text-gray-600 inline-flex items-center gap-1">
-                <FaHeart /> 123 {album.luot_yeu_thich}
-              </p>
-            </div>
+          </div>
+          <div className="flex flex-row items-baseline justify-between px-2">
+                  <div className="flex-1 flex flex-col">
+                    <h2 className="text-[16px] font-semibold py-2">{album.tenAlbum}</h2>
+                    <p className="text-white"> 2023 </p>
+                    <p className="text-lg text-white inline-flex items-center gap-1">
+                      <FaHeart size={15} />
+                      <span className='text-[14px]'>123</span>
+                    </p>
+                  </div>
             <div className="statusIcon flex-none text-xl ">
               {album.trang_thai === 1 ? <BiSolidLockOpen /> : <BiSolidLock />}
             </div>
@@ -141,8 +205,13 @@ const AlbumList = ({ albums }) => {
         </div>
       ))}
       {selectedAlbum && (
-        <AlbumDetailModal album={selectedAlbum} onClose={closeModal} />
+        <AlbumDetailModal album={selectedAlbum} onClose={handleCloseDetailModal} />
       )}
+      <EditAlbumModal
+        className="float-start"
+        selectedAlbum={selectedAlbum}
+        editAlbumModalState={editAlbumModalState}
+        onClose={handleCloseDetailModal} />
     </div>
   );
 };
