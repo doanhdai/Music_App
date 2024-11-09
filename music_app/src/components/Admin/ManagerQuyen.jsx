@@ -115,7 +115,7 @@ const ManagerQuyen = () => {
       quyenList = quyenList.filter((item)=> item.ma_phan_quyen != currentQuyen);
       setCurrentQuyen(quyenList[0].ma_phan_quyen);
     }
-    else alert('Không thể xóa quyền này do có tài khoản thuộc quyền này!');
+    else alert('Không thể xóa quyền này do có tài khoản thuộc quyền này!');   
   }
 
 
