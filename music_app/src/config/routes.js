@@ -35,7 +35,9 @@ const routes = {
     UserInfo: "/UserInfo",
     ManagerPremiumUser:"/UserInfo/premium",
 
-    Playlist: "/playlist/:id"
+    Playlist: "/playlist/:id",
+
+    PremiumSection: "buyPremium"
 };
 
 export default routes;

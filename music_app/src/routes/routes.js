@@ -16,7 +16,7 @@ const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage
 const ArtistWithdrawalRequestPage = React.lazy(() => import("../pages/artist/ArtistWithdrawalRequestPage"))
 const ArtistStatisticPage = React.lazy(() => import("../pages/artist/ArtistStatisticPage"));
 const AdminHome = React.lazy(()=>import("../pages/Admin/Admin"))
-const ManagerAccount = React.lazy(()=>import("../components/Admin/ManagerAccount"))
+const ManagerAccount = React.lazy(()=>import("../components/Admin/AccountManager/ManagerAccount"))
 const ManagerSong = React.lazy(()=>import("../components/Admin/ManagerSong"))
 const ManagerAlbum = React.lazy(()=>import("../components/Admin/ManagerAlbum"))
 const ManagerType = React.lazy(()=>import("../components/Admin/ManagerType"))
@@ -42,7 +42,7 @@ const UserInfoLayout = React.lazy(() => import("../pages/User/UserInfo/UserInfo"
 const UserInfo = React.lazy(() => import("../components/UserInfo/ManagerUserInfo"));
 const ManagerPremiumUser = React.lazy(() => import("../components/UserInfo/ManagerPremiumUser"));
 const DisplayPlaylist = React.lazy(()=> import("../components/DisplayPlaylist"))
-
+const PremiumSection = React.lazy(()=>import("../components/premium/PremiumSection"))
 
 
 const routes = createBrowserRouter([
@@ -85,6 +85,10 @@ const routes = createBrowserRouter([
       {
         path: config.routes.Playlist,
         Component: DisplayPlaylist
+      },
+      {
+        path: config.routes.PremiumSection,
+        Component: PremiumSection
       }
     ],
   },
