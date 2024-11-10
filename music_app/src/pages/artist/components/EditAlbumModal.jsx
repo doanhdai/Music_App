@@ -1,21 +1,14 @@
-                              import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ImageUpload from "./ImageUpload";
 import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { songData2 } from "../../../assets/assets";
 
-const AddAlbumModal = ({ onClose, modalState }) => {
-  if (modalState === false) return null;
-  return <AlbumUpLoad closeModal= {onClose}/>;
-};
-export default AddAlbumModal;
-
-
-
-const AlbumUpLoad = ({closeModal}) => {
+const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
+  if (editAlbumModalState === false) return null;
 
   const ImgRef = useRef(null);
-  const [albumName, setAlbumName] = useState("");
+  const [albumName, setAlbumName] = useState(selectedAlbum.tenAlbum);
   const [selectedSongs,setSelectedSongs] = useState([]);
 
   const handleSelectionSongChange = (selected) => {
@@ -36,9 +29,9 @@ const AlbumUpLoad = ({closeModal}) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="max-w-xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
-        <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={closeModal}/>
+        <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={onClose}/>
         <h2 className="text-2xl font-bold mb-5 text-center">
-            Tạo album mới
+            Chỉnh sửa album
         </h2>
       {/*  submit form */}
         <form  id="albumForm" onSubmit={handleSubmit}>
@@ -76,8 +69,11 @@ const AlbumUpLoad = ({closeModal}) => {
         </form>
       </div>
     </div>
-  );
+  );;
 };
+export default EditAlbumModal;
+
+
 const AlbumSongList = ({selectedSongs,removeSong}) => {
   if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
 

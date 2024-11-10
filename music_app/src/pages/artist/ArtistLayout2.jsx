@@ -1,12 +1,9 @@
 import React, { Suspense, useState, useEffect, useRef } from "react";
 import ArtistSidebar2 from "./ArtistSidebar2";
-import Player from "../../components/Player"; 
 import { Outlet } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import { albumsData, artistData } from '../../assets/assets';
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
-import Poster from "../../components/Poster";
 import ArtistNavbar from "./components/ArtisNavbar";
 
 const ArtistLayout2 = () => {
@@ -18,13 +15,8 @@ const ArtistLayout2 = () => {
 
   const id = isAlbum || isArtist ? location.pathname.split("/").pop() : "";
 
-
-  // const bgColor = isAlbum
-  //   ? albumsData[Number(id)]?.bgColor
-  //   : isArtist
-  //   ? artistData[Number(id)]?.bgColor
-  //   : "#121212";
   const bgColor = "#121212";
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -41,7 +33,7 @@ const ArtistLayout2 = () => {
         displayColor.current.style.background = `#121212`;
       }
     }
-  }, [bgColor]);
+  }, [bgColor, isAlbum]);
 
   // Nếu đang loading, hiển thị màn hình loading
   if (isLoading) {
@@ -54,20 +46,19 @@ const ArtistLayout2 = () => {
 
   // Khi hết loading, hiển thị giao diện chính
   return (
-    <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
-      <div className="h-full bg-black">
-        <div className=" flex">
-          <ArtistSidebar2/>
-          <div ref={displayColor} className="w-[100%] m-2 pt-4 rounded text-white overflow-auto lh:w-[75%] lg:ml-0">
-            <ArtistNavbar className="mb-10"/>
+    <div className="h-full bg-black">
+      <div className="flex">
+        <ArtistSidebar2 />
+        <div ref={displayColor} className="w-[100%] m-2 pt-4 rounded text-white overflow-auto lh:w-[75%] lg:ml-0">
+          <ArtistNavbar className="mb-10" />
+          <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
             <Outlet />
-            <hr/>
-            <Footer />
-          </div>
+          </Suspense>
+          <hr />
+          <Footer />
         </div>
-        {/* <Player /> */}
       </div>
-    </Suspense>
+    </div>
   );
 };
 

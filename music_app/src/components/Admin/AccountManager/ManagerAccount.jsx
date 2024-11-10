@@ -1,0 +1,331 @@
+import { Button, Modal, Select } from "antd";
+import React, { useState } from "react";
+import { CiCirclePlus } from "react-icons/ci";
+import { IoIosMore, IoIosSearch } from "react-icons/io";
+import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
+import { Link } from "react-router-dom";
+import AddEmployeeAccountForm from "./AddEmployeeAccountForm";
+const ManagerAccount = () => {
+  const accountData = [
+    {
+      name: "User001",
+      email: "user001@example.com",
+      password: "password001",
+      createdDate: "2024-01-01",
+      role: 1, // Người nghe
+      status: 2, // Công khai
+    },
+    {
+      name: "User002",
+      email: "user002@example.com",
+      password: "password002",
+      createdDate: "2024-02-01",
+      role: 2, // Nghệ sĩ
+      status: 3, // Khóa
+    },
+    {
+      name: "User003",
+      email: "user003@example.com",
+      password: "password003",
+      createdDate: "2024-03-01",
+      role: 1, // Người nghe
+      status: 1, // Chờ duyệt
+    },
+    {
+      name: "User004",
+      email: "user004@example.com",
+      password: "password004",
+      createdDate: "2024-04-01",
+      role: 1, // Người nghe
+      status: 2, // Công khai
+    },
+    {
+      name: "User005",
+      email: "user005@example.com",
+      password: "password005",
+      createdDate: "2024-05-01",
+      role: 2, // Nghệ sĩ
+      status: 3, // Khóa
+    },
+    {
+      name: "User006",
+      email: "user006@example.com",
+      password: "password006",
+      createdDate: "2024-06-01",
+      role: 1, // Người nghe
+      status: 1, // Chờ duyệt
+    },
+    {
+      name: "User007",
+      email: "user007@example.com",
+      password: "password007",
+      createdDate: "2024-07-01",
+      role: 2, // Nghệ sĩ
+      status: 2, // Công khai
+    },
+  ];
+
+  const [accounts, setAccounts] = useState(accountData);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [editedRole, setEditedRole] = useState("");
+  const [editedStatus, setEditedStatus] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterRole, setFilterRole] = useState("All_role");
+  const [filterStatus, setFilterStatus] = useState("All_status");
+
+  const maskPassword = (password) => "*".repeat(password.length);
+
+  // Hàm chuyển đổi role từ mã sang tên hiển thị
+  const displayRole = (role) => {
+    switch (role) {
+      case 1:
+        return "Người nghe";
+      case 2:
+        return "Nghệ sĩ";
+      case 3:
+        return "Manager";
+      default:
+        return "Không xác định";
+    }
+  };
+
+  // Hàm chuyển đổi status từ mã sang tên hiển thị
+  const displayStatus = (status) => {
+    switch (status) {
+      case 1:
+        // return "Chờ duyệt";
+      case 2:
+        // return "Công khai";
+      case 3:
+        // return "Khóa";
+      default:
+        return "";
+    }
+  };
+
+  const showDeleteConfirm = (account) => {
+    setSelectedAccount(account);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    if (isDeleteMode) {
+      handleOkDelete();
+    } else if (isEditMode) {
+      handleOkEdit();
+    }
+  };
+
+const handleOkDelete = () => {
+  setAccounts((prevAccounts) =>
+    prevAccounts.map((account) =>
+      account === selectedAccount ? { ...account, status: 0 } : account
+    )
+  );
+  setIsModalVisible(false);
+  setIsDeleteMode(false);
+};
+
+  const handleOkEdit = () => {
+    setAccounts((prevAccounts) =>
+      prevAccounts.map((account) =>
+        account === selectedAccount
+          ? { ...account, role: editedRole, status: editedStatus }
+          : account
+      )
+    );
+    setIsModalVisible(false);
+    setIsEditMode(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setIsDeleteMode(false);
+    setIsEditMode(false);
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteMode(true);
+    setIsEditMode(false);
+  };
+
+  const handleEditClick = () => {
+    setIsEditMode(true);
+    setIsDeleteMode(false);
+  };
+
+  const handleAccountClick = (account) => {
+    if (isDeleteMode) {
+      showDeleteConfirm(account);
+    } else if (isEditMode) {
+      setSelectedAccount(account);
+      setEditedRole(account.role);
+      setEditedStatus(account.status);
+      setIsModalVisible(true);
+    }
+  };
+  const handleSearchAndReset = () => {
+  setAccounts(applyFilters());
+  setSearchTerm("");
+  setFilterRole("All_role");
+  setFilterStatus("All_status");
+};
+
+  const applyFilters = () => {
+    return accountData.filter((account) => {
+      const matchesSearchTerm = account.email.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesRole = filterRole === "All_role" || displayRole(account.role) === filterRole;
+      const matchesStatus = filterStatus === "All_status" || displayStatus(account.status) === filterStatus;
+      return matchesSearchTerm && matchesRole && matchesStatus;
+    });
+  };
+
+  return (
+    <div className="pt-3 mx-[38px]">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center space-x-5">
+          <div className="flex flex-col">
+            <label className="mb-1">Tìm kiếm tài khoản</label>
+            <div className="flex items-center p-2 w-[300px] bg-black justify-between rounded-3xl">
+              <IoIosSearch className="text-white text-2xl cursor-pointer" />
+              <input
+                className="bg-black w-[100%] outline-none ml-3 text-white"
+                type="text"
+                placeholder="Tìm kiếm theo email"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-1">Loại người dùng</label>
+            <select
+              className="bg-black text-white p-2 rounded-3xl border-none w-[200px] outline-none cursor-pointer"
+              value={filterRole}
+              onChange={(e) => setFilterRole(e.target.value)}
+            >
+              <option value="All_role">Tất cả người dùng</option>
+              <option>Người nghe</option>
+              <option>Nghệ sĩ</option>
+              <option>Manager</option>
+            </select>
+          </div>
+          {/* <div className="flex flex-col">
+            <label className="mb-1">Trạng thái</label>
+            <select
+              className="bg-black text-white p-2 rounded-3xl border-none w-[170px] outline-none cursor-pointer"
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+            >
+              <option value="All_status">Tất cả</option>
+              <option>Chờ duyệt</option>
+              <option>Công khai</option>
+              <option>Khóa</option>
+            </select>
+          </div> */}
+          <div className="flex flex-col">
+            <label className="mb-1">&nbsp;</label>
+            <button
+              type="primary"
+              className="rounded-3xl bg-[#E0066F] h-[36px] w-[100px] hover:!bg-[#E0066F]"
+              onClick={handleSearchAndReset}
+            >
+              Tìm kiếm
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-2">&nbsp;</label>
+          <div className="flex space-x-5">
+            <div className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black">
+              <CiCirclePlus size={20} />
+              
+
+            </div>
+            <div
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isEditMode ? "bg-[#E0066F]" : "bg-black"}`}
+              onClick={handleEditClick}
+            >
+              <MdOutlineEdit size={20} />
+            </div>
+            <div
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isDeleteMode ? "bg-[#E0066F]" : "bg-black"}`}
+              onClick={handleDeleteClick}
+            >
+              <MdDeleteOutline size={20} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p className="mt-4">Tổng có: {accounts.length} tài khoản.</p>
+        <div className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] mt-2 p-4 text-[#fff]">
+          <p className="text-[#E0066F]">#ID</p>
+          <p className="text-[#E0066F]">Gmail</p>
+          <p className="hidden sm:block text-[#E0066F]">Mật khẩu</p>
+          <p className="text-[#E0066F]"> Ngày tạo</p>
+          <p className="text-[#E0066F]">Quyền</p>
+          {/* <p className="text-[#E0066F]">Trạng thái</p> */}
+        </div>
+        <hr />
+        {accounts.map((item, index) => (
+          item.status !== 0 && (
+            <div
+              key={index}
+              className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
+              onClick={() => handleAccountClick(item)}
+            >
+              <Link to="" className="text-white">{index}</Link>
+              <p className="text-[15px]">{item.email}</p>
+              <p className="text-[15px] hidden sm:block">{maskPassword(item.password)}</p>
+              <p className="text-[15px]">{item.createdDate}</p>
+              <p className="text-[15px]">{displayRole(item.role)}</p>
+              {/* <p className="text-[15px]">{displayStatus(item.status)}</p> */}
+            </div>
+          )
+        ))}
+      </div>
+      <Modal
+        title={isDeleteMode ? "Xác nhận xóa" : "Chỉnh sửa tài khoản"}
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="OK"
+        cancelText="Hủy"
+        centered
+      >
+        {isDeleteMode ? (
+          <p>Bạn có chắc chắn muốn xóa tài khoản này?</p>
+        ) : (
+          <div>
+            <label>Quyền:</label>
+            <select
+              value={editedRole}
+              onChange={(e) => setEditedRole(parseInt(e.target.value))}
+              className="w-full p-2 border rounded mb-4"
+            >
+              <option value={1}>Người nghe</option>
+              <option value={2}>Nghệ sĩ</option>
+              <option value={3}>Manager</option>
+            </select>
+            <label className="mt-2">Trạng thái:</label>
+            <select
+              value={editedStatus}
+              onChange={(e) => setEditedStatus(parseInt(e.target.value))}
+              className="w-full p-2 border rounded"
+            >
+              <option value={1}>Chờ duyệt</option>
+              <option value={2}>Công khai</option>
+              <option value={3}>Khóa</option>
+            </select>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
+};
+
+export default ManagerAccount;

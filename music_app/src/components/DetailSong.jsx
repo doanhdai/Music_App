@@ -12,6 +12,26 @@ import { PlayerContext } from '../context/PlayerContext';
 
 
 const DetailSong = () => {
+  const comments = [
+  {
+    id: 1,
+    userName: 'Đài snack',
+    userImage: assets.mck,
+    content: 'Đạo nhạc chắc luôn',
+  },
+  {
+    id: 2,
+    userName: 'Oanh Le',
+    userImage: assets.mck,
+    content: 'suy quá',
+  },
+  {
+    id: 3,
+    userName: 'Giai Tuấn',
+    userImage: assets.mck, 
+    content: 'ko phải gu',
+  },
+];
   const { id } = useParams();
   const albumData = albumsData[id];
   console.log(albumData);
@@ -73,10 +93,28 @@ const DetailSong = () => {
             </div>
           </div>
         </div>
-        <div className='flex flex-col mt-5'>
-          <label>Viết bình luận</label>
-          <textarea className='bg-black rounded-xl border-2 border-pink-500'></textarea>
+
+
+        <div className='mt-10 bg-[#121212] rounded-xl mb-5' >
+          <div className='mx-4 py-4'>
+            <h2 className="font-bold text-xl">Bình luận</h2>
+            {comments.map((comment) => (
+              <div key={comment.id} className="flex items-center my-4">
+                <img className="rounded-sm w-9 h-9" src={comment.userImage} alt={comment.userName} />
+                <div className="ml-4">
+                  <b>{comment.userName}</b>
+                  <p className="text-xs text-[#bbbbbb]">{comment.content}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className='flex flex-col pb-3'>
+            <label>Viết bình luận</label>
+            <textarea className='bg-black rounded-lg border-[1px] border-pink-400'></textarea>
+          </div>
         </div>
+
+
 
 
         <div className='mb-4 pt-6'>

@@ -78,42 +78,42 @@ export const albumsData = [
         id:0,
         name: "Top 50 Global",
         image: img8,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly ",
         bgColor:"#2a4365"
     },
     {   
         id:1,
         name: "Top 50 the world",
         image: img9,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly ",
         bgColor:"#22543d"
     },
     {   
         id:2,
         name: "Trending the world",
         image: img10,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly ",
         bgColor:"#742a2a"
     },
     {   
         id:3,
         name: "Trending Global",
         image: img16,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly update",
         bgColor:"#44337a"
     },
     {   
         id:4,
         name: "Mega Hits",
         image: img11,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly update",
         bgColor:"#234e52"
     },
     {   
         id:5,
         name: "Happy Favorites",
         image: img15,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly up",
         bgColor:"#744210"
     }
 ]
@@ -123,42 +123,42 @@ export const artistData = [
         id:0,
         name: "Top 50 Global",
         image: img8,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly",
         bgColor:"#2a4365"
     },
     {   
         id:1,
         name: "Top 50 the world",
         image: img9,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly update",
         bgColor:"#22543d"
     },
     {   
         id:2,
         name: "Trending the world",
         image: img10,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly update",
         bgColor:"#742a2a"
     },
     {   
         id:3,
         name: "Trending Global",
         image: img16,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly update",
         bgColor:"#44337a"
     },
     {   
         id:4,
         name: "Mega Hits",
         image: img11,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly update",
         bgColor:"#234e52"
     },
     {   
         id:5,
         name: "Happy Favorites",
         image: img15,
-        desc:"Your weekly update of the most played tracks",
+        desc:"Your weekly update",
         bgColor:"#744210"
     }
 ]
@@ -177,7 +177,7 @@ export const songsData = [
         name: "Song Two",
         image: img2,
         file:song2,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Put a smile",
         duration:"2:20"
     },
     {
@@ -185,7 +185,7 @@ export const songsData = [
         name: "Song Three",
         image: img3,
         file:song3,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Put a smile",
         duration:"2:32"
     },
     {
@@ -193,7 +193,7 @@ export const songsData = [
         name: "Song Four",
         image: img4,
         file:song1,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Put a smil",
         duration:"2:50"
     },
     {
@@ -201,7 +201,7 @@ export const songsData = [
         name: "Song Five",
         image: img5,
         file:song2,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Put a smile",
         duration:"3:10"
     },
     {
@@ -209,7 +209,7 @@ export const songsData = [
         name: "Song Six",
         image: img14    ,
         file:song3,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Put a smile on  ",
         duration:"2:45"
     },
     {
@@ -217,7 +217,7 @@ export const songsData = [
         name: "Song Seven",
         image: img7,
         file:song1,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Put a smile  ",
         duration:"2:18"
     },
     {
@@ -225,7 +225,7 @@ export const songsData = [
         name: "Song Eight",
         image: img12,
         file:song2,
-        desc:"Put a smile on your face with these happy tunes",
+        desc:"Put a smile  ",
         duration:"2:35"
     }
 ]
@@ -279,7 +279,7 @@ export const songData2 = [
       "thoi_luong": 6,
       "trang_thai": 1,
       "luot_nghe": 3298,
-      "hinh_anh": "https://example.com/image1.jpg",
+      "hinh_anh": "https://cloudinary-marketing-res.cloudinary.com/image/upload/ar_0.5,c_fill,g_auto,w_433/q_auto/f_auto/hiking_dog_mountain.jpg",
       "ma_album": "AL001",
       "link_bai_hat": "https://example.com/song1.mp3",
       "ngay_phat_hanh": "2023-11-19",

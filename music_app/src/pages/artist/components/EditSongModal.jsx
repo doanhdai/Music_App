@@ -1,39 +1,20 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    import React, { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import ImageUpload from "./ImageUpload";
 import { FaXmark } from "react-icons/fa6";
 
-const AddSongModal = ({ onClose, modalState }) => {
-  if (modalState === false) return null;
-  return <SongUpload closeModal= {onClose}/>;
-};
-export default AddSongModal;
+const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
+  if (editSongModalState === false) return null;
 
-const genresList = [
-  "Pop",
-  "Rock",
-  "Hip-Hop",
-  "Jazz",
-  "Classical",
-  "Electronic",
-];
-const artistsList = [
-  "Artist A",
-  "Artist B",
-  "Artist C",
-  "Artist D",
-  "Artist E",
-];
-
-const SongUpload = ({closeModal}) => {
-  const [songName, setSongName] = useState("");
-  const [selectedGenres, setSelectedGenres] = useState([]);
-  const [selectedArtists, setSelectedArtists] = useState([]);
+  const [songName, setSongName] = useState(songDetails?.ma_bai_hat || "");
+  const [selectedGenres, setSelectedGenres] = useState(songDetails?.genres || []);
+  const [selectedArtists, setSelectedArtists] = useState(songDetails?.artists || []);
   const [genreSearch, setGenreSearch] = useState("");
   const [artistSearch, setArtistSearch] = useState("");
   const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
   const [artistDropdownOpen, setArtistDropdownOpen] = useState(false);
-  const ImgRef = useRef(null);
+  const ImgRef = useRef(null); // store img data not api link
 
+  console.log(songDetails)
   const toggleGenreDropdown = () => {
     setGenreDropdownOpen(!genreDropdownOpen);
     setArtistDropdownOpen(false); // Close artist dropdown if open
@@ -78,19 +59,19 @@ const SongUpload = ({closeModal}) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="max-w-2xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
-        <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={closeModal}/>
+        <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={onClose} />
         <h2 className="text-2xl font-bold mb-5 text-center">
-          Tạo bài hát mới
+          Sửa bài hát
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} />
+            <ImageUpload ref={ImgRef} initialImage={songDetails?.hinh_anh} />
 
             <div className="w-sm">
               {/* Song Name */}
               <div className="mb-4">
                 <label className="text-lg font-semibold text-gray-400">
-                  song name
+                  Tên bài hát
                 </label>
                 <input
                   type="text"
@@ -105,7 +86,7 @@ const SongUpload = ({closeModal}) => {
               {/* Genre Selection */}
               <div className="mb-4 relative">
                 <label className="block text-lg font-semibold text-gray-400">
-                  the loai
+                  Thể loại
                 </label>
                 <input
                   type="text"
@@ -148,10 +129,11 @@ const SongUpload = ({closeModal}) => {
                 )}
               </div>
 
+
               {/* Related Artist Selection */}
               <div className="mb-4 relative">
                 <label className="block text-lg font-semibold text-gray-400">
-                  Nghe si lien quan
+                  Nghệ sĩ liên quan
                 </label>
                 <input
                   type="text"
@@ -204,7 +186,6 @@ const SongUpload = ({closeModal}) => {
                 <input
                   type="file"
                   accept="audio/*"
-                  required
                   className="w-full p-2 border  bg-white text-black rounded"
                 />
               </div>
@@ -217,10 +198,12 @@ const SongUpload = ({closeModal}) => {
             type="submit"
             className="w-full bg-[#EB2272] text-white py-2 rounded hover:bg-[#FE61A0] transition"
           >
-            Xac nhan
+            Xác nhận
           </button>
         </form>
       </div>
     </div>
   );
 };
+
+export default EditSongModal;

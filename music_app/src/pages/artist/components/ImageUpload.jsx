@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const ImageUpload = ({}, ref) => {
-  const [image, setImage] = useState(null);
+const ImageUpload = ({initialImage}, ref) => {
+  const [image, setImage] = useState(initialImage);
   React.useImperativeHandle(ref, () => ({
     getData: getData,
   }));
@@ -23,7 +23,7 @@ const ImageUpload = ({}, ref) => {
 
   return (
     <div className=" rounded-lg  mr-5 max-w-sm  ">
-      <h2 className="text-lg font-semibold text-gray-400 ">Chen anh</h2>
+      <h2 className="text-lg font-semibold text-gray-400 ">Chèn ảnh</h2>
       <input
         type="file"
         id="file-input"
@@ -33,7 +33,7 @@ const ImageUpload = ({}, ref) => {
       />
       <div
         id="image-preview"
-        className="flex bg-white aspect-square items-center justify-center w-40   border-2 border-dashed border-gray-300 rounded-lg cursor-pointer"
+        className="flex bg-white aspect-square items-center justify-center w-40   border-2  rounded-lg cursor-pointer"
         onClick={() => document.getElementById("file-input").click()} // Trigger file input on click
       >
         {image ? (
@@ -43,7 +43,7 @@ const ImageUpload = ({}, ref) => {
             className="aspect-square object-cover rounded-lg"
           />
         ) : (
-          <span className="text-gray-400">Click to Upload Image</span>
+          <span className="text-gray-400">Click để tải ảnh</span>
         )}
       </div>
     </div>
