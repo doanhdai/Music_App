@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "antd";
 
 import { CiCirclePlus } from "react-icons/ci";
@@ -12,15 +12,44 @@ import UserProfile from "./UserProfile";
 import AccountProfile from "./AccountProfile";
 
 const ManagerUserInfo = () => {
+  const [isEditingUser, setIsEditingUser] = useState(false);
+
+    const handleEditUserClick = () => {
+        setIsEditingUser(true);
+    };
+
+    const handleCancelUserClick = () => {
+        setIsEditingUser(false);
+    };
+
+    const [isEditingAccount, setIsEditingAccount] = useState(false);
+
+    const handleEditAccountClick = () => {
+        setIsEditingAccount(true);
+    };
+
+    const handleCancelAccountClick = () => {
+        setIsEditingAccount(false);
+    };
   return (
     <div className="pt-3 mx-[38px] flex space-x-4">
       <div className="w-1/2">
-        <UserProfile />
-        <UserProfileEdit />
+        {/* <UserProfile />
+        <UserProfileEdit /> */}
+        {isEditingUser ? (
+                <UserProfileEdit onCancel={handleCancelUserClick} />
+            ) : (
+                <UserProfile onEdit={handleEditUserClick} />
+            )}
       </div>
       <div className="w-1/2">
-        <AccountProfile />
-        <AccountProfileEdit />
+      {isEditingAccount ? (
+                <AccountProfileEdit onCancel={handleCancelAccountClick} />
+            ) : (
+                <AccountProfile onEdit={handleEditAccountClick} />
+            )}
+        {/* <AccountProfile />
+        <AccountProfileEdit /> */}
       </div>
     </div>
   );

@@ -6,9 +6,9 @@ import PremiumSection from "../premium/PremiumSection";
 const ManagerPremium = () => {
   return (
     <div className="pt-3 mx-[38px]">
-      <PremiumSection />
+      {/* <PremiumSection /> */}
       {/* <NonPremium /> */}
-      {/* <div className="total_card">Tổng cộng: 40</div>
+      <div className="total_card">Tổng cộng: 40</div>
       <div className="flex flex-wrap">
         <PremiumCard 
           isActive={true} 
@@ -29,7 +29,7 @@ const ManagerPremium = () => {
           descriptions={["mo ta", "mo ta", "mo ta"]}
         />
         
-      </div> */}
+      </div>
     </div>
   );
 };

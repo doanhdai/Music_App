@@ -70,6 +70,7 @@ export const assets = {
     arrow_right,
     spotify_logo,
     clock_icon,
+    img2,
 }
 
 export const albumsData = [

@@ -1,16 +1,16 @@
 import React from "react";
-
-const UserProfileEdit = () => {
+import { assets } from "../../assets/assets";
+const UserProfileEdit = ({onCancel}) => {
   return (
     <div className="bg-[#141414] text-white rounded-lg p-6 w-96 relative">
       <h2 className="text-pink-500 font-bold mb-6">Thông tin cá nhân</h2>
 
-      <button className="absolute top-4 right-4 bg-gray-800 px-4 py-1 rounded-md">
+      <button className="absolute top-4 right-4 bg-gray-800 px-4 py-1 rounded-md" onClick={onCancel}>
         Lưu
       </button>
 
       <div className="flex justify-center mb-4">
-        <div className="w-32 h-32 bg-gray-400 rounded-full"></div>
+        <img src={assets.img2} alt="Avatar" className="w-36 h-36 bg-gray-400 rounded-full object-cover" />
       </div>
 
       <div className="flex justify-center mb-6">
