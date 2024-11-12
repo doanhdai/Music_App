@@ -13,22 +13,68 @@ import { MdOutlineEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
 import { albumsData, assets, songData2, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
+import EditSongModal from '../../pages/artist/components/EditSongModal';
 
 const ManagerSong = () => {
     const baihat= songData2;
 
   const [selectedSong, setSelectedSong] = useState(null);
+  const [currentActionType, setCurrentActionType] = useState('details');
+  const [editSongModalState, setEditSongModalState] = useState(false);
+  const [detailsSongModalState, setDetailsSongModalState] = useState(false);
+
+
+  const actionList = {
+    'delete': ' xóa',
+    'edit' : 'chỉnh sửa',
+    'details': ' xem chi tiết'
+  }
+
+  const handleClickStatusChange =(actionType) => {
+    // status include details,edit,delete
+    if (actionType === currentActionType) {
+      setCurrentActionType('details');
+      alert(`Thoát trạng thái ${actionList[actionType]}`);
+    }
+    else {
+      setCurrentActionType(actionType);
+      alert(`Đang ở trạng thái ${actionList[actionType]}`)
+    }
+  }
 
   const handleShowDetails = (song) => {
     setSelectedSong(song);
+    setDetailsSongModalState(true);
   };
-
-  const handleCloseModal = () => {
+  const handleShowEditModal = (song) => {
+    setSelectedSong(song);
+    setEditSongModalState(true);
+  }
+  const handleCloseDetailModal = () => {
     setSelectedSong(null);
+    setDetailsSongModalState(false);
+    setEditSongModalState(false);
   };
 
+  function deleteSong(song) {
+    //gửi data song để xóa
+    alert('xoa'+ song )
+  }
 
+  const clickedAction = {
+    'details': (song) =>  handleShowDetails(song),
+    'edit': (song) =>  handleShowEditModal(song),
+    'delete': (song) =>  deleteSong(song),
+  };
 
+  function handleClickedSongItem(actionType, songInformation) {
+    const action = clickedAction[actionType];
+    if (action) {
+      return clickedAction[actionType](songInformation);
+  } else {
+      alert(`Wrong action type ${actionType}`);
+  }
+  }
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between">
@@ -74,10 +120,14 @@ const ManagerSong = () => {
         <div className="flex flex-col">
           <label className="mb-1">&nbsp;</label>
               <div className='flex space-x-5'>
-                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                <div 
+                onClick={() => handleClickStatusChange('edit')}
+                className={`w-[36px] h-[36px] flex items-center justify-center rounded-full  ${currentActionType === "edit" ? 'bg-[#EB2272]' : 'bg-black' }`}>
                     <MdOutlineEdit  size={20} />
                 </div>
-                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                <div 
+                onClick={()=> handleClickStatusChange('delete')}
+                className={`w-[36px] h-[36px] flex items-center justify-center rounded-full  ${currentActionType === "delete" ? 'bg-[#EB2272]' : 'bg-black' }`}>
                     <MdDeleteOutline size={20}/>
                 </div>
                </div>
@@ -103,7 +153,7 @@ const ManagerSong = () => {
             <div
               key={index}
               className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
-              onClick={() => handleShowDetails(item)}
+              onClick={() => handleClickedSongItem(currentActionType, item)}
             >
               <p className="text-white">{item.ma_bai_hat}</p>
               <p className="text-[15px] flex items-center">
@@ -122,8 +172,15 @@ const ManagerSong = () => {
       <SongDetailModal
         className="float-start"
         song={selectedSong}
-        onClose={handleCloseModal}
+        detailsSongModalState={detailsSongModalState}
+        onClose={handleCloseDetailModal}
       />
+      <EditSongModal
+        className="float-start"
+        songDetails={selectedSong}
+        editSongModalState={editSongModalState}
+        onClose={handleCloseDetailModal}
+        />
     </div>
   );
 }
