@@ -8,9 +8,12 @@ import { IoClose } from "react-icons/io5";
 import { BiSolidLock, BiSolidLockOpen } from 'react-icons/bi';
 import { FaHeart } from 'react-icons/fa';
 import SongItem from './ManagerAlbum/SongItem';
-
+import EditAlbumModal from '../../pages/artist/components/EditAlbumModal';
 const ManagerAlbum = () => {
    const [selectedAlbum, setSelectedAlbum] = useState(null);
+   const [currentActionType, setCurrentActionType] = useState('details');
+   const [editAlbumModalState, setEditAlbumModalState] = useState(false);
+   const [detailsAlbumSodalState, setDetailsAlbumModalState] = useState(false);
 
    const handleCardClick = (album) => {
      setSelectedAlbum(album);
@@ -19,6 +22,66 @@ const ManagerAlbum = () => {
    const closeModal = () => {
      setSelectedAlbum(null);
    };
+
+   const handleShowAddAlbumModal = () => {
+    
+    setShowAddAlbumModal(true);
+    
+  };
+  const handleCloseAddAlbumModal = () => {
+    setShowAddAlbumModal(false);
+  };
+
+  const actionList = {
+    'delete': ' xóa',
+    'edit' : 'chỉnh sửa',
+    'details': ' xem chi tiết'
+  }
+  const handleClickStatusChange =(actionType) => {
+    // status include details,edit,delete
+    if (actionType === currentActionType) {
+      setCurrentActionType('details');
+      alert(`Thoát trạng thái ${actionList[actionType]}`);
+    }
+    else {
+      setCurrentActionType(actionType);
+      alert(`Đang ở trạng thái ${actionList[actionType]}`)
+    }
+  }
+  const handleShowDetails = (album) => {
+    setSelectedAlbum(album);
+    setDetailsAlbumModalState(true);
+  };
+  const handleShowEditModal = (album) => {
+    setSelectedAlbum(album);
+    setEditAlbumModalState(true);
+  }
+  const handleCloseDetailModal = () => {
+    setSelectedAlbum(null);
+    setDetailsAlbumModalState(false);
+    setEditAlbumModalState(false);
+  };
+
+  function deleteAlbum(album) {
+    //gửi data song để xóa
+    alert('xoa')
+  }
+
+  const clickedAction = {
+    'details': (album) =>  handleShowDetails(album),
+    'edit': (album) =>  handleShowEditModal(album),
+    'delete': (album) =>  deleteAlbum(album),
+  };
+
+
+  function handleClickedAlbumItem(actionType, albumInformation) {
+    const action = clickedAction[actionType];
+    if (action) {
+      return clickedAction[actionType](albumInformation);
+  } else {
+      alert(`Wrong action type ${actionType}`);
+  }
+  }
 
    return (
      <div className='pt-3 mx-[38px]'>
@@ -65,13 +128,18 @@ const ManagerAlbum = () => {
                   </Button>
                 </div>
             </div>
+            {/* button for change edit,delete state */}
             <div className='flex flex-col'>
               <label className='mb-1'>&nbsp;</label>
               <div className='flex space-x-5'>
-                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                <div 
+                onClick={() => handleClickStatusChange('edit')}
+                className={`w-[36px] h-[36px] flex items-center justify-center rounded-full  ${currentActionType === "edit" ? 'bg-[#EB2272]' : 'bg-black'} `}>
                     <MdOutlineEdit  size={20} />
                 </div>
-                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                <div 
+                onClick={() => handleClickStatusChange('delete')}
+                className={`w-[36px] h-[36px] flex items-center justify-center rounded-full  ${currentActionType === "delete" ? 'bg-[#EB2272]' : 'bg-black'} `}>
                     <MdDeleteOutline size={20}/>
                 </div>
                </div>
@@ -84,7 +152,7 @@ const ManagerAlbum = () => {
               <div
                 key={album.id}
                 className="bg-gradient-to-b from-gray-800 to-black shadow-lg cursor-pointer h-[280px] flex flex-col justify-between rounded-lg"
-                onClick={() => handleCardClick(album)}
+                onClick={() => handleClickedAlbumItem(currentActionType,album)}
               >
                 <div className='flex justify-center mt-1'>
                   <img
@@ -112,6 +180,11 @@ const ManagerAlbum = () => {
             {selectedAlbum && (
               <AlbumDetailModal album={selectedAlbum} onClose={closeModal} />
             )}
+            <EditAlbumModal
+              className="float-start"
+              selectedAlbum={selectedAlbum}
+              editAlbumModalState={editAlbumModalState}
+              onClose={handleCloseDetailModal} />
           </div>
         </div>
       </div>

@@ -60,12 +60,7 @@ const ArtistAlbumPage = () => {
   const handleCloseAddAlbumModal = () => {
     setShowAddAlbumModal(false);
   };
-  const handleEditStatusChange = () => {
-    setCurrentActionType('edit');
-  }
-  const handleDeleteStatusChange = () => {
-    setCurrentActionType('delete');
-  }
+
   const actionList = {
     'delete': ' xóa',
     'edit' : 'chỉnh sửa',
