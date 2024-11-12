@@ -93,12 +93,36 @@ const NavBar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <p onClick={()=>navigate(config.routes.PremiumSection)} className="bg-[#E0066F] text-white text-[15px] px-4 py-2 rounded-3xl hidden md:block cursor-pointer">Khám phá Primeum</p>
-          <div className="relative inline-block">
+                    <p
+            className="text-gray-400 text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:text-white hover:scale-110"
+            onClick={() => {
+              startTransition(() => {
+                navigate("/authentication/sign-in");
+              });
+            }}
+          >
+            Đăng kí
+          </p>
+          <p
+            className="text-white text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:scale-105"
+            style={{
+              background:
+                "linear-gradient(153deg, rgba(185, 90, 120, 1) 34%, rgba(224, 6, 111, 1) 99%)",
+            }}
+            onClick={() => {
+              startTransition(() => {
+                navigate("/authentication/log-in");
+              });
+            }}
+          >
+            Đăng nhập
+          </p>
+          {/* <p onClick={()=>navigate(config.routes.PremiumSection)} className="bg-[#E0066F] text-white text-[15px] px-4 py-2 rounded-3xl hidden md:block cursor-pointer">Khám phá Primeum</p> */}
+          {/* <div className="relative inline-block">
             <FaRegBell size={25} />
             <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
-          </div>
-          <div
+          </div> */}
+          {/* <div
             className="relative"
             onMouseEnter={() => setIsOpen(true)}
           >
@@ -144,7 +168,7 @@ const NavBar = () => {
                 </ul>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
