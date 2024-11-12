@@ -54,7 +54,7 @@ const ManagerPremium = () => {
 
                 {/* Search Button */}
                 <div className='flex flex-col'>
-                  <label className='mb-1'>&nbsp;</label> {/* Dùng label rỗng để giữ chiều cao tương tự */}
+                  <label className='mb-1'>&nbsp;</label> 
                   <Button type="primary" className='rounded-3xl bg-[#E0066F] h-[35px] w-[100px] hover:!bg-[#E0066F]'>
                     Tìm kiếm
                   </Button>
@@ -80,7 +80,7 @@ const ManagerPremium = () => {
           {/* <p className='mt-7 '>Tổng có : 100 Gói .</p> */}
             <div className="grid grid-cols-4 gap-3 mt-5">
               <PurchasedPremiumCard
-                isActive={false}
+                isActive={true}
                 title="Ten Premium"
                 price="100.000"
                 duration="2 tháng"
