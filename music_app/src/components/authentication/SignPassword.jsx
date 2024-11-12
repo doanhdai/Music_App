@@ -27,13 +27,13 @@ const SignPassword = () => {
       ></div>
       <BackBtn link="/authentication/sign-in"></BackBtn>
       <InputItem
-        title="Mat khau"
+        title="Mật khẩu"
         password={password}
         setPassword={setPassword}
       />
       <PasswordRules password={password} />
       <AuthBtn
-        title="Tiep theo"
+        title="Tiếp theo"
         link="/authentication/sign-in/signInfo"
       ></AuthBtn>
     </div>

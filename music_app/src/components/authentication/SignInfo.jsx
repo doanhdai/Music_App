@@ -23,20 +23,20 @@ const SignInfo = () => {
       ></div>
       <BackBtn link="/authentication/sign-in/signPass"></BackBtn>
       <span className="SignInfo-text">
-        Gioi thieu thong tin ve ban than ban
+        Giới thiệu thông tin về bản thân
       </span>
-      <InputItem title="Ten">
+      <InputItem title="Tên">
         <div className="input-describe">
-          Ten nay se xuat hien trong ho so cua ban
+        Tên này sẽ xuất hiện trong hồ sơ của bạn
         </div>
       </InputItem>
       <div className="avatarWrap">
-        <div className="avatar-title">Anh dai dien</div>
-        <div className="avatar-describe">chon anh ban muon</div>
+        <div className="avatar-title">Ảnh đại diện</div>
+        <div className="avatar-describe">Chọn ảnh bạn muốn</div>
         <div className="fileWrap">
-          <div className="file-describe">Anh cua ban</div>
+          <div className="file-describe">Ảnh của bạn</div>
           <div className="file-btn">
-            <span className="file-btn_title">Chon tep</span>
+            <span className="file-btn_title">Chọn tệp</span>
           </div>
         </div>
         <div className="avatar-frame"></div>

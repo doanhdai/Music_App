@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 const AuthBtn = (props) => {
   const navigate = useNavigate();
   return (
-    <div
+    <button type="submit"
       className="AuthBtn-container"
       onClick={() => {
         startTransition(() => {
@@ -12,7 +12,7 @@ const AuthBtn = (props) => {
       }}
     >
       <div className="AuthBtn-title">{props.title}</div>
-    </div>
+    </button>
   );
 };
 

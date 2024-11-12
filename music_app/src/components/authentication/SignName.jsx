@@ -15,18 +15,18 @@ const SignName = () => {
           });
         }}
       ></span>
-      <span className="SignName-text">Dang ky de </span>
-      <span className="SignName-text">bat dau nghe</span>
-      <InputItem title="Ten nguoi dung"></InputItem>
+      <span className="SignName-text">Đăng ký để </span>
+      <span className="SignName-text">bắt đầu nghe</span>
+      <InputItem title="Email"></InputItem>
       <AuthBtn
-        title="Tiep theo"
+        title="Tiếp theo"
         link="/authentication/sign-in/signPass"
       ></AuthBtn>
       <div className="Auth-line"></div>
       <ClickableText
-        textAcc="Ban da co tai khoan"
+        textAcc="Bạn đã có tài khoản"
         link="/authentication/log-in"
-        title="Dang nhap tai day"
+        title="Đăng nhập tại đây"
       ></ClickableText>
     </div>
   );
