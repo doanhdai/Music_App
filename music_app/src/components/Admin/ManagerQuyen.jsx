@@ -4,7 +4,7 @@ import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { AdminContext } from '../../context/AdminContext';
 
 const taikhoanList = [
-  {ma_tk: 1, ma_phan_quyen: 'Q1'}
+  { ma_tk: 1, ma_phan_quyen: 'Q1' }
 ]
 
 let quyenList = [
@@ -110,16 +110,16 @@ const ManagerQuyen = () => {
   };
 
   const handleDeleteQuyen = () => {
-    if (!(taikhoanList.some((item)=> item.ma_phan_quyen == currentQuyen))){
-      chitietquyenList = chitietquyenList.filter((item)=> item.ma_phan_quyen != currentQuyen);
-      quyenList = quyenList.filter((item)=> item.ma_phan_quyen != currentQuyen);
+    if (!(taikhoanList.some((item) => item.ma_phan_quyen == currentQuyen))) {
+      chitietquyenList = chitietquyenList.filter((item) => item.ma_phan_quyen != currentQuyen);
+      quyenList = quyenList.filter((item) => item.ma_phan_quyen != currentQuyen);
       setCurrentQuyen(quyenList[0].ma_phan_quyen);
     }
-    else alert('Không thể xóa quyền này do có tài khoản thuộc quyền này!');   
+    else alert('Không thể xóa quyền này do có tài khoản thuộc quyền này!');
   }
 
 
-  const TableChitietquyen = () => (
+  const TableChitietquyen = ({ action }) => (
     <div>
       <table className='bg-[#1E1E1E] w-full h-auto '>
         <thead>
@@ -137,16 +137,23 @@ const ManagerQuyen = () => {
             return (
               <tr key={chucnang.ma_chuc_nang} className='text-center'>
                 <td className='py-3 text-left pl-4'>{chucnang.ten_chuc_nang}</td>
-                {['Xem', 'Thêm', 'Sửa', 'Xóa'].map((vaiTro) => (
-                  <td key={vaiTro}>
-                    <input
-                      type="checkbox"
-                      checked={chitietquyen.some(item => item.mo_ta_vai_tro === vaiTro)}
-                      // disabled={valueAction !== actionList.update}
-                      onChange={(event) => handleCheckboxChange(chucnang.ma_chuc_nang, vaiTro, event.target.checked)}
-                    />
-                  </td>
-                ))}
+                {action != actionList.add ?
+                  ['Xem', 'Thêm', 'Sửa', 'Xóa'].map((vaiTro) => (
+                    <td key={vaiTro}>
+                      <input
+                        type="checkbox"
+                        checked={chitietquyen.some(item => item.mo_ta_vai_tro === vaiTro)}
+                        onChange={(event) => handleCheckboxChange(chucnang.ma_chuc_nang, vaiTro, event.target.checked)}
+                      />
+                    </td>)) :
+                  ['Xem', 'Thêm', 'Sửa', 'Xóa'].map((vaiTro) => (
+                    <td key={vaiTro}>
+                      <input
+                        type="checkbox"
+                        onChange={(event) => alert('click')}
+                      />
+                    </td>))
+                }
               </tr>
             );
           })}
@@ -158,21 +165,23 @@ const ManagerQuyen = () => {
 
   function FormAdd() {
     return (
-      <form className="bg-[#1E1E1E] w-auto p-4">
-        <p className='text-[#A4A298]'>Nhập tên quyền</p>
-        <input
-          className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2"
-          type="text"
-        />
-        <p className='text-[#EB2272] italic'></p>
-        <div className="flex justify-center mt-4 gap-2">
-          <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => handleAction("")}>Hủy</button>
-          <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black'>Xác nhận</button>
+      <div className='bg-[#1E1E1E] w-[50vw]'>
+        <form className=" w-auto p-4">
+          <p className='text-[#A4A298]'>Nhập tên quyền</p>
+          <input
+            className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2 "
+            type="text"
+            autoFocus
+          />
+          <p className='text-[#EB2272] italic'></p>
+          <TableChitietquyen action={actionList.add} />
+          <div className="flex justify-center mt-4 gap-2">
+            <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => handleAction("")}>Hủy</button>
+            <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black'>Xác nhận</button>
+          </div>
+        </form>
 
-          {/* <Button onClick={() => dispatchBgCover({ type: actionList.add_cl_cancel })}>Hủy</Button>
-            <Button className="ml-2 bg-[#EB2272] outline-none"></Button> */}
-        </div>
-      </form>
+      </div>
     );
   }
 
@@ -196,9 +205,9 @@ const ManagerQuyen = () => {
           {
             valueAction != actionList.update ? <ItemsQuyen /> :
               <form className='w-full flex justify-between'>
-                <input type="text" placeholder={quyenList.find((item)=> item.ma_phan_quyen == currentQuyen)?.ten_quyen_han}
-                className='bg-[#1E1E1E] outline-none p-2 mx-2' 
-                autoFocus/>
+                <input type="text" placeholder={quyenList.find((item) => item.ma_phan_quyen == currentQuyen)?.ten_quyen_han}
+                  className='bg-[#1E1E1E] outline-none p-2 mx-2'
+                  autoFocus />
                 <button type='submit' className='bg-[#EB2272] py-1 px-4 text-black '>Lưu thay đổi</button>
               </form>
           }

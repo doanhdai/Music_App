@@ -9,9 +9,10 @@ const pageTitles = {
     '/admin': 'Quản lý tài khoản',
     '/admin/Manager_song': 'Quản lý bài hát',
     '/admin/Manager_Album': 'Quản lý album',
-    '/admin/Manager_type': 'Quản lý chủng loại',
+    '/admin/Manager_type': 'Quản lý thể loại',
     '/admin/Manager_premium': 'Quản lý premium',
     '/admin/Manager_ads': 'Quản lý quảng cáo',
+    '/admin/Manager_ads/contract': 'Quản lý quảng cáo',
     '/admin/Manager_quyen': 'Phân quyền hệ thống',
     '/admin/Manager_statistical': 'Thống kê',
 };
@@ -32,7 +33,7 @@ const HeaderAdmin = () => {
                         <FaRegBell size={25} />
                         <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
                     </div>
-                    <div className='flex'>     
+                    <div className='flex'>
                         <p className='font-bold'>Admin</p>
                     </div>
                 </div>
