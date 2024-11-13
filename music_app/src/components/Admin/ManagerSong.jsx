@@ -142,7 +142,7 @@ const ManagerSong = () => {
           <p>Mã bài hát</p>
           <p>Tên bài hát</p>
           <p className="hidden sm:block">album</p>
-          <p>Thời gian</p>
+          <p>Ngày phát hành</p>
           <p>Trạng thái</p>
         </div>
 
