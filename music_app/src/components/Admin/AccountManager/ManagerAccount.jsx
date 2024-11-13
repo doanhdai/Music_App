@@ -96,11 +96,11 @@ const ManagerAccount = () => {
   const displayStatus = (status) => {
     switch (status) {
       case 1:
-        // return "Chờ duyệt";
+        return "Chờ duyệt";
       case 2:
-        // return "Công khai";
+        return "Công khai";
       case 3:
-        // return "Khóa";
+        return "Khóa";
       default:
         return "";
     }
@@ -167,6 +167,7 @@ const handleOkDelete = () => {
       setIsModalVisible(true);
     }
   };
+  //reset data
   const handleSearchAndReset = () => {
   setAccounts(applyFilters());
   setSearchTerm("");
@@ -213,7 +214,7 @@ const handleOkDelete = () => {
               <option>Manager</option>
             </select>
           </div>
-          {/* <div className="flex flex-col">
+          <div className="flex flex-col">
             <label className="mb-1">Trạng thái</label>
             <select
               className="bg-black text-white p-2 rounded-3xl border-none w-[170px] outline-none cursor-pointer"
@@ -225,7 +226,7 @@ const handleOkDelete = () => {
               <option>Công khai</option>
               <option>Khóa</option>
             </select>
-          </div> */}
+          </div>
           <div className="flex flex-col">
             <label className="mb-1">&nbsp;</label>
             <button
@@ -242,17 +243,19 @@ const handleOkDelete = () => {
           <div className="flex space-x-5">
             <div className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black">
               <CiCirclePlus size={20} />
-              
-
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isEditMode ? "bg-[#E0066F]" : "bg-black"}`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
+                isEditMode ? "bg-[#E0066F]" : "bg-black"
+              }`}
               onClick={handleEditClick}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isDeleteMode ? "bg-[#E0066F]" : "bg-black"}`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
+                isDeleteMode ? "bg-[#E0066F]" : "bg-black"
+              }`}
               onClick={handleDeleteClick}
             >
               <MdDeleteOutline size={20} />
@@ -260,34 +263,48 @@ const handleOkDelete = () => {
           </div>
         </div>
       </div>
-      <div>
-        <p className="mt-4">Tổng có: {accounts.length} tài khoản.</p>
-        <div className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] mt-2 p-4 text-[#fff]">
-          <p className="text-[#E0066F]">#ID</p>
-          <p className="text-[#E0066F]">Gmail</p>
-          <p className="hidden sm:block text-[#E0066F]">Mật khẩu</p>
-          <p className="text-[#E0066F]"> Ngày tạo</p>
-          <p className="text-[#E0066F]">Quyền</p>
-          {/* <p className="text-[#E0066F]">Trạng thái</p> */}
+
+      {accounts.length === 0 ? (
+        <div className="flex items-center h-[500px] justify-center text-center text-white">
+          Không có album bạn tìm
         </div>
-        <hr />
-        {accounts.map((item, index) => (
-          item.status !== 0 && (
-            <div
-              key={index}
-              className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
-              onClick={() => handleAccountClick(item)}
-            >
-              <Link to="" className="text-white">{index}</Link>
-              <p className="text-[15px]">{item.email}</p>
-              <p className="text-[15px] hidden sm:block">{maskPassword(item.password)}</p>
-              <p className="text-[15px]">{item.createdDate}</p>
-              <p className="text-[15px]">{displayRole(item.role)}</p>
-              {/* <p className="text-[15px]">{displayStatus(item.status)}</p> */}
-            </div>
-          )
-        ))}
-      </div>
+      ) : (
+        <div>
+          <p className="mt-4">Tổng có: {accounts.length} tài khoản.</p>
+          <div className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] mt-2 p-4 text-[#fff]">
+            <p className="text-[#E0066F]">#ID</p>
+            <p className="text-[#E0066F]">Gmail</p>
+            <p className="hidden sm:block text-[#E0066F]">Mật khẩu</p>
+            <p className="text-[#E0066F]">Tên</p>
+            <p className="text-[#E0066F]"> Ngày tạo</p>
+            <p className="text-[#E0066F]">Quyền</p>
+            <p className="text-[#E0066F]">Trạng thái</p>
+          </div>
+          <hr />
+          {accounts.map(
+            (item, index) =>
+              item.status !== 0 && (
+                <div
+                  key={index}
+                  className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
+                  onClick={() => handleAccountClick(item)}
+                >
+                  <Link to="" className="text-white">
+                    {index}
+                  </Link>
+                  <p className="text-[15px]">{item.email}</p>
+                  <p className="text-[15px] hidden sm:block">
+                    {maskPassword(item.password)}
+                  </p>
+                  <p className="text-[15px]">MCK</p>
+                  <p className="text-[15px]">{item.createdDate}</p>
+                  <p className="text-[15px]">{displayRole(item.role)}</p>
+                  <p className="text-[15px]">{displayStatus(item.status)}</p>
+                </div>
+              )
+          )}
+        </div>
+      )}
       <Modal
         title={isDeleteMode ? "Xác nhận xóa" : "Chỉnh sửa tài khoản"}
         open={isModalVisible}
