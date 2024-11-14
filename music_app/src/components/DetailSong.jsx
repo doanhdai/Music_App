@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { albumsData, assets, songsData } from "../assets/assets";
 import { Link, useParams } from "react-router-dom";
-import { FaPlay } from "react-icons/fa";
+import { FaHeart, FaPlay } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore, IoMdPause } from "react-icons/io";
 import ArtistItems from "./ArtistItems";
@@ -46,6 +46,11 @@ const DetailSong = () => {
   console.log(albumData);
   const { playWithId, playStatus, pause, track } = useContext(PlayerContext);
 
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  const handleFavourite = () => {
+    setIsFavourite(!isFavourite);
+  };
   return (
     <div onClick={closeMenu}>
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
@@ -54,10 +59,10 @@ const DetailSong = () => {
           <p>Bài hát</p>
           <h2 className="text-5xl font-bold mb-4 md:text-7xl">Anh đã ổn hơn</h2>
           <p className="mt-1 flex items-center">
-              <img className="w-5" src={assets.spotify_logo}></img>
-              <span className="pl-2">MCK -</span>
-              <span className="pl-2">234.321 yêu thích - </span>
-              <span className="pl-2">12/12/2024</span>
+            <img className="w-5" src={assets.spotify_logo}></img>
+            <span className="pl-2">MCK -</span>
+            <span className="pl-2">234.321 yêu thích - </span>
+            <span className="pl-2">12/12/2024</span>
           </p>
           <p className="mt-4 flex items-center">POP, R&B</p>
         </div>
@@ -73,8 +78,12 @@ const DetailSong = () => {
               )}
             </button>
 
-            <button>
-              <FaRegHeart size={30} />
+            <button onClick={handleFavourite}>
+              {isFavourite ? (
+                <FaHeart color="red" size={30} />
+              ) : (
+                <FaRegHeart size={30} />
+              )}
             </button>
             <IoIosMore size={30} />
           </div>
@@ -139,27 +148,22 @@ const DetailSong = () => {
                   </div>
                 </div>
                 <div className="text-[15px] flex justify-center relative">
-                <IoMdMore 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleMenu(comment.id);
-                  }}
-                />                  
+                  <IoMdMore
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMenu(comment.id);
+                    }}
+                  />
                   {menuSongId === comment.id && (
                     <div className="absolute bottom-8 right-0 bg-gray-800 text-white p-2 rounded shadow-lg !z-50 w-[80px]">
                       <div className="cursor-pointer flex items-center gap-2">
                         {" "}
-                        <AiOutlineDelete size={18}/>
+                        <AiOutlineDelete size={18} />
                         Xóa
                       </div>
-
                     </div>
-                  )
-                  
-                  }
-
+                  )}
                 </div>
-
               </div>
             ))
           ) : (

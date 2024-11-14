@@ -63,10 +63,19 @@ const ManagerAccount = () => {
       role: 2, // Nghệ sĩ
       status: 2, // Công khai
     },
+    {
+      name: "User008",
+      email: "user007@example.com",
+      password: "password007",
+      createdDate: "2024-07-01",
+      role: 3, // Nghệ sĩ
+      status: 2, // Công khai
+    },
   ];
 
   const [accounts, setAccounts] = useState(accountData);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
@@ -119,16 +128,22 @@ const ManagerAccount = () => {
     }
   };
 
-const handleOkDelete = () => {
-  setAccounts((prevAccounts) =>
-    prevAccounts.map((account) =>
-      account === selectedAccount ? { ...account, status: 0 } : account
-    )
-  );
-  setIsModalVisible(false);
-  setIsDeleteMode(false);
-};
+  const handleOkDelete = () => {
+    setAccounts((prevAccounts) =>
+      prevAccounts.map((account) =>
+        account === selectedAccount ? { ...account, status: 0 } : account
+      )
+    );
+    setIsModalVisible(false);
+    setIsDeleteMode(false);
+  };
+  const handleAddClick = () => {
+    setIsAddModalVisible(true);
+  };
 
+  const handleAddCancel = () => {
+    setIsAddModalVisible(false);
+  };
   const handleOkEdit = () => {
     setAccounts((prevAccounts) =>
       prevAccounts.map((account) =>
@@ -169,17 +184,22 @@ const handleOkDelete = () => {
   };
   //reset data
   const handleSearchAndReset = () => {
-  setAccounts(applyFilters());
-  setSearchTerm("");
-  setFilterRole("All_role");
-  setFilterStatus("All_status");
-};
+    setAccounts(applyFilters());
+    setSearchTerm("");
+    setFilterRole("All_role");
+    setFilterStatus("All_status");
+  };
 
   const applyFilters = () => {
     return accountData.filter((account) => {
-      const matchesSearchTerm = account.email.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesRole = filterRole === "All_role" || displayRole(account.role) === filterRole;
-      const matchesStatus = filterStatus === "All_status" || displayStatus(account.status) === filterStatus;
+      const matchesSearchTerm = account.email
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesRole =
+        filterRole === "All_role" || displayRole(account.role) === filterRole;
+      const matchesStatus =
+        filterStatus === "All_status" ||
+        displayStatus(account.status) === filterStatus;
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
@@ -241,7 +261,10 @@ const handleOkDelete = () => {
         <div className="flex flex-col">
           <label className="mb-2">&nbsp;</label>
           <div className="flex space-x-5">
-            <div className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black">
+            <div
+              onClick={handleAddClick}
+              className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black"
+            >
               <CiCirclePlus size={20} />
             </div>
             <div
@@ -266,7 +289,7 @@ const handleOkDelete = () => {
 
       {accounts.length === 0 ? (
         <div className="flex items-center h-[500px] justify-center text-center text-white">
-          Không có album bạn tìm
+          Không có tài khoản bạn tìm
         </div>
       ) : (
         <div>
@@ -305,6 +328,10 @@ const handleOkDelete = () => {
           )}
         </div>
       )}
+      <AddEmployeeAccountForm
+        isModal={isAddModalVisible}
+        onCancel={handleAddCancel}
+      />
       <Modal
         title={isDeleteMode ? "Xác nhận xóa" : "Chỉnh sửa tài khoản"}
         open={isModalVisible}
