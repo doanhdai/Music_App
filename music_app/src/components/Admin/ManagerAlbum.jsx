@@ -112,7 +112,6 @@ const ManagerAlbum = () => {
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between">
         <div className="flex items-center space-x-5">
-          {/* Search Box */}
           <div className="flex flex-col">
             <label className="mb-1">Tìm kiếm album</label>
             <div className="flex items-center p-2 w-[300px] bg-black justify-between rounded-lg">
@@ -122,18 +121,17 @@ const ManagerAlbum = () => {
                 type="text"
                 placeholder="Tìm kiếm album..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} // Cập nhật state khi tìm kiếm
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
 
-          {/* Status Filter */}
           <div className="flex flex-col">
             <label className="mb-1">Trạng thái</label>
             <select
               className="bg-black text-white p-2 rounded-lg border-none w-[150px] outline-none cursor-pointer"
               value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)} // Cập nhật trạng thái khi thay đổi
+              onChange={(e) => setSelectedStatus(e.target.value)}
             >
               <option value="">Tất cả</option>
               <option value="public">Công khai</option>
@@ -141,7 +139,6 @@ const ManagerAlbum = () => {
             </select>
           </div>
 
-          {/* Release Date Filter */}
           <div className="flex flex-col">
             <label className="mb-1">Ngày phát hành</label>
             <div className="flex items-center p-1.5 w-[200px] bg-black justify-between rounded-lg">
@@ -149,12 +146,11 @@ const ManagerAlbum = () => {
                 className="bg-black w-[100%] outline-none ml-3 text-white"
                 type="date"
                 value={releaseDate}
-                onChange={(e) => setReleaseDate(e.target.value)} // Cập nhật ngày phát hành khi thay đổi
+                onChange={(e) => setReleaseDate(e.target.value)} 
               />
             </div>
           </div>
 
-          {/* Search Button */}
           <div className="flex flex-col">
             <label className="mb-1">&nbsp;</label>
             <Button
@@ -167,7 +163,6 @@ const ManagerAlbum = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col">
           <label className="mb-1">&nbsp;</label>
           <div className="flex space-x-5">
