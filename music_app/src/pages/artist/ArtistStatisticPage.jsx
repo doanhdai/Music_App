@@ -69,6 +69,7 @@ const ArtistStatisticPage = () => {
 export default ArtistStatisticPage;
 
 const IncomeStatisticList = () => {
+
   return (
     <div>
       <div className="ml-5 inline-flex gap-5">
@@ -256,3 +257,177 @@ const LikedStatisticList = () => {
     </div>
   );
 };
+
+const getDate = (type) => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0 nên cần +1
+  const day = String(today.getDate()).padStart(2, '0');
+  switch (type) {
+    case 0: //ngày hôm qua
+      return `${day - 1}/${month}/${year}`;
+    case 1: //ngày hôm nay
+      return `${day}/${month}/${year}`;
+    case 2: //ngày hôm nay của tháng trước
+      return `${day}/${month - 1}/${year}`;
+    default:
+      break;
+  }
+
+};
+
+function getDaysOfMonth(month, year) { //Lấy mảng chứa các ngày của tháng và năm truyền vào
+  const daysInMonth = new Date(year, month, 0).getDate(); // Lấy số ngày trong tháng
+  const days = [];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const formattedDay = String(day).padStart(2, '0');
+    const formattedMonth = String(month).padStart(2, '0');
+    days.push(`${formattedDay}/${formattedMonth}/${year}`);
+  }
+
+  return days;
+}
+
+function listDaysInRange(start, end) { // lấy mảng chứa các ngày từ ngày start den end
+  const days = [];
+
+  while (start <= end) {
+    const day = String(start.getDate()).padStart(2, '0');
+    const month = String(start.getMonth() + 1).padStart(2, '0');
+    const year = start.getFullYear();
+    days.push(`${day}/${month}/${year}`);
+
+    start.setDate(start.getDate() + 1);
+  }
+
+
+  return days;
+}
+/// incomponent
+const handleChangeLoaiThongKe = (event) => {
+  const selectedIndex = +event.target.value;
+  setIndexLoai(selectedIndex);
+}
+const handleChangeThoiGian = (event) => {
+  const selectedIndex = +event.target.value;
+  setIndexThoiGian(selectedIndex);
+};
+
+const handleGetNewDate = (event) => {
+  const { name, value } = event.target;
+
+  if (name === 'startDay') {
+    const start = new Date(value.split("/").reverse().join("-"));
+    const end = new Date(endDay.split("/").reverse().join("-"));
+
+    if (start >= end) {
+      alert('Khoảng ngày không hợp lệ. Ngày bắt đầu phải bé hơn ngày kết thúc!');
+
+    } else {
+      const timeDifference = end - start;
+
+      // Chuyển sự chênh lệch từ milliseconds sang ngày
+      const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+      if (daysDifference <= 32)
+        setStartDay(value);
+      else
+        alert('Ngày bắt đầu và ngày kết thúc chênh lệch không quá 32 ngày!');
+    }
+
+  } else if (name === 'endDay') {
+    const start = new Date(startDay.split("/").reverse().join("-"));
+    const end = new Date(value.split("/").reverse().join("-"));
+
+    if (start >= end) {
+      alert('Khoảng ngày không hợp lệ. Ngày bắt đầu phải bé hơn ngày kết thúc!');
+
+    } else {
+      const timeDifference = end - start;
+
+      // Chuyển sự chênh lệch từ milliseconds sang ngày
+      const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+      if (daysDifference <= 32)
+        setEndDay(value);
+      else
+        alert('Ngày bắt đầu và ngày kết thúc chênh lệch không quá 32 ngày!');
+    }
+
+  }
+}
+
+/*
+<span className='flex gap-2 items-center'>
+              <input
+                className="inputDate p-1 w-fit mt-3 outline-none bg-[#A4A298] mb-2 text-black"
+                type="date"
+                name="startDay"
+                value={startDay.split('/').reverse().join('-')}
+                onChange={handleGetNewDate}
+                onKeyDown={(event) => event.preventDefault()}
+              />
+              <span>đến</span>
+              <input
+                className="inputDate p-1 w-fit mt-3 outline-none bg-[#A4A298] mb-2 text-black"
+                type="date"
+                name="endDay"
+                value={endDay.split('/').reverse().join('-')}
+                onChange={handleGetNewDate}
+                onKeyDown={(event) => event.preventDefault()}
+
+              />
+            </span>
+            const IncomeStatistic = () => {
+  let incomeData = [
+    {"ngay_thong_ke":"2024-11-11 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100000000,"luot_nghe":100000000},
+{"ngay_thong_ke":"2024-11-12 00:00:00","ma_bai_hat":"BH0002","doanh_thu":10100,"luot_nghe":2000000},
+{"ngay_thong_ke":"2024-11-13 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10010000,"luot_nghe":1000000},
+{"ngay_thong_ke":"2024-11-14 00:00:00","ma_bai_hat":"BH0003","doanh_thu":10100,"luot_nghe":100000000},
+{"ngay_thong_ke":"2024-11-15 00:00:00","ma_bai_hat":"BH0002","doanh_thu":10010000,"luot_nghe":2000000},
+{"ngay_thong_ke":"2024-11-16 00:00:00","ma_bai_hat":"BH0001","doanh_thu":100000000,"luot_nghe":1000000},
+{"ngay_thong_ke":"2024-11-17 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100100,"luot_nghe":100000000},
+{"ngay_thong_ke":"2024-11-18 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
+{"ngay_thong_ke":"2024-11-19 00:00:00","ma_bai_hat":"BH0001","doanh_thu":100000000,"luot_nghe":1000000},
+{"ngay_thong_ke":"2024-11-20 00:00:00","ma_bai_hat":"BH0003","doanh_thu":1001000,"luot_nghe":100000000},
+{"ngay_thong_ke":"2024-11-21 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
+{"ngay_thong_ke":"2024-11-22 00:00:00","ma_bai_hat":"BH0001","doanh_thu":101,"luot_nghe":1000000},
+{"ngay_thong_ke":"2024-11-23 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100000000,"luot_nghe":100000000},
+{"ngay_thong_ke":"2024-11-24 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
+{"ngay_thong_ke":"2024-11-25 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10100,"luot_nghe":1000000},
+{"ngay_thong_ke":"2024-11-26 00:00:00","ma_bai_hat":"BH0003","doanh_thu":102000,"luot_nghe":100000000},
+{"ngay_thong_ke":"2024-11-27 00:00:00","ma_bai_hat":"BH0002","doanh_thu":104000,"luot_nghe":2000000},
+{"ngay_thong_ke":"2024-11-28 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10400,"luot_nghe":1000000},
+{"ngay_thong_ke":"2024-11-29 00:00:00","ma_bai_hat":"BH0003","doanh_thu":10300,"luot_nghe":100000000},
+{"ngay_thong_ke":"2024-11-30 00:00:00","ma_bai_hat":"BH0002","doanh_thu":102000,"luot_nghe":2000000},
+  ]
+
+  const [startDay, setStartDay] = useState(getDate(0));
+  const [endDay, setEndDay] = useState(getDate(1));
+return (
+  <>
+     <span className='flex gap-2 items-center'>
+              <input
+                className="inputDate p-1 w-fit mt-3 outline-none bg-[#A4A298] mb-2 text-black"
+                type="date"
+                name="startDay"
+                value={startDay.split('/').reverse().join('-')}
+                onChange={handleGetNewDate}
+                onKeyDown={(event) => event.preventDefault()}
+              />
+              <span>đến</span>
+              <input
+                className="inputDate p-1 w-fit mt-3 outline-none bg-[#A4A298] mb-2 text-black"
+                type="date"
+                name="endDay"
+                value={endDay.split('/').reverse().join('-')}
+                onChange={handleGetNewDate}
+                onKeyDown={(event) => event.preventDefault()}
+
+              />
+            </span>
+  </>
+)
+}
+ */
