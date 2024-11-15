@@ -15,17 +15,17 @@ const ArtistSongPage = React.lazy(() => import("../pages/artist/ArtistSongPage")
 const ArtistAlbumPage = React.lazy(() => import("../pages/artist/ArtistAlbumPage"))
 const ArtistWithdrawalRequestPage = React.lazy(() => import("../pages/artist/ArtistWithdrawalRequestPage"))
 const ArtistStatisticPage = React.lazy(() => import("../pages/artist/ArtistStatisticPage"));
-const AdminHome = React.lazy(()=>import("../pages/Admin/Admin"))
-const ManagerAccount = React.lazy(()=>import("../components/Admin/AccountManager/ManagerAccount"))
-const ManagerSong = React.lazy(()=>import("../components/Admin/ManagerSong"))
-const ManagerAlbum = React.lazy(()=>import("../components/Admin/ManagerAlbum"))
-const ManagerType = React.lazy(()=>import("../components/Admin/ManagerType"))
-const ManagerPremium = React.lazy(()=>import("../components/Admin/ManagerPremium"))
-const ManagerAds = React.lazy(()=>import("../components/Admin/ManagerAds"))
-const ManagerQuyen = React.lazy(()=>import("../components/Admin/ManagerQuyen"))
-const ManagerStatistical = React.lazy(()=>import("../components/Admin/ManagerStatistical"))
-const AccountAdmin = React.lazy(()=> import("../components/Admin/AccountAdmin"))
-const search = React.lazy(()=> import("../components/Search"))
+const AdminHome = React.lazy(() => import("../pages/Admin/Admin"))
+const ManagerAccount = React.lazy(() => import("../components/Admin/AccountManager/ManagerAccount"))
+const ManagerSong = React.lazy(() => import("../components/Admin/ManagerSong"))
+const ManagerAlbum = React.lazy(() => import("../components/Admin/ManagerAlbum"))
+const ManagerType = React.lazy(() => import("../components/Admin/ManagerType"))
+const ManagerPremium = React.lazy(() => import("../components/Admin/ManagerPremium"))
+const ManagerAds = React.lazy(() => import("../components/Admin/ManagerAds"))
+const ManagerQuyen = React.lazy(() => import("../components/Admin/ManagerQuyen"))
+const ManagerStatistical = React.lazy(() => import("../components/Admin/ManagerStatistical"))
+const AccountAdmin = React.lazy(() => import("../components/Admin/AccountAdmin"))
+const search = React.lazy(() => import("../components/Search"))
 const AlbumSongs = React.lazy(() => import("../components/DisplayAlbum"));
 const ArtistSongs = React.lazy(() => import("../components/DisplayArtist"));
 const Song = React.lazy(() => import("../components/DetailSong"));
@@ -41,7 +41,7 @@ const NotFound = React.lazy(() => import("../pages/NotFound"));
 const UserInfoLayout = React.lazy(() => import("../pages/User/UserInfo/UserInfo"));
 const UserInfo = React.lazy(() => import("../components/UserInfo/ManagerUserInfo"));
 const ManagerPremiumUser = React.lazy(() => import("../components/UserInfo/ManagerPremiumUser"));
-const PremiumSection = React.lazy(()=>import("../components/premium/PremiumSection"))
+const PremiumSection = React.lazy(() => import("../components/premium/PremiumSection"))
 const DisplayPlaylist = React.lazy(() => import("../components/DisplayPlaylist"))
 const InforAdsPage = React.lazy(() => import("../components/Admin/InforAdsPage"))
 const ContractAdsPage = React.lazy(() => import("../components/Admin/ContractAdsPage"))

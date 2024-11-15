@@ -83,7 +83,7 @@ const NavBar = () => {
                 const term = e.target.value;
                 setSearchTerm(term);
                 handleSearch(term);
-                {console.log(term)}
+                { console.log(term) }
               }}
               className="bg-black w-[100%] outline-none ml-3"
               type="text"
@@ -93,7 +93,7 @@ const NavBar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-                    <p
+          <p
             className="text-gray-400 text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:text-white hover:scale-110"
             onClick={() => {
               startTransition(() => {
@@ -122,7 +122,7 @@ const NavBar = () => {
             <FaRegBell size={25} />
             <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
           </div> */}
-          {/* <div
+          <div
             className="relative"
             onMouseEnter={() => setIsOpen(true)}
           >
@@ -132,7 +132,7 @@ const NavBar = () => {
             {isOpen && (
               <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
                 <ul className="text-white">
-                  <li 
+                  <li
                     className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
                     onClick={() => {
                       startTransition(() => {
@@ -143,7 +143,7 @@ const NavBar = () => {
                     <div className="mr-3"><IoSettingsOutline size={20} /></div>
                     Quản lý
                   </li>
-                  <li 
+                  <li
                     className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
                     onClick={() => {
                       startTransition(() => {
@@ -154,7 +154,7 @@ const NavBar = () => {
                     <div className="mr-3"><RiAccountCircleLine size={20} /></div>
                     Tài khoản
                   </li>
-                  <li 
+                  <li
                     className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
                     onClick={() => {
                       startTransition(() => {
@@ -168,7 +168,7 @@ const NavBar = () => {
                 </ul>
               </div>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

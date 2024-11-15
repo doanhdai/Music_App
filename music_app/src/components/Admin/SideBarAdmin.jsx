@@ -10,6 +10,7 @@ import { IoAlbumsOutline } from "react-icons/io5";
 import { RiFolderMusicLine } from "react-icons/ri";
 import { MdOutlineSupervisorAccount } from "react-icons/md";
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FaDollarSign } from 'react-icons/fa6';
 
 const menuItems = [
   { label: 'Quản lý tài khoản', icon: <MdOutlineSupervisorAccount size={20} />, route: '/admin', id: 'account' },
@@ -20,6 +21,7 @@ const menuItems = [
   { label: 'Quản lý quảng cáo', icon: <RiAdvertisementLine size={20} />, route: '/admin/Manager_ads', id: 'ads' },
   { label: 'Phân quyền hệ thống', icon: <TbAlignBoxRightStretch size={20} />, route: '/admin/Manager_quyen', id: 'system' },
   { label: 'Thống kê', icon: <FaChartBar size={20} />, route: '/admin/Manager_statistical', id: 'statistics' },
+
 ];
 
 const SideBarAdmin = () => {
