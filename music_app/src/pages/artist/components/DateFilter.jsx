@@ -52,8 +52,7 @@ const DateFilter = () => {
           className=" w-full px-2 text-black border border-gray-300  shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       
-
-      
+  
     </div>
   );
 };
