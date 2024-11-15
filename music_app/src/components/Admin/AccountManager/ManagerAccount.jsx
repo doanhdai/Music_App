@@ -1,79 +1,15 @@
 import { Button, Modal, Select } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import { IoIosMore, IoIosSearch } from "react-icons/io";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import AddEmployeeAccountForm from "./AddEmployeeAccountForm";
+import { AdminContext } from "../../../context/AdminContext";
 const ManagerAccount = () => {
-  const accountData = [
-    {
-      name: "User001",
-      email: "user001@example.com",
-      password: "password001",
-      createdDate: "2024-01-01",
-      role: 1, // Người nghe
-      status: 2, // Công khai
-    },
-    {
-      name: "User002",
-      email: "user002@example.com",
-      password: "password002",
-      createdDate: "2024-02-01",
-      role: 2, // Nghệ sĩ
-      status: 3, // Khóa
-    },
-    {
-      name: "User003",
-      email: "user003@example.com",
-      password: "password003",
-      createdDate: "2024-03-01",
-      role: 1, // Người nghe
-      status: 1, // Chờ duyệt
-    },
-    {
-      name: "User004",
-      email: "user004@example.com",
-      password: "password004",
-      createdDate: "2024-04-01",
-      role: 1, // Người nghe
-      status: 2, // Công khai
-    },
-    {
-      name: "User005",
-      email: "user005@example.com",
-      password: "password005",
-      createdDate: "2024-05-01",
-      role: 2, // Nghệ sĩ
-      status: 3, // Khóa
-    },
-    {
-      name: "User006",
-      email: "user006@example.com",
-      password: "password006",
-      createdDate: "2024-06-01",
-      role: 1, // Người nghe
-      status: 1, // Chờ duyệt
-    },
-    {
-      name: "User007",
-      email: "user007@example.com",
-      password: "password007",
-      createdDate: "2024-07-01",
-      role: 2, // Nghệ sĩ
-      status: 2, // Công khai
-    },
-    {
-      name: "User008",
-      email: "user007@example.com",
-      password: "password007",
-      createdDate: "2024-07-01",
-      role: 3, // Nghệ sĩ
-      status: 2, // Công khai
-    },
-  ];
+  const { accountsData } = useContext(AdminContext);
 
-  const [accounts, setAccounts] = useState(accountData);
+  const [accounts, setAccounts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
@@ -86,8 +22,10 @@ const ManagerAccount = () => {
   const [filterStatus, setFilterStatus] = useState("All_status");
 
   const maskPassword = (password) => "*".repeat(password.length);
-
-  // Hàm chuyển đổi role từ mã sang tên hiển thị
+  useEffect(() => {
+    setAccounts(accountsData);
+  }, [accountsData]);
+  console.log(accounts)
   const displayRole = (role) => {
     switch (role) {
       case 1:
@@ -97,7 +35,7 @@ const ManagerAccount = () => {
       case 3:
         return "Manager";
       default:
-        return "Không xác định";
+        return "null";
     }
   };
 
@@ -131,7 +69,7 @@ const ManagerAccount = () => {
   const handleOkDelete = () => {
     setAccounts((prevAccounts) =>
       prevAccounts.map((account) =>
-        account === selectedAccount ? { ...account, status: 0 } : account
+        account === selectedAccount ? { ...account, trang_thai: 0 } : account
       )
     );
     setIsModalVisible(false);
@@ -148,7 +86,7 @@ const ManagerAccount = () => {
     setAccounts((prevAccounts) =>
       prevAccounts.map((account) =>
         account === selectedAccount
-          ? { ...account, role: editedRole, status: editedStatus }
+          ? { ...account, role: editedRole, trang_thai: editedStatus }
           : account
       )
     );
@@ -178,7 +116,7 @@ const ManagerAccount = () => {
     } else if (isEditMode) {
       setSelectedAccount(account);
       setEditedRole(account.role);
-      setEditedStatus(account.status);
+      setEditedStatus(account.trang_thai);
       setIsModalVisible(true);
     }
   };
@@ -191,7 +129,7 @@ const ManagerAccount = () => {
   };
 
   const applyFilters = () => {
-    return accountData.filter((account) => {
+    return accountsData.filter((account) => {
       const matchesSearchTerm = account.email
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -199,7 +137,7 @@ const ManagerAccount = () => {
         filterRole === "All_role" || displayRole(account.role) === filterRole;
       const matchesStatus =
         filterStatus === "All_status" ||
-        displayStatus(account.status) === filterStatus;
+        displayStatus(account.trang_thai) === filterStatus;
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
@@ -304,28 +242,34 @@ const ManagerAccount = () => {
             <p className="text-[#E0066F]">Trạng thái</p>
           </div>
           <hr />
-          {accounts.map(
-            (item, index) =>
-              item.status !== 0 && (
-                <div
-                  key={index}
-                  className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
-                  onClick={() => handleAccountClick(item)}
-                >
-                  <Link to="" className="text-white">
-                    {index}
-                  </Link>
-                  <p className="text-[15px]">{item.email}</p>
-                  <p className="text-[15px] hidden sm:block">
-                    {maskPassword(item.password)}
-                  </p>
-                  <p className="text-[15px]">MCK</p>
-                  <p className="text-[15px]">{item.createdDate}</p>
-                  <p className="text-[15px]">{displayRole(item.role)}</p>
-                  <p className="text-[15px]">{displayStatus(item.status)}</p>
-                </div>
-              )
-          )}
+          <div className="h-[460px] overflow-y-auto">
+            {accounts.map(
+              (item, index) =>
+                item.status !== 0 && (
+                  <div
+                    key={index}
+                    className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
+                    onClick={() => handleAccountClick(item)}
+                  >
+                    <Link to="" className="text-white">
+                      {index}
+                    </Link>
+                    <p className="text-[15px]">{item.email}</p>
+                    <p className="text-[15px] hidden sm:block">
+                      {maskPassword(item.mat_khau)}
+                    </p>
+                    <p className="text-[15px]">MCK</p>
+                    <p className="text-[15px]">{item.ngay_tao}</p>
+                    <p className="text-[15px]">
+                      {displayRole(item.ma_phan_quyen)}
+                    </p>
+                    <p className="text-[15px]">
+                      {displayStatus(item.trang_thai)}
+                    </p>
+                  </div>
+                )
+            )}
+          </div>
         </div>
       )}
       <AddEmployeeAccountForm

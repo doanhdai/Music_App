@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "antd";
 
 import { FaHeart } from "react-icons/fa";
@@ -10,14 +10,15 @@ import { CiCirclePlus } from "react-icons/ci";
 import { IoIosMore, IoIosSearch } from "react-icons/io";
 import { MdOutlineEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
-import { albumsData, assets, songData2, songsData } from "../../assets/assets";
+import { assets, songData2 } from "../../assets/assets";
 import { Link } from "react-router-dom";
 import EditSongModal from "../../pages/artist/components/EditSongModal";
+import { PlayerContext } from "../../context/PlayerContext";
 
 const ManagerSong = () => {
-  const songData = songData2;
+  const { songsData } = useContext(PlayerContext);
   const [selectedSong, setSelectedSong] = useState(null);
-  const [baihat, setSong] = useState(songData2);
+  const [baihat, setSong] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
   const [currentActionType, setCurrentActionType] = useState("details");
@@ -25,6 +26,9 @@ const ManagerSong = () => {
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All_status");
 
+  useEffect(() => {
+    setSong(songsData);
+  }, [songsData]);
   const actionList = {
     delete: " xóa",
     edit: "chỉnh sửa",
@@ -51,6 +55,16 @@ const ManagerSong = () => {
       setCurrentActionType(actionType);
       alert(`Đang ở trạng thái ${actionList[actionType]}`);
     }
+  };
+  const removeVietnamese = (str) => {
+    if (typeof str !== "string") {
+      return "";
+    }
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D");
   };
 
   const handleShowDetails = (song) => {
@@ -87,22 +101,27 @@ const ManagerSong = () => {
     }
   }
   const handleSearchAndReset = () => {
-    setSong(filteredSongs());
+    const results = filteredSongs();
+    setSong(results);
     setSearchTerm("");
     setFilterStatus("All_status");
   };
+
   const filteredSongs = () => {
-    return songData.filter((song) => {
-      const matchesText = song.ten_bai_hat
+    return songsData.filter((song) => {
+      const matchesText = removeVietnamese(song.ten_bai_hat)
         .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+        .includes(removeVietnamese(searchTerm).toLowerCase());
       const matchesStatus =
         filterStatus === "All_status" ||
-        displayStatus(song.status) === filterStatus;
-      const matchesDate = !releaseDate || song.releaseDate === releaseDate;
+        displayStatus(song.trang_thai) === filterStatus;
+      const matchesDate = !releaseDate || song.ngay_phat_hanh === releaseDate;
       return matchesText && matchesStatus && matchesDate;
     });
   };
+  // console.log("Dữ liệu ban đầu:", songsData);
+  console.log("Điều kiện lọc:", searchTerm);
+  console.log("Kết quả sau lọc:", filteredSongs());
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between">
@@ -177,6 +196,7 @@ const ManagerSong = () => {
           </div>
         </div>
       </div>
+
       {baihat.length === 0 ? (
         <div className="flex items-center h-[500px] justify-center text-center text-white">
           Không có bài hát bạn tìm
@@ -185,7 +205,7 @@ const ManagerSong = () => {
         <div>
           <p className="mt-4">Tổng có: 100 bài hát.</p>
 
-          <div className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] mt-2 p-4 text-[#fff]">
+          <div className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] mt-2 p-4 text-[#fff] ">
             <p>Mã bài hát</p>
             <p>Tên bài hát</p>
             <p className="hidden sm:block">album</p>
@@ -204,8 +224,7 @@ const ManagerSong = () => {
                 <p className="text-[15px] flex items-center">
                   <img
                     className="inline w-10 mr-2"
-                    src={assets.mck}
-                    alt="album"
+                    src={item.hinh_anh}
                   />
                   {item.ten_bai_hat}
                 </p>
