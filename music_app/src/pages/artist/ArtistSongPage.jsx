@@ -22,36 +22,40 @@ import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 
 const ArtistSongPage = () => {
-  
   const [songsData, setSongsData] = useState([]);
-  const [currentActionType, setCurrentActionType] = useState('details');
+  const [currentActionType, setCurrentActionType] = useState("details");
   const [showAddSongModal, setShowAddSongModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const [filteredSongs, setFilteredSongs] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState(2);
+
+
   const handleShowAddSongModal = () => {
     setShowAddSongModal(true);
   };
   const handleCloseAddSongModal = () => {
     setShowAddSongModal(false);
   };
- 
-  const actionList = {
-    'delete': ' xóa',
-    'edit' : 'chỉnh sửa',
-    'details': ' xem chi tiết'
+  const handleEditStatusChange = () => {
+    setCurrentActionType('edit');
   }
-  const handleClickStatusChange =(actionType) => {
+  const handleDeleteStatusChange = () => {
+    setCurrentActionType('delete');
+  }
+  const actionList = {
+    delete: " xóa",
+    edit: "chỉnh sửa",
+    details: " xem chi tiết",
+  };
+  const handleClickStatusChange = (actionType) => {
     // status include details,edit,delete
     if (actionType === currentActionType) {
-      setCurrentActionType('details');
+      setCurrentActionType("details");
       alert(`Thoát trạng thái ${actionList[actionType]}`);
-    }
-    else {
+    } else {
       setCurrentActionType(actionType);
-      alert(`Đang ở trạng thái ${actionList[actionType]}`)
+      alert(`Đang ở trạng thái ${actionList[actionType]}`);
     }
-  }
+  };
   // fetch data from server
   useEffect(() => {
     // fetch("link")
@@ -63,48 +67,22 @@ const ArtistSongPage = () => {
     //     setSongs(data);
     //   });
     setSongsData(songData2);
-    setFilteredSongs(songData2);
+    
+   
   }, []);
-  
-  const displayStatus = (status) => {
-    switch (status) {
-      case 1:
-        return "Chờ duyệt";
-      case 2:
-        return "Công khai";
-      case 3:
-        return "bị Khóa";
-      default:
-        return "";
-    }
-  };
 
-  const handleSearchAndReset = (keyword) => {
-      setSearchQuery(keyword)     
-      setSelectedStatus("");  
 
-      const filteredItems = () => {
-        if (keyword === "") return songsData;
-        else {
-        
-        const filter = songsData.filter((song) => {
-          const matchesQuery = song.ten_bai_hat
-            .toLowerCase()
-            .includes(keyword.toLowerCase());
-              
-          return matchesQuery  ;
-        });
-        return filter;
-      }
-      
-  };
-  setFilteredSongs(filteredItems);
-  };
-  
+  const filteredSongs = songsData.filter((item) => { 
+    return (
+      item.ten_bai_hat.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      ( selectedStatus == 2 || item.trang_thai == selectedStatus) // 2 la tat ca
+    )
+  });
+
   return (
-    <div className="mt-8">
-      <div className="ml-5 grid grid-cols-2 justify-center ">
-          <div className="inline-flex items-center gap-10">
+    <div className="p-2 mt-5">
+      <div className=" grid grid-cols-2 justify-center ">
+        <div className="inline-flex items-center gap-10">
           <div className="flex items-center p-1 w-[500px] bg-[#1E1E1E] justify-between rounded-3xl">
             <CiSearch className="text-3xl font-bold" />
             <input
@@ -112,31 +90,42 @@ const ArtistSongPage = () => {
               type="text"
               placeholder="Tìm kiếm bài hát"
               value={searchQuery}
-              onChange={(e) => handleSearchAndReset(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button
-              onClick={handleSearchAndReset}
-              type="primary"
-              className="rounded-lg bg-[#E0066F] h-[36px] w-[100px] hover:!bg-[#E0066F]"
+
+          <div className="flex flex-col">
+            <select
+              className="bg-[#1E1E1E] text-white p-2 rounded-lg border-none w-[150px]  cursor-pointer"
+              value={selectedStatus}
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+          
+              }}
             >
-              Tìm kiếm
-            </Button>
+              <option value="2">Tất cả</option>
+              <option value="1">Công khai</option>
+              <option value="0">Ẩn</option>
+            </select>
           </div>
+        </div>
 
         <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
           <button
             onClick={() => handleShowAddSongModal()}
             className=" text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
           >
-            <GoPlus className="m-auto" /> 
+            <GoPlus className="m-auto" />
             {/* add song */}
           </button>
 
           {/* delete */}
-          <button 
-          onClick={()=> handleClickStatusChange('delete')}
-          className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${currentActionType === "delete" ? 'bg-[#EB2272]' : '' }`}>
+          <button
+            onClick={() => handleClickStatusChange("delete")}
+            className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${
+              currentActionType === "delete" ? "bg-[#EB2272]" : ""
+            }`}
+          >
             <FaTrash className="m-auto" />
           </button>
         </div>
@@ -146,12 +135,15 @@ const ArtistSongPage = () => {
         />
       </div>
       <h3 className="mt-3">Tong cong: {filteredSongs.length}</h3>
-      <SongList2 songsData={filteredSongs} currentActionType={currentActionType} />
+      <SongList2
+        songsData={filteredSongs}
+        currentActionType={currentActionType}
+      />
     </div>
   );
 };
 
-const SongDetailModal = ({detailsSongModalState, song, onClose }) => {
+const SongDetailModal = ({ detailsSongModalState, song, onClose }) => {
   if (!detailsSongModalState) return null;
   const songData = songData2[1];
   return (
@@ -216,7 +208,6 @@ const SongDetailModal = ({detailsSongModalState, song, onClose }) => {
           onClick={onClose}
           className="absolute top-2 right-2 text-white py-2 px-4 rounded"
         >
-          
           X
         </button>
       </div>
@@ -225,7 +216,7 @@ const SongDetailModal = ({detailsSongModalState, song, onClose }) => {
 };
 
 // Theo kieu cua dai
-const SongList2 = ({songsData, currentActionType}) => {
+const SongList2 = ({ songsData, currentActionType }) => {
   // fake data
 
   const [selectedSong, setSelectedSong] = useState(null);
@@ -239,7 +230,7 @@ const SongList2 = ({songsData, currentActionType}) => {
   const handleShowEditModal = (song) => {
     setSelectedSong(song);
     setEditSongModalState(true);
-  }
+  };
   const handleCloseDetailModal = () => {
     setSelectedSong(null);
     setDetailsSongModalState(false);
@@ -248,27 +239,26 @@ const SongList2 = ({songsData, currentActionType}) => {
 
   function deleteSong(song) {
     //gửi data song để xóa
-    alert('xoa')
+    alert("xoa");
   }
 
   const clickedAction = {
-    'details': (song) =>  handleShowDetails(song),
-    'edit': (song) =>  handleShowEditModal(song),
-    'delete': (song) =>  deleteSong(song),
+    details: (song) => handleShowDetails(song),
+    edit: (song) => handleShowEditModal(song),
+    delete: (song) => deleteSong(song),
   };
-
 
   function handleClickedSongItem(actionType, songInformation) {
     const action = clickedAction[actionType];
     if (action) {
       return clickedAction[actionType](songInformation);
-  } else {
+    } else {
       alert(`Wrong action type ${actionType}`);
-  }
+    }
   }
 
   return (
-    <div className="mt-5 bg-[#121212] h-screen">
+    <div className="mt-5 bg-[#121212] h-screen overflow-scroll">
       <div className=" py-2 grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
         <p>Tên bài hất</p>
         <p>Album</p>
@@ -276,7 +266,7 @@ const SongList2 = ({songsData, currentActionType}) => {
         <img className="m-auto w-4 " src={assets.clock_icon}></img>{" "}
         {/*  thoi luon*/}
       </div>
-      <hr className="mx-5"/>
+      <hr className="mx-5" />
 
       {songsData.map((item, index) => (
         <div
@@ -296,6 +286,7 @@ const SongList2 = ({songsData, currentActionType}) => {
           <p className="text-[15px] text-center">{item.ma_album}</p>
           <p className="text-[15px] text-center">
             {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
+            {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
           </p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
         </div>
@@ -311,7 +302,7 @@ const SongList2 = ({songsData, currentActionType}) => {
         songDetails={selectedSong}
         editSongModalState={editSongModalState}
         onClose={handleCloseDetailModal}
-        />
+      />
     </div>
   );
 };
