@@ -8,8 +8,9 @@ const InputItem = (props) => {
       <input
         type="text"
         className="input-text"
-        value={props.password}
-        onChange={(e) => props.setPassword(e.target.value)}
+        value={props.valueInput}
+        onChange={(e) => props.setValueInput(e.target.value)}
+        required
       />
     </div>
   );
