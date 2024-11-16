@@ -1,6 +1,5 @@
 import { createContext, useEffect, useRef, useState } from 'react';
-// import axios from 'axios';
-import { songsData } from '../assets/assets';
+import axios from 'axios';
 export const PlayerContext = createContext();
 
 const PlayerContextProvider = (props) => {
@@ -9,20 +8,20 @@ const PlayerContextProvider = (props) => {
     const seekBar = useRef();
     const scrollHomeRef = useRef();
     const bgHomeHeader = useRef();
+    const url = "http://localhost:8000";
 
     const [loadingTrack, setLoadingTrack] = useState(false);
     // const [user, setUser] = useState(false);
     // const [usersData, setUsersData] = useState([]);
-    // const [songsData, setSongsData] = useState([]);
-    // const [albumsData, setAlbumsData] = useState([]);
+    const [songsData, setSongsData] = useState([]);
+    const [albumsData, setAlbumsData] = useState([]);
     // const [playlistsData, setPlaylistsData] = useState([]);
     // const [artistsData, setArtistsData] = useState([]); 
-    // const [genresData, setGenresData] = useState([]);
+    const [genresData, setGenresData] = useState([]);
     // const [concertsData, setConcertsData] = useState([]);
-    const [track, setTrack] = useState(songsData[0] || { file: "" });
+    const [track, setTrack] = useState(null);
     const [playStatus, setPlayStatus] = useState(false);
     const [volume, setVolume] = useState(1);
-
     const [time, setTime] = useState({
         currentTime: {
             second: 0,
@@ -33,6 +32,7 @@ const PlayerContextProvider = (props) => {
             minute: 0,
         },
     });
+ 
 
     const play = () => {
         audioRef.current.play();
@@ -109,6 +109,35 @@ const PlayerContextProvider = (props) => {
         audioRef.current.currentTime = (e.nativeEvent.offsetX / seekBg.current.offsetWidth) * audioRef.current.duration;
     };
 
+
+    const getSongsData = async () => {
+      try {
+        const response = await axios.get(`${url}/api/songs`);
+        setSongsData(response.data.data);
+        // console.log(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getAlbumsData = async () => {
+      try {
+        const response = await axios.get(`${url}/api/albums`);
+        setAlbumsData(response.data.albums);
+        // console.log(response.data.albums);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getGenresData = async () => {
+      try {
+        const response = await axios.get(`${url}/api/genres`);
+        setGenresData(response.data);
+        // console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     
 
     useEffect(() => {
@@ -143,7 +172,20 @@ const PlayerContextProvider = (props) => {
         };
     }, [audioRef, loadingTrack]);
 
-
+    useEffect(() => {
+    //   getUsersData();
+      getSongsData();
+      getAlbumsData();
+    //   getPlaylistsData();
+    //   getArtistData();
+      getGenresData();
+    //   getConcertsData();
+    }, []);
+    useEffect(() => {
+      if (songsData.length > 0 && track === null) {
+        setTrack(songsData[0]);
+      }
+    }, [songsData]);       
     const contextValue = {
         // user,
         // setUser,
@@ -165,11 +207,11 @@ const PlayerContextProvider = (props) => {
         next,
         seekSong,
         // usersData,
-        // songsData,
-        // albumsData,
+        songsData,
+        albumsData,
         // playlistsData,
         // artistsData,
-        // genresData,
+        genresData,
         // concertsData,
         setVolume: updateVolume,
         muteVolume

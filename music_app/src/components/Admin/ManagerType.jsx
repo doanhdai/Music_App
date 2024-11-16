@@ -153,7 +153,7 @@ const ManagerType = () => {
 
 
     return (
-        <div className="mt-7 bg-black h-full">
+        <div className="mt-2 bg-black h-[100%]">
 
             {/* Phần giao diện cho thể loại */}
             <div className="col-span-3 pl-[1em] pr-[1em]">

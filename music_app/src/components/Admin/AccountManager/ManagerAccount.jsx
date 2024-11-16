@@ -1,72 +1,17 @@
 import { Button, Modal, Select } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import { IoIosMore, IoIosSearch } from "react-icons/io";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import AddEmployeeAccountForm from "./AddEmployeeAccountForm";
+import { AdminContext } from "../../../context/AdminContext";
 const ManagerAccount = () => {
-  const accountData = [
-    {
-      name: "User001",
-      email: "user001@example.com",
-      password: "password001",
-      createdDate: "2024-01-01",
-      role: 1, // Người nghe
-      status: 2, // Công khai
-    },
-    {
-      name: "User002",
-      email: "user002@example.com",
-      password: "password002",
-      createdDate: "2024-02-01",
-      role: 2, // Nghệ sĩ
-      status: 3, // Khóa
-    },
-    {
-      name: "User003",
-      email: "user003@example.com",
-      password: "password003",
-      createdDate: "2024-03-01",
-      role: 1, // Người nghe
-      status: 1, // Chờ duyệt
-    },
-    {
-      name: "User004",
-      email: "user004@example.com",
-      password: "password004",
-      createdDate: "2024-04-01",
-      role: 1, // Người nghe
-      status: 2, // Công khai
-    },
-    {
-      name: "User005",
-      email: "user005@example.com",
-      password: "password005",
-      createdDate: "2024-05-01",
-      role: 2, // Nghệ sĩ
-      status: 3, // Khóa
-    },
-    {
-      name: "User006",
-      email: "user006@example.com",
-      password: "password006",
-      createdDate: "2024-06-01",
-      role: 1, // Người nghe
-      status: 1, // Chờ duyệt
-    },
-    {
-      name: "User007",
-      email: "user007@example.com",
-      password: "password007",
-      createdDate: "2024-07-01",
-      role: 2, // Nghệ sĩ
-      status: 2, // Công khai
-    },
-  ];
+  const { accountsData } = useContext(AdminContext);
 
-  const [accounts, setAccounts] = useState(accountData);
+  const [accounts, setAccounts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
@@ -77,8 +22,10 @@ const ManagerAccount = () => {
   const [filterStatus, setFilterStatus] = useState("All_status");
 
   const maskPassword = (password) => "*".repeat(password.length);
-
-  // Hàm chuyển đổi role từ mã sang tên hiển thị
+  useEffect(() => {
+    setAccounts(accountsData);
+  }, [accountsData]);
+  console.log(accounts)
   const displayRole = (role) => {
     switch (role) {
       case 1:
@@ -88,7 +35,7 @@ const ManagerAccount = () => {
       case 3:
         return "Manager";
       default:
-        return "Không xác định";
+        return "null";
     }
   };
 
@@ -96,11 +43,11 @@ const ManagerAccount = () => {
   const displayStatus = (status) => {
     switch (status) {
       case 1:
-        // return "Chờ duyệt";
+        return "Chờ duyệt";
       case 2:
-        // return "Công khai";
+        return "Công khai";
       case 3:
-        // return "Khóa";
+        return "Khóa";
       default:
         return "";
     }
@@ -119,21 +66,27 @@ const ManagerAccount = () => {
     }
   };
 
-const handleOkDelete = () => {
-  setAccounts((prevAccounts) =>
-    prevAccounts.map((account) =>
-      account === selectedAccount ? { ...account, status: 0 } : account
-    )
-  );
-  setIsModalVisible(false);
-  setIsDeleteMode(false);
-};
+  const handleOkDelete = () => {
+    setAccounts((prevAccounts) =>
+      prevAccounts.map((account) =>
+        account === selectedAccount ? { ...account, trang_thai: 0 } : account
+      )
+    );
+    setIsModalVisible(false);
+    setIsDeleteMode(false);
+  };
+  const handleAddClick = () => {
+    setIsAddModalVisible(true);
+  };
 
+  const handleAddCancel = () => {
+    setIsAddModalVisible(false);
+  };
   const handleOkEdit = () => {
     setAccounts((prevAccounts) =>
       prevAccounts.map((account) =>
         account === selectedAccount
-          ? { ...account, role: editedRole, status: editedStatus }
+          ? { ...account, role: editedRole, trang_thai: editedStatus }
           : account
       )
     );
@@ -163,22 +116,28 @@ const handleOkDelete = () => {
     } else if (isEditMode) {
       setSelectedAccount(account);
       setEditedRole(account.role);
-      setEditedStatus(account.status);
+      setEditedStatus(account.trang_thai);
       setIsModalVisible(true);
     }
   };
+  //reset data
   const handleSearchAndReset = () => {
-  setAccounts(applyFilters());
-  setSearchTerm("");
-  setFilterRole("All_role");
-  setFilterStatus("All_status");
-};
+    setAccounts(applyFilters());
+    setSearchTerm("");
+    setFilterRole("All_role");
+    setFilterStatus("All_status");
+  };
 
   const applyFilters = () => {
-    return accountData.filter((account) => {
-      const matchesSearchTerm = account.email.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesRole = filterRole === "All_role" || displayRole(account.role) === filterRole;
-      const matchesStatus = filterStatus === "All_status" || displayStatus(account.status) === filterStatus;
+    return accountsData.filter((account) => {
+      const matchesSearchTerm = account.email
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesRole =
+        filterRole === "All_role" || displayRole(account.role) === filterRole;
+      const matchesStatus =
+        filterStatus === "All_status" ||
+        displayStatus(account.trang_thai) === filterStatus;
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
@@ -213,7 +172,7 @@ const handleOkDelete = () => {
               <option>Manager</option>
             </select>
           </div>
-          {/* <div className="flex flex-col">
+          <div className="flex flex-col">
             <label className="mb-1">Trạng thái</label>
             <select
               className="bg-black text-white p-2 rounded-3xl border-none w-[170px] outline-none cursor-pointer"
@@ -225,7 +184,7 @@ const handleOkDelete = () => {
               <option>Công khai</option>
               <option>Khóa</option>
             </select>
-          </div> */}
+          </div>
           <div className="flex flex-col">
             <label className="mb-1">&nbsp;</label>
             <button
@@ -240,19 +199,24 @@ const handleOkDelete = () => {
         <div className="flex flex-col">
           <label className="mb-2">&nbsp;</label>
           <div className="flex space-x-5">
-            <div className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black">
+            <div
+              onClick={handleAddClick}
+              className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black"
+            >
               <CiCirclePlus size={20} />
-              
-
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isEditMode ? "bg-[#E0066F]" : "bg-black"}`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
+                isEditMode ? "bg-[#E0066F]" : "bg-black"
+              }`}
               onClick={handleEditClick}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isDeleteMode ? "bg-[#E0066F]" : "bg-black"}`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
+                isDeleteMode ? "bg-[#E0066F]" : "bg-black"
+              }`}
               onClick={handleDeleteClick}
             >
               <MdDeleteOutline size={20} />
@@ -260,34 +224,58 @@ const handleOkDelete = () => {
           </div>
         </div>
       </div>
-      <div>
-        <p className="mt-4">Tổng có: {accounts.length} tài khoản.</p>
-        <div className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] mt-2 p-4 text-[#fff]">
-          <p className="text-[#E0066F]">#ID</p>
-          <p className="text-[#E0066F]">Gmail</p>
-          <p className="hidden sm:block text-[#E0066F]">Mật khẩu</p>
-          <p className="text-[#E0066F]"> Ngày tạo</p>
-          <p className="text-[#E0066F]">Quyền</p>
-          {/* <p className="text-[#E0066F]">Trạng thái</p> */}
+
+      {accounts.length === 0 ? (
+        <div className="flex items-center h-[500px] justify-center text-center text-white">
+          Không có tài khoản bạn tìm
         </div>
-        <hr />
-        {accounts.map((item, index) => (
-          item.status !== 0 && (
-            <div
-              key={index}
-              className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
-              onClick={() => handleAccountClick(item)}
-            >
-              <Link to="" className="text-white">{index}</Link>
-              <p className="text-[15px]">{item.email}</p>
-              <p className="text-[15px] hidden sm:block">{maskPassword(item.password)}</p>
-              <p className="text-[15px]">{item.createdDate}</p>
-              <p className="text-[15px]">{displayRole(item.role)}</p>
-              {/* <p className="text-[15px]">{displayStatus(item.status)}</p> */}
-            </div>
-          )
-        ))}
-      </div>
+      ) : (
+        <div>
+          <p className="mt-4">Tổng có: {accounts.length} tài khoản.</p>
+          <div className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] mt-2 p-4 text-[#fff]">
+            <p className="text-[#E0066F]">#ID</p>
+            <p className="text-[#E0066F]">Gmail</p>
+            <p className="hidden sm:block text-[#E0066F]">Mật khẩu</p>
+            <p className="text-[#E0066F]">Tên</p>
+            <p className="text-[#E0066F]"> Ngày tạo</p>
+            <p className="text-[#E0066F]">Quyền</p>
+            <p className="text-[#E0066F]">Trạng thái</p>
+          </div>
+          <hr />
+          <div className="h-[460px] overflow-y-auto">
+            {accounts.map(
+              (item, index) =>
+                item.status !== 0 && (
+                  <div
+                    key={index}
+                    className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
+                    onClick={() => handleAccountClick(item)}
+                  >
+                    <Link to="" className="text-white">
+                      {index}
+                    </Link>
+                    <p className="text-[15px]">{item.email}</p>
+                    <p className="text-[15px] hidden sm:block">
+                      {maskPassword(item.mat_khau)}
+                    </p>
+                    <p className="text-[15px]">MCK</p>
+                    <p className="text-[15px]">{item.ngay_tao}</p>
+                    <p className="text-[15px]">
+                      {displayRole(item.ma_phan_quyen)}
+                    </p>
+                    <p className="text-[15px]">
+                      {displayStatus(item.trang_thai)}
+                    </p>
+                  </div>
+                )
+            )}
+          </div>
+        </div>
+      )}
+      <AddEmployeeAccountForm
+        isModal={isAddModalVisible}
+        onCancel={handleAddCancel}
+      />
       <Modal
         title={isDeleteMode ? "Xác nhận xóa" : "Chỉnh sửa tài khoản"}
         open={isModalVisible}

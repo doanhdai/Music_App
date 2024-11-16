@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { albumsData, assets, songsData } from "../assets/assets";
 import { Link, useParams } from "react-router-dom";
-import { FaPlay } from "react-icons/fa";
+import { FaHeart, FaPlay } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore, IoMdPause } from "react-icons/io";
 import ArtistItems from "./ArtistItems";
@@ -12,15 +12,19 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoMdMore } from "react-icons/io";
 
-
 const DetailSong = () => {
   const [menuSongId, setMenuSongId] = useState(null);
-
+  const [songData, setSongData] = useState(null); // Initialize with null
   const toggleMenu = (songId) => {
     setMenuSongId(menuSongId === songId ? null : songId);
     console.log(songId);
   };
   const closeMenu = () => setMenuSongId(null);
+
+  const { playWithId, playStatus, pause, songsData } = useContext(PlayerContext);
+  const { id } = useParams(); // Get the song ID from URL
+  const [isFavourite, setIsFavourite] = useState(false);
+
   const comments = [
     {
       id: 1,
@@ -41,23 +45,40 @@ const DetailSong = () => {
       content: "ko phải gu",
     },
   ];
-  const { id } = useParams();
-  const albumData = albumsData[id];
-  console.log(albumData);
-  const { playWithId, playStatus, pause, track } = useContext(PlayerContext);
+
+  useEffect(() => {
+    const song = songsData.find((item) => item.ma_bai_hat === id); 
+
+    if (song) {
+      setSongData(song);
+    } else {
+      setSongData(null); // Set to null if no song is found
+    }
+  }, [id, songsData]);
+  console.log('song datat', songsData)
+  const handleFavourite = () => {
+    setIsFavourite(!isFavourite);
+  };
+
+  // Render the song details only if songData exists
+  if (!songData) {
+    return <div>Song not found.</div>;
+  }
 
   return (
     <div onClick={closeMenu}>
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
-        <img className="w-48 rounded" src={assets.mck}></img>
+        <img className="w-48 rounded" src={songData.hinh_anh}></img>
         <div className="flex flex-col justify-center">
           <p>Bài hát</p>
-          <h2 className="text-5xl font-bold mb-4 md:text-7xl">Anh đã ổn hơn</h2>
+          <h2 className="text-5xl font-bold mb-4 md:text-7xl">
+            {songData.ten_bai_hat}
+          </h2>
           <p className="mt-1 flex items-center">
-              <img className="w-5" src={assets.spotify_logo}></img>
-              <span className="pl-2">MCK -</span>
-              <span className="pl-2">234.321 yêu thích - </span>
-              <span className="pl-2">12/12/2024</span>
+            <img className="w-5" src={assets.spotify_logo}></img>
+            <span className="pl-2">{songData.ten_bai_hat} -</span>
+            <span className="pl-2">{songData.luot_nghe} yêu thích - </span>
+            <span className="pl-2">12/12/2024</span>
           </p>
           <p className="mt-4 flex items-center">POP, R&B</p>
         </div>
@@ -73,8 +94,12 @@ const DetailSong = () => {
               )}
             </button>
 
-            <button>
-              <FaRegHeart size={30} />
+            <button onClick={handleFavourite}>
+              {isFavourite ? (
+                <FaHeart color="red" size={30} />
+              ) : (
+                <FaRegHeart size={30} />
+              )}
             </button>
             <IoIosMore size={30} />
           </div>
@@ -139,27 +164,22 @@ const DetailSong = () => {
                   </div>
                 </div>
                 <div className="text-[15px] flex justify-center relative">
-                <IoMdMore 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleMenu(comment.id);
-                  }}
-                />                  
+                  <IoMdMore
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMenu(comment.id);
+                    }}
+                  />
                   {menuSongId === comment.id && (
                     <div className="absolute bottom-8 right-0 bg-gray-800 text-white p-2 rounded shadow-lg !z-50 w-[80px]">
                       <div className="cursor-pointer flex items-center gap-2">
                         {" "}
-                        <AiOutlineDelete size={18}/>
+                        <AiOutlineDelete size={18} />
                         Xóa
                       </div>
-
                     </div>
-                  )
-                  
-                  }
-
+                  )}
                 </div>
-
               </div>
             ))
           ) : (
@@ -190,10 +210,10 @@ const DetailSong = () => {
           {songsData.map((item, index) => (
             <SongItems
               key={index}
-              name={item.name}
-              desc={item.desc}
-              id={item.id}
-              img={item.image}
+              name={item.ten_bai_hat}
+              desc={item.ten_bai_hat}
+              id={item.ma_bai_hat}
+              img={item.hinh_anh}
             />
           ))}
         </div>
