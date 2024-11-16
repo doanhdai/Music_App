@@ -5,8 +5,6 @@ import PasswordItem from "./PasswordItem";
 import AuthBtn from "./AuthBtn";
 import ClickableText from "./ClickableText";
 import { loginAPI } from "../../services/UserServices"; 
-import { toast } from 'react-toastify';
-import axios from "axios";
 
 const DisplayLogin = () => {
   const [email, setEmail] = useState('');

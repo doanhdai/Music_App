@@ -13,6 +13,7 @@ import { PlayerContext } from "../context/PlayerContext";
 const NavBar = () => {
   // login
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const [isOpen, setIsOpen] = useState(true);
   
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
