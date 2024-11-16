@@ -22,9 +22,15 @@ const DisplayLogin = () => {
     // e.preventDefault();
     
       await loginAPI(email, password).then(response => {
-        // Kiểm tra nếu có URL để chuyển hướng
-        if (response.data.redirect) {
-            window.location.href = response.data.redirect; // Chuyển hướng đến URL
+        if (response.data.account) {
+            // Lưu thông tin tài khoản vào localStorage
+            localStorage.setItem('account', JSON.stringify(response.data.account));
+            localStorage.setItem('isLoggedIn', 'true');
+    
+            // Chuyển hướng đến trang chủ
+            if (response.data.redirect) {
+                window.location.href = response.data.redirect;
+            }
         }
     })
     .catch(error => {

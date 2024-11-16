@@ -4,7 +4,6 @@ import React, { Component } from "react";
 
 import config from "../config";
 
-
 const Home = React.lazy(() => import("../pages/User/Home/Home"));
 const HomeIndex = React.lazy(() => import("../components/DisplayHome"));
 const FullAlbum = React.lazy(() => import("../components/FullAlbums"));
@@ -30,13 +29,13 @@ const AlbumSongs = React.lazy(() => import("../components/DisplayAlbum"));
 const ArtistSongs = React.lazy(() => import("../components/DisplayArtist"));
 const Song = React.lazy(() => import("../components/DetailSong"));
 const Login = React.lazy(() => import("../pages/User/Authentication/Login"));
-const LoginIndex = React.lazy(() => import("../components/authentication/DisplayLogin"));
-const ForgetPass = React.lazy(() => import("../components/authentication/ForgetPassword"));
-const ResetPass = React.lazy(() => import("../components/authentication/ResetPassword"));
+const LoginIndex = React.lazy(() => import("../components/Authentication/DisplayLogin"));
+const ForgetPass = React.lazy(() => import("../components/Authentication/ForgetPassword"));
+const ResetPass = React.lazy(() => import("../components/Authentication/ResetPassword"));
 const Signin = React.lazy(() => import("../pages/User/Authentication/Signin"));
-const SigninIndex = React.lazy(() => import("../components/authentication/SignName"));
-const SignPass = React.lazy(() => import("../components/authentication/SignPassword"));
-const SignInfo = React.lazy(() => import("../components/authentication/SignInfo"));
+const SigninIndex = React.lazy(() => import("../components/Authentication/SignEmail"));
+const SignPass = React.lazy(() => import("../components/Authentication/SignPassword"));
+const SignInfo = React.lazy(() => import("../components/Authentication/SignInfo"));
 const NotFound = React.lazy(() => import("../pages/NotFound"));
 const UserInfoLayout = React.lazy(() => import("../pages/User/UserInfo/UserInfo"));
 const UserInfo = React.lazy(() => import("../components/UserInfo/ManagerUserInfo"));
@@ -214,6 +213,7 @@ const routes = createBrowserRouter([
       {
         index: true,
         Component: UserInfo,
+      
       },
       {
         path: config.routes.ManagerPremiumUser,

@@ -2,13 +2,14 @@ import React from "react";
 import PremiumCard from "./PremiumCard";
 import NonPremium from "./NonPremium";
 import PremiumSection from "../premium/PremiumSection";
+import DropboxUploader from "./DropboxUploader";
 
 const ManagerPremium = () => {
   return (
     <div className="pt-3 mx-[38px]">
       {/* <PremiumSection /> */}
       {/* <NonPremium /> */}
-      <div className="total_card">Tổng cộng: 40</div>
+      {/* <div className="total_card">Tổng cộng: 40</div>
       <div className="flex flex-wrap">
         <PremiumCard 
           isActive={true} 
@@ -29,7 +30,8 @@ const ManagerPremium = () => {
           descriptions={["mo ta", "mo ta", "mo ta"]}
         />
         
-      </div>
+      </div> */}
+      <DropboxUploader />
     </div>
   );
 };

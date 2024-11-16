@@ -323,16 +323,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #000;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 .file-btn_title {
-  color: #000;
-  font-size: 12px;
+  
 }
 
-.avatar-frame {
-  background-color: #65f59c;
-  width: 200px;
-  height: 200px;
-  margin: 20px auto 0;
-}

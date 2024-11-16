@@ -8,7 +8,13 @@ import AuthBtn from "./AuthBtn";
 const SignPassword = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  function validatePassword(value) {
+    const hasDigit = /\d/;
+    const hasUppercase = /[A-Z]/;
+    const hasSpecialChar = /[!@#\$%\^\&*\)\(+=._-]/;
+  
+    return (value.length >= 8 && hasDigit.test(value) && hasSpecialChar.test(value));
+  }
   return (
     <div className="Auth-form">
       <span
@@ -25,16 +31,20 @@ const SignPassword = () => {
           marginTop: "20px",
         }}
       ></div>
-      <BackBtn link="/authentication/sign-in"></BackBtn>
+      <BackBtn link="/authentication/sign-in" keyLocal="emailSign"></BackBtn>
       <InputItem
         title="Mật khẩu"
-        password={password}
-        setPassword={setPassword}
+        valueInput={password}
+        setValueInput={setPassword}
       />
       <PasswordRules password={password} />
       <AuthBtn
         title="Tiếp theo"
-        link="/authentication/sign-in/signInfo"
+        {...(validatePassword(password) && {
+        link: "/authentication/sign-in/signInfo",
+        keyLocal: "passwordSign",
+        valueLocal: password
+        })}
       ></AuthBtn>
     </div>
   );

@@ -9,6 +9,9 @@ const AuthBtn = (props) => {
         startTransition(() => {
           navigate(props.link);
         });
+        if(props.keyLocal!=null){
+          localStorage.setItem(props.keyLocal, props.valueLocal);
+        }
       }}
     >
       <div className="AuthBtn-title">{props.title}</div>
