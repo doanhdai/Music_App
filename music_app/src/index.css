@@ -5,3 +5,104 @@
 ::-webkit-scrollbar {
   display: none;
 }
+.custom-modal .ant-modal-content {
+  background-color: black !important;
+  color: white;
+}
+
+.custom-modal .ant-modal-header {
+  background-color: black !important;
+  color: white;
+}
+
+.custom-modal .ant-modal-footer {
+  background-color: black !important;
+}
+
+.custom-modal .ant-modal-body {
+  background-color: black !important;
+  color: white;
+}
+.custom-input {
+  background-color: #4b4b4b;
+  color: white;
+  border: none;
+}
+/* .absolute {
+  z-index: 50;
+} */
+
+
+
+.custom-input {
+  background-color: #4b4b4b; 
+  color: white;
+  border: none;
+}
+
+.custom-input::placeholder {
+  color: #545454;
+}
+
+.custom-input:focus,
+.custom-input:hover {
+  background-color: #4b4b4b !important;
+  color: white; 
+  outline: none; 
+}
+
+.custom-modal .ant-form-item-has-error .custom-input {
+  background-color: #4b4b4b !important;
+  color: white !important;
+  border-color: #ff4d4f !important; /* Maintain the error border color */
+}
+
+.custom-modal .ant-form-item-has-error .ant-select-selector {
+  background-color: #4b4b4b !important;
+  color: white !important;
+  border-color: #ff4d4f !important; /* Maintain the error border color */
+}
+
+.custom-modal .ant-form-item-explain-error {
+  color: #ff4d4f !important; /* Maintain the error message color */
+}
+
+.custom-modal .ant-modal-content {
+  background-color: black !important;
+  color: white;
+}
+
+.custom-modal .ant-modal-header {
+  background-color: black !important;
+  color: white;
+}
+
+.custom-modal .ant-modal-footer {
+  background-color: black !important;
+}
+
+.custom-modal .ant-modal-body {
+  background-color: black !important;
+  color: white;
+}
+
+.custom-select .ant-select-selector {
+  background-color: #4b4b4b !important;
+  color: white !important;
+  border: none !important;
+}
+
+.custom-select .ant-select-selector:focus,
+.custom-select .ant-select-selector:hover {
+  background-color: #4b4b4b !important;
+  color: white !important;
+}
+
+.custom-modal .ant-modal-close {
+  color: white; 
+}
+
+.custom-modal .ant-modal-close:hover {
+  color: white; 
+}
+
