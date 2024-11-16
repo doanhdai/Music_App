@@ -16,46 +16,26 @@ import { FaPlay } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
 import { songData2 } from "../../assets/assets";
+import { Button } from "antd";
 
 import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 
 const ArtistSongPage = () => {
-  const fakeSongData = [
-    {
-      id: 1,
-      imgUrl:
-        "https://cloudinary-marketing-res.cloudinary.com/image/upload/ar_0.5,c_fill,g_auto,w_433/q_auto/f_auto/hiking_dog_mountain.jpg",
-      title: "Show Me Love",
-      album: "99%",
-      status: "Công khai",
-      duration: "3:15",
-    },
-    {
-      id: 1,
-      title: "Show Me Love asdfasdf",
-      album: "99%",
-      status: "Công khai",
-      duration: "3:15",
-    },
-  ];
-  const [songs, setSongs] = useState([]);
+  
+  const [songsData, setSongsData] = useState([]);
   const [currentActionType, setCurrentActionType] = useState('details');
   const [showAddSongModal, setShowAddSongModal] = useState(false);
-
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [filteredSongs, setFilteredSongs] = useState([]);
   const handleShowAddSongModal = () => {
     setShowAddSongModal(true);
   };
   const handleCloseAddSongModal = () => {
     setShowAddSongModal(false);
   };
-  const handleEditStatusChange = () => {
-    setCurrentActionType('edit');
-  }
-  const handleDeleteStatusChange = () => {
-    setCurrentActionType('delete');
-  }
+ 
   const actionList = {
     'delete': ' xóa',
     'edit' : 'chỉnh sửa',
@@ -82,42 +62,75 @@ const ArtistSongPage = () => {
     //     console.log(data);
     //     setSongs(data);
     //   });
-    setSongs(fakeSongData);
+    setSongsData(songData2);
+    setFilteredSongs(songData2);
   }, []);
+  
+  const displayStatus = (status) => {
+    switch (status) {
+      case 1:
+        return "Chờ duyệt";
+      case 2:
+        return "Công khai";
+      case 3:
+        return "bị Khóa";
+      default:
+        return "";
+    }
+  };
+
+  const handleSearchAndReset = (keyword) => {
+      setSearchQuery(keyword)     
+      setSelectedStatus("");  
+
+      const filteredItems = () => {
+        if (keyword === "") return songsData;
+        else {
+        
+        const filter = songsData.filter((song) => {
+          const matchesQuery = song.ten_bai_hat
+            .toLowerCase()
+            .includes(keyword.toLowerCase());
+              
+          return matchesQuery  ;
+        });
+        return filter;
+      }
+      
+  };
+  setFilteredSongs(filteredItems);
+  };
   
   return (
     <div className="mt-8">
       <div className="ml-5 grid grid-cols-2 justify-center ">
-        <form action="">
+          <div className="inline-flex items-center gap-10">
           <div className="flex items-center p-1 w-[500px] bg-[#1E1E1E] justify-between rounded-3xl">
             <CiSearch className="text-3xl font-bold" />
             <input
               className="bg-inherit w-[100%] outline-none ml-3"
               type="text"
-              placeholder="Tìm kiếm bài hát, album,..."
+              placeholder="Tìm kiếm bài hát"
+              value={searchQuery}
+              onChange={(e) => handleSearchAndReset(e.target.value)}
             />
           </div>
-        </form>
+          <Button
+              onClick={handleSearchAndReset}
+              type="primary"
+              className="rounded-lg bg-[#E0066F] h-[36px] w-[100px] hover:!bg-[#E0066F]"
+            >
+              Tìm kiếm
+            </Button>
+          </div>
 
         <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
-           {/* send */}
-          <button className=" h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
-            <BsSendPlus className="m-auto" />
-           
-          </button>
           <button
             onClick={() => handleShowAddSongModal()}
             className=" text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
           >
             <GoPlus className="m-auto" /> 
             {/* add song */}
-          </button>
-
-           {/* edit */}
-          <button 
-          onClick={()=> handleClickStatusChange('edit')}
-          className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${currentActionType === "edit" ? 'bg-[#EB2272]' : '' }`}>
-            <TfiPencil className="m-auto" />          
           </button>
 
           {/* delete */}
@@ -132,8 +145,8 @@ const ArtistSongPage = () => {
           modalState={showAddSongModal}
         />
       </div>
-      <h3 className="mt-3">Tong cong: {songs.length}</h3>
-      <SongList2 songsData={songData2} currentActionType={currentActionType} />
+      <h3 className="mt-3">Tong cong: {filteredSongs.length}</h3>
+      <SongList2 songsData={filteredSongs} currentActionType={currentActionType} />
     </div>
   );
 };
@@ -203,7 +216,7 @@ const SongDetailModal = ({detailsSongModalState, song, onClose }) => {
           onClick={onClose}
           className="absolute top-2 right-2 text-white py-2 px-4 rounded"
         >
-          {" "}
+          
           X
         </button>
       </div>
@@ -213,7 +226,7 @@ const SongDetailModal = ({detailsSongModalState, song, onClose }) => {
 
 // Theo kieu cua dai
 const SongList2 = ({songsData, currentActionType}) => {
-  const baihat = songData2;
+  // fake data
 
   const [selectedSong, setSelectedSong] = useState(null);
   const [editSongModalState, setEditSongModalState] = useState(false);
@@ -255,7 +268,7 @@ const SongList2 = ({songsData, currentActionType}) => {
   }
 
   return (
-    <div className="mt-5 bg-[#121212]">
+    <div className="mt-5 bg-[#121212] h-screen">
       <div className=" py-2 grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
         <p>Tên bài hất</p>
         <p>Album</p>
@@ -265,7 +278,7 @@ const SongList2 = ({songsData, currentActionType}) => {
       </div>
       <hr className="mx-5"/>
 
-      {baihat.map((item, index) => (
+      {songsData.map((item, index) => (
         <div
           key={index}
           className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
@@ -282,7 +295,7 @@ const SongList2 = ({songsData, currentActionType}) => {
 
           <p className="text-[15px] text-center">{item.ma_album}</p>
           <p className="text-[15px] text-center">
-            {item.trang_thai === 1 ? "Cong khai" : "An"}
+            {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
           </p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
         </div>

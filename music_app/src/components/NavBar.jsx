@@ -1,6 +1,6 @@
-import React, { startTransition, useEffect, useRef, useState } from "react";
+import React, { startTransition, useContext, useEffect, useRef, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { albumsData, artistData, assets, songsData } from "../assets/assets";
+import { assets, } from "../assets/assets";
 import { FaRegBell } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiLogin } from "react-icons/ci";
@@ -8,14 +8,18 @@ import { RiAccountCircleLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../config";
 import ComboIcon from "./Admin/ComboIcon/ComboIcon";
+import { PlayerContext } from "../context/PlayerContext";
 
 const NavBar = () => {
   const navigate = useNavigate();
-
+  const { songsData, albumsData, artistsData } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
 
 
-  const removeVietnameseTones = (str) => {
+  const removeVietnamese = (str) => {
+    if (typeof str !== "string") {
+      return "";
+    }
     return str
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
@@ -30,15 +34,15 @@ const NavBar = () => {
       return;
     }
 
-    const searchTermNoAccent = removeVietnameseTones(trimmedTerm.toLowerCase());
-    const artistResults = artistData.filter((artist) =>
-      removeVietnameseTones(artist.name.toLowerCase()).includes(searchTermNoAccent)
+    const searchTermNoAccent = removeVietnamese(trimmedTerm.toLowerCase());
+    const artistResults = (artistsData || []).filter((artist) =>
+      removeVietnamese(artist.ten_nghe_si.toLowerCase()).includes(searchTermNoAccent)
     );
-    const albumResults = albumsData.filter((album) =>
-      removeVietnameseTones(album.name.toLowerCase()).includes(searchTermNoAccent)
+    const albumResults = (albumsData || []).filter((album) =>
+      removeVietnamese(album.ten_album).toLowerCase().includes(searchTermNoAccent)
     );
-    const songResults = songsData.filter((song) =>
-      removeVietnameseTones(song.name.toLowerCase()).includes(searchTermNoAccent)
+    const songResults = (songsData || []).filter((song) =>
+      removeVietnamese(song.ten_bai_hat).toLowerCase().includes(searchTermNoAccent)
     );
 
     navigate("/search", {
@@ -84,7 +88,6 @@ const NavBar = () => {
                 const term = e.target.value;
                 setSearchTerm(term);
                 handleSearch(term);
-                { console.log(term) }
               }}
               className="bg-black w-[100%] outline-none ml-3"
               type="text"

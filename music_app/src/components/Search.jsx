@@ -1,26 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import AlbumItems from "./AlbumItems";
 import SongItems from "./SongItems";
 import ArtistItems from "./ArtistItems";
+import { PlayerContext } from "../context/PlayerContext";
 
 const Search = () => {
+  const { genresData } = useContext(PlayerContext);
   const location = useLocation();
   const { artistResults, albumResults, songResults, searchTerm } = location.state || {};
-  const genres = [
-    { id: 1, name: "Pop" },
-    { id: 2, name: "Rock" },
-    { id: 3, name: "Hip Hop" },
-    { id: 4, name: "Jazz" },
-    { id: 5, name: "Classical" },
-    { id: 6, name: "Electronic" },
-    { id: 7, name: "R&B" },
-    { id: 8, name: "Country" },
-    { id: 9, name: "Blues" },
-    { id: 10, name: "Reggae" },
-    { id: 11, name: "Folk" },
-    { id: 12, name: "Latin" },
-  ];
 
   const getRandomColor = () => {
     const letters = "0123456789ABCDEF";
@@ -31,101 +19,100 @@ const Search = () => {
     return color;
   };
 
-  const hasResults =
-    artistResults?.length > 0 ||
-    albumResults?.length > 0 ||
-    songResults?.length > 0;
+  const hasResults = artistResults?.length > 0 || albumResults?.length > 0 || songResults?.length > 0;
 
   return (
-
-  <>
-    {searchTerm && searchTerm.trim() ? (
-      hasResults ? (
-        <div>
-         {songResults?.length > 0 && (
-            <>
-              <h1 className="mb-4 font-bold text-[20px]">Bài hát tìm thấy:</h1>
-              <div className="flex overflow-auto">
-                {songResults.map((song, index) => (
-                  <SongItems
-                    key={index}
-                    name={song.name}
-                    desc={song.desc}
-                    id={song.id}
-                    img={song.image}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-          {artistResults?.length > 0 && (
-            <>
-              <h1 className="mb-4 font-bold text-[20px]">Nghệ sĩ tìm thấy:</h1>
-              <div className="flex overflow-auto">
-                {artistResults.map((artist, index) => (
-                  <ArtistItems
-                    key={index}
-                    name={artist.name}
-                    desc={artist.desc}
-                    id={artist.id}
-                    img={artist.image}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-          {albumResults?.length > 0 && (
-            <>
-              <h1 className="mb-4 font-bold text-[20px]">Album tìm thấy:</h1>
-              <div className="flex overflow-auto">
-                {albumResults.map((album, index) => (
-                  <AlbumItems
-                    key={index}
-                    name={album.name}
-                    desc={album.desc}
-                    id={album.id}
-                    img={album.image}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-        </div>
+    <>
+      {searchTerm && searchTerm.trim() ? (
+        hasResults ? (
+          <div>
+            {songResults?.length > 0 && (
+              <>
+                <h1 className="mb-4 font-bold text-[20px]">
+                  Bài hát tìm thấy:
+                </h1>
+                <div className="flex overflow-auto">
+                  {songResults.map((song, index) => (
+                    <SongItems
+                      key={index}
+                      name={song.ten_bai_hat}
+                      desc={song.ten_bai_hat}
+                      id={song.ma_bai_hat}
+                      img={song.hinh_anh}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+            {artistResults?.length > 0 && (
+              <>
+                <h1 className="mb-4 font-bold text-[20px]">
+                  Nghệ sĩ tìm thấy:
+                </h1>
+                <div className="flex overflow-auto">
+                  {artistResults.map((artist, index) => (
+                    <ArtistItems
+                      key={index}
+                      name={artist.ma_nghe_si}
+                      desc={artist.ten_nghe_si}
+                      id={artist.ma_nghe_si}
+                      img={artist.hinh_anh}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+            {albumResults?.length > 0 && (
+              <>
+                <h1 className="mb-4 font-bold text-[20px]">Album tìm thấy:</h1>
+                <div className="flex overflow-auto">
+                  {albumResults.map((album, index) => (
+                    <AlbumItems
+                      key={index}
+                      name={album.ten_album}
+                      desc={album.ten_album}
+                      id={album.ma_album}
+                      img={album.hinh_anh}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <div>
+            <div className="font-bold text-2xl">Thể loại:</div>
+            <div className="grid grid-cols-4 gap-4 py-4">
+              {genresData.map((genre) => (
+                <div
+                  key={genre.ma_the_loai}
+                  className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[18px]"
+                  style={{ backgroundColor: getRandomColor() }}
+                >
+                  {genre.ten_the_loai}
+                </div>
+              ))}
+            </div>
+          </div>
+        )
       ) : (
         <div>
-          <div className="px-4 font-bold text-[20px]">Thể loại:</div>
-          <div className="grid grid-cols-4 gap-4 p-4">
-            {genres.map((genre) => (
+          <div className="font-bold text-2xl">Thể loại:</div>
+          <div className="grid grid-cols-4 gap-4 py-4">
+            {genresData.map((genre) => (
               <div
-                key={genre.id}
+                key={genre.ma_the_loai}
                 className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[18px]"
                 style={{ backgroundColor: getRandomColor() }}
               >
-                {genre.name}
+                {genre.ten_the_loai}
               </div>
             ))}
           </div>
         </div>
-      )
-    ) : (
-      <div>
-        <div className="px-4 font-bold text-[20px]">Thể loại:</div>
-        <div className="grid grid-cols-4 gap-4 p-4">
-          {genres.map((genre) => (
-            <div
-              key={genre.id}
-              className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[18px]"
-              style={{ backgroundColor: getRandomColor() }}
-            >
-              {genre.name}
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </>
-);
+      )}
+    </>
+  );
 };
 
 export default Search;
