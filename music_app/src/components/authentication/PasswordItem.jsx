@@ -7,7 +7,7 @@ const PasswordItem = () => {
       <div className="remember-item">
         <input type="checkbox" className="chk-item" id="chk-item" />
         <label className="chk-title" for="chk-item">
-          Nho mat khau
+          Nhớ mật khẩu
         </label>
       </div>
       <div
@@ -18,7 +18,7 @@ const PasswordItem = () => {
           });
         }}
       >
-        Quen mat khau?
+        Quên mật khẩu
       </div>
     </div>
   );

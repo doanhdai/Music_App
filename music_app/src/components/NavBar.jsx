@@ -11,6 +11,10 @@ import ComboIcon from "./Admin/ComboIcon/ComboIcon";
 import { PlayerContext } from "../context/PlayerContext";
 
 const NavBar = () => {
+  // login
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const [isOpen, setIsOpen] = useState(true);
+  
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
@@ -102,37 +106,97 @@ const NavBar = () => {
               placeholder="Tìm kiếm bài hát, album, nghệ sĩ..."
             />
           </div>
-        </div>
+          </div>
 
-        <div className="flex items-center gap-4">
-          {/* <p
-            className="text-gray-400 text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:text-white hover:scale-110"
-            onClick={() => {
-              startTransition(() => {
-                navigate("/authentication/sign-in");
-              });
-            }}
-          >
-            Đăng kí
-          </p>
-          <p
-            className="text-white text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:scale-105"
-            style={{
-              background:
-                "linear-gradient(153deg, rgba(185, 90, 120, 1) 34%, rgba(224, 6, 111, 1) 99%)",
-            }}
-            onClick={() => {
-              startTransition(() => {
-                navigate("/authentication/log-in");
-              });
-            }}
-          >
-            Đăng nhập
-          </p> */}
-          <ComboIcon />
+          {isLoggedIn ? (
+            <div className="flex items-center gap-4">
+                  <p onClick={()=>navigate(config.routes.PremiumSection)} className="bg-[#E0066F] text-white text-[15px] px-4 py-2 rounded-3xl hidden md:block cursor-pointer">Khám phá Primeum</p>
+                  <div className="relative inline-block">
+                    <FaRegBell size={25} />
+                    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+                  </div>
+                  <div
+                    className="relative"
+                    onMouseEnter={() => setIsOpen(true)}
+                  >
+                    <p className="bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center">
+                      <img className="h-10 rounded-full" src={assets.mck} />
+                    </p>
+                    {isOpen && (
+                      <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
+                        <ul className="text-white">
+                          <li 
+                            className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
+                            onClick={() => {
+                              startTransition(() => {
+                                navigate(config.routes.artistSite);
+                              });
+                            }}
+                          >
+                            <div className="mr-3"><IoSettingsOutline size={20} /></div>
+                            Quản lý
+                          </li>
+                          <li 
+                            className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
+                            onClick={() => {
+                              startTransition(() => {
+                                navigate(config.routes.UserInfo);
+                              });
+                            }}
+                          >
+                            <div className="mr-3"><RiAccountCircleLine size={20} /></div>
+                            Tài khoản
+                          </li>
+                          <li 
+                            className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
+                            onClick={() => {
+                              localStorage.removeItem('account');
+                              localStorage.removeItem('isLoggedIn');
+                              window.location.href = '/';
+                            }}
+                          >
+                            <div className="mr-3" ><CiLogin size={20} /></div>
+                            Đăng xuất
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+            
+            ) : (
+              <div className="flex items-center gap-4">
+                    <p
+                    className="text-gray-400 text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:text-white hover:scale-110"
+                    onClick={() => {
+                      startTransition(() => {
+                        navigate("/authentication/sign-in");
+                      });
+                    }}
+                  >
+                    Đăng kí
+                  </p>
+                  <p
+                    className="text-white text-[15px] px-5 p-2 rounded-3xl hidden md:block cursor-pointer hover:scale-105"
+                    style={{
+                      background:
+                        "linear-gradient(153deg, rgba(185, 90, 120, 1) 34%, rgba(224, 6, 111, 1) 99%)",
+                    }}
+                    onClick={() => {
+                      startTransition(() => {
+                        navigate("/authentication/log-in");
+                      });
+                    }}
+                  >
+                    Đăng nhập
+                  </p>
+                </div>
+            )}
+                
+                          
+          
+          </div>
         </div>
-      </div>
-    </div>
   );
 };
 

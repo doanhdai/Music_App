@@ -1,18 +1,29 @@
-import React, { useState, startTransition } from "react";
+import React, { useState, startTransition, useEffect } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import { assets } from "../../assets/assets";
 import { FaBullseye } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+const menuItems = [
+  {label: 'Xem thong tin', icon: <FaBullseye size={20} />, route: '/UserInfo', id: 'userInfo' },
+  {label: 'Goi premium da dang ky', icon: <FaBullseye size={20} />, route: '/UserInfo/premium', id: 'userPremium' }
+]
 
 const SideBarUserInfo = () => {
-  // State để lưu trữ menuItem đang được active
-  const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState(null);
 
   // Hàm xử lý khi click vào MenuItem
-  const handleMenuItemClick = (item) => {
-    setActiveItem(item); // Cập nhật trạng thái activeItem
+  const handleMenuItemClick = (id, route) => {
+    setActiveItem(id);
+    navigate(route);
   };
+  useEffect(() => {
+    const currentItem = menuItems.find(item => item.route === location.pathname);
+    if (currentItem) {
+      setActiveItem(currentItem.id);
+    }
+  }, [location.pathname]);
 
   return (
     <Sidebar
@@ -55,43 +66,24 @@ const SideBarUserInfo = () => {
           },
         }}
       >
-        <MenuItem
-          style={{
-            gap: "0",
-            ...(activeItem === "userInfo" && {
-              color: "#E0066F",
-              backgroundColor: "#000000",
-              borderColor: "#E0066F",
-              fontWeight: 700,
-            }),
-          }}
-          icon={<FaBullseye size={35} />}
-          onClick={() => {
-            handleMenuItemClick("userInfo");
-            navigate("/UserInfo");
-          }}
-        >
-          Xem thong tin
-        </MenuItem>
-
-        <MenuItem
-          style={{
-            gap: "0",
-            ...(activeItem === "premium" && {
-              color: "#E0066F",
-              backgroundColor: "#000000",
-              borderColor: "#E0066F",
-              fontWeight: 700,
-            }),
-          }}
-          icon={<FaBullseye size={35} />}
-          onClick={() => {
-            handleMenuItemClick("premium");
-            navigate("/UserInfo/premium");
-          }}
-        >
-          Goi premium da dang ky
-        </MenuItem>
+        {menuItems.map((item) => (
+          <MenuItem
+            key={item.id}
+            icon={item.icon}
+            onClick={() => handleMenuItemClick(item.id, item.route)}
+            style={{
+              gap: '0',
+              ...(activeItem === item.id && {
+                color: '#E0066F',
+                backgroundColor: '#000000',
+                borderColor: '#E0066F',
+                fontWeight: 700,
+              }),
+            }}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
       </Menu>
     </Sidebar>
   );
