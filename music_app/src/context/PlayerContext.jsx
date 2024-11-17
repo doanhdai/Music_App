@@ -1,6 +1,7 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 export const PlayerContext = createContext();
+// import "dotenv/config";
 
 const PlayerContextProvider = (props) => {
     const audioRef = useRef();
@@ -8,7 +9,7 @@ const PlayerContextProvider = (props) => {
     const seekBar = useRef();
     const scrollHomeRef = useRef();
     const bgHomeHeader = useRef();
-    const url = "http://localhost:8000";
+    const url_api = "http://localhost:8000";
 
     const [loadingTrack, setLoadingTrack] = useState(false);
     // const [user, setUser] = useState(false);
@@ -77,7 +78,7 @@ const PlayerContextProvider = (props) => {
         //     }
         // }
 
-        if (track.id >= 1) {
+        if (track.ma_bai_hat >= 1) {
             setLoadingTrack(true);
             await setTrack(songsData[track.id - 1]);
             await audioRef.current.play();
@@ -85,7 +86,6 @@ const PlayerContextProvider = (props) => {
             setPlayStatus(true);
         }
     };
-
     const next = async () => {
         // if (track && currentPlaylist.length > 0) {
         //     const currentIndex = currentPlaylist.findIndex((song) => song._id === track._id);
@@ -96,13 +96,14 @@ const PlayerContextProvider = (props) => {
         //     }
         // }
 
-        if (track.id < songsData.length - 1) {
+        // if (track.id < songsData.length - 1) {
         setLoadingTrack(true);
-        await setTrack(songsData[track.id + 1]);
+        await setTrack(songsData[2]);
+        console.log(songsData[2])
         await audioRef.current.play();
         setLoadingTrack(false);
         setPlayStatus(true);
-    }
+    // }
     };
 
     const seekSong = async (e) => {
@@ -112,7 +113,7 @@ const PlayerContextProvider = (props) => {
 
     const getSongsData = async () => {
       try {
-        const response = await axios.get(`${url}/api/songs`);
+        const response = await axios.get(`${url_api}/api/songs`);
         setSongsData(response.data.data);
         // console.log(response.data.data);
       } catch (error) {
@@ -121,7 +122,7 @@ const PlayerContextProvider = (props) => {
     };
     const getAlbumsData = async () => {
       try {
-        const response = await axios.get(`${url}/api/albums`);
+        const response = await axios.get(`${url_api}/api/albums`);
         setAlbumsData(response.data.albums);
         // console.log(response.data.albums);
       } catch (error) {
@@ -130,7 +131,9 @@ const PlayerContextProvider = (props) => {
     };
     const getGenresData = async () => {
       try {
-        const response = await axios.get(`${url}/api/genres`);
+        const response = await axios.get(
+          `${url_api}/api/genres`
+        );
         setGenresData(response.data);
         // console.log(response.data);
       } catch (error) {
@@ -184,6 +187,7 @@ const PlayerContextProvider = (props) => {
     useEffect(() => {
       if (songsData.length > 0 && track === null) {
         setTrack(songsData[0]);
+        console.log(songsData[0].link_bai_hat)
       }
     }, [songsData]);       
     const contextValue = {

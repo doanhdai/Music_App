@@ -1,16 +1,23 @@
-import React, { Suspense, useState, useEffect, useRef, startTransition, useContext } from "react";
+import React, {
+  Suspense,
+  useState,
+  useEffect,
+  useRef,
+  startTransition,
+  useContext,
+} from "react";
 import Sidebar from "../../../components/Sidebar";
 import Player from "../../../components/Player";
 import { Outlet } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
-import { albumsData, artistData } from '../../../assets/assets';
+import { useLocation } from "react-router-dom";
+import { albumsData, artistData } from "../../../assets/assets";
 import NavBar from "../../../components/NavBar";
 import Footer from "../../../components/Footer";
 import Poster from "../../../components/Poster";
 import { PlayerContext } from "../../../context/PlayerContext";
 
 const Home = () => {
-  const {audioRef, track} = useContext(PlayerContext)
+  const { audioRef, track } = useContext(PlayerContext);
   const displayColor = useRef(null);
   const location = useLocation();
   const isAlbum = /\/albums(\/|$)/.test(location.pathname);
@@ -65,7 +72,12 @@ const Home = () => {
         </div>
       </div>
       <Player />
-      {/* <audio ref={audioRef} src={track.file} preload="auto"></audio> */}
+      <audio
+        ref={audioRef}
+        src={track?.link_bai_hat || ""}
+        preload="auto"
+      ></audio>
+      {console.log(track)}
     </div>
   );
 };
