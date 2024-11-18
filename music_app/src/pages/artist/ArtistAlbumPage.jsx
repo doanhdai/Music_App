@@ -44,13 +44,16 @@ const ArtistAlbumPage = () => {
     },
   ];
   const [albums, setAlbum] = useState([]);
+  const [showAddAlbumModal, setShowAddAlbumModal] = useState(false);
+  const [currentActionType, setCurrentActionType] = useState('details');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(2);
 
   useEffect(() => {
     setAlbum(fakeAlbumData);
   }, []);
 
-  const [showAddAlbumModal, setShowAddAlbumModal] = useState(false);
-  const [currentActionType, setCurrentActionType] = useState('details');
+  
   
   const handleShowAddAlbumModal = () => {
     
@@ -77,37 +80,51 @@ const ArtistAlbumPage = () => {
       alert(`Đang ở trạng thái ${actionList[actionType]}`)
     }
   }
+
+  const filteredAlbums = albums.filter((item) => { 
+    return (
+      item.tenAlbum.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      ( selectedStatus == 2 || item.trangThai == selectedStatus) // 2 la tat ca
+    )
+  });
+
   return (
     <>
-      <div className="p-5">
+      <div className="p-2 mt-5">
         {/* manage bar */}
         <div className="grid grid-cols-2 justify-center ">
-          <form action="">
+          <div className="inline-flex items-center gap-10">
             <div className="flex items-center p-1 w-[500px] bg-[#1E1E1E] justify-between rounded-3xl">
               <CiSearch className="text-3xl font-bold" />
               <input
                 className="bg-inherit w-[100%] outline-none ml-3"
                 type="text"
-                placeholder="Tìm kiếm bài hát, album,..."
+                placeholder="Tìm kiếm album"
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-          </form>
+            <div className="flex flex-col">
+            <select
+              className="bg-[#1E1E1E] text-white p-2 rounded-lg border-none w-[150px]  cursor-pointer"
+              value={selectedStatus}
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+          
+              }}
+            >
+              <option value="2">Tất cả</option>
+              <option value="1">Công khai</option>
+              <option value="0">Ẩn</option>
+            </select>
+          </div>
+          </div>
 
           <div className="flex flex-row justify-end gap-7 pr-10 align-middle">
-            <button className="h-10 w-10 rounded-full bg-[#1E1E1E] text-white">
-              <BsSendPlus className="m-auto" />
-            </button>
             <button
               onClick={() => handleShowAddAlbumModal()}
               className="text-3xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white"
             >
               <GoPlus className="m-auto" />
-            </button>
-
-            <button className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${currentActionType === "edit" ? 'bg-[#EB2272]' : '' }`}>
-              <TfiPencil 
-              onClick={() => handleClickStatusChange('edit')}
-              className="m-auto" />
             </button>
             <button 
             onClick={() => handleClickStatusChange('delete')}
@@ -120,8 +137,8 @@ const ArtistAlbumPage = () => {
             modalState={showAddAlbumModal}
           />
         </div>
-        <h3 className="mt-3">Tong cong: {albums.length}</h3>
-        <AlbumList albums={albums} currentActionType={currentActionType}/>
+        <h3 className="mt-3">Tổng cộng: {filteredAlbums.length}</h3>
+        <AlbumList albums={filteredAlbums} currentActionType={currentActionType}/>
       </div>
     </>
   );
