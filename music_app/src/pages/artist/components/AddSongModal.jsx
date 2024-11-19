@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ImageUpload from "./ImageUpload";
 import { FaXmark } from "react-icons/fa6";
 
@@ -34,7 +34,17 @@ const SongUpload = ({ closeModal }) => {
   const [artistDropdownOpen, setArtistDropdownOpen] = useState(false);
   const [highQualityFile, setHighQualityFile] = useState(null);
   const [lowQualityFile, setLowQualityFile] = useState(null);
+  // const [artistsList, setArtistsList] = useState([]);
+  // const [genresList, setGenresList] = useState([]);
   const ImgRef = useRef(null);
+
+  useEffect(()=>{
+    try {
+      test
+
+    } catch (e) {console.log("ee")}
+
+  },[]);
 
   const toggleDropdown = (type) => {
     if (type === "genre") {
@@ -61,7 +71,24 @@ const SongUpload = ({ closeModal }) => {
       );
     }
   };
-
+  //ACC0002
+  // 'ten_bai_hat' => 'required',
+  //           'thoi_luong' => 'required|numeric',
+  //           'hinh_anh' => 'required',
+  //           'ma_album' => 'nullable', // Cho phép null
+  //           'link_bai_hat' => 'required',
+  //           'ngay_phat_hanh' => 'required|date',
+  //           'ma_artist' => 'required',
+  //           'ma_phi_luot_nghe' => 'required',
+  const formData = {
+    thoi_luong: '',
+    hinh_anh: '', // Uncomment if needed
+    ma_album: '', // Uncomment if needed
+    link_bai_hat: '',
+    ngay_phat_hanh: '',
+    ma_artist: '',
+    ma_phi_luot_nghe: '',
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     const imgData = ImgRef.current?.getData();
@@ -124,7 +151,7 @@ const SongUpload = ({ closeModal }) => {
                   <div className="absolute z-10 bg-white border border-gray-300 w-full max-h-40 overflow-y-auto">
                     <input
                       type="text"
-                      placeholder="Search genre..."
+                      placeholder="Tìm kiếm nghệ sĩ..."
                       className="w-full p-2 border border-gray-300 rounded mb-2 text-black"
                       onChange={(e) => setGenreSearch(e.target.value)}
                     />

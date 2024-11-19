@@ -32,11 +32,11 @@ const SignInfo = () => {
   };
 
   
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-      const imageUrl = URL.createObjectURL(event.target.files[0]);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+      const imageUrl = URL.createObjectURL(e.target.files[0]);
       setImagePreview(imageUrl);
-};
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
