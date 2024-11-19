@@ -7,6 +7,7 @@ import { FaHeadphones } from "react-icons/fa6";
 import { assets } from '../../assets/assets';
 import { AdminContext } from '../../context/AdminContext';
 import { useState, useContext, useEffect } from 'react';
+import { PlayerContext } from "../../context/PlayerContext";
 
 let quangcaoList = [
     { ma_quang_cao: 1, ten_quang_cao: 'Chạy ngay đi vừa ra mắt! Nghe thử ngay! fa fa rgferag rregt qergfer gqretfgesf è gegerfgae fdafa dfa dfa adsgagaga', ngay_tao: '23/10/2001', ma_nqc: 'NQC1', hinh_anh: assets.mck },
@@ -29,10 +30,12 @@ let hopdongList = [
 
 
 function ContractPage() {
+    const { adsContractData } = useContext(PlayerContext);
     const [isAdding, setIsAdding] = useState(false);
     const { isBgCover, setBgCover } = useContext(AdminContext);
     const [keySelected, setKeySelected] = useState("");
     const [image, setImage] = useState("");
+    // const [hopdongList, setHopdongList] = useState(adsContractData);
 
     // const handleImageUpload = (event) => {
     //     const file = event.target.files[0];
@@ -45,6 +48,9 @@ function ContractPage() {
     //     }
     // };
 
+    // useEffect(() => {
+    //     setHopdongList(adsContractData);
+    // }, []);
 
     function ItemHopDong() {
         let array1 = hopdongList;

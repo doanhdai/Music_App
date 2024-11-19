@@ -8,9 +8,9 @@ const taikhoanList = [
 ]
 
 let quyenList = [
-  { ma_phan_quyen: 'Q1', ten_quyen_han: "admin", ngay_tao: "24/10/2003", tinh_trang: 1 },
-  { ma_phan_quyen: 'Q2', ten_quyen_han: "user", ngay_tao: "22/10/2003", tinh_trang: 1 },
-  { ma_phan_quyen: 'Q3', ten_quyen_han: "artist", ngay_tao: "24/10/1999", tinh_trang: 1 }
+  { ma_phan_quyen: 'Q1', ten_quyen_han: "admin", ngay_tao: "2024-11-11 20:00:00", tinh_trang: 1 },
+  { ma_phan_quyen: 'Q2', ten_quyen_han: "user", ngay_tao: "2024-11-11 20:00:00", tinh_trang: 1 },
+  { ma_phan_quyen: 'Q3', ten_quyen_han: "artist", ngay_tao: "2024-11-11 20:00:00", tinh_trang: 1 }
 ];
 
 let chucnangList = [
@@ -35,7 +35,8 @@ let chitietquyenList = [
   { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN3', mo_ta_vai_tro: 'Thêm' },
   { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN3', mo_ta_vai_tro: 'Sửa' },
   { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN3', mo_ta_vai_tro: 'Xóa' },
-  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN6', mo_ta_vai_tro: 'Xem' }
+  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN6', mo_ta_vai_tro: 'Xem' },
+  { ma_phan_quyen: 'Q2', ma_chuc_nang: 'CN6', mo_ta_vai_tro: 'Xem' }
 ];
 
 const actionList = {
@@ -51,6 +52,7 @@ const actionList = {
 function reducerBgCover(state, action) {
   switch (action.type) {
     case actionList.add:
+    case actionList.update:
       return true;
     default:
       return false;
@@ -60,18 +62,29 @@ function reducerBgCover(state, action) {
 const ManagerQuyen = () => {
   const [currentQuyen, setCurrentQuyen] = useState(quyenList[0].ma_phan_quyen);
   const [filteredChitietquyenList, setFilteredChitietquyenList] = useState([]);
+  const [chitietquyenUpdate, setChiTietQuyenUpdate] = useState([]);
   const { isBgCover, setBgCover } = useContext(AdminContext);
   const [valueAction, setValueAction] = useState("");
   const [stateBgCover, dispatchBgCover] = useReducer(reducerBgCover, isBgCover);
+  const [valueInputAdd, setValueInputAdd] = useState("");
+  const [errorInputAdd, setError] = useState("");
+  const [chitietquyenAdd, setChitietquyenAdd] = useState([]);
 
   const handleChange = (event) => {
     setCurrentQuyen(event.target.value);
   };
 
   const handleAction = (action) => {
-    setValueAction(action);
-    dispatchBgCover({ type: action });
+    if (currentQuyen == quyenList[0].ma_phan_quyen && action == actionList.update)
+      alert('Đây là quyền cao cấp. Không thể thay đổi quyền này!');
+    else {
+      if (action == actionList.update) setChiTietQuyenUpdate(filteredChitietquyenList);
+      dispatchBgCover({ type: action });
+      setValueAction(action);
+    }
   };
+
+
 
   const ItemsQuyen = () => (
     <select
@@ -88,26 +101,7 @@ const ManagerQuyen = () => {
     </select>
   );
 
-  const handleCheckboxChange = (chucNang, moTaVaiTro, isChecked) => {
-    if (valueAction == actionList.update) {
-      let updatedList = [...filteredChitietquyenList]; // Tạo bản sao mới
 
-      if (isChecked) {
-        updatedList.push({ ma_phan_quyen: currentQuyen, ma_chuc_nang: chucNang, mo_ta_vai_tro: moTaVaiTro });
-      } else {
-        updatedList = updatedList.filter(
-          (item) =>
-            item.ma_phan_quyen !== currentQuyen ||
-            item.ma_chuc_nang !== chucNang ||
-            item.mo_ta_vai_tro !== moTaVaiTro
-        );
-      }
-      setFilteredChitietquyenList(updatedList); // Cập nhật state với bản sao mới
-    }
-
-
-
-  };
 
   const handleDeleteQuyen = () => {
     if (!(taikhoanList.some((item) => item.ma_phan_quyen == currentQuyen))) {
@@ -118,8 +112,109 @@ const ManagerQuyen = () => {
     else alert('Không thể xóa quyền này do có tài khoản thuộc quyền này!');
   }
 
+  const TableChitietquyenUpdate = () => (
+    <div>
+      <table className='bg-[#1E1E1E] w-full h-auto '>
+        <thead>
+          <tr className='border-b border-[#A4A298] text-[#A4A298]'>
+            <th className='w-[10%] py-3'>&nbsp;</th>
+            <th>Xem</th>
+            <th>Thêm</th>
+            <th>Sửa</th>
+            <th>Xóa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {chucnangList.map((chucnang) => {
+            const chitietquyen = chitietquyenUpdate.filter(item => item.ma_chuc_nang === chucnang.ma_chuc_nang);
+            return (
+              <tr key={chucnang.ma_chuc_nang} className='text-center'>
+                <td className='py-3 text-left pl-4'>{chucnang.ten_chuc_nang}</td>
+                {
+                  ['Xem', 'Thêm', 'Sửa', 'Xóa'].map((vaiTro) => (
+                    <td key={vaiTro}>
+                      <input
+                        type="checkbox"
+                        checked={chitietquyen.some(item => item.mo_ta_vai_tro === vaiTro)}
+                        onChange={(event) => {
+                          let isChecked = event.target.checked;
+                          setChiTietQuyenUpdate((prevChitietquyenAdd) => {
+                            if (isChecked) {
+                              // Thêm phần tử mới khi checkbox được chọn
+                              return [...prevChitietquyenAdd, { ma_phan_quyen: currentQuyen, ma_chuc_nang: chucnang.ma_chuc_nang, mo_ta_vai_tro: vaiTro }];
+                            } else {
+                              // Loại bỏ phần tử khi checkbox bị bỏ chọn
+                              return prevChitietquyenAdd.filter(
+                                (item) => item.ma_chuc_nang !== chucnang.ma_chuc_nang || item.mo_ta_vai_tro !== vaiTro
+                              );
+                            }
+                          });
+                        }}
+                      />
+                    </td>))
+                }
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
 
-  const TableChitietquyen = ({ action }) => (
+
+
+  const TableChitietquyenAdd = () => (
+    <div>
+      <table className='bg-[#1E1E1E] w-full h-auto '>
+        <thead>
+          <tr className='border-b border-[#A4A298] text-[#A4A298]'>
+            <th className='w-[10%] py-3'>&nbsp;</th>
+            <th>Xem</th>
+            <th>Thêm</th>
+            <th>Sửa</th>
+            <th>Xóa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {chucnangList.map((chucnang) => {
+            const chitietquyen = chitietquyenAdd.filter(item => item.ma_chuc_nang === chucnang.ma_chuc_nang);
+            return (
+              <tr key={chucnang.ma_chuc_nang} className='text-center'>
+                <td className='py-3 text-left pl-4'>{chucnang.ten_chuc_nang}</td>
+                {
+                  ['Xem', 'Thêm', 'Sửa', 'Xóa'].map((vaiTro) => (
+                    <td key={vaiTro}>
+                      <input
+                        type="checkbox"
+                        checked={chitietquyen.some(item => item.mo_ta_vai_tro === vaiTro)}
+                        onChange={(event) => {
+                          let isChecked = event.target.checked;
+                          setChitietquyenAdd((prevChitietquyenAdd) => {
+                            if (isChecked) {
+                              // Thêm phần tử mới khi checkbox được chọn
+                              return [...prevChitietquyenAdd, { ma_chuc_nang: chucnang.ma_chuc_nang, mo_ta_vai_tro: vaiTro }];
+                            } else {
+                              // Loại bỏ phần tử khi checkbox bị bỏ chọn
+                              return prevChitietquyenAdd.filter(
+                                (item) => item.ma_chuc_nang !== chucnang.ma_chuc_nang || item.mo_ta_vai_tro !== vaiTro
+                              );
+                            }
+                          });
+                        }}
+                      />
+                    </td>))
+                }
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+
+
+
+  const TableChitietquyen = () => (
     <div>
       <table className='bg-[#1E1E1E] w-full h-auto '>
         <thead>
@@ -137,20 +232,12 @@ const ManagerQuyen = () => {
             return (
               <tr key={chucnang.ma_chuc_nang} className='text-center'>
                 <td className='py-3 text-left pl-4'>{chucnang.ten_chuc_nang}</td>
-                {action != actionList.add ?
+                {
                   ['Xem', 'Thêm', 'Sửa', 'Xóa'].map((vaiTro) => (
                     <td key={vaiTro}>
                       <input
                         type="checkbox"
                         checked={chitietquyen.some(item => item.mo_ta_vai_tro === vaiTro)}
-                        onChange={(event) => handleCheckboxChange(chucnang.ma_chuc_nang, vaiTro, event.target.checked)}
-                      />
-                    </td>)) :
-                  ['Xem', 'Thêm', 'Sửa', 'Xóa'].map((vaiTro) => (
-                    <td key={vaiTro}>
-                      <input
-                        type="checkbox"
-                        onChange={(event) => alert('click')}
                       />
                     </td>))
                 }
@@ -161,23 +248,130 @@ const ManagerQuyen = () => {
       </table>
     </div>
   );
+  function getCurrentDateTime() {
+    const now = new Date();
 
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
 
-  function FormAdd() {
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  const addQuyen = () => {
+    let flagExist = false;
+    setValueInputAdd(valueInputAdd.trim());
+    quyenList.forEach((item) => {
+      if (item.ten_quyen_han === valueInputAdd) {
+        setError('Tên quyền đã tồn tại');
+        flagExist = true;
+        return;
+      }
+    });
+    if (!flagExist) {
+      let ma_phan_quyen = 'Q4';
+      let newQuyen = { ma_phan_quyen: ma_phan_quyen, ten_quyen_han: valueInputAdd, ngay_tao: getCurrentDateTime(), tinh_trang: 1 };
+      quyenList.push(newQuyen);
+      const updatedChitietquyenAdd = chitietquyenAdd.map((item) => ({
+        ...item,
+        ma_phan_quyen: ma_phan_quyen
+      }));
+      chitietquyenList.push(...updatedChitietquyenAdd);
+      setError("");
+      setValueInputAdd("");
+      setChitietquyenAdd([]);
+      handleAction(actionList.add_cancel);
+
+    }
+
+  }
+
+  const updateQuyen = () => {
+    let flagExist = false;
+    setValueInputAdd(valueInputAdd.trim());
+    if (valueInputAdd != '') {
+
+      quyenList.forEach((item) => {
+        if (item.ten_quyen_han === valueInputAdd) {
+          setError('Tên quyền đã tồn tại');
+          flagExist = true;
+          return;
+        }
+      });
+    }
+    if (!flagExist) {
+      let i = confirm('Bạn có muốn lưu thay đổi?');
+      if (i) {
+        alert('Đã lưu thay đổi');
+        setFilteredChitietquyenList(chitietquyenUpdate);
+        if (valueInputAdd != '') {
+          quyenList.find((item) => item.ma_phan_quyen === currentQuyen).ten_quyen_han = valueInputAdd;
+        }
+        setError("");
+        setValueInputAdd("");
+        setChiTietQuyenUpdate([]);
+        handleAction(actionList.cancel_update);
+        chitietquyenUpdate.forEach((item) => {
+          chitietquyenList = chitietquyenList.filter((item1) => item1.ma_phan_quyen != currentQuyen || item1.ma_chuc_nang != item.ma_chuc_nang || item1.mo_ta_vai_tro != item.mo_ta_vai_tro);
+        })
+
+        chitietquyenList.push(...chitietquyenUpdate);
+      } else {
+
+      }
+
+    }
+
+  }
+
+  function FormUpdate() {
     return (
       <div className='bg-[#1E1E1E] w-[50vw]'>
         <form className=" w-auto p-4">
           <p className='text-[#A4A298]'>Nhập tên quyền</p>
           <input
+            value={valueInputAdd}
+            onChange={(event) => setValueInputAdd(event.target.value)}
+            className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2 "
+            type="text"
+            placeholder={quyenList.find((item) => item.ma_phan_quyen == currentQuyen)?.ten_quyen_han}
+            autoFocus
+          />
+          <p className='text-[#EB2272] italic'>{errorInputAdd}</p>
+          <TableChitietquyenUpdate />
+          <div className="flex justify-center mt-4 gap-2">
+            <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => { setValueInputAdd(''); setError(""); handleAction("") }}>Hủy</button>
+            <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black' onClick={(e) => { e.preventDefault(); updateQuyen(); }}>Xác nhận</button>
+          </div>
+        </form>
+
+      </div>
+    );
+  }
+
+
+  function FormAdd() {
+
+    return (
+      <div className='bg-[#1E1E1E] w-[50vw]'>
+        <form className=" w-auto p-4">
+          <p className='text-[#A4A298]'>Nhập tên quyền</p>
+          <input
+            value={valueInputAdd}
+            onChange={(event) => setValueInputAdd(event.target.value)}
             className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2 "
             type="text"
             autoFocus
           />
-          <p className='text-[#EB2272] italic'></p>
-          <TableChitietquyen action={actionList.add} />
+          <p className='text-[#EB2272] italic'>{errorInputAdd}</p>
+          <TableChitietquyenAdd />
           <div className="flex justify-center mt-4 gap-2">
-            <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => handleAction("")}>Hủy</button>
-            <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black'>Xác nhận</button>
+            <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => { setChitietquyenAdd([]); setValueInputAdd(''); setError(""); handleAction("") }}>Hủy</button>
+            <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black' onClick={(e) => { e.preventDefault(); addQuyen(); }}>Xác nhận</button>
           </div>
         </form>
 
@@ -239,8 +433,11 @@ const ManagerQuyen = () => {
             (() => {
               switch (valueAction) {
                 case actionList.add:
+                  // setChitietquyenAdd([]);
                   return <FormAdd />
-
+                case actionList.update:
+                  // setChiTietQuyenUpdate(filteredChitietquyenList);
+                  return <FormUpdate />
                 default:
                   return null;
               }

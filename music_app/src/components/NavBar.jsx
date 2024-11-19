@@ -1,6 +1,6 @@
 import React, { startTransition, useContext, useEffect, useRef, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { assets,} from "../assets/assets";
+import { assets, } from "../assets/assets";
 import { FaRegBell } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiLogin } from "react-icons/ci";

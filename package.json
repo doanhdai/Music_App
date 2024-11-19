@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.10",
     "chart.js": "^4.4.6",
     "react-chartjs-2": "^5.2.0"
   }
