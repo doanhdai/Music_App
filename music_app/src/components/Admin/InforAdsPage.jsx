@@ -6,6 +6,7 @@ import { Button } from 'antd';
 import { AdminContext } from '../../context/AdminContext';
 import { assets } from '../../assets/assets';
 import ImageUpload from "../../pages/artist/components/ImageUpload";
+import { PlayerContext } from "../../context/PlayerContext";
 
 let nhadangkyList = [
     { ma_nqc: 'NQC1', ten_nqc: 'MTP Talent', so_dien_thoai: "0123456789" },
@@ -20,15 +21,15 @@ let quangcaoList = [
     { ma_quang_cao: '4', ten_quang_cao: 'Mộng Yu cùng AMEE! Nghe Mộng Yu ngay!', ngay_tao: '22/07/1990', ma_nqc: 'NQC3', hinh_anh: assets.mck }
 ]
 
-let hopdongList = [
-    { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-    { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
-    { ma_hop_dong: 3, ma_quang_cao: 3, luot_phat: 111, doanh_thu: 4500000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
-    { ma_hop_dong: 4, ma_quang_cao: 4, luot_phat: 209, doanh_thu: 9000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-    { ma_hop_dong: 5, ma_quang_cao: 1, luot_phat: 230, doanh_thu: 10500000, ngay_tao: '23/12/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-    { ma_hop_dong: 6, ma_quang_cao: 3, luot_phat: 146, doanh_thu: 5400000, ngay_tao: '23/11/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-    { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '09/09/2023 18:00:33', ngay_hoan_thanh: '' },
-]
+// let hopdongList = [
+//     { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
+//     { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
+//     { ma_hop_dong: 3, ma_quang_cao: 3, luot_phat: 111, doanh_thu: 4500000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
+//     { ma_hop_dong: 4, ma_quang_cao: 4, luot_phat: 209, doanh_thu: 9000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
+//     { ma_hop_dong: 5, ma_quang_cao: 1, luot_phat: 230, doanh_thu: 10500000, ngay_tao: '23/12/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
+//     { ma_hop_dong: 6, ma_quang_cao: 3, luot_phat: 146, doanh_thu: 5400000, ngay_tao: '23/11/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
+//     { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '09/09/2023 18:00:33', ngay_hoan_thanh: '' },
+// ]
 
 const actionList = {
     add_nqc: "ADD_CL",
@@ -58,10 +59,16 @@ function reducerBgCover(state, action) {
 }
 
 const InforAdsPage = () => {
+    const { adsContractData } = useContext(PlayerContext);
     const [keySelected, setKeySelected] = useState("");
     const [valueAction, setValueAction] = useState("");
     const { isBgCover, setBgCover } = useContext(AdminContext);
     const [stateBgCover, dispatchBgCover] = useReducer(reducerBgCover, isBgCover);
+    const [hopdongList, setHopdongList] = useState([]);
+
+    useEffect(() => {
+        setHopdongList(adsContractData);
+    }, [adsContractData]);
 
     useEffect(() => {
         setBgCover(stateBgCover);

@@ -37,6 +37,9 @@ let dangkyPremium = [
   { ma_tk: 9, ma_goi: 1, ngay_dang_ky: '12/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 19000 }
 ]
 
+let premiumList = [
+
+]
 let hopdongList = [
   { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
   { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
@@ -350,6 +353,10 @@ const ManagerStatistical = () => {
       </>
     );
   };
+
+  const ItemDoanhThuPremium = () => {
+
+  }
 
 
 

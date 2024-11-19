@@ -19,6 +19,7 @@ const PlayerContextProvider = (props) => {
     // const [artistsData, setArtistsData] = useState([]); 
     const [genresData, setGenresData] = useState([]);
     // const [concertsData, setConcertsData] = useState([]);
+    const [adsContractData, setAdsContractData] = useState([]);
     const [track, setTrack] = useState(null);
     const [playStatus, setPlayStatus] = useState(false);
     const [volume, setVolume] = useState(1);
@@ -32,7 +33,7 @@ const PlayerContextProvider = (props) => {
             minute: 0,
         },
     });
- 
+
 
     const play = () => {
         audioRef.current.play();
@@ -61,7 +62,7 @@ const PlayerContextProvider = (props) => {
             audioRef.current.volume = newVolume;
         }
     };
-    const muteVolume = async() => {
+    const muteVolume = async () => {
         await setVolume(0)
     }
 
@@ -97,12 +98,12 @@ const PlayerContextProvider = (props) => {
         // }
 
         if (track.id < songsData.length - 1) {
-        setLoadingTrack(true);
-        await setTrack(songsData[track.id + 1]);
-        await audioRef.current.play();
-        setLoadingTrack(false);
-        setPlayStatus(true);
-    }
+            setLoadingTrack(true);
+            await setTrack(songsData[track.id + 1]);
+            await audioRef.current.play();
+            setLoadingTrack(false);
+            setPlayStatus(true);
+        }
     };
 
     const seekSong = async (e) => {
@@ -111,34 +112,34 @@ const PlayerContextProvider = (props) => {
 
 
     const getSongsData = async () => {
-      try {
-        const response = await axios.get(`${url}/api/songs`);
-        setSongsData(response.data.data);
-        // console.log(response.data.data);
-      } catch (error) {
-        console.log(error);
-      }
+        try {
+            const response = await axios.get(`${url}/api/songs`);
+            setSongsData(response.data.data);
+            // console.log(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
     const getAlbumsData = async () => {
-      try {
-        const response = await axios.get(`${url}/api/albums`);
-        setAlbumsData(response.data.albums);
-        // console.log(response.data.albums);
-      } catch (error) {
-        console.log(error);
-      }
+        try {
+            const response = await axios.get(`${url}/api/albums`);
+            setAlbumsData(response.data.albums);
+            // console.log(response.data.albums);
+        } catch (error) {
+            console.log(error);
+        }
     };
     const getGenresData = async () => {
-      try {
-        const response = await axios.get(`${url}/api/genres`);
-        setGenresData(response.data);
-        // console.log(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+        try {
+            const response = await axios.get(`${url}/api/genres`);
+            setGenresData(response.data.data);
+            // console.log(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    
+
 
     useEffect(() => {
         if (audioRef.current) {
@@ -173,19 +174,34 @@ const PlayerContextProvider = (props) => {
     }, [audioRef, loadingTrack]);
 
     useEffect(() => {
-    //   getUsersData();
-      getSongsData();
-      getAlbumsData();
-    //   getPlaylistsData();
-    //   getArtistData();
-      getGenresData();
-    //   getConcertsData();
+        //   getUsersData();
+        getSongsData();
+        getAlbumsData();
+        //   getPlaylistsData();
+        //   getArtistData();
+        getGenresData();
+        //   getConcertsData();
+        getAdsContract();
     }, []);
     useEffect(() => {
-      if (songsData.length > 0 && track === null) {
-        setTrack(songsData[0]);
-      }
-    }, [songsData]);       
+        if (songsData.length > 0 && track === null) {
+            setTrack(songsData[0]);
+        }
+    }, [songsData]);
+
+
+    //Phan cua oanh
+    const getAdsContract = async () => {
+        try {
+            const response = await axios.get(`${url}/api/advertising-contracts`);
+            setAdsContractData(response.data);
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    //end cua oanh
+
     const contextValue = {
         // user,
         // setUser,
@@ -212,16 +228,17 @@ const PlayerContextProvider = (props) => {
         // playlistsData,
         // artistsData,
         genresData,
+        adsContractData,
         // concertsData,
         setVolume: updateVolume,
         muteVolume
     };
 
-    return( 
-    <PlayerContext.Provider value={contextValue}>
-        {props.children}
-        
-    </PlayerContext.Provider>
+    return (
+        <PlayerContext.Provider value={contextValue}>
+            {props.children}
+
+        </PlayerContext.Provider>
     )
 };
 
