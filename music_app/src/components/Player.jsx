@@ -33,9 +33,9 @@ const Player = () => {
         setVolume: setAudioVolume
     } = useContext(PlayerContext);
 
-   useEffect(() => {
-    //  console.log("Track changed:", track);
-   }, [track]);
+  //  useEffect(() => {
+  //    console.log("Track changed:", track);
+  //  }, [track]);
     const handleVolumeChange = (e) => {
         const newVolume = parseFloat(e.target.value);
         setVolume(newVolume);

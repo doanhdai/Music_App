@@ -30,11 +30,19 @@ const NavBar = () => {
       .replace(/đ/g, "d")
       .replace(/Đ/g, "D");
   };
-
+  // const getRandomColor = () => {
+  //   const letters = "0123456789ABCDEF";
+  //   let color = "#";
+  //   for (let i = 0; i < 6; i++) {
+  //     color += letters[Math.floor(Math.random() * 16)];
+  //   }
+  //   return color;
+  // };
+  // const [color, setColor] = useState(getRandomColor());
   const handleSearch = (term) => {
     const trimmedTerm = term.trim();
     if (!trimmedTerm) {
-      navigate("/search", { state: { searchTerm: "" } });
+      navigate("/search", { state: { searchTerm: "", color } });
       return;
     }
 
@@ -50,7 +58,7 @@ const NavBar = () => {
     );
 
     navigate("/search", {
-      state: { artistResults, albumResults, songResults, searchTerm: trimmedTerm },
+      state: { artistResults, albumResults, songResults, searchTerm: trimmedTerm, color },
     });
   };
 
