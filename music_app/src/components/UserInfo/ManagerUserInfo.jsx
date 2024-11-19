@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 
 const ManagerUserInfo = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     
@@ -24,6 +23,7 @@ const ManagerUserInfo = () => {
   
 
 // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+
   const account = JSON.parse(accountData);
     const handleEditUserClick = () => {
         setIsEditingUser(true);
@@ -53,7 +53,11 @@ const ManagerUserInfo = () => {
         {isEditingUser ? (
                 <UserProfileEdit onCancel={handleCancelUserClick} />
             ) : (
-                <UserProfile onEdit={handleEditUserClick} />
+                <UserProfile onEdit={handleEditUserClick} 
+                  name={account.ten_user}
+                  image={account.avatar}
+                  quyen={account.quyen}
+                />
             )}
       </div>
       <div className="w-1/2">
