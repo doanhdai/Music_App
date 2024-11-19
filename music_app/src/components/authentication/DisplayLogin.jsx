@@ -24,7 +24,6 @@ const DisplayLogin = () => {
             // Lưu thông tin tài khoản vào localStorage
             localStorage.setItem('account', JSON.stringify(response.data.account));
             localStorage.setItem('isLoggedIn', 'true');
-    
             // Chuyển hướng đến trang chủ
             if (response.data.redirect) {
                 window.location.href = response.data.redirect;
