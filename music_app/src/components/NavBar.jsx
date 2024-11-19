@@ -18,7 +18,8 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
-  const account = JSON.parse(localStorage.getItem('account'));
+  count = JSON.parse(localStorage.getItem('account'));
+
 
   const removeVietnamese = (str) => {
     if (typeof str !== "string") {
@@ -30,25 +31,27 @@ const NavBar = () => {
       .replace(/đ/g, "d")
       .replace(/Đ/g, "D");
   };
-  // const getRandomColor = () => {
-  //   const letters = "0123456789ABCDEF";
-  //   let color = "#";
-  //   for (let i = 0; i < 6; i++) {
-  //     color += letters[Math.floor(Math.random() * 16)];
-  //   }
-  //   return color;
-  // };
+  const getRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
   // const [color, setColor] = useState(getRandomColor());
   const handleSearch = (term) => {
     const trimmedTerm = term.trim();
     if (!trimmedTerm) {
-      navigate("/search", { state: { searchTerm: "", color } });
+      navigate("/search", { state: { searchTerm: ""} });
       return;
     }
 
     const searchTermNoAccent = removeVietnamese(trimmedTerm.toLowerCase());
     const artistResults = (artistsData || []).filter((artist) =>
-      removeVietnamese(artist.ten_nghe_si.toLowerCase()).includes(searchTermNoAccent)
+      removeVietnamese(artist.ten_nghe_si)
+        .toLowerCase()
+        .includes(searchTermNoAccent)
     );
     const albumResults = (albumsData || []).filter((album) =>
       removeVietnamese(album.ten_album).toLowerCase().includes(searchTermNoAccent)
@@ -58,7 +61,7 @@ const NavBar = () => {
     );
 
     navigate("/search", {
-      state: { artistResults, albumResults, songResults, searchTerm: trimmedTerm, color },
+      state: { artistResults, albumResults, songResults, searchTerm: trimmedTerm},
     });
   };
 

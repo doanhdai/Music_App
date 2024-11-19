@@ -77,7 +77,6 @@ const Home = () => {
         src={track?.link_bai_hat || ""}
         preload="auto"
       ></audio>
-      {console.log(track)}
     </div>
   );
 };

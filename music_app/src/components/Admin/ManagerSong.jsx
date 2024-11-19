@@ -213,27 +213,26 @@ const ManagerSong = () => {
           </div>
           <hr />
           <div className="overflow-y-auto h-[440px]">
-            {baihat.map((item, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
-                onClick={() => handleClickedSongItem(currentActionType, item)}
-              >
-                <p className="text-white">{item.ma_bai_hat}</p>
-                <p className="text-[15px] flex items-center">
-                  <img
-                    className="inline w-10 mr-2"
-                    src={item.hinh_anh}
-                  />
-                  {item.ten_bai_hat}
-                </p>
-                <p className="text-[15px] hidden sm:block">Ngày cuối</p>
-                <p className="text-[15px]">{item.ngay_phat_hanh}</p>
-                <p className="flex ml-7">
-                  <CiUnlock />
-                </p>
-              </div>
-            ))}
+            {songsData
+              .filter((item) => item.chat_luong === "Thấp")
+              .map((item, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
+                  onClick={() => handleClickedSongItem(currentActionType, item)}
+                >
+                  <p className="text-white">{item.ma_bai_hat}</p>
+                  <p className="text-[15px] flex items-center">
+                    <img className="inline w-10 mr-2" src={item.hinh_anh} />
+                    {item.ten_bai_hat}
+                  </p>
+                  <p className="text-[15px] hidden sm:block">Ngày cuối</p>
+                  <p className="text-[15px]">{item.ngay_phat_hanh}</p>
+                  <p className="flex ml-7">
+                    <CiUnlock />
+                  </p>
+                </div>
+              ))}
           </div>
         </div>
       )}
