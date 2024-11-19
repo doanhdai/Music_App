@@ -10,7 +10,7 @@ const ArtistItems = ({id, name, img, artist}) => {
       onClick={() => navigate(`/artist/${id}`)}
       className="min-w-[180px] p-2 px-3 rounded cursor-pointer hover:bg-[#fffff26]"
     >
-      <img className="h-44 rounded-full" src={img}></img>
+      <img className="h-44 w-44 rounded-full" src={img}></img>
       <p className="font-bold mt-2 mb-1">{name}</p>
       <p className="text-slate-200 text-sm">{artist}</p>
     </div>

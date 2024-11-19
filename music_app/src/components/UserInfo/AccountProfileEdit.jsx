@@ -1,30 +1,64 @@
 import React, { useState } from "react";
 import InputItem from "./InputItem";
-import PasswordRules from "../Authentication/PasswordRules";
+import PasswordRules from "./PasswordRules";
+import { updateAccountAPI } from "../../services/UserServices";
+import AuthBtn from "../Authentication/AuthBtn";
 
-const AccountProfileEdit = () => {
+const AccountProfileEdit = ({onCancel}) => {
   const [password, setPassword] = useState("");
+  const [passwordComfirm, setPasswordComfirm] = useState("");
+  const account = JSON.parse(localStorage.getItem('account'));
+  const [email, setEmail] = useState(account.email);
+
+  const validatePassword = (value) => {
+    const hasDigit = /\d/;
+    const hasSpecialChar = /[!@#\$%\^\&*\)\(+=._-]/;
+    return (value.length >= 8 && hasDigit.test(value) && hasSpecialChar.test(value));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validatePassword(password)) {
+      return;
+    }
+
+    if (password !== passwordComfirm) {
+      return;
+    }
+    try {
+      const response = await updateAccountAPI(account.ma_tk,email,password);
+      alert('Account updated successfully!');
+      console.log(response.data);
+    } catch (error) {
+      if (error.response?.status === 404) {
+        alert('Account not found');
+      } else {
+        console.error('Error updating account:', error);
+      }
+    }
+  };
+  
   return (
-    <div className="bg-[#141414] text-white rounded-lg p-6 w-96 relative">
+    <form className="bg-[#141414] text-white rounded-lg p-6 w-96 relative" onSubmit={handleSubmit}>
       <h2 className="text-pink-500 font-bold mb-6">Thông tin cá nhân</h2>
 
-      <button className="absolute top-4 right-4 bg-gray-800 px-4 py-1 rounded-md">
-        Lưu
+      <button className="absolute top-4 right-4 bg-gray-800 px-4 py-1 rounded-md" onClick={onCancel} >
+        Thoát
       </button>
-      <InputItem title="Email" type_input="text" />
-      <div className="mt-5" style={{ marginBottom: "-5px", color: "#A4A298" }}>
+      <InputItem title="Email" valueInput={email} setValueInput={setEmail} type_input="text" />
+      <div className="mt-5"  style={{ marginBottom: "-5px", color: "#A4A298" }}>
         Thay đổi mật khẩu
       </div>
       <InputItem
         title="Mật khẩu cũ"
-        password={password}
-        setPassword={setPassword}
+        valueInput={password}
+        setValueInput={setPassword}
         type_input="password" 
       />
       
-      <InputItem title="Mật khẩu mới" type_input="password" />
-      <PasswordRules password={password} />
-    </div>
+      <InputItem title="Mật khẩu mới" type_input="password" valueInput={passwordComfirm} setValueInput={setPasswordComfirm}/>
+      <PasswordRules  password={password} />
+      <AuthBtn title="Xác nhận" />
+    </form>
   );
 };
 

@@ -15,8 +15,8 @@ const InputItem = (props) => {
           marginTop: "10px",
           padding: "3px",
         }}
-        value={props.password}
-        onChange={(e) => props.setPassword(e.target.value)}
+        value={props.valueInput}
+        onChange={(e) => props.setValueInput(e.target.value)}
       />
     </div>
   );

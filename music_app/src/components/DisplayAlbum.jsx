@@ -8,9 +8,10 @@ import { MdArrowCircleDown } from "react-icons/md";
 import { PlayerContext } from "../context/PlayerContext";
 import { FaHeart } from "react-icons/fa";
 const DisplayAlbum = () => {
-  const{playWithId, playStatus,pause, track} = useContext(PlayerContext)
-
+  const{playWithId, playStatus,pause, track, songsData} = useContext(PlayerContext)
+  
   const { id } = useParams();
+  console.log(id)
   const albumData = albumsData[id];
 
     const [hoveredSong, setHoveredSong] = useState(null);
@@ -34,13 +35,13 @@ const DisplayAlbum = () => {
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
         <img
           className="w-48 rounded"
-          src={albumData.image}
-          alt={albumData.name}
+          src={albumData.hinh_anh}
+          alt={albumData.ten_album}
         />
         <div className="flex flex-col justify-center">
           <p>Album</p>
           <h1 className="text-5xl font-bold mb-4 md:text-7xl">
-            {albumData.name}
+            {albumData.ten_album}
           </h1>
           <p className="mt-1 flex items-center">
             <img className="w-5" src={assets.spotify_logo} alt="Spotify Logo" />

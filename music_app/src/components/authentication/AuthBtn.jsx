@@ -3,16 +3,19 @@ import { useNavigate } from "react-router-dom";
 const AuthBtn = (props) => {
   const navigate = useNavigate();
   return (
-    <div
+    <button type="submit"
       className="AuthBtn-container"
       onClick={() => {
         startTransition(() => {
           navigate(props.link);
         });
+        if(props.keyLocal!=null){
+          localStorage.setItem(props.keyLocal, props.valueLocal);
+        }
       }}
     >
       <div className="AuthBtn-title">{props.title}</div>
-    </div>
+    </button>
   );
 };
 
