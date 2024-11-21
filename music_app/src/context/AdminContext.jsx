@@ -39,6 +39,7 @@ const AdminContextProvider = (props) => {
    const getAdvertisersData = async () => {
       try {
          const response = await axios.get(`${url}/api/advertisers`);
+         console.log(response.data.advertisers);
          setAdvertisers(response.data.advertisers);
       } catch (err) {
          console.error(err);
@@ -98,7 +99,7 @@ const AdminContextProvider = (props) => {
          message: "Thảnh công",
          description: mess,
          placement: "top", // Các giá trị khác: topLeft, topRight, bottomLeft
-         duration: 5
+         duration: 2
       });
    };
 
