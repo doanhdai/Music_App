@@ -2,6 +2,7 @@ import React, { useEffect, useState, useReducer, useContext } from 'react';
 import { CiCirclePlus } from "react-icons/ci";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { AdminContext } from '../../context/AdminContext';
+import axios from 'axios';
 
 const taikhoanList = [
   { ma_tk: 1, ma_phan_quyen: 'Q1' }
@@ -12,7 +13,7 @@ let quyenList = [
   { ma_phan_quyen: 'Q2', ten_quyen_han: "user", ngay_tao: "22/10/2003", tinh_trang: 1 },
   { ma_phan_quyen: 'Q3', ten_quyen_han: "artist", ngay_tao: "24/10/1999", tinh_trang: 1 }
 ];
-
+// const quyenList = (await axios.get("http://127.0.0.1:8000/api/decentralizations")).data;
 let chucnangList = [
   { ma_chuc_nang: 'CN1', ten_chuc_nang: 'Tài khoản' },
   { ma_chuc_nang: 'CN2', ten_chuc_nang: 'Bài hát' },
@@ -21,6 +22,7 @@ let chucnangList = [
   { ma_chuc_nang: 'CN5', ten_chuc_nang: 'Quảng cáo' },
   { ma_chuc_nang: 'CN6', ten_chuc_nang: 'Thống kê' },
 ];
+// const chucnangList = (await axios.get("http://127.0.0.1:8000/api/functionns")).data;
 
 let chitietquyenList = [
   { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN1', mo_ta_vai_tro: 'Xem' },

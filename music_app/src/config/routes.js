@@ -35,7 +35,7 @@ const routes = {
     AccountAdmin: "account_admin",
     UserInfo: "/UserInfo",
     ManagerPremiumUser: "/UserInfo/premium",
-
+    ArtistUser: "/UserInfo/artist",
     Playlist: "/playlist/:id",
 
     PremiumSection: "buyPremium"

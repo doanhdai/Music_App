@@ -40,6 +40,8 @@ const NotFound = React.lazy(() => import("../pages/NotFound"));
 const UserInfoLayout = React.lazy(() => import("../pages/User/UserInfo/UserInfo"));
 const UserInfo = React.lazy(() => import("../components/UserInfo/ManagerUserInfo"));
 const ManagerPremiumUser = React.lazy(() => import("../components/UserInfo/ManagerPremiumUser"));
+const ArtistUser = React.lazy(() => import("../components/UserInfo/ArtistUser"));
+
 const PremiumSection = React.lazy(()=>import("../components/premium/PremiumSection"))
 const DisplayPlaylist = React.lazy(() => import("../components/DisplayPlaylist"))
 const InforAdsPage = React.lazy(() => import("../components/Admin/InforAdsPage"))
@@ -218,6 +220,10 @@ const routes = createBrowserRouter([
       {
         path: config.routes.ManagerPremiumUser,
         Component: ManagerPremiumUser,
+      },
+      {
+        path: config.routes.ArtistUser,
+        Component: ArtistUser,
       },
     ],
   },
