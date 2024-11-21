@@ -16,7 +16,7 @@ import EditSongModal from "../../pages/artist/components/EditSongModal";
 import { PlayerContext } from "../../context/PlayerContext";
 
 const ManagerSong = () => {
-  const { songsData } = useContext(PlayerContext);
+  const { songsData, formatDate } = useContext(PlayerContext);
   const [selectedSong, setSelectedSong] = useState(null);
   const [baihat, setSong] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,6 +27,7 @@ const ManagerSong = () => {
   const [filterStatus, setFilterStatus] = useState("All_status");
 
   useEffect(() => {
+    alert(formatDate('2024-09-18 00:00:00'));
     setSong(songsData);
   }, [songsData]);
   const actionList = {
@@ -188,17 +189,15 @@ const ManagerSong = () => {
           <div className="flex space-x-5">
             <div
               onClick={() => handleClickStatusChange("edit")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
               onClick={() => handleClickStatusChange("delete")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdDeleteOutline size={20} />
             </div>

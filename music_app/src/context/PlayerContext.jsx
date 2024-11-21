@@ -88,9 +88,7 @@ const PlayerContextProvider = (props) => {
   };
   const getAllUsersData = async () => {
     try {
-      const response = await axios.get(
-        `${url_api}/api/users`
-      );
+      const response = await axios.get(`${url_api}/api/users`);
       setUsersData(response.data);
       // console.log(response.data)
     } catch (error) {
@@ -98,35 +96,35 @@ const PlayerContextProvider = (props) => {
     }
   };
 
-const play = () => {
-  if (audioRef.current) {
-    const savedState = JSON.parse(localStorage.getItem("musicPlayerState"));
-    if (savedState?.currentTime) {
-      audioRef.current.currentTime = savedState.currentTime;
+  const play = () => {
+    if (audioRef.current) {
+      const savedState = JSON.parse(localStorage.getItem("musicPlayerState"));
+      if (savedState?.currentTime) {
+        audioRef.current.currentTime = savedState.currentTime;
+      }
+
+      audioRef.current
+        .play()
+        .then(() => {
+          setPlayStatus(true);
+        })
+        .catch((error) => {
+          console.error("Lỗi khi phát nhạc:", error);
+        });
     }
+  };
 
-    audioRef.current
-      .play()
-      .then(() => {
-        setPlayStatus(true);
-      })
-      .catch((error) => {
-        console.error("Lỗi khi phát nhạc:", error);
-      });
-  }
-};
+  const pause = () => {
+    if (audioRef.current && playStatus) {
+      audioRef.current.pause();
+      setPlayStatus(false);
 
-const pause = () => {
-  if (audioRef.current && playStatus) {
-    audioRef.current.pause();
-    setPlayStatus(false);
-
-    localStorage.setItem(
-      "musicPlayerState",
-      JSON.stringify({ track, currentTime: audioRef.current.currentTime })
-    );
-  }
-};
+      localStorage.setItem(
+        "musicPlayerState",
+        JSON.stringify({ track, currentTime: audioRef.current.currentTime })
+      );
+    }
+  };
 
   const playWithId = async (id) => {
     const song = songsData.find((item) => id === item.ma_bai_hat);
