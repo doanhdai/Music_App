@@ -12,7 +12,6 @@ const AdminContextProvider = (props) => {
    const [contractsData, setContract] = useState([]);
    const [quyenList, setQuyenList] = useState([]);
    const [chucnangList, setChucnangList] = useState([]);
-   const [chitietquyenList, setChitietquyenList] = useState([]);
    const getAccountsData = async () => {
       try {
          const res = await axios.get(`${url}/api/accounts`);
@@ -139,7 +138,8 @@ const AdminContextProvider = (props) => {
       setChucnangList,
       quyenList,
       setQuyenList,
-      uploadImage
+      uploadImage,
+      setContract
    };
 
 
