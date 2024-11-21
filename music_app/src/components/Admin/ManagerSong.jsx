@@ -122,6 +122,15 @@ const ManagerSong = () => {
   // console.log("Dữ liệu ban đầu:", songsData);
   console.log("Điều kiện lọc:", searchTerm);
   console.log("Kết quả sau lọc:", filteredSongs());
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between">
@@ -228,7 +237,7 @@ const ManagerSong = () => {
                     {item.ten_bai_hat}
                   </p>
                   <p className="text-[15px] hidden sm:block">Ngày cuối</p>
-                  <p className="text-[15px]">{item.ngay_phat_hanh}</p>
+                  <p className="text-[15px]">{formatDate(item.ngay_phat_hanh)}</p>
                   <p className="flex ml-7">
                     <CiUnlock />
                   </p>

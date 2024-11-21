@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AlbumItems from "./AlbumItems";
 import SongItems from "./SongItems";
 import ArtistItems from "./ArtistItems";
@@ -8,6 +8,7 @@ import { PlayerContext } from "../context/PlayerContext";
 const Search = () => {
   const { genresData } = useContext(PlayerContext);
   const location = useLocation();
+  const navigate = useNavigate();
   const { artistResults, albumResults, songResults, searchTerm } = location.state || {};
 
   const getRandomColor = () => {
@@ -37,7 +38,7 @@ const Search = () => {
                       key={index}
                       name={song.ten_bai_hat}
                       desc={song.ten_bai_hat}
-                      id={song.ma_bai_hat}
+                      id={song.artist}
                       img={song.hinh_anh}
                     />
                   ))}
@@ -70,7 +71,7 @@ const Search = () => {
                     <AlbumItems
                       key={index}
                       name={album.ten_album}
-                      desc={album.ten_album}
+                      desc={album.nguoi_so_huu}
                       id={album.ma_album}
                       img={album.hinh_anh}
                     />
@@ -104,6 +105,7 @@ const Search = () => {
                 key={genre.ma_the_loai}
                 className="rounded-xl h-40 flex items-center justify-center text-center font-semibold text-white text-[18px]"
                 style={{ backgroundColor: getRandomColor() }}
+                onClick={() => navigate(`/category/${genre.ma_the_loai}`)}
               >
                 {genre.ten_the_loai}
               </div>

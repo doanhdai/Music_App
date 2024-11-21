@@ -38,7 +38,9 @@ const routes = {
 
     Playlist: "/playlist/:id",
 
-    PremiumSection: "buyPremium"
+    PremiumSection: "buyPremium",
+
+    CategorySong:"/category/:id"
 };
 
 export default routes;

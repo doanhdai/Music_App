@@ -18,7 +18,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
-  count = JSON.parse(localStorage.getItem('account'));
+  const count = JSON.parse(localStorage.getItem('account'));
 
 
   const removeVietnamese = (str) => {
@@ -123,7 +123,7 @@ const NavBar = () => {
                     onMouseEnter={() => setIsOpen(true)}
                   >
                     <p className="bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center">
-                      <img className="h-10 rounded-full" src={account.avatar} />
+                      <img className="h-10 rounded-full" src={assets.mck} />
                     </p>
                     {isOpen && (
                       <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
