@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useReducer, useState, useRef } from 'reac
 import { CiCirclePlus } from "react-icons/ci";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { IoIosSearch } from 'react-icons/io';
-import { Button, message, Upload } from 'antd';
+import { Button, message, Upload, Modal } from 'antd';
 import { AdminContext } from '../../context/AdminContext';
 import { assets } from '../../assets/assets';
 import axios from 'axios';
@@ -69,7 +69,11 @@ const InforAdsPage = () => {
     const [stateBgCover, dispatchBgCover] = useReducer(reducerBgCover, isBgCover);
     const [imageUrl, setImageUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null); // Lưu file đã chọn
-
+    const [valueUpdate, setValueUpdate] = useState("");
+    const [valueSearchNQC, setValueSearchNQC] = useState("");
+    const [filterNQC, setFilterNQC] = useState([]);
+    const [valueSearchQC, setValueSearchQC] = useState({ input: '', select: '1' });
+    const [filterQC, setFilterQC] = useState([]);
 
     useEffect(() => {
         setBgCover(stateBgCover);
@@ -77,17 +81,17 @@ const InforAdsPage = () => {
 
     useEffect(() => {
         if (valueAction == actionList.select_qc_update) {
-            alert('Nhấp chuột vào quảng cáo cần sửa!');
+            message.info('Nhấp chuột vào quảng cáo cần sửa!');
         } else if (valueAction == actionList.update_qc_cancel) {
-            alert('Thoát khỏi chế độ chỉnh sửa quảng cáo!');
+            message.info('Thoát khỏi chế độ chỉnh sửa quảng cáo!');
         } else if (valueAction == actionList.select_qc_delete) {
-            alert('Bạn đang ở chế độ xóa quảng cáo.\nNhấp chuột vào quảng cáo cần xóa!');
+            message.info('Bạn đang ở chế độ xóa quảng cáo.\nNhấp chuột vào quảng cáo cần xóa!');
         } else if (valueAction == actionList.delete_qc_cancel) {
-            alert('Thoát khỏi chế độ xóa quảng cáo!');
+            message.info('Thoát khỏi chế độ xóa quảng cáo!');
         } else if (valueAction == actionList.select_nqc_delete) {
-            alert('Bạn đang ở chế độ xóa nhà đăng kí quảng cáo.\nNhấp chuột vào nhà đăng kí quảng cáo cần xóa!');
+            message.info('Bạn đang ở chế độ xóa nhà đăng kí quảng cáo.\nNhấp chuột vào nhà đăng kí quảng cáo cần xóa!');
         } else if (valueAction == actionList.delete_nqc_cancel) {
-            alert('Thoát khỏi chế độ xóa nhà đăng kí quảng cáo!');
+            message.info('Thoát khỏi chế độ xóa nhà đăng kí quảng cáo!');
         }
 
     }, [valueAction]);
@@ -98,7 +102,6 @@ const InforAdsPage = () => {
     };
 
     const handleBeforeUpload = (file) => {
-        alert('chon');
         setSelectedFile(file); // Lưu file vào state
         const fileReader = new FileReader();
         fileReader.onload = () => {
@@ -133,34 +136,68 @@ const InforAdsPage = () => {
         )
     }
 
+    const callAPI_DeleteNQC = async (ma_nqc) => {
+        try {
+            const response = await axios.delete(`${url}/api/advertisers/${ma_nqc}`);
+            console.log(response);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const deleteNQC = (ma_nqc) => {
         const quangcao = advertisementsData.find((item) => item.ma_nqc == ma_nqc);
         if (!quangcao) {
-            const isConfirmed = window.confirm("Bạn có chắc chắn muốn thực hiện hành động này?");
-            if (isConfirmed) {
-                setAdvertisers((prev) => prev.filter(item => item.ma_nqc !== ma_nqc))
-                alert(`Đã xóa nhà đăng ký quảng cáo có mã: ${ma_nqc}`);
-            } else {
+            Modal.confirm({
+                title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+                content: 'Xóa nhà đăng kí quảng cáo ' + ma_nqc,
+                okText: 'Đồng ý',
+                cancelText: 'Hủy',
+                onOk() {
+                    setAdvertisers((prev) => prev.filter(item => item.ma_nqc !== ma_nqc))
+                    openNotification("Xóa nhà đăng kí quảng cáo");
+                    setValueAction(actionList.delete_nqc_cancel);
+                    callAPI_DeleteNQC(ma_nqc);
+                },
+                onCancel() {
+                    setValueAction(actionList.delete_nqc_cancel);
+                },
+            });
 
-            }
-            setValueAction(actionList.delete_nqc_cancel);
         } else {
             alert(`Không thể xóa nhà đăng ký quảng cáo có mã: ${ma_nqc}.\nDo nhà đăng ký này đã đăng kí quảng cáo`);
         }
 
     }
 
+
+    const callAPI_DeleteQC = async (ma_quang_cao) => {
+        try {
+            const response = await axios.delete(`${url}/api/advertisements/${ma_quang_cao}`);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const deleteQC = (ma_quang_cao) => {
         const hopdong = contractsData.find((item) => item.ma_quang_cao == ma_quang_cao);
         if (!hopdong) {
-            const isConfirmed = window.confirm("Bạn có chắc chắn muốn thực hiện hành động này?");
-            if (isConfirmed) {
-                setAdvertisements((prev) => prev.filter(item => item.ma_quang_cao !== ma_quang_cao));
-                alert(`Đã xóa quảng cáo có mã: ${ma_quang_cao}`);
-            } else {
+            Modal.confirm({
+                title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+                content: 'Xóa quảng cáo ' + ma_quang_cao,
+                okText: 'Đồng ý',
+                cancelText: 'Hủy',
+                onOk() {
+                    setAdvertisements((prev) => prev.filter(item => item.ma_quang_cao !== ma_quang_cao));
+                    openNotification("Xóa quảng cáo");
+                    setValueAction(actionList.delete_qc_cancel);
+                    callAPI_DeleteQC(ma_quang_cao);
+                },
+                onCancel() {
+                    setValueAction(actionList.delete_qc_cancel);
+                },
+            });
 
-            }
-            setValueAction(actionList.delete_qc_cancel);
         } else {
             alert(`Không thể xóa quảng cáo có mã: ${ma_quang_cao}.\nDo quảng cáo đã thuộc một hợp đồng nào đó`);
         }
@@ -196,7 +233,7 @@ const InforAdsPage = () => {
 
 
         return (
-            <form onSubmit={addQC} className="bg-[#1E1E1E] w-fit p-4 flex">
+            <form onSubmit={addQC} className="bg-[#1E1E1E] w-fit p-4 flex gap-3 items-center">
                 {
                     valueAction != actionList.update_qc && <ImageUpload />
                 }
@@ -217,7 +254,7 @@ const InforAdsPage = () => {
                     />
                     <p className='text-[#EB2272] italic'></p>
                     <div className="flex justify-center mt-4 gap-2">
-                        <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => handleAction(actionList.add_nqc_cancel)}>Hủy</button>
+                        <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => { setSelectedFile(null); setImageUrl(null); handleAction(actionList.add_nqc_cancel) }}>Hủy</button>
                         <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black' type='submit'>Xác nhận</button>
                     </div>
                 </div>
@@ -322,38 +359,74 @@ const InforAdsPage = () => {
 
         callAPI_AddQC(formData.ten, link, formData.ma_nqc);
         openNotification("Tạo quảng cáo");
-        setSelectedFile("");
+        setSelectedFile(null);
+        setImageUrl(null);
         handleAction("");
 
 
     }
 
 
+    const callAPI_UpdateQC = async (ma_quang_cao) => {
+        try {
+            const response = await axios.put(`${url}/api/advertisements`, {
+                ma_quang_cao: ma_quang_cao,
+                ten_quang_cao: valueUpdate
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const updateQC = (e) => {
+        e.preventDefault();
+        if (valueUpdate != '') {
+            Modal.confirm({
+                title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+                content: 'Cập nhật quảng cáo ' + keySelected,
+                okText: 'Đồng ý',
+                cancelText: 'Hủy',
+                onOk() {
+                    setAdvertisements((prev) => prev.map((item) => {
+                        if (item.ma_quang_cao == keySelected) return { ...item, ten_quang_cao: valueUpdate }
+                        else return { ...item }
+                    }));
+                    openNotification("Cập nhật quảng cáo");
+                    handleAction(actionList.update_qc_cancel);
+                    callAPI_UpdateQC(keySelected);
+
+                },
+                onCancel() {
+                    handleAction(actionList.update_qc_cancel);
+                },
+            });
+        } else {
+            message.error("Tên quảng cáo không để trống");
+        }
+
+
+    }
+
 
 
     function FormUpdateQC() {
-        const quangcao = quangcaoList.find((item) => item.ma_quang_cao == keySelected);
+        const quangcao = advertisementsData.find((item) => item.ma_quang_cao == keySelected);
         return (
-            <form className="bg-[#1E1E1E] w-fit p-4 flex">
+            <form onSubmit={updateQC} className="bg-[#1E1E1E] w-fit p-4 flex">
                 <div>
-                    <div className='flex gap-3 my-4'>
-                        <p className='text-[#A4A298]'>Chọn nhà đăng kí</p>
-                        <select className='bg-[#EB2272] text-white rounded-md border-none w-auto outline-none cursor-pointer text-center'>
-                            {
-                                nhadangkyList.map((item) => <option selected={item.ma_nqc == quangcao.ma_nqc} className='bg-[#EB2272] text-white'>{item.ten_nqc}</option>)
-                            }
-                        </select>
-                    </div>
                     <p className='text-[#A4A298]'>Nhập tên quảng cáo</p>
                     <input
                         className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2"
                         type="text"
                         placeholder={quangcao.ten_quang_cao}
+                        value={valueUpdate}
+                        onChange={(e) => setValueUpdate(e.target.value)}
+                        autoFocus
                     />
                     <p className='text-[#EB2272] italic'></p>
                     <div className="flex justify-center mt-4 gap-2">
                         <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => handleAction(actionList.update_qc_cancel)}>Hủy</button>
-                        <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black'>Xác nhận</button>
+                        <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black' type='submit'>Xác nhận</button>
                     </div>
                 </div>
 
@@ -364,11 +437,83 @@ const InforAdsPage = () => {
         );
     }
 
-    function ItemNhaDangKy() {
-        let array = advertisersData;
+    useEffect(() => {
+        const lowerSearch = valueSearchNQC.trim().toLowerCase();
+        if (lowerSearch !== '') {
+            // Lọc dữ liệu thay vì map
+            const filteredData = advertisersData.filter((item) => {
+                return (item.ten_nqc.toLowerCase().includes(lowerSearch) || item.so_dien_thoai.includes(lowerSearch));
+            });
+            setFilterNQC(filteredData);
+        } else {
+            // Nếu không có từ khóa tìm kiếm, trả lại toàn bộ dữ liệu
+            setFilterNQC(advertisersData);
+        }
+    }, [valueSearchNQC]); // Thêm advertisersData để tránh lỗi khi dữ liệu thay đổi
+
+    const searchNQC = (e) => {
+        e.preventDefault();
+        const formData = {};
+        const elements = (e.target).elements; // Lấy danh sách các phần tử trong form
+
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+
+            if (element.name) {
+                formData[element.name] = element.value; // Lưu giá trị theo `name`
+            }
+        }
+        setValueSearchNQC(formData.search);
+
+    }
+
+    useEffect(() => {
+        const lowerInput = valueSearchQC.input.trim().toLowerCase(); // Điều kiện tìm kiếm từ input
+        const ma_nqc = valueSearchQC.select; // Điều kiện tìm kiếm từ select
+
+        let filteredData = [];
+
+        // Lọc theo input (nếu input không trống)
+        if (lowerInput !== '') {
+            filteredData = advertisementsData.filter((item) => {
+                return item.ten_quang_cao.toLowerCase().includes(lowerInput); // Lọc theo ten_quang_cao
+            });
+        } else {
+            filteredData = advertisementsData; // Nếu input trống, không lọc gì cả
+        }
+
+        // Lọc theo ma_nqc (nếu ma_nqc khác '1')
+        if (ma_nqc !== '1') {
+            filteredData = filteredData.filter((item) => {
+                return item.ma_nqc.toLowerCase().includes(ma_nqc.toLowerCase()); // Lọc theo ma_nqc
+            });
+        }
+
+        setFilterQC(filteredData); // Cập nhật dữ liệu lọc
+    }, [valueSearchQC, advertisementsData]); // Thêm advertisementsData vào dependency array để đảm bảo dữ liệu được cập nhật khi thay đổi
+
+
+    const searchQC = (e) => {
+        e.preventDefault();
+        const formData = {};
+        const elements = (e.target).elements; // Lấy danh sách các phần tử trong form
+
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+
+            if (element.name) {
+                formData[element.name] = element.value; // Lưu giá trị theo `name`
+            }
+        }
+        setValueSearchQC({ input: formData.input, select: formData.select });
+
+    }
+
+    function ItemNhaDangKy({ list }) {
+        let array = list;
         return array.map((item) => (
             <div key={item.ma_nqc}
-                className={`grid grid-cols-7 w-full items-center pt-2 pb-2 ${valueAction == actionList.select_nqc_delete && 'hover:!bg-[#EB2272] cursor-pointer'}`}
+                className={`grid grid-cols-7 items-center pt-2 pb-2 ${valueAction == actionList.select_nqc_delete && 'hover:!bg-[#EB2272] cursor-pointer'}`}
                 onClick={() => {
                     setKeySelected(item.ma_nqc);
                     switch (valueAction) {
@@ -387,8 +532,8 @@ const InforAdsPage = () => {
         ));
     }
 
-    function ItemQuangCao() {
-        let array1 = advertisementsData;
+    function ItemQuangCao({ list }) {
+        let array1 = list;
         return array1.map((quangcao) => (
             <div key={quangcao.ma_quang_cao}
                 className={`w-full bg-[#141414] h-auto relative p-2 flex flex-col gap-2 ${(valueAction == actionList.select_qc_update || valueAction == actionList.select_qc_delete) && 'hover:!bg-[#EB2272] cursor-pointer'} `}
@@ -428,16 +573,17 @@ const InforAdsPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <form className='flex w-full h-[40px] items-center mt-6 mb-6'>
+                            <form onSubmit={searchNQC} className='flex w-full h-[40px] items-center mt-6 mb-6'>
                                 <div className="flex items-center p-2.5 w-[50%] h-full bg-[#1E1E1E] justify-between rounded-3xl">
                                     <IoIosSearch className="text-white text-2xl cursor-pointer" />
                                     <input
                                         className="bg-[#1E1E1E] w-full outline-none ml-2 text-white text-xs font-bold"
                                         type="text"
+                                        name='search'
                                         placeholder="Tên hoặc số điện thoại"
                                     />
                                 </div>
-                                <Button type="primary" className="rounded-full bg-[#E0066F] h-[80%] w-[25%] hover:!bg-[#E0066F] text-sm ml-4 font-normal">
+                                <Button type="submit" htmlType="submit" className="rounded-full bg-[#E0066F] h-[80%] w-[25%] hover:!bg-[#E0066F] text-sm ml-4 font-normal">
                                     Tìm kiếm
                                 </Button>
                             </form>
@@ -448,8 +594,8 @@ const InforAdsPage = () => {
                                     <div className='col-span-3 text-center'>Tên</div>
                                     <div className='col-span-2 text-center'>Số điện thoại</div>
                                 </div>
-                                <div id="wrap-items-Chungloai">
-                                    <ItemNhaDangKy />
+                                <div className='h-[45vh] overflow-y-auto'>
+                                    <ItemNhaDangKy list={valueSearchNQC == '' ? advertisersData : filterNQC} />
                                 </div>
                             </div>
                         </div>
@@ -477,32 +623,35 @@ const InforAdsPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <form className='flex w-full h-[40px] items-center mt-6 mb-6'>
+                            <form onSubmit={searchQC} className='flex w-full h-[40px] items-center mt-6 mb-6'>
                                 <div className="flex items-center p-2.5 w-[25%] h-full bg-[#1E1E1E] justify-between rounded-3xl">
                                     <IoIosSearch className="text-white text-2xl cursor-pointer" />
                                     <input
                                         className="bg-[#1E1E1E] w-full outline-none ml-2 text-white text-xs font-bold"
                                         type="text"
+                                        name="input"
                                         placeholder="Tên quảng cáo"
                                     />
                                 </div>
-                                <select className="bg-[#1E1E1E] text-white rounded-md border-none w-auto outline-none cursor-pointer ml-4 mr-4 text-center pt-1 pb-1 pr-1 text-sm">
+                                <select name="select" className="bg-[#1E1E1E] text-white rounded-md border-none w-auto outline-none cursor-pointer ml-4 mr-4 text-center pt-1 pb-1 pr-1 text-sm">
+                                    <option className="bg-[#1E1E1E] text-white" key={1} value={1}>Tất cả</option>
                                     {
+
                                         advertisersData.map((item) => (
-                                            <option className="bg-[#1E1E1E] text-white" key={item.ma_nqc}>
+                                            <option className="bg-[#1E1E1E] text-white" key={item.ma_nqc} value={item.ma_nqc}>
                                                 {item.ten_nqc}
                                             </option>
                                         )
                                         )
                                     }
                                 </select>
-                                <Button type="primary" className="rounded-full bg-[#E0066F] h-[80%] w-[20%] hover:!bg-[#E0066F] text-sm font-normal">
+                                <Button type="submit" htmlType="submit" className="rounded-full bg-[#E0066F] h-[80%] w-[20%] hover:!bg-[#E0066F] text-sm font-normal">
                                     Tìm kiếm
                                 </Button>
                             </form>
                             {/* Bảng hiển thị quảng cáo */}
-                            <div className='w-full h-[50vh] grid grid-cols-3 gap-2 overflow-y-auto'>
-                                <ItemQuangCao />
+                            <div className='w-full h-[53vh] grid grid-cols-3 gap-2 overflow-y-auto'>
+                                <ItemQuangCao list={JSON.stringify(valueSearchQC) === JSON.stringify({ input: '', select: '1' }) ? advertisementsData : filterQC} />
                             </div>
                         </div>
                     </>
