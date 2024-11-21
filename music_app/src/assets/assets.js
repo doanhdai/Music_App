@@ -72,7 +72,12 @@ export const assets = {
     clock_icon,
     img2,
 }
-
+export function removeVietnameseTones(str) {
+    str = str.normalize('NFD')
+             .replace(/[\u0300-\u036f]/g, '');
+    return str;
+  }
+  
 export const albumsData = [
     {   
         id:0,

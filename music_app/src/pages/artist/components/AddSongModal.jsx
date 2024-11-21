@@ -40,7 +40,7 @@ const SongUpload = ({ closeModal }) => {
 
   useEffect(()=>{
     try {
-      test
+     console.log('useeffect')
 
     } catch (e) {console.log("ee")}
 
