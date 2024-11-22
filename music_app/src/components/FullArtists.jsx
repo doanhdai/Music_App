@@ -13,14 +13,14 @@ const FullArtists = () => {
   return (
     <>
       <div className="mb-4">
-          <h1 className="mb-4 font-bold text-2xl">Nghệ sĩ đề xuất</h1>
+        <h1 className="mb-4 font-bold text-2xl">Nghệ sĩ đề xuất</h1>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {songsData.map((item, index) => (
+          {artistsData.map((item, index) => (
             <ArtistItems
               key={index}
-              name={item.ten_user}
-            //   desc={item.desc}
-              id={item.ma_user}
+              name={item.ten_artist}
+              //   desc={item.desc}
+              id={item.ma_artist}
               img={item.anh_dai_dien}
             />
           ))}

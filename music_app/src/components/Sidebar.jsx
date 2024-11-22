@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets, playlistsData } from "../assets/assets";
 import { IoIosSearch } from "react-icons/io";
 import { TbFilterPlus } from "react-icons/tb";
@@ -6,10 +6,12 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { MdArrowCircleDown, MdDriveFileRenameOutline } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
+import { PlayerContext } from "../context/PlayerContext";
 
 
 const Sidebar = ({ onOutsideClick }) => {
-  const navigate = useNavigate();
+  const { playlistsData} = useContext(PlayerContext)
+  const navigate = useNavigate(); 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [contextMenuPosition, setContextMenuPosition] = useState({
@@ -26,7 +28,7 @@ const Sidebar = ({ onOutsideClick }) => {
   };
 
   const filteredPlaylists = playlistsData.filter((playlist) =>
-    removeVietnameseTones(playlist.name)
+    removeVietnameseTones(playlist.ten_playlist)
       .toLowerCase()
       .includes(removeVietnameseTones(searchQuery.toLowerCase()))
   );
@@ -93,8 +95,8 @@ const Sidebar = ({ onOutsideClick }) => {
         <div className="h-[85%] overflow-y-auto">
           {filteredPlaylists.map((item, index) => (
             <div
-              onClick={() => navigate(`/playlist/${item.id}`)}
-              onContextMenu={(e) => handleContextMenu(e, item.id)}
+              onClick={() => navigate(`/playlist/${item.ma_playlist}`)}
+              onContextMenu={(e) => handleContextMenu(e, item.ma_playlist)}
               key={index}
               className="min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#ffffff26]"
             >
@@ -104,7 +106,7 @@ const Sidebar = ({ onOutsideClick }) => {
                 alt="Playlist Cover"
               />
               <div>
-                <p className="">{item.name}</p>
+                <p className="">{item.ten_playlist}</p>
                 <h5 className="text-slate-200 text-sm">Playlist - Đài</h5>
               </div>
             </div>

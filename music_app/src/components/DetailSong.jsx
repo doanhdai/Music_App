@@ -68,10 +68,10 @@ const DetailSong = () => {
   return (
     <div onClick={closeMenu}>
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
-        <img className="w-48 rounded" src={songData.hinh_anh}></img>
+        <img className="w-48 h-48 rounded" src={songData.hinh_anh}></img>
         <div className="flex flex-col justify-center">
           <p>Bài hát</p>
-          <h2 className="text-5xl font-bold mb-4 md:text-7xl">
+          <h2 className="text-4xl font-bold mb-4 md:text-7xl">
             {songData.ten_bai_hat}
           </h2>
           <p className="mt-1 flex items-center">

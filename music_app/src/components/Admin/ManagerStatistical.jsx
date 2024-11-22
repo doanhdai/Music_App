@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import { Button } from 'antd'
+import { assets } from '../../assets/assets';
+import { Bar, Line } from 'react-chartjs-2';
+import { Chart, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 
-// Đảm bảo đã đăng ký các thành phần của ChartJS
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
-
+// Đăng ký các thành phần cần thiết
+Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 const loaithongke = [
   { index: 1, ten: "Doanh thu từ quảng cáo" },
   { index: 2, ten: "Doanh thu từ gói Premium" },
@@ -36,6 +37,9 @@ let dangkyPremium = [
   { ma_tk: 9, ma_goi: 1, ngay_dang_ky: '12/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 19000 }
 ]
 
+let premiumList = [
+
+]
 let hopdongList = [
   { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
   { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
@@ -44,21 +48,28 @@ let hopdongList = [
   { ma_hop_dong: 5, ma_quang_cao: 1, luot_phat: 230, doanh_thu: 10500000, ngay_tao: '23/12/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
   { ma_hop_dong: 6, ma_quang_cao: 3, luot_phat: 146, doanh_thu: 5400000, ngay_tao: '23/11/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '09/09/2023 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/10/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/10/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '12/10/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '12/10/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/10/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/10/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '12/10/2024 18:00:33', ngay_hoan_thanh: '' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '12/10/2024 18:00:33', ngay_hoan_thanh: '' },
   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '14/10/2024 18:00:33', ngay_hoan_thanh: '' }
+]
+
+let quangcaoList = [
+  { ma_quang_cao: 1, ten_quang_cao: 'Chạy ngay đi vừa ra mắt! Nghe thử ngay!', ngay_tao: '23/10/2001', ma_nqc: 'NQC1', hinh_anh: assets.mck },
+  { ma_quang_cao: 2, ten_quang_cao: 'Nghe bài hát mới của Sơn Tùng MTP', ngay_tao: '05/02/1998', ma_nqc: 'NQC1', hinh_anh: assets.mck },
+  { ma_quang_cao: 3, ten_quang_cao: 'Rap Việt vừa ra mắt! Xem ngay trên trang youtube: Đông Tây Promotion', ngay_tao: '02/01/1996', ma_nqc: 'NQC2', hinh_anh: assets.mck },
+  { ma_quang_cao: 4, ten_quang_cao: 'Mộng Yu cùng AMEE! Nghe Mộng Yu ngay!', ngay_tao: '22/07/1990', ma_nqc: 'NQC3', hinh_anh: assets.mck }
 ]
 
 let phieuruttien = [
@@ -74,6 +85,8 @@ let phieuruttien = [
   { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '12/11/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
   { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '12/11/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' }
 ]
+
+let phimoiluotnghe = 500;
 
 const getDate = (type) => {
   const today = new Date();
@@ -130,7 +143,9 @@ const ManagerStatistical = () => {
   const [startDay, setStartDay] = useState(getDate(0));
   const [endDay, setEndDay] = useState(getDate(1));
   const [chartData, setChartData] = useState(data());
-
+  const [isUpdatePhi, setIsUpdatePhi] = useState(false);
+  const [valueUpdate, setValueUpdate] = useState('');
+  const [dayClicked, setDayClicked] = useState('');
 
 
   const chartRef = useRef(null); // Tham chiếu đến canvas
@@ -300,7 +315,7 @@ const ManagerStatistical = () => {
     }
     return {
       labels: labels,
-      datasets: [{ label: loaithongke[indexLoaiSelected - 1].ten, data: value, backgroundColor: '#C64174' }]
+      datasets: [{ label: loaithongke[indexLoaiSelected - 1].ten, data: value, borderColor: '#FF6384', backgroundColor: '#FFB1C1', }]
     };
 
   }
@@ -315,12 +330,59 @@ const ManagerStatistical = () => {
     }
   }, [chartData]); // Chạy lại khi dữ liệu biểu đồ thay đổi
 
+  const ItemDoanhThuQuangCao = () => {
+    let day = dayClicked;
+    const filter = hopdongList.filter(item => item.ngay_tao.split(' ')[0] === day); // Lọc hợp đồng theo ngày
+    return (
+      <>
+        <div className='grid grid-cols-5 w-full border-y text-center mt-2 py-2'>
+          <div className=''>Mã hợp đồng</div>
+          <div className='col-span-3'>Tên quảng cáo</div>
+          <div>Doanh thu</div>
+        </div>
+        {filter.map((item, index) => {
+          const quangcao = quangcaoList.find(qc => qc.ma_quang_cao === item.ma_quang_cao);
+          return quangcao ? (
+            <div key={index} className='grid grid-cols-5 w-full text-[#A4A298] text-center' >
+              <div className=''>{item.ma_hop_dong}</div>
+              <div className='col-span-3'>{quangcao.ten_quang_cao}</div>
+              <div>{item.doanh_thu}</div>
+            </div>
+          ) : null;
+        })}
+      </>
+    );
+  };
+
+  const ItemDoanhThuPremium = () => {
+
+  }
+
+
+
+  const handleClickColBar = {
+    onClick: (e) => {
+      const chart = chartRef.current;
+      const elements = chart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
+
+      if (elements.length > 0) {
+        const element = elements[0];
+        const datasetIndex = element.datasetIndex;
+        const index = element.index;
+        const value = chart.data.datasets[datasetIndex].data[index];
+
+        setDayClicked(chart.data.labels[index]);
+      }
+    },
+  };
 
   const handleChangeLoaiThongKe = (event) => {
+    setDayClicked('');
     const selectedIndex = +event.target.value;
     setIndexLoai(selectedIndex);
   }
   const handleChangeThoiGian = (event) => {
+    setDayClicked('');
     const selectedIndex = +event.target.value;
     setIndexThoiGian(selectedIndex);
   };
@@ -374,6 +436,19 @@ const ManagerStatistical = () => {
     setChartData(newData);
   }, [indexLoaiSelected, indexThoiGianSelected, setIndexLoai, setIndexThoiGian, startDay, endDay]);
 
+  const handleUpdatePhi = () => {
+    if (valueUpdate != '') {
+      let i = confirm('Bạn có muốn lưu thay đổi?');
+      if (i) {
+        phimoiluotnghe = valueUpdate;
+        alert('Lưu thành công');
+      }
+
+    }
+    setIsUpdatePhi(false);
+    setValueUpdate('');
+  }
+
   return (
     <div className='w-full h-full bg-black p-2'>
       <div className='flex gap-4 h-[40px] mb-2'>
@@ -413,12 +488,60 @@ const ManagerStatistical = () => {
             </span>
           )
         }
+
       </div>
-      <div className='w-full h-[90%] bg-[#1E1E1E]'>
-        <Bar
-          ref={chartRef} // Tham chiếu đến canvas
-          data={chartData} />
+      <div className='h-[80vh] overflow-y-scroll'>
+        {
+          indexLoaiSelected === 3 && (
+            <div className='flex items-center gap-2 my-2'>
+              Hiện tại, phí mà nghệ sĩ nhận được với mỗi lượt nghe bài hát của họ là:
+              {
+                isUpdatePhi ? <>
+                  <input type="number" value={valueUpdate} placeholder={phimoiluotnghe} className='bg-[#1E1E1E] outline-none p-1' autoFocus onChange={(event) => setValueUpdate(event.target.value)} />
+                  <Button onClick={handleUpdatePhi} type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F]'>Lưu</Button>
+                </> : <>
+                  <span className='text-lg font-bold text-[#EB2272]'> {phimoiluotnghe}đ</span>
+                  <Button onClick={() => setIsUpdatePhi(true)} type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F]'>Thay đổi</Button>
+                </>
+
+              }
+
+
+
+            </div>
+          )
+        }
+
+        <div className='w-full h-[100%] bg-[#1E1E1E]'>
+          <Bar
+            ref={chartRef} // Tham chiếu đến canvas
+            data={chartData}
+            options={handleClickColBar} />
+        </div>
+
+        {
+          dayClicked != '' ? (
+            <div className="w-full h-fit bg-[#1E1E1E] my-2 p-2">
+              <div className='flex justify-center text-lg font-bold'>Chi tiết của ngày {dayClicked}</div>
+              {
+
+                (() => {
+                  switch (indexLoaiSelected) {
+
+                    case 1:
+
+                      return <ItemDoanhThuQuangCao />
+
+                    default:
+                      return null;
+                  }
+                })()
+              }
+            </div>
+          ) : <div className="w-full h-fit bg-[#1E1E1E] my-2 p-2">Click vào cột để xem chi tiết</div>
+        }
       </div>
+
     </div>
   );
 };

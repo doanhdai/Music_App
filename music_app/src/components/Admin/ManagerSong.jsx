@@ -16,7 +16,7 @@ import EditSongModal from "../../pages/artist/components/EditSongModal";
 import { PlayerContext } from "../../context/PlayerContext";
 
 const ManagerSong = () => {
-  const { songsData } = useContext(PlayerContext);
+  const { songsData, formatDate } = useContext(PlayerContext);
   const [selectedSong, setSelectedSong] = useState(null);
   const [baihat, setSong] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,6 +27,7 @@ const ManagerSong = () => {
   const [filterStatus, setFilterStatus] = useState("All_status");
 
   useEffect(() => {
+    alert(formatDate('2024-09-18 00:00:00'));
     setSong(songsData);
   }, [songsData]);
   const actionList = {
@@ -179,17 +180,15 @@ const ManagerSong = () => {
           <div className="flex space-x-5">
             <div
               onClick={() => handleClickStatusChange("edit")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
               onClick={() => handleClickStatusChange("delete")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdDeleteOutline size={20} />
             </div>
@@ -214,27 +213,26 @@ const ManagerSong = () => {
           </div>
           <hr />
           <div className="overflow-y-auto h-[440px]">
-            {baihat.map((item, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
-                onClick={() => handleClickedSongItem(currentActionType, item)}
-              >
-                <p className="text-white">{item.ma_bai_hat}</p>
-                <p className="text-[15px] flex items-center">
-                  <img
-                    className="inline w-10 mr-2"
-                    src={item.hinh_anh}
-                  />
-                  {item.ten_bai_hat}
-                </p>
-                <p className="text-[15px] hidden sm:block">Ngày cuối</p>
-                <p className="text-[15px]">{item.ngay_phat_hanh}</p>
-                <p className="flex ml-7">
-                  <CiUnlock />
-                </p>
-              </div>
-            ))}
+            {songsData
+              .filter((item) => item.chat_luong === "Thấp")
+              .map((item, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
+                  onClick={() => handleClickedSongItem(currentActionType, item)}
+                >
+                  <p className="text-white">{item.ma_bai_hat}</p>
+                  <p className="text-[15px] flex items-center">
+                    <img className="inline w-10 mr-2" src={item.hinh_anh} />
+                    {item.ten_bai_hat}
+                  </p>
+                  <p className="text-[15px] hidden sm:block">Ngày cuối</p>
+                  <p className="text-[15px]">{item.ngay_phat_hanh}</p>
+                  <p className="flex ml-7">
+                    <CiUnlock />
+                  </p>
+                </div>
+              ))}
           </div>
         </div>
       )}
