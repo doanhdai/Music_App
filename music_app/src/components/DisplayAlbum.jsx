@@ -23,23 +23,10 @@ const DisplayAlbum = () => {
   const [detailAlbum, setDetailAlbum] = useState([]);
   const [songsAlbum, setSongsAlbum] = useState([]);
   const [likedSongs, setLikedSongs] = useState({});
-  const [accLike, setAccLike] = useState([]);
-
-  const getSongByAlbumsData = async () => {
-    try {
-      const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
-      setDetailAlbum(response.data.album);
-      setSongsAlbum(response.data.album.songs);
-      console.log(response.data.album.songs);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getSongByAlbumsData();
-    getAccLikesData();
-  }, []);
+  const [likeAlbum, setLikeAlbum] = useState({});
+  const [accLikeSong, setAccLikeSong] = useState([]);
+  // const [accLikeAlbum, setAccLikeAlbum] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
 
   const toggleMenu = (songId) => {
     setMenuSongId(menuSongId === songId ? null : songId);
@@ -48,34 +35,49 @@ const DisplayAlbum = () => {
 
   const closeMenu = () => setMenuSongId(null);
 
-  const [isFavourite, setIsFavourite] = useState(false);
-
-  const handleFavourite = () => {
-    setIsFavourite(!isFavourite);
+  const getSongByAlbumsData = async () => {
+    try {
+      const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
+      setDetailAlbum(response.data.album);
+      setSongsAlbum(response.data.album.songs);
+      // console.log(response.data.album);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    getSongByAlbumsData();
+    getAccLikesData();
+    fetchLikedAlbum();
+  }, []);
+
   const getAccLikesData = async () => {
     try {
       const response = await axios.get(`${url_api}/api/song-likes`);
-      setAccLike(response.data);
+      setAccLikeSong(response.data);
       console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     const likedFromStorage = {};
-    accLike.forEach((like) => {
+    accLikeSong.forEach((like) => {
       if (like.ma_tk === "ACC0006") {
         likedFromStorage[like.ma_bai_hat] = true;
       }
     });
 
     setLikedSongs(likedFromStorage);
-  }, [accLike]);
-  const handleLike = async (ma_bai_hat) => {
-    const isLiked = likedSongs[ma_bai_hat];
+  }, [accLikeSong]);
 
-    if (!isLiked) {
+  // hàm sử lí yêu thích bài hát
+  const handleLikeSong = async (ma_bai_hat) => {
+    const isLikedSong = likedSongs[ma_bai_hat];
+
+    if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
 
       try {
@@ -101,6 +103,36 @@ const DisplayAlbum = () => {
         console.error("Lỗi khi bỏ like bài hát:", error);
         setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
       }
+    }
+  };
+
+  const fetchLikedAlbum = async () => {
+    try {
+      const response = await axios.get(`${url_api}/api/albums-likes/ACC0006`);
+      const likedAlbums = response.data.data || [];
+      setLikeAlbum(likedAlbums.some((album) => album.ma_album === id));
+    } catch (error) {
+      console.error("Error fetching liked albums:", error);
+    }
+  };
+  const toggleLikeAlbum = async () => {
+    const newLikeState = !likeAlbum;
+    setLikeAlbum(newLikeState);
+
+    try {
+      if (newLikeState) {
+        await axios.post(`${url_api}/api/albums/like`, {
+          ma_tk: "ACC0006",
+          ma_album: id,
+        });
+      } else {
+        await axios.delete(`${url_api}/api/albums/unlike`, {
+          data: { ma_tk: "ACC0006", ma_album: id },
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling like for album:", error);
+      setLikeAlbum(!newLikeState);
     }
   };
 
@@ -135,8 +167,8 @@ const DisplayAlbum = () => {
               <FaPlay onClick={() => playWithId(id)} />
             )}
           </button>
-          <button onClick={handleFavourite}>
-            {isFavourite ? (
+          <button onClick={toggleLikeAlbum}>
+            {likeAlbum ? (
               <FaHeart color="red" size={30} />
             ) : (
               <FaRegHeart size={30} />
@@ -235,7 +267,7 @@ const DisplayAlbum = () => {
             )}
           </div>
           <div className="text-[15px] flex justify-center relative">
-            <button onClick={() => handleLike(item.ma_bai_hat)}>
+            <button onClick={() => handleLikeSong(item.ma_bai_hat)}>
               {!likedSongs[item.ma_bai_hat] ? (
                 <FaRegHeart size={20} />
               ) : (

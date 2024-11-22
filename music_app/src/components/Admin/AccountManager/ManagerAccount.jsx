@@ -21,7 +21,7 @@ const ManagerAccount = () => {
   const [filterRole, setFilterRole] = useState("All_role");
   const [filterStatus, setFilterStatus] = useState("All_status");
 
-  const maskPassword = (password) => "*".repeat(password.length);
+  // const maskPassword = (password) => "*".repeat(password.length);
   useEffect(() => {
     setAccounts(accountsData);
   }, [accountsData]);
@@ -263,7 +263,7 @@ const ManagerAccount = () => {
                     </Link>
                     <p className="text-[15px]">{item.email}</p>
                     <p className="text-[15px] hidden sm:block">
-                      {maskPassword(item.mat_khau)}
+                      {(item.mat_khau)}
                     </p>
                     <p className="text-[15px]">MCK</p>
                     <p className="text-[15px]">{formatDate(item.ngay_tao)}</p>

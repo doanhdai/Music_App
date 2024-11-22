@@ -12,11 +12,12 @@ import { MdOutlineEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
 import { assets, songData2 } from "../../assets/assets";
 import { Link } from "react-router-dom";
+import { formatDate } from "../../utils";
 import EditSongModal from "../../pages/artist/components/EditSongModal";
 import { PlayerContext } from "../../context/PlayerContext";
 
 const ManagerSong = () => {
-  const { songsData, formatDate } = useContext(PlayerContext);
+  const { songsData } = useContext(PlayerContext);
   const [selectedSong, setSelectedSong] = useState(null);
   const [baihat, setSong] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,10 +27,7 @@ const ManagerSong = () => {
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All_status");
 
-  useEffect(() => {
-    alert(formatDate('2024-09-18 00:00:00'));
-    setSong(songsData);
-  }, [songsData]);
+
   const actionList = {
     delete: " xóa",
     edit: "chỉnh sửa",
@@ -124,14 +122,6 @@ const ManagerSong = () => {
   console.log("Điều kiện lọc:", searchTerm);
   console.log("Kết quả sau lọc:", filteredSongs());
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  };
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between">
@@ -189,15 +179,17 @@ const ManagerSong = () => {
           <div className="flex space-x-5">
             <div
               onClick={() => handleClickStatusChange("edit")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
-                }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
+                currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
+              }`}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
               onClick={() => handleClickStatusChange("delete")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
-                }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
+                currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
+              }`}
             >
               <MdDeleteOutline size={20} />
             </div>
@@ -205,7 +197,7 @@ const ManagerSong = () => {
         </div>
       </div>
 
-      {baihat.length === 0 ? (
+      {filteredSongs().length === 0 ? (
         <div className="flex items-center h-[500px] justify-center text-center text-white">
           Không có bài hát bạn tìm
         </div>
@@ -236,7 +228,9 @@ const ManagerSong = () => {
                     {item.ten_bai_hat}
                   </p>
                   <p className="text-[15px] hidden sm:block">Ngày cuối</p>
-                  <p className="text-[15px]">{formatDate(item.ngay_phat_hanh)}</p>
+                  <p className="text-[15px]">
+                    {formatDate(item.ngay_phat_hanh)}
+                  </p>
                   <p className="flex ml-7">
                     <CiUnlock />
                   </p>
