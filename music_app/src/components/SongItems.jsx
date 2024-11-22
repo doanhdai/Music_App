@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PlayerContext } from '../context/PlayerContext'
 
-const SongItems = ({id, name, artistName, img}) => {
+const SongItems = ({ name, artistName,id, img}) => {
   const navigate= useNavigate()
   const{playWithId} = useContext(PlayerContext)
   return (
