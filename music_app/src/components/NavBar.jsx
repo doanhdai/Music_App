@@ -1,6 +1,12 @@
-import React, { startTransition, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  startTransition,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { IoIosSearch } from "react-icons/io";
-import { assets, } from "../assets/assets";
+import { assets } from "../assets/assets";
 import { FaRegBell } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiLogin } from "react-icons/ci";
@@ -12,7 +18,7 @@ import { PlayerContext } from "../context/PlayerContext";
 
 const NavBar = () => {
   // login
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -54,14 +60,23 @@ const NavBar = () => {
         .includes(searchTermNoAccent)
     );
     const albumResults = (albumsData || []).filter((album) =>
-      removeVietnamese(album.ten_album).toLowerCase().includes(searchTermNoAccent)
+      removeVietnamese(album.ten_album)
+        .toLowerCase()
+        .includes(searchTermNoAccent)
     );
     const songResults = (songsData || []).filter((song) =>
-      removeVietnamese(song.ten_bai_hat).toLowerCase().includes(searchTermNoAccent)
+      removeVietnamese(song.ten_bai_hat)
+        .toLowerCase()
+        .includes(searchTermNoAccent)
     );
 
     navigate("/search", {
-      state: { artistResults, albumResults, songResults, searchTerm: trimmedTerm },
+      state: {
+        artistResults,
+        albumResults,
+        songResults,
+        searchTerm: trimmedTerm,
+      },
     });
   };
 
@@ -113,20 +128,25 @@ const NavBar = () => {
 
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <p onClick={() => navigate(config.routes.PremiumSection)} className="bg-[#E0066F] text-white text-[15px] px-4 py-2 rounded-3xl hidden md:block cursor-pointer">Khám phá Primeum</p>
+            <p
+              onClick={() => navigate(config.routes.PremiumSection)}
+              className="bg-[#E0066F] text-white text-[15px] px-4 py-2 rounded-3xl hidden md:block cursor-pointer"
+            >
+              Khám phá Primeum
+            </p>
             <div className="relative inline-block">
               <FaRegBell size={25} />
               <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
             </div>
-            <div
-              className="relative"
-              onMouseEnter={() => setIsOpen(true)}
-            >
+            <div className="relative" onMouseEnter={() => setIsOpen(true)}>
               <p className="bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center">
-                <img className="h-10 rounded-full" src={account.avatar} />
+                {/* <img className="h-10 rounded-full" src={account.avatar} /> */}
               </p>
               {isOpen && (
-                <div onMouseLeave={() => setIsOpen(false)} className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48">
+                <div
+                  onMouseLeave={() => setIsOpen(false)}
+                  className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48"
+                >
                   <ul className="text-white">
                     <li
                       className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
@@ -136,7 +156,9 @@ const NavBar = () => {
                         });
                       }}
                     >
-                      <div className="mr-3"><IoSettingsOutline size={20} /></div>
+                      <div className="mr-3">
+                        <IoSettingsOutline size={20} />
+                      </div>
                       Quản lý
                     </li>
                     <li
@@ -147,18 +169,22 @@ const NavBar = () => {
                         });
                       }}
                     >
-                      <div className="mr-3"><RiAccountCircleLine size={20} /></div>
+                      <div className="mr-3">
+                        <RiAccountCircleLine size={20} />
+                      </div>
                       Tài khoản
                     </li>
                     <li
                       className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
                       onClick={() => {
-                        localStorage.removeItem('account');
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = '/';
+                        localStorage.removeItem("account");
+                        localStorage.removeItem("isLoggedIn");
+                        window.location.href = "/";
                       }}
                     >
-                      <div className="mr-3" ><CiLogin size={20} /></div>
+                      <div className="mr-3">
+                        <CiLogin size={20} />
+                      </div>
                       Đăng xuất
                     </li>
                   </ul>
@@ -166,7 +192,6 @@ const NavBar = () => {
               )}
             </div>
           </div>
-
         ) : (
           <div className="flex items-center gap-4">
             <p
@@ -195,9 +220,6 @@ const NavBar = () => {
             </p>
           </div>
         )}
-
-
-
       </div>
     </div>
   );

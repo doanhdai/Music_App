@@ -10,7 +10,7 @@ const DisplayHome = () => {
   const navigate = useNavigate();
 
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
-  console.log(songsData)
+  // console.log(songsData)
   return (
     <>
       {/* nghệ sĩ */}
@@ -104,7 +104,7 @@ const DisplayHome = () => {
               <SongItems
                 key={index}
                 name={item.ten_bai_hat}
-                desc={item.ten_bai_hat}
+                artistName={item.artist}
                 id={item.ma_bai_hat}
                 img={item.hinh_anh}
               />

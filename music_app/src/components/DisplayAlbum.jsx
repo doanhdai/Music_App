@@ -3,21 +3,28 @@ import { FaPlay, FaRegHeart } from "react-icons/fa";
 import { IoIosMore, IoMdPause } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { albumsData, assets, songsData } from "../assets/assets";
+import { IoMdMore } from "react-icons/io";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdArrowCircleDown } from "react-icons/md";
 import { PlayerContext } from "../context/PlayerContext";
 import { FaHeart } from "react-icons/fa";
+import { formatDate } from "../utils";
+import { IoMdHeartEmpty } from "react-icons/io";
 import axios from "axios";
+import { BsPlusLg } from "react-icons/bs";
 const DisplayAlbum = () => {
-  const { playWithId, playStatus, pause, track } = useContext(PlayerContext);
+  const { playWithId, playStatus, pause, track, playlistsData } =
+    useContext(PlayerContext);
   const url_api = "http://localhost:8000";
 
   const { id } = useParams();
   const [hoveredSong, setHoveredSong] = useState(null);
   const [menuSongId, setMenuSongId] = useState(null);
   const [detailAlbum, setDetailAlbum] = useState([]);
-  const [songsAlbum, setSongsAlbum] = useState([])
- 
+  const [songsAlbum, setSongsAlbum] = useState([]);
+  const [likedSongs, setLikedSongs] = useState({});
+  const [accLike, setAccLike] = useState([]);
+
   const getSongByAlbumsData = async () => {
     try {
       const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
@@ -29,9 +36,9 @@ const DisplayAlbum = () => {
     }
   };
 
-
   useEffect(() => {
     getSongByAlbumsData();
+    getAccLikesData();
   }, []);
 
   const toggleMenu = (songId) => {
@@ -45,6 +52,56 @@ const DisplayAlbum = () => {
 
   const handleFavourite = () => {
     setIsFavourite(!isFavourite);
+  };
+  const getAccLikesData = async () => {
+    try {
+      const response = await axios.get(`${url_api}/api/song-likes`);
+      setAccLike(response.data);
+      // console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    const likedFromStorage = {};
+    accLike.forEach((like) => {
+      if (like.ma_tk === "ACC0006") {
+        likedFromStorage[like.ma_bai_hat] = true;
+      }
+    });
+
+    setLikedSongs(likedFromStorage);
+  }, [accLike]);
+  const handleLike = async (ma_bai_hat) => {
+    const isLiked = likedSongs[ma_bai_hat];
+
+    if (!isLiked) {
+      setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
+
+      try {
+        await axios.post(`${url_api}/api/song-likes`, {
+          ma_tk: "ACC0006",
+          ma_bai_hat: ma_bai_hat,
+        });
+      } catch (error) {
+        console.error("Lỗi khi like bài hát:", error);
+        setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
+      }
+    } else {
+      setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
+
+      try {
+        await axios.delete(`${url_api}/api/song-likes`, {
+          data: {
+            ma_tk: "ACC0006",
+            ma_bai_hat: ma_bai_hat,
+          },
+        });
+      } catch (error) {
+        console.error("Lỗi khi bỏ like bài hát:", error);
+        setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
+      }
+    }
   };
 
   return (
@@ -95,7 +152,7 @@ const DisplayAlbum = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr_1.5fr_1fr] mt-7 mb-4 pl-2 text-[#fff]">
+      <div className="grid grid-cols-5 sm:grid-cols-[4.5fr_3fr_2fr_1fr_1.5fr_0.5fr_1.5fr] mt-7 mb-4 pl-2 text-[#fff]">
         <p>
           <b className="mr-4">#</b>
           Title
@@ -104,7 +161,8 @@ const DisplayAlbum = () => {
         <p className="hidden sm:block">Ngày thêm</p>
         <p>Lượt nghe</p>
         <img className="m-auto w-4" src={assets.clock_icon} alt="Clock Icon" />
-        <p className="flex justify-center">Thêm</p>
+        <p></p>
+        <p className="flex justify-center">Yêu thích</p>
       </div>
 
       <hr />
@@ -112,7 +170,7 @@ const DisplayAlbum = () => {
       {songsAlbum.map((item, index) => (
         <div
           key={index}
-          className="grid grid-cols-7 sm:grid-cols-[0.3fr_2.8fr_3fr_2fr_2fr_1.5fr_1fr] mt-10 mb-4 pl-2 text-[#fff] items-center hover:bg-[#ffffff2b] cursor-pointer"
+          className="grid grid-cols-7 sm:grid-cols-[0.5fr_4fr_3fr_2fr_1fr_1.5fr_0.5fr_1.5fr] mt-10 mb-4 pl-2 text-[#fff] items-center hover:bg-[#ffffff2b] cursor-pointer"
           onMouseEnter={() => setHoveredSong(index)}
           onMouseLeave={() => setHoveredSong(null)}
         >
@@ -133,35 +191,57 @@ const DisplayAlbum = () => {
               )}
             </p>
           )}
-          <Link to="/song/1" className="text-white flex items-center pr-2">
-            <img className="inline w-10 mx-4 " src={item.hinh_anh} />
+          <Link
+            to={`/song/${item.ma_bai_hat}`}
+            className="text-white flex items-center pr-2"
+          >
+            <img className="inline w-10 mr-4 " src={item.hinh_anh} />
             {item.ten_bai_hat}
           </Link>
           <p className="text-[15px]">{detailAlbum.ten_album}</p>
-          <p className="text-[15px] hidden sm:block">{item.ngay_phat_hanh}</p>
+          <p className="text-[15px] hidden sm:block">
+            {formatDate(item.ngay_phat_hanh)}
+          </p>
           <p className="text-[15px]">{item.luot_nghe}</p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
           <div className="text-[15px] flex justify-center relative">
+            {hoveredSong === index && (
+              <IoAddCircleOutline
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleMenu(item.ma_bai_hat);
+                }}
+                color="#00FF00"
+                size={20}
+              />
+            )}
             {menuSongId === item.ma_bai_hat && (
-              <div className="absolute bottom-8 right-0 bg-gray-800 text-white p-2 rounded shadow-lg !z-50 w-[250px]">
+              <div className="absolute bottom-[40px] right-[10px] bg-gray-800 text-white p-2 rounded shadow-lg w-[250px] z-50">
                 <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2">
-                  {" "}
-                  <IoAddCircleOutline size={20} />
-                  Thêm vào danh sách phát
+                  <BsPlusLg size={27} />
+                  Thêm và tạo mới playlist
                 </div>
-                <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2">
-                  {" "}
-                  <MdArrowCircleDown size={20} />
-                  Tải xuống
-                </div>
+                <hr />
+                {playlistsData.map((playlist, index) => (
+                  <div
+                    key={index}
+                    className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+                  >
+                    <img className="h-10" src={assets.mck} />
+                    <span>{playlist.ten_playlist}</span>
+                  </div>
+                ))}
               </div>
             )}
-            <IoIosMore
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleMenu(item.id);
-              }}
-            />
+          </div>
+          <div className="text-[15px] flex justify-center relative">
+            <button onClick={() => handleLike(item.ma_bai_hat)}>
+              {!likedSongs[item.ma_bai_hat] ? (
+                <FaRegHeart size={20} />
+              ) : (
+                <FaHeart color="red" size={20} />
+              )}
+            </button>
           </div>
         </div>
       ))}

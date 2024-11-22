@@ -141,7 +141,14 @@ const ManagerAccount = () => {
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
 
+      return `${day}/${month}/${year}`;
+    };
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between items-center">
@@ -259,7 +266,7 @@ const ManagerAccount = () => {
                       {maskPassword(item.mat_khau)}
                     </p>
                     <p className="text-[15px]">MCK</p>
-                    <p className="text-[15px]">{item.ngay_tao}</p>
+                    <p className="text-[15px]">{formatDate(item.ngay_tao)}</p>
                     <p className="text-[15px]">
                       {displayRole(item.ma_phan_quyen)}
                     </p>
