@@ -3,11 +3,11 @@ import { CiCirclePlus } from "react-icons/ci";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { AdminContext } from '../../context/AdminContext';
 import axios from 'axios';
+import { getFunctionalDetail } from '../../services/UserServices';
 
-
+// const quyenList = (await axios.get("http://127.0.0.1:8000/api/decentralizations")).data;
+// const chucnangList = (await axios.get("http://127.0.0.1:8000/api/functionns")).data;
 const url = "http://localhost:8000";
-
-
 
 const chitietchucnang = [
   { ma_chuc_nang: 'FUNC0001', xem: 1, them: 1, sua: 1, xoa: 1 },
@@ -54,6 +54,70 @@ const ManagerQuyen = () => {
   const [valueInputAdd, setValueInputAdd] = useState("");
   const [errorInputAdd, setError] = useState("");
   const [chitietquyenAdd, setChitietquyenAdd] = useState([]);
+
+
+  const createQuyen = async (valueSentAPI) => {
+    try {
+      // Gửi yêu cầu POST tới API store để tạo phân quyền và chức năng
+      const response = await axios.post(`${url}/api/decentralizations`, valueSentAPI);
+  
+      // Hiển thị kết quả sau khi tạo thành công
+      console.log('Cập nhật phân quyền và chức năng thành công:', response.data);
+  
+      // Lưu mã phân quyền vào localStorage
+      return response.data.decentralization.ma_phan_quyen;
+    } catch (error) {
+      console.error('Lỗi khi gọi API:', error.response?.data || error.message);
+      alert('Có lỗi xảy ra khi tạo phân quyền và chức năng!');
+    }
+  };
+
+  // xoa
+  const deleteQuyen = async (maPhanQuyen) => {
+    try {
+        const response = await axios.delete(`${url}/api/decentralizations/${maPhanQuyen}`);
+        console.log('Xóa phân quyền thành công:', response.data);
+    } catch (error) {
+        console.error('Lỗi khi xóa phân quyền:', error.response?.data || error.message);
+    }
+};
+  // updataphanquyen
+  const updatePhanQuyen = async (dataArray) => {
+    try {
+        for (const item of dataArray) {
+            const { ma_phan_quyen, ma_chuc_nang, xem, them, sua, xoa } = item;
+
+            // Gửi yêu cầu cập nhật từng bản ghi
+            const response = await axios.put(`${url}/api/functionalDetail/update`, {
+                ma_phan_quyen,
+                ma_chuc_nang,
+                xem,
+                them,
+                sua,
+                xoa,
+            });
+            console.log(`Updated: ${ma_chuc_nang}`, response.data);
+        }
+        console.log("Tất cả bản ghi đã được cập nhật.");
+      } catch (error) {
+          console.error("Lỗi khi cập nhật:", error.response?.data || error.message);
+      }
+  };
+  const updateTenQuyenHan = async (maPhanQuyen, tenQuyenHanMoi) => {
+    try {
+        const response = await axios.put(`${url}/api/updateNameDecentralization/${maPhanQuyen}`, {
+            ten_quyen_han: tenQuyenHanMoi,
+        });
+
+        if (response.data.success) {
+            console.log(response.data.message);
+        } else {
+            console.error(response.data.message);
+        }
+    } catch (error) {
+        console.error('Lỗi khi cập nhật tên quyền hạn:', error);
+    }
+};
 
   const getChitietquyen = async (ma_phan_quyen) => {
     try {
@@ -109,10 +173,13 @@ const ManagerQuyen = () => {
 
   const handleDeleteQuyen = () => {
     if (!(accountsData.some((item) => item.ma_phan_quyen == currentQuyen))) {
-      //cal api o day
-      //xóa là xóa khoi sql luon, khon gphai cap nhat trang thai, tại đã có kieerm tra dieu khien coi có tài khoản nào thuộc quyền này chưa?
       console.log('Mã quyền gửi xuống BE xóa');
       console.log(currentQuyen);
+      if (window.confirm('Bạn có chắc chắn muốn xóa phân quyền này?')) {
+        deleteQuyen(currentQuyen);
+      }
+      //xóa là xóa khoi sql luon, khon gphai cap nhat trang thai, tại đã có kieerm tra dieu khien coi có tài khoản nào thuộc quyền này chưa?
+      
       //
       setQuyenList((prev) => prev.filter((item) => item.ma_phan_quyen != currentQuyen));
       setCurrentQuyen(quyenList[0].ma_phan_quyen);
@@ -355,15 +422,15 @@ const ManagerQuyen = () => {
     if (!flagExist) {
       const timeCreated = getCurrentDateTime();
       //call api luu tru o day
-      const valueSentAPI = [{
-        ten_quyen_han: valueInputAdd,
-        ngay_tao: timeCreated,
-        chi_tiet_phan_quyen: chitietquyenAdd
-      }]
+      const valueSentAPI = {
+        ten_quyen_han: valueInputAdd,   // Tên quyền hạn
+        ngay_tao: timeCreated,          // Ngày tạo
+        chi_tiet_phan_quyen: chitietquyenAdd  // Mảng chi tiết quyền hạn
+      };
       console.log('Dữ liệu gửi xuống BE thêm');
-      console.log(valueSentAPI);
+      let ma_phan_quyen = createQuyen(valueSentAPI);
       //
-      let ma_phan_quyen = 'Q4';//ma này lấy mặc định để làm thôi, sau khi add thì api trả về cái mã quyền mới xong gắn vào biến này la được
+   //   let ma_phan_quyen  = 'Q4';//ma này lấy mặc định để làm thôi, sau khi add thì api trả về cái mã quyền mới xong gắn vào biến này la được
       let newQuyen = { ma_phan_quyen: ma_phan_quyen, ten_quyen_han: valueInputAdd, ngay_tao: timeCreated, tinh_trang: 1 };
       setQuyenList((prev) => [...prev, newQuyen]);
       const updatedChitietquyenAdd = chitietquyenAdd.map((item) => ({
@@ -402,7 +469,9 @@ const ManagerQuyen = () => {
           chi_tiet_phan_quyen: chitietquyenUpdate
         }]
         console.log('Dữ liệu gửi xuống BE sửa');
-        console.log(valueSentAPI);
+        const firstMaPhanQuyen = chitietquyenUpdate[0]?.ma_phan_quyen;
+        valueInputAdd ? updateTenQuyenHan(firstMaPhanQuyen, valueInputAdd) : null;
+        updatePhanQuyen(chitietquyenUpdate);
         //
         setFilteredChitietquyenList(chitietquyenUpdate);
         if (valueInputAdd != '') {
@@ -509,6 +578,22 @@ const ManagerQuyen = () => {
     setBgCover(stateBgCover);
   }, [stateBgCover, setBgCover]);
 
+  // kiểm tra quyền xem,them,sua,xoa
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const maPhanQuyen = 'AUTH0001'; // Thay bằng mã thực tế
+        const maChucNang = 'FUNC0001'; // Thay bằng mã thực tế
+        const result = await getFunctionalDetail(maPhanQuyen, maChucNang);
+        console.log(result);
+      } catch (error) {
+        console.error('Lỗi khi lấy chi tiết phân quyền:', error);
+      }
+    };
+
+    fetchDetails();
+  }, []);
   return (
     <div className='w-full h-full bg-black p-3'>
       <div className='flex justify-between '>

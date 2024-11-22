@@ -41,4 +41,19 @@ const updateUserAPI = (ma_tk,name,avatar) =>{
     });
 }
 
-export {loginAPI, createAccountAPI, uploadImageAPI,updateAccountAPI,updateUserAPI};
+const getFunctionalDetail = async (maPhanQuyen, maChucNang) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/functional-details`, {
+        params: {
+          ma_phan_quyen: maPhanQuyen,
+          ma_chuc_nang: maChucNang,
+        },
+      });
+      return response.data; // Dữ liệu trả về từ API
+    } catch (error) {
+      console.error('Lỗi khi gọi API getFunctionalDetail:', error.response?.data || error.message);
+      throw error; // Ném lỗi để xử lý bên ngoài
+    }
+  };
+
+export {loginAPI, createAccountAPI, uploadImageAPI,updateAccountAPI,updateUserAPI,getFunctionalDetail};
