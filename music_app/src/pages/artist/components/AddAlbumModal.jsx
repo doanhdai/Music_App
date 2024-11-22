@@ -49,16 +49,26 @@ const AlbumUpLoad = ({closeModal}) => {
     setSelectedSongs({...selectedItems });
   };
   const imgData = ImgRef.current?.getData()
+  
+  if (imgData){console.log("co anh") }else {console.log("no img data")}
+  
   const formData = {
     "ten_album": albumName,
-    "hinh_anh": imgData,
+    "hinh_anh": "https://media.istockphoto.com/id/2160972981/vi/anh/hai-con-ong-thu-th%E1%BA%ADp-m%E1%BA%ADt-hoa-t%E1%BB%AB-m%E1%BB%99t-b%C3%B4ng-hoa-m%C3%A0u-v%C3%A0ng.jpg?s=1024x1024&w=is&k=20&c=Jr_JjNJSSUsxVoCDKN_EB2d8rvTXYSRjRkTG4CxOB3A=",
     "songs": selectedSongs
+    // "songs" : [{
+    //   "ma_bai_hat": "BH0003",
+    //   "ten_bai_hat": "Những ngôi sao xa xôi",
+    //   "thoi_luong": 3.5,
+    //   "ngay_phat_hanh": "2023-09-18 00:00:00",
+    //   "ma_album": null
+    // }]
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
     try {
-      const response = await fetch(`/albums/${currentArtistId}`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/albums/${currentArtistId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -159,8 +169,6 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
     // dataKey is the key of data when api return result ex: { songs: [....]}
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedItems, setSelectedItems] = useState({});
-    const [searchResults, setSearchResults] = useState([]);
     let count = 0;
     
     const toggleDropdown = () => {
