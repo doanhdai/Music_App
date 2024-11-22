@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import BackBtn from "./BackBtn";
 import InputItem from "./InputItem";
 import AuthBtn from "./AuthBtn";
+import Notification from './Notification';
 import { createAccountAPI, uploadImageAPI } from "../../services/UserServices";
 
 const SignInfo = () => {
@@ -11,11 +12,15 @@ const SignInfo = () => {
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('http://127.0.0.1:8000/storage/images/AvatarDefault.png');
   const [imagePreview, setImagePreview] = useState(null);
-
+  const [message, setMessage] = useState('');
   const uploadImage = async (formData) =>{
     try {
+
+      
       const resImage = await uploadImageAPI(formData)
       console.log('Path image:', resImage.data.path);
+
+
       setImageUrl(resImage.data.path);
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -26,6 +31,7 @@ const SignInfo = () => {
     try {
       const response = await createAccountAPI(accountData);
       console.log(response.data);
+      setMessage('Đăng ký tài khoản thành công rồi yeah');
     } catch (error) {
       console.error('There was an error creating the user:', error.response.data);
     }
@@ -46,7 +52,7 @@ const SignInfo = () => {
       ten_user: ten_user,
       email: localStorage.getItem('emailSign'),
       password: localStorage.getItem('passwordSign'),
-      avatar: imageUrl
+      anh_dai_dien: imageUrl
     };
     
     createAccount(account);
@@ -58,6 +64,11 @@ const SignInfo = () => {
 
   return (
     <form className="Auth-form" onSubmit={handleSubmit}>
+    <Notification 
+        message={message} 
+        link="/" 
+        buttonText="Về trang chủ" 
+      />
       <span
         className="logo-item"
         onClick={() => {
@@ -95,7 +106,7 @@ const SignInfo = () => {
         <div><img src={imagePreview ? imagePreview : imageUrl} alt="Uploaded" className="w-[100px] h-[100px] mt-5 mx-auto object-cover" /></div>
       </div>
       <AuthBtn
-        title="Tiếp theo"
+        title="Hoàn thành đăng ký"
         // {...(validatePassword(password) && {
         // link: "/authentication/sign-in/signInfo",
         // keyLocal: "passwordSign",

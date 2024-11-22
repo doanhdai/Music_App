@@ -24,7 +24,8 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
-  const count = JSON.parse(localStorage.getItem("account"));
+  const account= JSON.parse(localStorage.getItem('account'));
+
 
   const removeVietnamese = (str) => {
     if (typeof str !== "string") {
