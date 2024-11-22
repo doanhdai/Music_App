@@ -4,14 +4,13 @@ import { Outlet } from 'react-router-dom';
 import SideBarAdmin from '../../components/Admin/SideBarAdmin';
 import AdminContextProvider, { AdminContext } from '../../context/AdminContext';
 import CheckAccount from '../CheckAccount';
-
 const AdminContent = () => {
     const { isBgCover } = useContext(AdminContext);
-    
+
     return (
-        
+
         <>
-        {/* <CheckAccount ma_quyen="AUTH0001"/> */}
+            {/* <CheckAccount ma_quyen="AUTH0001"/> */}
             <div className={`h-screen w-screen fixed top-0 left-0 bg-[#A4A298] opacity-25 z-20 ${isBgCover ? 'block' : 'hidden'}`}></div>
             <div className="h-screen bg-black">
                 <div className="h-[100%] flex">

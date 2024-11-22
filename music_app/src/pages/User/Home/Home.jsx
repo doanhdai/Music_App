@@ -28,8 +28,8 @@ const Home = () => {
   const bgColor = isAlbum
     ? albumsData[Number(id)]?.bgColor
     : isArtist
-    ? artistData[Number(id)]?.bgColor
-    : "#121212";
+      ? artistData[Number(id)]?.bgColor
+      : "#121212";
 
   useEffect(() => {
     if (displayColor.current) {
