@@ -60,10 +60,10 @@ const ManagerQuyen = () => {
     try {
       // Gửi yêu cầu POST tới API store để tạo phân quyền và chức năng
       const response = await axios.post(`${url}/api/decentralizations`, valueSentAPI);
-  
+
       // Hiển thị kết quả sau khi tạo thành công
       console.log('Cập nhật phân quyền và chức năng thành công:', response.data);
-  
+
       // Lưu mã phân quyền vào localStorage
       return response.data.decentralization.ma_phan_quyen;
     } catch (error) {
@@ -75,49 +75,49 @@ const ManagerQuyen = () => {
   // xoa
   const deleteQuyen = async (maPhanQuyen) => {
     try {
-        const response = await axios.delete(`${url}/api/decentralizations/${maPhanQuyen}`);
-        console.log('Xóa phân quyền thành công:', response.data);
+      const response = await axios.delete(`${url}/api/decentralizations/${maPhanQuyen}`);
+      console.log('Xóa phân quyền thành công:', response.data);
     } catch (error) {
-        console.error('Lỗi khi xóa phân quyền:', error.response?.data || error.message);
+      console.error('Lỗi khi xóa phân quyền:', error.response?.data || error.message);
     }
-};
+  };
   // updataphanquyen
   const updatePhanQuyen = async (dataArray) => {
     try {
-        for (const item of dataArray) {
-            const { ma_phan_quyen, ma_chuc_nang, xem, them, sua, xoa } = item;
+      for (const item of dataArray) {
+        const { ma_phan_quyen, ma_chuc_nang, xem, them, sua, xoa } = item;
 
-            // Gửi yêu cầu cập nhật từng bản ghi
-            const response = await axios.put(`${url}/api/functionalDetail/update`, {
-                ma_phan_quyen,
-                ma_chuc_nang,
-                xem,
-                them,
-                sua,
-                xoa,
-            });
-            console.log(`Updated: ${ma_chuc_nang}`, response.data);
-        }
-        console.log("Tất cả bản ghi đã được cập nhật.");
-      } catch (error) {
-          console.error("Lỗi khi cập nhật:", error.response?.data || error.message);
+        // Gửi yêu cầu cập nhật từng bản ghi
+        const response = await axios.put(`${url}/api/functionalDetail/update`, {
+          ma_phan_quyen,
+          ma_chuc_nang,
+          xem,
+          them,
+          sua,
+          xoa,
+        });
+        console.log(`Updated: ${ma_chuc_nang}`, response.data);
       }
+      console.log("Tất cả bản ghi đã được cập nhật.");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật:", error.response?.data || error.message);
+    }
   };
   const updateTenQuyenHan = async (maPhanQuyen, tenQuyenHanMoi) => {
     try {
-        const response = await axios.put(`${url}/api/updateNameDecentralization/${maPhanQuyen}`, {
-            ten_quyen_han: tenQuyenHanMoi,
-        });
+      const response = await axios.put(`${url}/api/updateNameDecentralization/${maPhanQuyen}`, {
+        ten_quyen_han: tenQuyenHanMoi,
+      });
 
-        if (response.data.success) {
-            console.log(response.data.message);
-        } else {
-            console.error(response.data.message);
-        }
+      if (response.data.success) {
+        console.log(response.data.message);
+      } else {
+        console.error(response.data.message);
+      }
     } catch (error) {
-        console.error('Lỗi khi cập nhật tên quyền hạn:', error);
+      console.error('Lỗi khi cập nhật tên quyền hạn:', error);
     }
-};
+  };
 
   const getChitietquyen = async (ma_phan_quyen) => {
     try {
@@ -179,7 +179,7 @@ const ManagerQuyen = () => {
         deleteQuyen(currentQuyen);
       }
       //xóa là xóa khoi sql luon, khon gphai cap nhat trang thai, tại đã có kieerm tra dieu khien coi có tài khoản nào thuộc quyền này chưa?
-      
+
       //
       setQuyenList((prev) => prev.filter((item) => item.ma_phan_quyen != currentQuyen));
       setCurrentQuyen(quyenList[0].ma_phan_quyen);
@@ -430,7 +430,7 @@ const ManagerQuyen = () => {
       console.log('Dữ liệu gửi xuống BE thêm');
       let ma_phan_quyen = createQuyen(valueSentAPI);
       //
-   //   let ma_phan_quyen  = 'Q4';//ma này lấy mặc định để làm thôi, sau khi add thì api trả về cái mã quyền mới xong gắn vào biến này la được
+      //   let ma_phan_quyen  = 'Q4';//ma này lấy mặc định để làm thôi, sau khi add thì api trả về cái mã quyền mới xong gắn vào biến này la được
       let newQuyen = { ma_phan_quyen: ma_phan_quyen, ten_quyen_han: valueInputAdd, ngay_tao: timeCreated, tinh_trang: 1 };
       setQuyenList((prev) => [...prev, newQuyen]);
       const updatedChitietquyenAdd = chitietquyenAdd.map((item) => ({
