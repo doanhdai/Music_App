@@ -28,6 +28,7 @@ const PlayerContextProvider = (props) => {
         currentTime: { second: 0, minute: 0 },
         totalTime: { second: 0, minute: 0 },
     });
+    const [notificationList, setNotificationList] = useState([]);
 
     const getLastNumberFromCode = (code) => {
         const match = code.match(/\d+$/);
