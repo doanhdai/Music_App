@@ -10,17 +10,24 @@ import { assets } from "../assets/assets";
 import { FaRegBell } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiLogin } from "react-icons/ci";
+import { GiLetterBomb } from "react-icons/gi";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../config";
 import ComboIcon from "./Admin/ComboIcon/ComboIcon";
 import { PlayerContext } from "../context/PlayerContext";
 
+
+let thongbaoList = [
+  { ma_tb: "NOTI0001", ten_tb: "Thông báo hệ thống", noi_dung_tb: "Hệ thống sẽ bảo trì vào lúc 23:00 tối nay.", ngay_thong_bao: "2024-11-22 09:00:33", trang_thai: "", ma_tk: "ACC0007" },
+  { ma_tb: "NOTI0002", ten_tb: "Cap nhat tai khoan", noi_dung_tb: "Tai khoan cua ban da chuyen sang quyen nghe si", ngay_thong_bao: "2024-11-22 09:00:33", trang_thai: "", ma_tk: "ACC0007" },
+  { ma_tb: "NOTI0003", ten_tb: "Thanh cong", noi_dung_tb: "Yeu cau duyet bai hat BH0010 da duyet thanh cong", ngay_thong_bao: "2024-11-22 09:00:33", trang_thai: "", ma_tk: "ACC0007" }
+]
 const NavBar = () => {
   // login
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isOpenNotification, setIsOpenNotification] = useState(false);
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
@@ -135,9 +142,29 @@ const NavBar = () => {
             >
               Khám phá Primeum
             </p>
-            <div className="relative inline-block">
-              <FaRegBell size={25} />
-              <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+            <div className="relative w-fit" onMouseEnter={() => setIsOpenNotification(true)} onMouseLeave={() => setIsOpenNotification(false)}>
+              <div>
+                <FaRegBell size={25} />
+                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+              </div>
+
+              {
+                isOpenNotification && (
+                  <div
+                    className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-auto"
+                  >
+                    <ul className="text-white">
+                      <li className="flex gap-2">
+                        <GiLetterBomb className="w-[40px] h-[40px] bg-slate-400" />
+                        <span className="bg-red-600 w-full">
+                          <p>Ten thong bao</p>
+                          <p>Noi dung thong bao</p>
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                )
+              }
             </div>
             <div className="relative" onMouseEnter={() => setIsOpen(true)}>
               <p className="bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center">

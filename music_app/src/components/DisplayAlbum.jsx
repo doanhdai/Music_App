@@ -30,7 +30,7 @@ const DisplayAlbum = () => {
       const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
       setDetailAlbum(response.data.album);
       setSongsAlbum(response.data.album.songs);
-      // console.log(response.data.album);
+      console.log(response.data.album.songs);
     } catch (error) {
       console.log(error);
     }
@@ -57,7 +57,7 @@ const DisplayAlbum = () => {
     try {
       const response = await axios.get(`${url_api}/api/song-likes`);
       setAccLike(response.data);
-      // console.log(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
