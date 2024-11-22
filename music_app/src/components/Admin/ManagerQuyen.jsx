@@ -8,15 +8,6 @@ import axios from 'axios';
 const url = "http://localhost:8000";
 
 
-let chitietquyenList = [
-  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN1', xem: 1, them: 0, sua: 1, xoa: 0 },
-  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN2', xem: 1, them: 0, sua: 0, xoa: 0 },
-  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN3', xem: 1, them: 0, sua: 0, xoa: 0 },
-  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN4', xem: 1, them: 0, sua: 0, xoa: 0 },
-  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN5', xem: 1, them: 0, sua: 0, xoa: 0 },
-  { ma_phan_quyen: 'Q1', ma_chuc_nang: 'CN6', xem: 1, them: 2, sua: 2, xoa: 2 },
-  { ma_phan_quyen: 'Q2', ma_chuc_nang: 'CN1', xem: 1, them: 0, sua: 0, xoa: 0 }
-];
 
 const chitietchucnang = [
   { ma_chuc_nang: 'FUNC0001', xem: 1, them: 1, sua: 1, xoa: 1 },
