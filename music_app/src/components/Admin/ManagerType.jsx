@@ -9,7 +9,6 @@ import axios from 'axios';
 const url = "http://localhost:8000";
 let theloaiList = [];
 
-let theloai_soluongbaihat = []; //dạng ma_the_loai va so_luong_bai_hat
 
 const actionList = {
     add: 'ADD',
@@ -229,7 +228,7 @@ const ManagerType = () => {
     return (
         <div className="mt-2 bg-black h-[100%]">
             {
-                theloaiList.length === 0 ? (<div className='flex justify-center w-full items-center h-full'>Đang tải</div>) :
+                theloaiList.length === 0 ? (<div className="wrap-loader"><span className="loader"></span></div>) :
                     (
                         <>
                             {/* Phần giao diện cho thể loại */}

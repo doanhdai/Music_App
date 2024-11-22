@@ -10,16 +10,20 @@ import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
 
-
+const todayNewDate = new Date();
+const today = todayNewDate.toISOString().split('T')[0];
+const tomorrowNewDate = new Date();
+tomorrowNewDate.setDate(todayNewDate.getDate() + 1); // Thêm 1 ngày
+const tomorrow = tomorrowNewDate.toISOString().split('T')[0];
 
 function ContractPage() {
-    const { openNotification, url, advertisementsData, formatDate, contractsData, setContract } = useContext(AdminContext);
+    const { isGettingContractsData, openNotification, url, advertisementsData, formatDate, contractsData, setContract } = useContext(AdminContext);
     const [isAdding, setIsAdding] = useState(false);
     const { isBgCover, setBgCover } = useContext(AdminContext);
     const [keySelected, setKeySelected] = useState("");
     const [valueSearchQC, setValueSearchQC] = useState("");
     const [filterQC, setFilterQC] = useState([]);
-    const [valueSearchHopdong, setValueSearchHopdong] = useState({ input: '', select: '1' });
+    const [valueSearchHopdong, setValueSearchHopdong] = useState({ input: '', ngay_hieu_luc: today, ngay_hoan_thanh: tomorrow });
     const [filterHopdong, setFilterHopdong] = useState([]);
     // const [hopdongList, setHopdongList] = useState(adsContractData);
 
@@ -44,7 +48,7 @@ function ContractPage() {
             <div className='bg-[#1E1E1E] ' key={hopdong.ma_hop_dong}>
                 <div className='flex justify-between'>
                     <div className='bg-[#E0066F] text-black p-1 font-bold'>{hopdong.ma_hop_dong}</div>
-                    <div className='bg-[#E0066F] text-black p-1 '>{hopdong.ngay_thanh_toan === '' ? 'Còn thời hạn' : 'Hoàn thành'}</div>
+                    <div className='bg-[#E0066F] text-black p-1 '>{hopdong.ngay_hoan_thanh === '' ? 'Còn thời hạn' : 'Hoàn thành'}</div>
                 </div>
 
                 <div className='p-2 flex flex-col gap-1 text-gray-400 '>
@@ -57,7 +61,7 @@ function ContractPage() {
                     <div>
                         <span>{formatDate(hopdong.ngay_hieu_luc)}</span>
                         <span className='text-base font-bold'> - </span>
-                        <span>{hopdong.ngay_thanh_toan !== null ? formatDate(hopdong.ngay_thanh_toan) : '?'}</span>
+                        <span>{hopdong.ngay_hoan_thanh !== null ? formatDate(hopdong.ngay_hoan_thanh) : '?'}</span>
                     </div>
                     <div className='text-lg'>{hopdong.doanh_thu} đ</div>
                 </div>
@@ -68,10 +72,9 @@ function ContractPage() {
     }
 
     useEffect(() => {
-        console.log(valueSearchHopdong);
         const lowerInput = valueSearchHopdong.input.trim().toLowerCase(); // Điều kiện tìm kiếm từ input
-        const done = valueSearchHopdong.select; // Điều kiện tìm kiếm từ select
-
+        const ngay_hieu_luc = valueSearchHopdong.ngay_hieu_luc; // Chuỗi ngày hiệu lực (yyyy-mm-dd)
+        const ngay_hoan_thanh = valueSearchHopdong.ngay_hoan_thanh; // Chuỗi ngày hoàn thành (yyyy-mm-dd)
         let filteredData = [];
 
         // Lọc theo input (nếu input không trống)
@@ -83,17 +86,20 @@ function ContractPage() {
             filteredData = contractsData; // Nếu input trống, không lọc gì cả
         }
 
+        // Lọc theo ngày hiệu lực
+        if (ngay_hieu_luc) { // Kiểm tra nếu có giá trị ngày hiệu lực
+            filteredData = filteredData.filter((item) => {
+                const currentDate = new Date(item.ngay_hieu_luc).toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
+                return currentDate === ngay_hieu_luc; // So sánh chuỗi ngày
+            });
+        }
 
-        // Lọc theo ma_nqc (nếu ma_nqc khác '1')
-        if (done !== 1) {
-            if (done == 2)
-                filteredData = filteredData.filter((item) => {
-                    return item.ngay_thanh_toan != null // Lọc theo ma_nqc
-                });
-            if (done == 3)
-                filteredData = filteredData.filter((item) => {
-                    return item.ngay_thanh_toan == null // Lọc theo ma_nqc
-                });
+        // Lọc theo ngày hoàn thành
+        if (ngay_hoan_thanh) { // Kiểm tra nếu có giá trị ngày hoàn thành
+            filteredData = filteredData.filter((item) => {
+                const currentDate = new Date(item.ngay_hoan_thanh).toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
+                return currentDate === ngay_hoan_thanh; // So sánh chuỗi ngày
+            });
         }
 
         setFilterHopdong(filteredData); // Cập nhật dữ liệu lọc
@@ -101,18 +107,35 @@ function ContractPage() {
 
 
     const searchHopdong = (e) => {
-        e.preventDefault();
+
+        if ((e.target).elements != undefined)
+            e.preventDefault();
         const formData = {};
         const elements = (e.target).elements; // Lấy danh sách các phần tử trong form
+        let error = false;
+        if (elements != undefined) {
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
 
-        for (let i = 0; i < elements.length; i++) {
-            const element = elements[i];
-
-            if (element.name) {
-                formData[element.name] = element.value; // Lưu giá trị theo `name`
+                if (element.name) {
+                    formData[element.name] = element.value; // Lưu giá trị theo `name`
+                }
             }
+
+
+            const date1 = new Date(formData.ngay_hieu_luc);
+            const date2 = new Date(formData.ngay_hoan_thanh);
+
+            if (date1 > date2) {
+                message.error("Ngày kết thúc phải lớn hơn ngày hiệu lực");
+                error = true;
+            }
+            if (!error)
+                setValueSearchHopdong({ input: formData.input, ngay_hieu_luc: formData.ngay_hieu_luc, ngay_hoan_thanh: formData.ngay_hoan_thanh });
         }
-        setValueSearchHopdong({ input: formData.input, select: formData.select });
+
+        else setValueSearchHopdong({ input: '', ngay_hieu_luc: '', ngay_hoan_thanh: '' });
+
 
     }
 
@@ -134,28 +157,29 @@ function ContractPage() {
     }, [valueSearchQC]); // Thêm advertisementsData vào dependency array để đảm bảo dữ liệu được cập nhật khi thay đổi
 
 
-    const callAPI_AddHopdong = (ma_quang_cao, luot_phat, doanh_thu, ngay_hieu_luc) => {
+    const callAPI_AddHopdong = async (ma_quang_cao, luot_phat, doanh_thu, ngay_hieu_luc, ngay_hoan_thanh) => {
         try {
-            // const response = await axios.post(`${url}/api/advertising-contracts`, {
-            //     ma_quang_cao: ma_quang_cao,
-            //     luot_phat: luot_phat,
-            //     doanh_thu: doanh_thu,
-            //     ngay_hieu_luc: ngay_hieu_luc,
-            //     ngay_thanh_toan: ""
-            // });
+            const response = await axios.post(`${url}/api/advertising-contracts`, {
+                ma_quang_cao: ma_quang_cao,
+                luot_phat: luot_phat,
+                doanh_thu: doanh_thu,
+                ngay_hieu_luc: ngay_hieu_luc,
+                ngay_hoan_thanh: ngay_hoan_thanh
+            });
             let qc = advertisementsData.find((item) => item.ma_quang_cao == ma_quang_cao);
             setContract((prev) => [...prev, {
-                ma_hop_dong: 'HD003', //response.data.ma_hop_dong,
+                ma_hop_dong: response.data.ma_hop_dong,
                 ma_quang_cao: ma_quang_cao,
                 ten_quang_cao: qc.ten_quang_cao,
                 luot_phat: luot_phat,
                 doanh_thu: doanh_thu,
                 ngay_hieu_luc: ngay_hieu_luc,
                 hinh_anh: qc.hinh_anh,
-                ngay_thanh_toan: null
+                ngay_hoan_thanh: ngay_hoan_thanh
             }]);
 
         } catch (err) {
+            console.log("loi them hop dong");
             console.error(err);
         }
     };
@@ -187,6 +211,14 @@ function ContractPage() {
             error = true;
         }
 
+        const date1 = new Date(formData.ngay_hieu_luc);
+        const date2 = new Date(formData.ngay_hoan_thanh);
+
+        if (date1 > date2) {
+            message.error("Ngày kết thúc phải lớn hơn ngày hiệu lực");
+            error = true;
+        }
+
         if (!error) {
             Modal.confirm({
                 title: 'Xác nhận?',
@@ -197,16 +229,14 @@ function ContractPage() {
                     openNotification("Thêm hợp đồng quảng cáo");
                     // setContract((prev)=>[...prev, {}])
                     // setValueAction(actionList.delete_nqc_cancel);
-                    callAPI_AddHopdong(keySelected, formData.luot_phat, formData.doanh_thu, formData.ngay_hieu_luc + " 00:00:00");
+                    callAPI_AddHopdong(keySelected, formData.luot_phat, formData.doanh_thu, formData.ngay_hieu_luc + " 00:00:00", formData.ngay_hoan_thanh + " 00:00:00");
 
                     setIsAdding(false);
                     setBgCover(false);
                     setKeySelected("");
                 },
                 onCancel() {
-                    setIsAdding(false);
-                    setBgCover(false);
-                    setKeySelected("");
+
                 },
             });
         }
@@ -214,7 +244,6 @@ function ContractPage() {
 
     function FormAdd() {
         const quangcao = advertisementsData.find((item) => item.ma_quang_cao == keySelected);
-        const today = new Date().toISOString().split('T')[0];
         return (
             <div className=' flex bg-[#1E1E1E]'>
                 <div className='w-[25vw]  p-2  border-r '>
@@ -284,7 +313,6 @@ function ContractPage() {
                             name="doanh_thu"
                             min={100000}
                         />
-                        <p className='text-[#EB2272] italic'></p>
                         <p className='text-[#A4A298]'>Chọn ngày hợp đồng có hiệu lực</p>
                         <input
                             className=" p-1 w-[300px] mt-3 outline-none bg-[#A4A298] mb-2 text-black"
@@ -293,7 +321,14 @@ function ContractPage() {
                             defaultValue={today} // Giá trị mặc định là ngày hiện tại
                             min={today} // Giới hạn tối đa là ngày hiện tại
                         />
-                        <p className='text-[#EB2272] italic'></p>
+                        <p className='text-[#A4A298]'>Chọn ngày kết thúc hợp đồng</p>
+                        <input
+                            className=" p-1 w-[300px] mt-3 outline-none bg-[#A4A298] mb-2 text-black"
+                            type="date"
+                            name='ngay_hoan_thanh'
+                            defaultValue={tomorrow} // Giá trị mặc định là ngày hiện tại
+                            min={tomorrow} // Giới hạn tối đa là ngày hiện tại
+                        />
                         <div className="flex justify-center my-3 gap-2">
                             <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => {
 
@@ -310,62 +345,85 @@ function ContractPage() {
     }
     return (
         <>
-            <div className='flex justify-between'>
-                <form onSubmit={searchHopdong} className='flex items-center space-x-5'>
-                    {/* Search Box */}
+            {isGettingContractsData ? (<div className="wrap-loader"><span className="loader"></span></div>) :
+                (<>
+                    <div className='flex justify-between'>
+                        <form onSubmit={searchHopdong} className='flex items-center space-x-5'>
+                            {/* Search Box */}
 
 
-                    <div className='flex flex-col'>
-                        <label className='mb-2 text-[#A4A298]'>Tìm hợp đồng theo</label>
+                            <div className='flex flex-col'>
+                                <label className='mb-2 text-[#A4A298]'>Tìm hợp đồng theo</label>
 
-                        <div className='flex items-center p-2 w-[300px] bg-[#1E1E1E] justify-between rounded-3xl'>
-                            <IoIosSearch className="text-white text-2xl cursor-pointer" />
-                            <input
-                                className="bg-[#1E1E1E] w-[100%] outline-none ml-3 text-white"
-                                type="text"
-                                placeholder="Tên quảng cáo"
-                                name="input"
-                            />
+                                <div className='flex items-center p-2 w-[300px] bg-[#1E1E1E] justify-between rounded-3xl'>
+                                    <IoIosSearch className="text-white text-2xl cursor-pointer" />
+                                    <input
+                                        className="bg-[#1E1E1E] w-[100%] outline-none ml-3 text-white"
+                                        type="text"
+                                        placeholder="Tên quảng cáo"
+                                        name="input"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* User Type Filter */}
+
+                            <div className='flex flex-col'>
+                                <label className="mb-2 text-[#A4A298]">Ngày hiệu lực</label>
+                                <input
+                                    className=" p-1 w-fit  outline-none bg-[#A4A298] mb-2 text-black"
+                                    type="date"
+                                    name='ngay_hieu_luc'
+                                />
+                            </div>
+
+                            <div className='flex flex-col'>
+                                <label className="mb-2 text-[#A4A298]">Ngày kết thúc</label>
+                                <input
+                                    className=" p-1 w-fit  outline-none bg-[#A4A298] mb-2 text-black"
+                                    type="date"
+                                    name='ngay_hoan_thanh'
+                                />
+                            </div>
+
+
+                            {/* Search Button */}
+                            <div className='flex flex-col w-[100px] gap-1'>
+                                <Button type="primary" htmlType="submit" className='rounded-3xl bg-[#E0066F]   hover:!bg-[#E0066F]'>
+                                    Tìm kiếm
+                                </Button>
+                                <Button type="primary" htmlType="reset" className='rounded-3xl bg-[#E0066F]   hover:!bg-[#E0066F]' onClick={searchHopdong}>
+                                    Xóa
+                                </Button>
+                            </div>
+
+                        </form>
+                        <div className='flex flex-col'>
+                            <label className='mb-1'>&nbsp;</label>
+                            <div className='w-[40px] h-[40px] flex items-center justify-center rounded-full bg-[#1E1E1E] cursor-pointer'>
+                                <CiCirclePlus size={25} onClick={() => {
+                                    setIsAdding(!isAdding);
+                                    setBgCover(true);
+                                }} />
+                            </div>
+
+
                         </div>
                     </div>
+                    {
+                        contractsData.length == 0 ? <div className='w-full h-[50vh] flex items-center justify-center'>Chưa có hợp đồng</div> :
+                            (<>
+                                <label className='mt-6 mb-3 block'>Tổng cộng: {contractsData.length} hợp đồng</label>
+                                <div className='grid grid-cols-5 gap-2 w-full h-[50vh] overflow-y-auto'>
+                                    <ItemHopDong list={JSON.stringify(valueSearchHopdong) === JSON.stringify({ input: '', ngay_hieu_luc: today, ngay_hoan_thanh: tomorrow }) ? contractsData : filterHopdong} />
 
-                    {/* User Type Filter */}
+                                </div>
+                            </>)
+                    }
 
-                    <div className='flex flex-col'>
-                        <label className="mb-2 text-[#A4A298]">Loại</label>
-                        <select name='select' className='bg-[#1E1E1E] text-white p-2 rounded-3xl border-none w-[150px] outline-none cursor-pointer'>
-                            <option value={1}>Tất cả</option>
-                            <option value={2}>Hoàn thành</option>
-                            <option value={3}>Còn quảng cáo</option>
-                        </select>
-                    </div>
+                </>)
+            }
 
-
-                    {/* Search Button */}
-                    <div className='flex flex-col'>
-                        <label className='mb-1'>&nbsp;</label> {/* Dùng label rỗng để giữ chiều cao tương tự */}
-                        <Button type="submit" htmlType="submit" className='rounded-3xl bg-[#E0066F] h-[35px] w-[100px] hover:!bg-[#E0066F]'>
-                            Tìm kiếm
-                        </Button>
-                    </div>
-                </form>
-                <div className='flex flex-col'>
-                    <label className='mb-1'>&nbsp;</label>
-                    <div className='w-[40px] h-[40px] flex items-center justify-center rounded-full bg-[#1E1E1E] cursor-pointer'>
-                        <CiCirclePlus size={25} onClick={() => {
-                            setIsAdding(!isAdding);
-                            setBgCover(true);
-                        }} />
-                    </div>
-
-
-                </div>
-            </div>
-            <label className='mt-6 mb-3 block'>Tổng cộng: {contractsData.length} hợp đồng</label>
-            <div className='grid grid-cols-5 gap-2 w-full h-[50vh] overflow-y-auto'>
-                <ItemHopDong list={JSON.stringify(valueSearchHopdong) === JSON.stringify({ input: '', select: '1' }) ? contractsData : filterHopdong} />
-
-            </div>
             {
                 isAdding && (
                     <div className="fixed top-0 left-0 w-full h-full z-30 flex items-center justify-center">

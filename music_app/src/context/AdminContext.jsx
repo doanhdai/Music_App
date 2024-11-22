@@ -12,6 +12,9 @@ const AdminContextProvider = (props) => {
    const [contractsData, setContract] = useState([]);
    const [quyenList, setQuyenList] = useState([]);
    const [chucnangList, setChucnangList] = useState([]);
+   const [isGettingAdvertisersData, setIsGettingAdvertisersData] = useState(true);
+   const [isGettingAdvertisementsData, setIsGettingAdvertisementsData] = useState(true);
+   const [isGettingContractsData, setIsGettingContractsData] = useState(true);
    const getAccountsData = async () => {
       try {
          const res = await axios.get(`${url}/api/accounts`);
@@ -38,8 +41,8 @@ const AdminContextProvider = (props) => {
    const getAdvertisersData = async () => {
       try {
          const response = await axios.get(`${url}/api/advertisers`);
-         console.log(response.data.advertisers);
          setAdvertisers(response.data.advertisers);
+         setIsGettingAdvertisersData(false);
       } catch (err) {
          console.error(err);
       }
@@ -49,6 +52,7 @@ const AdminContextProvider = (props) => {
       try {
          const response = await axios.get(`${url}/api/advertisements`);
          setAdvertisements(response.data.advertisements);
+         setIsGettingAdvertisementsData(false);
       } catch (err) {
          console.error(err);
       }
@@ -59,6 +63,7 @@ const AdminContextProvider = (props) => {
       try {
          const response = await axios.get(`${url}/api/advertising-contracts`);
          setContract(response.data.advertising_contracts);
+         setIsGettingContractsData(false);
       } catch (err) {
          console.error(err);
       }
@@ -139,7 +144,10 @@ const AdminContextProvider = (props) => {
       quyenList,
       setQuyenList,
       uploadImage,
-      setContract
+      setContract,
+      isGettingAdvertisersData,
+      isGettingAdvertisementsData,
+      isGettingContractsData
    };
 
 
