@@ -112,6 +112,14 @@
   color: white;
 }
 
+.wrap-loader {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .loader {
   animation: rotate 1s infinite;
   height: 50px;
