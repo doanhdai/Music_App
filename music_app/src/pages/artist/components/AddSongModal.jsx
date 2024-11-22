@@ -32,19 +32,71 @@ const SongUpload = ({ closeModal }) => {
   const [artistSearch, setArtistSearch] = useState("");
   const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
   const [artistDropdownOpen, setArtistDropdownOpen] = useState(false);
+
+  const [artistsData,setArtistData] = useState([])
+  const [genresData, setGenresData] = useState([]);
+
   const [highQualityFile, setHighQualityFile] = useState(null);
   const [lowQualityFile, setLowQualityFile] = useState(null);
-  // const [artistsList, setArtistsList] = useState([]);
-  // const [genresList, setGenresList] = useState([]);
+ 
   const ImgRef = useRef(null);
+  const currentArtistId = "ACC0006";
 
-  useEffect(()=>{
-    try {
-      test
+  //
+  //http://127.0.0.1:8000/api/song : them bai hat
 
-    } catch (e) {console.log("ee")}
+//   {
+//   "ten_bai_hat": "Bài hát mới",
+//   "ma_tk_artist": "ACC0006",
+//   "ma_album": null,
+//   "thoi_luong": 240,
+//   "trang_thai": 1,
+//   "hinh_anh": "https://example.com/images/baihat.jpg",
+//   "ngay_phat_hanh": "2024-11-21",
+//   "doanh_thu": 0,
+//   "the_loai": ["CATE0002", "CATE0001"],
+//   "links": {
+//     "cao": "https://example.com/music/high.mp3",
+//     "thap": "https://example.com/music/low.mp3"
+//   },
+//   "subartists": ["ACC0005", "ACC0004"]
+// }
+  useEffect(() => {
+    const fetchArtists = async () => {
 
-  },[]);
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/songs/artists`);
+
+        if (!response.ok) {
+          throw new Error(`artist Network response was not ok (status: ${response.status})`); // Provide more context for debugging
+        }
+        const data = await response.json();
+        console.log(data.data);
+        setArtistData(data.data);
+      } catch (error) {
+        console.error('Error fetching songs:', error);
+       
+      }
+    };
+    const fetchGeners = async () => {
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/genres`);
+
+        if (!response.ok) {
+          throw new Error(`Network response was not ok (status: ${response.status})`); // Provide more context for debugging
+        }
+        const data = await response.json();
+       // console.log(data.data);
+        setGenresData(data.data); // Assuming "bai_hat" is the key containing the songs
+      } catch (error) {
+        console.error('Error fetching songs:', error);
+       
+      }
+    };
+    fetchArtists();
+    fetchGeners();
+  }, [currentArtistId]);
 
   const toggleDropdown = (type) => {
     if (type === "genre") {
@@ -71,36 +123,60 @@ const SongUpload = ({ closeModal }) => {
       );
     }
   };
-  //ACC0002
-  // 'ten_bai_hat' => 'required',
-  //           'thoi_luong' => 'required|numeric',
-  //           'hinh_anh' => 'required',
-  //           'ma_album' => 'nullable', // Cho phép null
-  //           'link_bai_hat' => 'required',
-  //           'ngay_phat_hanh' => 'required|date',
-  //           'ma_artist' => 'required',
-  //           'ma_phi_luot_nghe' => 'required',
-  const formData = {
-    thoi_luong: '',
-    hinh_anh: '', // Uncomment if needed
-    ma_album: '', // Uncomment if needed
-    link_bai_hat: '',
-    ngay_phat_hanh: '',
-    ma_artist: '',
-    ma_phi_luot_nghe: '',
+  function getCurrentDay() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
   }
-  const handleSubmit = (e) => {
+  
+  const imgData = ImgRef.current?.getData()
+
+  const formData = {
+    "ten_bai_hat": songName,
+    "ma_tk_artist": currentArtistId,
+    "ma_album": null,
+    "thoi_luong": 240,
+    "trang_thai": 1,
+    "hinh_anh": ImgRef,
+    "ngay_phat_hanh": getCurrentDay(),
+    "doanh_thu": 0,
+    "the_loai": selectedGenres.map(genre => genre.ma_the_loai),
+    "links": {
+      "cao": highQualityFile,
+      "thap": lowQualityFile
+    },
+    "subartists": selectedArtists.map(artist => artist.ma_artist) //["ACC0005", "ACC0004"] //them api
+  }
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const imgData = ImgRef.current?.getData();
-    console.log({
-      songName,
-      selectedGenres,
-      selectedArtists,
-      imgData,
-      highQualityFile,
-      lowQualityFile,
-    });
-    alert("Form Submitted!");
+    console.log(formData);
+    // try {
+    //   const response = await fetch(`http://127.0.0.1:8000/api/albums/${currentArtistId}`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body:  JSON.stringify(formData),
+    //   });
+  
+    //   if (!response.ok) {
+    //     // Attempt to parse the error message from the backend
+    //     const errorData = await response.json();
+    //     throw new Error(errorData.message || "An error occurred while processing your request.");
+    //   }
+
+    //   // Parse the successful response
+    //   const data = await response.json();
+    //   console.log("Form submitted successfully:", data);
+    //   alert("Form submitted successfully!");
+    // } catch (error) {
+    //   // Handle errors
+    //   console.error("Error submitting form:", error);
+    //   alert(`Error: ${error.message}`);
+    // }
   };
 
   return (
@@ -141,8 +217,8 @@ const SongUpload = ({ closeModal }) => {
                   readOnly
                   value={
                     selectedGenres.length
-                      ? selectedGenres.join(", ")
-                      : "Select Genre"
+                      ? selectedGenres.map(theLoai => theLoai.ten_the_loai).join(", ")
+                      : "Chọn thể loại"
                   }
                   onClick={() => toggleDropdown("genre")}
                   className="w-full p-2 border border-gray-300 rounded text-black cursor-pointer"
@@ -155,9 +231,9 @@ const SongUpload = ({ closeModal }) => {
                       className="w-full p-2 border border-gray-300 rounded mb-2 text-black"
                       onChange={(e) => setGenreSearch(e.target.value)}
                     />
-                    {genresList
+                    {genresData
                       .filter((genre) =>
-                        genre.toLowerCase().includes(genreSearch.toLowerCase())
+                        genre.ten_the_loai.toLowerCase().includes(genreSearch.toLowerCase())
                       )
                       .slice(0, 6)
                       .map((genre) => (
@@ -173,7 +249,7 @@ const SongUpload = ({ closeModal }) => {
                               handleCheckboxChange("genre", genre)
                             }
                           />
-                          <span className="ml-2 text-gray-400">{genre}</span>
+                          <span className="ml-2 text-gray-400">{genre.ten_the_loai}</span>
                         </label>
                       ))}
                   </div>
@@ -190,7 +266,7 @@ const SongUpload = ({ closeModal }) => {
                   readOnly
                   value={
                     selectedArtists.length
-                      ? selectedArtists.join(", ")
+                      ? selectedArtists.map(artist => artist.ten_artist).join(", ")
                       : "Select Artist"
                   }
                   onClick={() => toggleDropdown("artist")}
@@ -204,16 +280,16 @@ const SongUpload = ({ closeModal }) => {
                       className="w-full p-2 border border-gray-300 rounded mb-2 text-black"
                       onChange={(e) => setArtistSearch(e.target.value)}
                     />
-                    {artistsList
+                    {artistsData
                       .filter((artist) =>
-                        artist
+                        artist.ten_artist
                           .toLowerCase()
                           .includes(artistSearch.toLowerCase())
                       )
                       .slice(0, 6)
                       .map((artist) => (
                         <label
-                          key={artist}
+                          key={artist.ma_artist}
                           className="inline-flex items-center p-2 cursor-pointer"
                         >
                           <input
@@ -222,9 +298,9 @@ const SongUpload = ({ closeModal }) => {
                             checked={selectedArtists.includes(artist)}
                             onChange={() =>
                               handleCheckboxChange("artist", artist)
-                            }
+                            }q
                           />
-                          <span className="ml-2 text-gray-400">{artist}</span>
+                          <span className="ml-2 text-gray-400">{artist.ten_artist}</span>
                         </label>
                       ))}
                   </div>
