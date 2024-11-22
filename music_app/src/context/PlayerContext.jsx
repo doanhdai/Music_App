@@ -19,20 +19,81 @@ const PlayerContextProvider = (props) => {
     const [playlistsData, setPlaylistsData] = useState([]);
     const [artistsData, setArtistsData] = useState([]);
     const [genresData, setGenresData] = useState([]);
-    const [detailPlaylist, setDetailPlaylist] = useState([]);
-    const [songsPlaylist, setSongsPlaylist] = useState([]);
+    const [usersData, setUsersData] = useState([]);
+    // const [detailPlaylist, setDetailPlaylist] = useState([]);
+    // const [songsPlaylist, setSongsPlaylist] = useState([]);
     const [track, setTrack] = useState(null);
     const [playStatus, setPlayStatus] = useState(false);
     const [volume, setVolume] = useState(1);
+
     const [time, setTime] = useState({
         currentTime: { second: 0, minute: 0 },
         totalTime: { second: 0, minute: 0 },
     });
-    const [notificationList, setNotificationList] = useState([]);
 
     const getLastNumberFromCode = (code) => {
         const match = code.match(/\d+$/);
         return match ? parseInt(match[0], 10) : null;
+    };
+    const getSongsData = async () => {
+        try {
+            const response = await axios.get(`${url_api}/api/songs`);
+            const filteredSongs = response.data.data.filter(
+                (song) => song.chat_luong === "Thấp"
+            );
+            setSongsData(filteredSongs);
+            // console.log(filteredSongs)
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getArtistsData = async () => {
+        try {
+            const response = await axios.get(`${url_api}/api/songs/artists`);
+            setArtistsData(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getAlbumsData = async () => {
+        try {
+            const response = await axios.get(`${url_api}/api/albums/list-albums`);
+            setAlbumsData(response.data.albums);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getGenresData = async () => {
+        try {
+            const response = await axios.get(`${url_api}/api/genres`);
+            setGenresData(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getPlaylistsData = async () => {
+        try {
+            const response = await axios.get(
+                `${url_api}/api/playlists/account/ACC0007`
+            );
+            setPlaylistsData(response.data.data);
+            console.log(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const getAllUsersData = async () => {
+        try {
+            const response = await axios.get(`${url_api}/api/users`);
+            setUsersData(response.data);
+            // console.log(response.data)
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const play = () => {
@@ -41,15 +102,23 @@ const PlayerContextProvider = (props) => {
             if (savedState?.currentTime) {
                 audioRef.current.currentTime = savedState.currentTime;
             }
-            audioRef.current.play();
-            setPlayStatus(true);
+
+            audioRef.current
+                .play()
+                .then(() => {
+                    setPlayStatus(true);
+                })
+                .catch((error) => {
+                    console.error("Lỗi khi phát nhạc:", error);
+                });
         }
     };
 
     const pause = () => {
-        if (audioRef.current) {
+        if (audioRef.current && playStatus) {
             audioRef.current.pause();
             setPlayStatus(false);
+
             localStorage.setItem(
                 "musicPlayerState",
                 JSON.stringify({ track, currentTime: audioRef.current.currentTime })
@@ -61,10 +130,7 @@ const PlayerContextProvider = (props) => {
         const song = songsData.find((item) => id === item.ma_bai_hat);
 
         if (song) {
-            // Cập nhật bài hát mới
             setTrack(song);
-
-            // Xóa dữ liệu bài hát cũ và set dữ liệu mới
             localStorage.removeItem("musicPlayerState");
             localStorage.setItem(
                 "musicPlayerState",
@@ -75,10 +141,8 @@ const PlayerContextProvider = (props) => {
             );
 
             if (audioRef.current) {
-                audioRef.current.pause(); // Dừng bài hát hiện tại
-                audioRef.current.src = song.link_bai_hat; // Cập nhật nguồn bài hát mới
-
-                // Lắng nghe sự kiện oncanplay để phát nhạc
+                audioRef.current.pause();
+                audioRef.current.src = song.link_bai_hat;
                 audioRef.current.oncanplay = () => {
                     audioRef.current.play();
                     setPlayStatus(true);
@@ -141,8 +205,6 @@ const PlayerContextProvider = (props) => {
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current.src = previousTrack.link_bai_hat;
-
-                // Lắng nghe sự kiện oncanplay để phát nhạc
                 audioRef.current.oncanplay = () => {
                     audioRef.current.play();
                     setPlayStatus(true);
@@ -155,9 +217,21 @@ const PlayerContextProvider = (props) => {
 
     const seekSong = (e) => {
         if (audioRef.current) {
-            audioRef.current.currentTime =
+            const newCurrentTime =
                 (e.nativeEvent.offsetX / seekBg.current.offsetWidth) *
                 audioRef.current.duration;
+
+            audioRef.current.currentTime = newCurrentTime;
+
+            // Cập nhật localStorage với thời gian mới
+            const currentState =
+                JSON.parse(localStorage.getItem("musicPlayerState")) || {};
+            currentState.currentTime = newCurrentTime;
+            if (seekBar.current) {
+                currentState.seekBarWidth =
+                    Math.floor((newCurrentTime / audioRef.current.duration) * 100) + "%";
+            }
+            localStorage.setItem("musicPlayerState", JSON.stringify(currentState));
         }
     };
 
@@ -172,69 +246,6 @@ const PlayerContextProvider = (props) => {
         setVolume(0);
         if (audioRef.current) {
             audioRef.current.volume = 0;
-        }
-    };
-
-    const getSongsData = async () => {
-        try {
-            const response = await axios.get(`${url_api}/api/songs`);
-            const filteredSongs = response.data.data.filter(
-                (song) => song.chat_luong === "Thấp"
-            );
-            setSongsData(filteredSongs);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const getArtistsData = async () => {
-        try {
-            const response = await axios.get(`${url_api}/api/songs/artists`);
-            setArtistsData(response.data.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const getAlbumsData = async () => {
-        try {
-            const response = await axios.get(`${url_api}/api/albums/list-albums`);
-            setAlbumsData(response.data.albums);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const getGenresData = async () => {
-        try {
-            const response = await axios.get(`${url_api}/api/genres`);
-            setGenresData(response.data.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const getPlaylistsData = async () => {
-        try {
-            const response = await axios.get(
-                `${url_api}/api/playlists/account/ACC0007`
-            );
-            setPlaylistsData(response.data.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const getSongByPlaylistData = async () => {
-        try {
-            const response = await axios.get(
-                `${url_api}/api/playlists/account/ACC0007`
-            );
-            const playlistData = response.data.data[0];
-            setDetailPlaylist(playlistData);
-            setSongsPlaylist(playlistData.bai_hat);
-        } catch (error) {
-            console.error(error);
         }
     };
 
@@ -274,11 +285,25 @@ const PlayerContextProvider = (props) => {
 
     useEffect(() => {
         const savedState = localStorage.getItem("musicPlayerState");
+
         if (savedState) {
-            const { track: savedTrack, currentTime } = JSON.parse(savedState);
+            const {
+                track: savedTrack,
+                currentTime,
+                seekBarWidth,
+            } = JSON.parse(savedState);
+
+            // Thiết lập bài hát và thời gian hiện tại
             setTrack(savedTrack);
+
             if (audioRef.current) {
-                audioRef.current.currentTime = currentTime;
+                audioRef.current.src = savedTrack.link_bai_hat;
+                audioRef.current.currentTime = currentTime || 0;
+
+                // Nếu có thông tin seekBar, thiết lập lại
+                if (seekBar.current && seekBarWidth) {
+                    seekBar.current.style.width = seekBarWidth;
+                }
             }
         }
     }, []);
@@ -289,12 +314,27 @@ const PlayerContextProvider = (props) => {
         getPlaylistsData();
         getArtistsData();
         getGenresData();
-        getSongByPlaylistData();
+        getAllUsersData();
+        // getSongByPlaylistData();
     }, []);
 
     useEffect(() => {
-        if (songsData.length > 0 && track === null) {
-            setTrack(songsData[0]);
+        if (songsData.length > 0) {
+            const savedState = JSON.parse(localStorage.getItem("musicPlayerState"));
+
+            if (savedState && savedState.track) {
+                setTrack(savedState.track);
+                if (audioRef.current) {
+                    audioRef.current.src = savedState.track.link_bai_hat;
+                    audioRef.current.currentTime = savedState.currentTime || 0;
+                }
+            } else {
+                setTrack(songsData[0]);
+                if (audioRef.current) {
+                    audioRef.current.src = songsData[0].link_bai_hat;
+                    audioRef.current.currentTime = 0;
+                }
+            }
         }
     }, [songsData]);
 
@@ -304,17 +344,14 @@ const PlayerContextProvider = (props) => {
                 track,
                 currentTime: audioRef.current?.currentTime || 0,
             };
+            if (seekBar.current) {
+                currentState.seekBarWidth = seekBar.current.style.width;
+            }
+
             localStorage.setItem("musicPlayerState", JSON.stringify(currentState));
         }
-    }, [track, playStatus]);
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = date.getFullYear();
+    }, [track, playStatus, time]);
 
-        return `${day}/${month}/${year}`;
-    };
     const contextValue = {
         audioRef,
         scrollHomeRef,
@@ -335,14 +372,14 @@ const PlayerContextProvider = (props) => {
         seekSong,
         songsData,
         albumsData,
-        songsPlaylist,
-        detailPlaylist,
+        usersData,
+        // songsPlaylist,
+        // detailPlaylist,
         playlistsData,
         artistsData,
         genresData,
         setVolume: updateVolume,
         muteVolume,
-        formatDate
     };
 
     return (

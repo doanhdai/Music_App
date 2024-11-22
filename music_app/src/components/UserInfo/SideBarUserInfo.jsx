@@ -4,8 +4,9 @@ import { assets } from "../../assets/assets";
 import { FaBullseye } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 const menuItems = [
-  {label: 'Xem thong tin', icon: <FaBullseye size={20} />, route: '/UserInfo', id: 'userInfo' },
-  {label: 'Goi premium da dang ky', icon: <FaBullseye size={20} />, route: '/UserInfo/premium', id: 'userPremium' }
+  {label: 'Xem thông tin', icon: <FaBullseye size={20} />, route: '/UserInfo', id: 'userInfo' },
+  {label: 'Gói premium đã đăng ký', icon: <FaBullseye size={20} />, route: '/UserInfo/premium', id: 'userPremium' },
+  {label: 'Tài khoản nghệ sĩ', icon: <FaBullseye size={20} />, route: '/UserInfo/artist', id: 'userArtist' },
 ]
 
 const SideBarUserInfo = () => {

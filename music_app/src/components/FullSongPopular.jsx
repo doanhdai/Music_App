@@ -13,9 +13,7 @@ const FullSongPopular = () => {
           <h1 className="mb-4 font-bold text-2xl">Bài hát thịch hành</h1>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {songsData
-            .filter((item) => item.chat_luong === "Thấp")
-            .map((item, index) => (
+          {songsData.map((item, index) => (
               <SongItems
                 key={index}
                 name={item.ten_bai_hat}

@@ -134,7 +134,7 @@ const ArtistSongPage = () => {
           modalState={showAddSongModal}
         />
       </div>
-      <h3 className="mt-3">Tong cong: {filteredSongs.length}</h3>
+      <h3 className="mt-3">Tổng cộng: {filteredSongs.length}</h3>
       <SongList2
         songsData={filteredSongs}
         currentActionType={currentActionType}
@@ -285,7 +285,6 @@ const SongList2 = ({ songsData, currentActionType }) => {
 
           <p className="text-[15px] text-center">{item.ma_album}</p>
           <p className="text-[15px] text-center">
-            {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
             {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
           </p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
