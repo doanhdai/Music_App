@@ -11,7 +11,6 @@ const PlayerContextProvider = (props) => {
   const scrollHomeRef = useRef();
   const bgHomeHeader = useRef();
   const url_api = "http://localhost:8000";
-  const { id } = useParams();
 
   const [loadingTrack, setLoadingTrack] = useState(false);
   const [songsData, setSongsData] = useState([]);
@@ -35,6 +34,7 @@ const PlayerContextProvider = (props) => {
     const match = code.match(/\d+$/);
     return match ? parseInt(match[0], 10) : null;
   };
+  
   const getSongsData = async () => {
     try {
       const response = await axios.get(`${url_api}/api/songs`);
@@ -78,7 +78,7 @@ const PlayerContextProvider = (props) => {
   const getPlaylistsData = async () => {
     try {
       const response = await axios.get(
-        `${url_api}/api/playlists/account/ACC0007`
+        `${url_api}/api/playlist/ACC0007`
       );
       setPlaylistsData(response.data.data);
       console.log(response.data.data);

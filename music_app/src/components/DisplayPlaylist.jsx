@@ -18,11 +18,15 @@ const DisplayPlaylist = () => {
   const [hoveredSong, setHoveredSong] = useState(null);
   const [detailPlaylist, setDetailPlaylist] = useState([]);
   const [songsPlaylist, setSongsPlaylist] = useState([]);
+
+
   const url_api = "http://localhost:8000";
+
+  
   const getSongByAlbumsData = async () => {
     try {
       const response = await axios.get(
-        `${url_api}/api/playlists/account/ACC0007`
+        `${url_api}api/playlist/ACC0008/${id}`
       );
       const playlistData = response.data.data[0];
       setDetailPlaylist(playlistData.data);
