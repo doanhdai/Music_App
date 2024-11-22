@@ -281,7 +281,7 @@ const DisplayAlbum = () => {
               </div>
             ))}
           </div>
-        ) : <div className="w-full h-[50vh] flex items-center justify-center"><span className="loader"></span></div>
+        ) : <div className="wrap-loader"><span className="loader"></span></div>
       }
     </>
   );
