@@ -89,7 +89,7 @@ const NavBar = () => {
   };
 
   const ItemNotification = () => {
-    return <>
+    return 
       {
         thongbaoList.map((item) => (
           <li className="flex gap-2 border-b pb-1 border-[#A4A298] items-center mb-1">
@@ -102,7 +102,7 @@ const NavBar = () => {
           </li>
         ))
       }
-    </>
+
 
   }
 

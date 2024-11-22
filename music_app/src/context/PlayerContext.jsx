@@ -376,6 +376,7 @@ const PlayerContextProvider = (props) => {
     // songsPlaylist,
     // detailPlaylist,
     playlistsData,
+    setPlaylistsData,
     artistsData,
     genresData,
     setVolume: updateVolume,

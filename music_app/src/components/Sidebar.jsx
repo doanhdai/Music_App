@@ -7,9 +7,10 @@ import { MdArrowCircleDown, MdDriveFileRenameOutline } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { PlayerContext } from "../context/PlayerContext";
+import axios from "axios";
 
 const Sidebar = ({ onOutsideClick }) => {
-  const { playlistsData } = useContext(PlayerContext);
+  const { playlistsData, setPlaylistsData } = useContext(PlayerContext);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
@@ -17,7 +18,7 @@ const Sidebar = ({ onOutsideClick }) => {
     x: 0,
     y: 0,
   });
-
+  const url_api = "http://localhost:8000";
   const removeVietnameseTones = (str) => {
     return str
       .normalize("NFD")
@@ -46,6 +47,20 @@ const Sidebar = ({ onOutsideClick }) => {
   const handleOutsideClick = (event) => {
     if (selectedPlaylist !== null) {
       setSelectedPlaylist(null);
+    }
+  };
+
+  const handleDeletePlaylist = async (idPlaylist) => {
+    try {
+      await axios.delete(`${url_api}/api/playlist/ACC0007/${idPlaylist}`);
+
+      setPlaylistsData((prevData) =>
+        prevData.filter((playlist) => playlist.ma_playlist !== idPlaylist)
+      );
+
+      setSelectedPlaylist(null);
+    } catch (error) {
+      console.error("Lỗi khi xóa playlist:", error);
     }
   };
 
@@ -130,7 +145,10 @@ const Sidebar = ({ onOutsideClick }) => {
               <MdDriveFileRenameOutline size={18} />
               Đổi tên playlist
             </div>
-            <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2">
+            <div
+              onClick={() => handleDeletePlaylist(selectedPlaylist)}
+              className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+            >
               <AiOutlineDelete size={18} />
               Xóa playlist
             </div>
