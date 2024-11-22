@@ -88,6 +88,24 @@ const NavBar = () => {
     });
   };
 
+  const ItemNotification = () => {
+    return <>
+      {
+        thongbaoList.map((item) => (
+          <li className="flex gap-2 border-b pb-1 border-[#A4A298] items-center mb-1">
+            <GiLetterBomb className="w-[45px] h-[45px] bg-transparent text-[#EB2272]" />
+            <span className=" w-full">
+              <p className="font-bold">{item.ten_tb}</p>
+              <div className="font-normal text-sm my-1">{item.noi_dung_tb}</div>
+              <div className="font-normal text-xs text-[#A4A298] mt-2">{item.ngay_thong_bao}</div>
+            </span>
+          </li>
+        ))
+      }
+    </>
+
+  }
+
   return (
     <div className="sticky top-0 z-50 px-7 py-4 backdrop-blur-md bg-opacity-1">
       <div className="w-full flex justify-between items-center font-semibold">
@@ -142,27 +160,31 @@ const NavBar = () => {
             >
               Khám phá Primeum
             </p>
-            <div className="relative w-fit" onMouseEnter={() => setIsOpenNotification(true)} onMouseLeave={() => setIsOpenNotification(false)}>
+            <div className="relative" onMouseEnter={() => setIsOpenNotification(true)} onMouseLeave={() => setIsOpenNotification(false)}>
               <div>
                 <FaRegBell size={25} />
-                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+                {thongbaoList.length != 0 && <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>}
+
               </div>
 
               {
                 isOpenNotification && (
-                  <div
-                    className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-auto"
-                  >
-                    <ul className="text-white">
-                      <li className="flex gap-2">
-                        <GiLetterBomb className="w-[40px] h-[40px] bg-slate-400" />
-                        <span className="bg-red-600 w-full">
-                          <p>Ten thong bao</p>
-                          <p>Noi dung thong bao</p>
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
+                  <>
+                    <div
+                      className="absolute top-10 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-[25vw] h-[40vh] overflow-y-auto"
+                    >
+                      <ul className="text-white">
+                        {thongbaoList.length == 0 ? <div className="w-full h-[40vh] flex-col flex items-center justify-center">
+                          <img className="w-[50%] h-auto text-white mb-2" src="https://cdni.iconscout.com/illustration/premium/thumb/empty-notification-illustration-download-in-svg-png-gif-file-formats--new-logo-call-notifications-no-pack-user-interface-illustrations-8944796.png?f=webp" />
+                          <span>Chưa có thông báo</span>
+                        </div>
+                          : <ItemNotification />}
+
+                      </ul>
+                    </div>
+                    <div className="absolute right-0 w-[150%] h-[20px]"></div>
+                  </>
+
                 )
               }
             </div>
