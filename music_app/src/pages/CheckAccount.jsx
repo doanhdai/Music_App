@@ -6,7 +6,7 @@ const CheckAccount = ({ ma_quyen }) => {
 
   useEffect(() => {
     const account = JSON.parse(localStorage.getItem('account'));
-    if (!account || account.ma_tk !== ma_quyen) {
+    if (!account || account.ma_quyen !== ma_quyen) {
       localStorage.removeItem('account');
       localStorage.removeItem('isLoggedIn');
       navigate('/');

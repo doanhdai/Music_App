@@ -8,10 +8,257 @@ import { MdDeleteOutline } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
 import PurchasedPremiumCard from '../premium/PurchasedPremiumCard';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from "axios";
+
+const AddPremiumModal = ({ isOpen, onClose, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    isActive: true,
+    title: "",
+    price: "",
+    duration: 1,
+    descriptions: ["", "", ""],
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleDescriptionChange = (index, value) => {
+    const newDescriptions = [...formData.descriptions];
+    newDescriptions[index] = value;
+    setFormData((prev) => ({ ...prev, descriptions: newDescriptions }));
+  };
+
+  const handleSubmit = () => {
+    const mergedDescriptions = formData.descriptions.join(",");
+    const finalData = {
+      ...formData,
+      descriptions: mergedDescriptions,
+    };
+
+    onSubmit(finalData);
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-20">
+      <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg text-black">
+        <h2 className="text-lg font-bold mb-4">Thêm PurchasedPremiumCard</h2>
+
+        {/* Bật/tắt trạng thái */}
+        <div className="mb-4">
+          <label className="flex items-center space-x-2 text-black">
+            <input
+              type="checkbox"
+              checked={formData.isActive}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, isActive: e.target.checked }))
+              }
+              className="w-4 h-4 text-blue-600"
+            />
+            <span>Trạng thái</span>
+          </label>
+        </div>
+
+        {/* Tên gói */}
+        <div className="mb-4">
+          <label className="block mb-1 font-medium text-black">Tên gói</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            className="w-full border rounded px-3 py-2 text-black"
+            placeholder="Nhập tên gói"
+          />
+        </div>
+
+        {/* Giá gói */}
+        <div className="mb-4">
+          <label className="block mb-1 font-medium text-black">Giá gói</label>
+          <input
+            type="text"
+            name="price"
+            value={formData.price}
+            onChange={handleInputChange}
+            className="w-full border rounded px-3 py-2 text-black"
+            placeholder="Nhập giá gói"
+          />
+        </div>
+
+        {/* Thời hạn */}
+        <div className="mb-4">
+          <label className="block mb-1 font-medium text-black">Thời hạn</label>
+          <select
+          name="duration"
+          value={Number(formData.duration)} // Đảm bảo giá trị là số
+          onChange={handleInputChange}
+          className="w-full border rounded px-3 py-2 text-black"
+        >
+          <option value={1}>1 tháng</option>
+          <option value={2}>2 tháng</option>
+          <option value={3}>3 tháng</option>
+          <option value={6}>6 tháng</option>
+        </select>
+
+        </div>
+
+        {/* Mô tả */}
+        <div className="mb-4">
+          <label className="block mb-1 font-medium text-black">Mô tả</label>
+          {formData.descriptions.map((desc, index) => (
+            <input
+              key={index}
+              type="text"
+              value={desc}
+              onChange={(e) => handleDescriptionChange(index, e.target.value)}
+              className="w-full border rounded px-3 py-2 mb-2 text-black"
+              placeholder={`Nhập mô tả ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Nút hành động */}
+        <div className="flex space-x-4">
+          <button
+            onClick={handleSubmit}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Lưu
+          </button>
+          <button
+            onClick={onClose}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Hủy
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DeletePremiumModal = ({ visible, onClose, premiumData, onDelete }) => {
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = () => {
+    if (selectedPackage) {
+      setLoading(true);
+      // Gọi API xóa gói
+      fetch(`http://127.0.0.1:8000/api/vouchers/${selectedPackage}`, {
+        method: 'DELETE',
+      })
+        .then(response => response.json())
+        .then(() => {
+          onDelete(selectedPackage); // Gọi hàm onDelete từ component cha để cập nhật dữ liệu
+          setLoading(false);
+          onClose(); // Đóng modal
+        })
+        .catch(error => {
+          console.error("Error deleting package", error);
+          setLoading(false);
+        });
+    }
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg w-96 p-6">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-4 text-black">Xác nhận xóa</h2>
+        </div>
+        <div className="mb-4">
+          <select
+            className="w-full p-2 border border-gray-300 rounded-md text-black"
+            onChange={(e) => setSelectedPackage(e.target.value)}
+            value={selectedPackage}
+          >
+            <option value="">Chọn gói cần xóa</option>
+            {premiumData.map((item) => (
+              <option key={item.ma_goi} value={item.ma_goi}>
+                {item.ten_goi}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex justify-between">
+          <button
+            className="bg-gray-400 text-black py-2 px-4 rounded-md hover:bg-gray-500"
+            onClick={onClose}
+          >
+            Hủy
+          </button>
+          <button
+            className="bg-red-500 text-black py-2 px-4 rounded-md hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            {loading ? 'Đang xóa...' : 'Xóa'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ManagerPremium = () => {
+  const [premiumData, setPremiumData] = useState([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/vouchers")
+      .then(res => setPremiumData(res.data))
+      .catch(console.error);
+  }, []);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddPremium = (data) => {
+    console.log("Dữ liệu nhận được:", data);
+    const requestData = {
+      ten_goi: data.title,       // Tên gói
+      thoi_han: data.duration,     // Thời hạn
+      gia_goi: data.price,       // Giá gói // Doanh thu
+      mo_ta: data.descriptions,           // Mô tả (chuỗi)
+      trang_thai: data.isActive // Trạng thái (1 hoặc 0)
+  };
+  
+
+  // Gửi dữ liệu lên API
+  axios.post('http://127.0.0.1:8000/api/vouchers', requestData)
+      .then(response => {
+          console.log("Dữ liệu đã được thêm vào:", response.data);
+          // Xử lý thêm nếu cần (ví dụ: thông báo thành công, cập nhật UI)
+      })
+      .catch(error => {
+          console.error("Lỗi khi gửi API:", error);
+      });
+  };
+  const handleDelete = (ma_goi) => {
+    // Cập nhật dữ liệu sau khi xóa gói
+    setPremiumData(premiumData.filter(item => item.ma_goi !== ma_goi));
+  };
   return (
-   <div className='pt-3 mx-[38px]'>
+    <>
+      <AddPremiumModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSubmit={handleAddPremium}
+                    />
+      <DeletePremiumModal
+        visible={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        premiumData={premiumData}
+        onDelete={handleDelete}
+      />
+      <div className='pt-3 mx-[38px]'>
         <div className='flex justify-between'>
             <div className='flex items-center space-x-5'>
                 {/* Search Box */}
@@ -63,13 +310,11 @@ const ManagerPremium = () => {
             <div className='flex flex-col'>
               <label className='mb-1'>&nbsp;</label>
               <div className='flex space-x-5'>
-                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black' onClick={() => setIsModalOpen(true)}>
                     <CiCirclePlus size={20} />
+                    
                 </div>
-                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
-                    <MdOutlineEdit  size={20} />
-                </div>
-                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black'>
+                <div className='w-[36px] h-[36px] flex items-center justify-center rounded-full bg-black' onClick={() => setIsDeleteModalOpen(true)}>
                     <MdDeleteOutline size={20}/>
                 </div>
                </div>
@@ -79,44 +324,21 @@ const ManagerPremium = () => {
         <div>
           {/* <p className='mt-7 '>Tổng có : 100 Gói .</p> */}
             <div className="grid grid-cols-4 gap-3 mt-5">
+            {premiumData.map((item, index) => (
               <PurchasedPremiumCard
-                isActive={true}
-                title="Ten Premium"
-                price="100.000"
-                duration="2 tháng"
-                descriptions={["không có quảng cáo", "chất lượng âm thanh tốt nhất", "tải xuống miễn phí"]}
-              />   
-              <PurchasedPremiumCard
-                isActive={true}
-                title="Ten Premium"
-                price="giá_gói"
-                duration="thoi_han"
-                descriptions={["mo ta", "mo ta", "mo ta"]}
+                key={index}
+                isActive={item.trang_thai === 1}
+                title={item.ten_goi}
+                price={`${item.gia_goi} VND`}
+                duration={`${item.thoi_han} tháng`}
+                descriptions={item.mo_ta.split(",")}
               />
-              <PurchasedPremiumCard
-                isActive={true}
-                title="Ten Premium"
-                price="giá_gói"
-                duration="thoi_han"
-                descriptions={["mo ta", "mo ta", "mo ta"]}
-              />
-              <PurchasedPremiumCard
-                isActive={true}
-                title="Ten Premium"
-                price="giá_gói"
-                duration="thoi_han"
-                descriptions={["mo ta", "mo ta", "mo ta"]}
-              />
-              <PurchasedPremiumCard
-                isActive={true}
-                title="Ten Premium"
-                price="giá_gói"
-                duration="thoi_han"
-                descriptions={["mo ta", "mo ta", "mo ta"]}
-              />
+            ))}
           </div>
       </div>
     </div>
+    </>
+   
   )
 }
 
