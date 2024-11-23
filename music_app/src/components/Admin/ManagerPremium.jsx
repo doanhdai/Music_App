@@ -224,21 +224,25 @@ const ManagerPremium = () => {
     console.log("Dữ liệu nhận được:", data);
     const requestData = {
       ten_goi: data.title,       // Tên gói
-      thoi_han: data.duration,     // Thời hạn
-      gia_goi: data.price,       // Giá gói // Doanh thu
-      mo_ta: data.descriptions,           // Mô tả (chuỗi)
-      trang_thai: data.isActive // Trạng thái (1 hoặc 0)
-  };
+      thoi_han: data.duration,   // Thời hạn
+      gia_goi: data.price,       // Giá gói
+      mo_ta: data.descriptions,  // Mô tả (chuỗi)
+      trang_thai: data.isActive  // Trạng thái (1 hoặc 0)
+    };
   
-
-  // Gửi dữ liệu lên API
-  axios.post('http://127.0.0.1:8000/api/vouchers', requestData)
+    // Gửi dữ liệu lên API
+    axios.post('http://127.0.0.1:8000/api/vouchers', requestData)
       .then(response => {
-          console.log("Dữ liệu đã được thêm vào:", response.data);
-          // Xử lý thêm nếu cần (ví dụ: thông báo thành công, cập nhật UI)
+        console.log("Dữ liệu đã được thêm vào:", response.data);
+  
+        // Gọi lại API để cập nhật danh sách mới
+        return axios.get("http://127.0.0.1:8000/api/vouchers");
+      })
+      .then(res => {
+        setPremiumData(res.data); // Cập nhật lại danh sách gói
       })
       .catch(error => {
-          console.error("Lỗi khi gửi API:", error);
+        console.error("Lỗi khi thêm gói:", error);
       });
   };
   const handleDelete = (ma_goi) => {

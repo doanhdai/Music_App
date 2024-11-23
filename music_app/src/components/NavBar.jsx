@@ -26,8 +26,16 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData, thongbaoList } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
-  const account = JSON.parse(localStorage.getItem('account'));
-  const thongbaotheoAcc = thongbaoList.filter((item) => item.ma_tk == account.ma_tk);
+  let account = null;
+let thongbaotheoAcc = [];
+
+if (isLoggedIn) {
+  account = JSON.parse(localStorage.getItem('account'));
+  if (account) {
+    thongbaotheoAcc = thongbaoList.filter((item) => item.ma_tk === account.ma_tk);
+  }
+}
+  
 
 
   const removeVietnamese = (str) => {
@@ -93,17 +101,24 @@ const NavBar = () => {
     } else
       return <>
         {
-          thongbaoList.map((item) => account.ma_tk == item.ma_tk && (
-            <li className="flex gap-2 border-b pb-1 border-[#A4A298] items-center mb-1">
-              <GiLetterBomb className="w-[45px] h-[45px] bg-transparent text-[#EB2272]" />
-              <span className=" w-full">
-                <p className="font-bold">{item.ten_tb}</p>
-                <div className="font-normal text-sm my-1">{item.noi_dung_tb}</div>
-                <div className="font-normal text-xs text-[#A4A298] mt-2">{item.ngay_thong_bao}</div>
-              </span>
-            </li>
-          ))
-        }
+  thongbaoList
+    .filter(item => account.ma_tk === item.ma_tk)
+    .map(item => (
+      <li 
+        key={item.ma_tb} // Đảm bảo mỗi phần tử có key duy nhất
+        className="flex gap-2 border-b pb-1 border-[#A4A298] items-center mb-1"
+      >
+        <GiLetterBomb className="w-[45px] h-[45px] bg-transparent text-[#EB2272]" />
+        <span className="w-full">
+          <p className="font-bold">{item.ten_tb}</p>
+          <div className="font-normal text-sm my-1">{item.noi_dung_tb}</div>
+          <div className="font-normal text-xs text-[#A4A298] mt-2">
+            {item.ngay_thong_bao}
+          </div>
+        </span>
+      </li>
+    ))
+}
 
       </>
   }
