@@ -131,13 +131,31 @@ const SongUpload = ({ closeModal }) => {
     return `${year}-${month}-${day}`;
   }
   
-  const imgData = ImgRef.current?.getData()
+  const imgData = ImgRef.current?.getData();
+  async function getAudioDuration(file) {
+    const url = URL.createObjectURL(file);
 
+    return new Promise((resolve) => {
+      const audio = document.createElement("audio");
+      audio.muted = true; // Mute the audio to avoid unexpected playback
+
+      const source = document.createElement("source");
+      source.src = url;
+
+      audio.appendChild(source);
+      audio.preload = "metadata"; // Load metadata only
+
+      audio.onloadedmetadata = () => {
+        resolve(audio.duration);
+        URL.revokeObjectURL(url); // Release the URL object
+      };
+    });
+  }
   const formData = {
     "ten_bai_hat": songName,
     "ma_tk_artist": currentArtistId,
     "ma_album": null,
-    "thoi_luong": 240,
+    "thoi_luong": getAudioDuration(highQualityFile),
     "trang_thai": 1,
     "hinh_anh": ImgRef,
     "ngay_phat_hanh": getCurrentDay(),

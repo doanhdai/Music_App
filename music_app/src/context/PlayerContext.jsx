@@ -34,7 +34,7 @@ const PlayerContextProvider = (props) => {
     const match = code.match(/\d+$/);
     return match ? parseInt(match[0], 10) : null;
   };
-  
+
   const getSongsData = async () => {
     try {
       const response = await axios.get(`${url_api}/api/songs`);
@@ -376,6 +376,7 @@ const PlayerContextProvider = (props) => {
     // songsPlaylist,
     // detailPlaylist,
     playlistsData,
+    setPlaylistsData,
     artistsData,
     genresData,
     setVolume: updateVolume,

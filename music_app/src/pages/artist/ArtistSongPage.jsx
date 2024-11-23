@@ -1,6 +1,6 @@
 import ManageBar from "./components/ManageBar";
 import { useEffect, useState } from "react";
-import { assets } from "../../assets/assets";
+import { assets, songsData } from "../../assets/assets";
 
 import { FiEye } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
@@ -17,7 +17,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
 import { songData2 } from "../../assets/assets";
 import { Button } from "antd";
-
+import { FaX } from "react-icons/fa6";
 import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 
@@ -28,7 +28,7 @@ const ArtistSongPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(2);
 
-
+  const currentArtistId = "ACC0006";
   const handleShowAddSongModal = () => {
     setShowAddSongModal(true);
   };
@@ -58,17 +58,13 @@ const ArtistSongPage = () => {
   };
   // fetch data from server
   useEffect(() => {
-    // fetch("link")
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSongs(data);
-    //   });
-    setSongsData(songData2);
+    fetch(`http://127.0.0.1:8000/api/songs/artist/${currentArtistId}`)
+      .then(res=> res.json())
+      .then(res => {
+        console.log(res.data[0].bai_hat);
+        setSongsData(res.data[0].bai_hat);
+      });
     
-   
   }, []);
 
 
@@ -143,9 +139,9 @@ const ArtistSongPage = () => {
   );
 };
 
-const SongDetailModal = ({ detailsSongModalState, song, onClose }) => {
+const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
   if (!detailsSongModalState) return null;
-  const songData = songData2[1];
+  console.log(songData.ma_bai_hat)
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
@@ -170,36 +166,36 @@ const SongDetailModal = ({ detailsSongModalState, song, onClose }) => {
               </h3>
               <h5 className="text-sm text-gray-400">
                 Ngay phat hanh:{" "}
-                <span className="text-white">{songData.ngay_phat_hanh}</span>
+                <span className="text-white">  {songData.ngay_phat_hanh}</span>
               </h5>
               <h5 className="text-sm text-gray-400">
-                Album:{" "}
-                <span className="text-white">{songData.ma_album} ma album</span>
+                Album:
+                <span className="text-white">   {songData.ten_album}</span>
               </h5>
               <h5 className="text-sm text-gray-400">
-                The loai:{" "}
+                Thể loại:
                 <span className="text-white">
-                  99%{songData.theloa} the loai
+                  {songData.the_loai} 
                 </span>
               </h5>
               <h5 className="text-sm text-gray-400">
-                Nghe si:{" "}
+                Nghệ sĩ:
                 <span className="text-white">{songData.ma_artist}</span>
               </h5>
             </div>
           </div>
           <div className="flex flex-col  gap-3 justify-between w-[60] ml-2">
             <div className="flex flex-row items-center text-gray-400 gap-2">
-              <FaHeart class />
-              <span>11{song.luot_yeu_thich}</span>
+              <FaHeart className="" />
+              <span>{songData.luot_yeu_thich}</span>
             </div>
             <div className="flex flex-row items-center text-gray-400 gap-2">
               <FaHeadphones />
-              <span>11{song.luot_nghe}</span>
+              <span>{songData.luot_nghe}</span>
             </div>
             <div className="flex flex-row items-center text-gray-400 gap-2">
               <IoTimeSharp />
-              <span>3:2</span>
+              <span>{songData.thoi_luong}</span>
             </div>
           </div>
         </div>
@@ -208,7 +204,7 @@ const SongDetailModal = ({ detailsSongModalState, song, onClose }) => {
           onClick={onClose}
           className="absolute top-2 right-2 text-white py-2 px-4 rounded"
         >
-          X
+         <FaX/>
         </button>
       </div>
     </div>
@@ -259,7 +255,7 @@ const SongList2 = ({ songsData, currentActionType }) => {
 
   return (
     <div className="mt-5 bg-[#121212] h-screen overflow-scroll">
-      <div className=" py-2 grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
+      <div className=" py-2 grid grid-cols-5 sm:grid-cols-[4fr_2fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
         <p>Tên bài hất</p>
         <p>Album</p>
         <p>Trạng thái</p>
@@ -271,19 +267,18 @@ const SongList2 = ({ songsData, currentActionType }) => {
       {songsData.map((item, index) => (
         <div
           key={index}
-          className="grid grid-cols-5 sm:grid-cols-[3.5fr_3fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
+          className="grid grid-cols-5 sm:grid-cols-[4fr_2fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
           onClick={() => handleClickedSongItem(currentActionType, item)}
         >
           <p className="text-white">
             {/* src={item.hinh_anh} */}
             <img
               className="inline w-10 mx-4 aspect-square "
-              src="https://cloudinary-marketing-res.cloudinary.com/image/upload/ar_0.5,c_fill,g_auto,w_433/q_auto/f_auto/hiking_dog_mountain.jpg"
-            />
+              src={item.hinh_anh} />
             {item.ten_bai_hat}
           </p>
 
-          <p className="text-[15px] text-center">{item.ma_album}</p>
+          <p className="text-[15px] text-center">{item.ten_album}</p>
           <p className="text-[15px] text-center">
             {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
           </p>
@@ -292,7 +287,7 @@ const SongList2 = ({ songsData, currentActionType }) => {
       ))}
       <SongDetailModal
         className="float-start"
-        song={selectedSong}
+        songData={selectedSong}
         detailsSongModalState={detailsSongModalState}
         onClose={handleCloseDetailModal}
       />

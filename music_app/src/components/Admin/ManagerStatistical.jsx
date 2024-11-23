@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from 'antd'
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { Button, message, Modal } from 'antd'
 import { assets } from '../../assets/assets';
 import { Bar, Line } from 'react-chartjs-2';
+import { AdminContext } from '../../context/AdminContext';
 import { Chart, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
-
+import * as XLSX from 'xlsx';
 // Đăng ký các thành phần cần thiết
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 const loaithongke = [
@@ -20,49 +21,53 @@ const loaithoigian = [
 ];
 
 let dangkyPremium = [
-  { ma_tk: 1, ma_goi: 1, ngay_dang_ky: '24/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 20000 },
-  { ma_tk: 2, ma_goi: 1, ngay_dang_ky: '20/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 10000 },
-  { ma_tk: 3, ma_goi: 1, ngay_dang_ky: '21/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 23000 },
-  { ma_tk: 4, ma_goi: 1, ngay_dang_ky: '22/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 13000 },
-  { ma_tk: 5, ma_goi: 1, ngay_dang_ky: '23/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 23000 },
-  { ma_tk: 1, ma_goi: 1, ngay_dang_ky: '24/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 23000 },
-  { ma_tk: 2, ma_goi: 1, ngay_dang_ky: '21/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 12000 },
-  { ma_tk: 4, ma_goi: 1, ngay_dang_ky: '22/10/2023 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 10000 },
-  { ma_tk: 3, ma_goi: 1, ngay_dang_ky: '11/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 24000 },
-  { ma_tk: 5, ma_goi: 1, ngay_dang_ky: '11/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 22000 },
-  { ma_tk: 5, ma_goi: 1, ngay_dang_ky: '21/10/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 13000 },
-  { ma_tk: 6, ma_goi: 1, ngay_dang_ky: '12/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 14000 },
-  { ma_tk: 7, ma_goi: 1, ngay_dang_ky: '12/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 21000 },
-  { ma_tk: 8, ma_goi: 1, ngay_dang_ky: '12/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 20000 },
-  { ma_tk: 9, ma_goi: 1, ngay_dang_ky: '12/11/2024 18:00:33', ngay_het_han: '11/11/2023 18:00:33', tong_tien_thanh_toan: 19000 }
+  { ma_tk: 1, ma_goi: 1, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 20000 },
+  { ma_tk: 2, ma_goi: 2, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 10000 },
+  { ma_tk: 3, ma_goi: 3, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 23000 },
+  { ma_tk: 4, ma_goi: 4, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 13000 },
+  { ma_tk: 5, ma_goi: 5, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 23000 },
+  { ma_tk: 2, ma_goi: 1, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 12000 },
+  { ma_tk: 4, ma_goi: 2, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 10000 },
+  { ma_tk: 3, ma_goi: 4, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 24000 },
+  { ma_tk: 5, ma_goi: 2, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 22000 },
+  { ma_tk: 5, ma_goi: 4, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 13000 },
+  { ma_tk: 6, ma_goi: 5, ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 14000 },
+  { ma_tk: 7, ma_goi: 4, ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 21000 },
+  { ma_tk: 8, ma_goi: 6, ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 20000 },
+  { ma_tk: 9, ma_goi: 6, ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 19000 }
 ]
 
 let premiumList = [
-
+  { ma_goi: 1, ten_goi: 'goi 1', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
+  { ma_goi: 2, ten_goi: 'goi 2', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 1 },
+  { ma_goi: 3, ten_goi: 'goi 3', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
+  { ma_goi: 4, ten_goi: 'goi 4', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
+  { ma_goi: 5, ten_goi: 'goi 5', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 1 },
+  { ma_goi: 6, ten_goi: 'goi 6', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 }
 ]
-let hopdongList = [
-  { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-  { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 3, ma_quang_cao: 3, luot_phat: 111, doanh_thu: 4500000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 4, ma_quang_cao: 4, luot_phat: 209, doanh_thu: 9000000, ngay_tao: '23/10/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-  { ma_hop_dong: 5, ma_quang_cao: 1, luot_phat: 230, doanh_thu: 10500000, ngay_tao: '23/12/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-  { ma_hop_dong: 6, ma_quang_cao: 3, luot_phat: 146, doanh_thu: 5400000, ngay_tao: '23/11/2023 18:00:33', ngay_hoan_thanh: '23/11/2023 08:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '09/09/2023 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_tao: '12/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/11/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/10/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '11/10/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '12/10/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '12/10/2024 18:00:33', ngay_hoan_thanh: '' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_tao: '14/10/2024 18:00:33', ngay_hoan_thanh: '' }
+let contractsData = [
+  { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 3, ma_quang_cao: 3, luot_phat: 111, doanh_thu: 4500000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 4, ma_quang_cao: 4, luot_phat: 209, doanh_thu: 9000000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 5, ma_quang_cao: 1, luot_phat: 230, doanh_thu: 10500000, ngay_hieu_luc: '23/12/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 6, ma_quang_cao: 3, luot_phat: 146, doanh_thu: 5400000, ngay_hieu_luc: '23/11/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '09/09/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '12/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '12/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '14/10/2024 18:00:33', ngay_hoan_thanh: '10-10-2024 18:00:33' }
 ]
 
 let quangcaoList = [
@@ -73,17 +78,17 @@ let quangcaoList = [
 ]
 
 let phieuruttien = [
-  { ma_phieu: 1, ma_tk_artist: 1, ngay_rut_tien: '23/10/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
-  { ma_phieu: 1, ma_tk_artist: 2, ngay_rut_tien: '22/10/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'VCB' },
-  { ma_phieu: 1, ma_tk_artist: 3, ngay_rut_tien: '21/10/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'MB' },
-  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '20/10/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Sacombank' },
-  { ma_phieu: 1, ma_tk_artist: 5, ngay_rut_tien: '22/10/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
-  { ma_phieu: 1, ma_tk_artist: 2, ngay_rut_tien: '23/10/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'VPBank' },
-  { ma_phieu: 1, ma_tk_artist: 1, ngay_rut_tien: '11/11/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'MB' },
-  { ma_phieu: 1, ma_tk_artist: 3, ngay_rut_tien: '11/11/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Sacombank' },
-  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '11/11/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
-  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '12/11/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
-  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '12/11/2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' }
+  { ma_phieu: 1, ma_tk_artist: 1, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
+  { ma_phieu: 1, ma_tk_artist: 2, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'VCB' },
+  { ma_phieu: 1, ma_tk_artist: 3, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'MB' },
+  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Sacombank' },
+  { ma_phieu: 1, ma_tk_artist: 5, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
+  { ma_phieu: 1, ma_tk_artist: 2, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'VPBank' },
+  { ma_phieu: 1, ma_tk_artist: 1, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'MB' },
+  { ma_phieu: 1, ma_tk_artist: 3, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Sacombank' },
+  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
+  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },
+  { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' }
 ]
 
 let phimoiluotnghe = 500;
@@ -138,6 +143,7 @@ function listDaysInRange(start, end) { // lấy mảng chứa các ngày từ ng
 
 
 const ManagerStatistical = () => {
+  const { contractsData, formatDate } = useContext(AdminContext);
   const [indexThoiGianSelected, setIndexThoiGian] = useState(1);
   const [indexLoaiSelected, setIndexLoai] = useState(1);
   const [startDay, setStartDay] = useState(getDate(0));
@@ -160,29 +166,29 @@ const ManagerStatistical = () => {
           case 1: {
             let day = getDate(1);
             labels.push(day);
-            const total = hopdongList.reduce((sum, item) => {
-              return item.ngay_tao.split(' ')[0] == day ? sum + item.doanh_thu : sum;
+            const total = contractsData.reduce((sum, item) => {
+              return formatDate(item.ngay_hoan_thanh) == day ? sum + item.doanh_thu : sum;
             }, 0);
-            value.push(total);
+            value.push(Math.trunc(total));
             break;
           }
           case 2: {
             let day = getDate(0);
             labels.push(day);
-            const total = hopdongList.reduce((sum, item) => {
-              return item.ngay_tao.split(' ')[0] == day ? sum + item.doanh_thu : sum;
+            const total = contractsData.reduce((sum, item) => {
+              return formatDate(item.ngay_hoan_thanh) == day ? sum + item.doanh_thu : sum;
             }, 0);
-            value.push(total);
+            value.push(Math.trunc(total));
             break;
           }
           case 3: {
             let day = getDate(2).split("/");
             labels = getDaysOfMonth(day[1], day[2]);
             labels.forEach((d) => {
-              const total = hopdongList.reduce((sum, item) => {
-                return item.ngay_tao.split(' ')[0] == d ? sum + item.doanh_thu : sum;
+              const total = contractsData.reduce((sum, item) => {
+                return formatDate(item.ngay_hoan_thanh) == d ? sum + item.doanh_thu : sum;
               }, 0);
-              value.push(total);
+              value.push(Math.trunc(total));
             })
             break;
           }
@@ -193,10 +199,10 @@ const ManagerStatistical = () => {
             labels = listDaysInRange(start, end);
             if (labels.length != 0) {
               labels.forEach((d) => {
-                const total = hopdongList.reduce((sum, item) => {
-                  return item.ngay_tao.split(' ')[0] == d ? sum + item.doanh_thu : sum;
+                const total = contractsData.reduce((sum, item) => {
+                  return formatDate(item.ngay_hoan_thanh) == d ? sum + item.doanh_thu : sum;
                 }, 0);
-                value.push(total);
+                value.push(Math.trunc(total));
               })
 
               break;
@@ -214,7 +220,7 @@ const ManagerStatistical = () => {
             let day = getDate(1);
             labels.push(day);
             const total = dangkyPremium.reduce((sum, item) => {
-              return item.ngay_dang_ky.split(' ')[0] == day ? sum + item.tong_tien_thanh_toan : sum;
+              return formatDate(item.ngay_dang_ky) == day ? sum + item.tong_tien_thanh_toan : sum;
             }, 0);
             value.push(total);
             break;
@@ -223,7 +229,7 @@ const ManagerStatistical = () => {
             let day = getDate(0);
             labels.push(day);
             const total = dangkyPremium.reduce((sum, item) => {
-              return item.ngay_dang_ky.split(' ')[0] == day ? sum + item.tong_tien_thanh_toan : sum;
+              return formatDate(item.ngay_dang_ky) == day ? sum + item.tong_tien_thanh_toan : sum;
             }, 0);
             value.push(total);
             break;
@@ -233,7 +239,7 @@ const ManagerStatistical = () => {
             labels = getDaysOfMonth(day[1], day[2]);
             labels.forEach((d) => {
               const total = dangkyPremium.reduce((sum, item) => {
-                return item.ngay_dang_ky.split(' ')[0] == d ? sum + item.tong_tien_thanh_toan : sum;
+                return formatDate(item.ngay_dang_ky) == d ? sum + item.tong_tien_thanh_toan : sum;
               }, 0);
               value.push(total);
             })
@@ -247,7 +253,7 @@ const ManagerStatistical = () => {
             if (labels.length != 0) {
               labels.forEach((d) => {
                 const total = dangkyPremium.reduce((sum, item) => {
-                  return item.ngay_dang_ky.split(' ')[0] == d ? sum + item.tong_tien_thanh_toan : sum;
+                  return formatDate(item.ngay_dang_ky) == d ? sum + item.tong_tien_thanh_toan : sum;
                 }, 0);
                 value.push(total);
               })
@@ -266,7 +272,7 @@ const ManagerStatistical = () => {
             let day = getDate(1);
             labels.push(day);
             const total = phieuruttien.reduce((sum, item) => {
-              return item.ngay_rut_tien.split(' ')[0] == day ? sum + item.tong_tien_rut_ra : sum;
+              return formatDate(item.ngay_rut_tien) == day ? sum + item.tong_tien_rut_ra : sum;
             }, 0);
             value.push(total);
             break;
@@ -275,7 +281,7 @@ const ManagerStatistical = () => {
             let day = getDate(0);
             labels.push(day);
             const total = phieuruttien.reduce((sum, item) => {
-              return item.ngay_rut_tien.split(' ')[0] == day ? sum + item.tong_tien_rut_ra : sum;
+              return formatDate(item.ngay_rut_tien) == day ? sum + item.tong_tien_rut_ra : sum;
             }, 0);
             value.push(total);
             break;
@@ -285,7 +291,7 @@ const ManagerStatistical = () => {
             labels = getDaysOfMonth(day[1], day[2]);
             labels.forEach((d) => {
               const total = phieuruttien.reduce((sum, item) => {
-                return item.ngay_rut_tien.split(' ')[0] == d ? sum + item.tong_tien_rut_ra : sum;
+                return formatDate(item.ngay_rut_tien) == d ? sum + item.tong_tien_rut_ra : sum;
               }, 0);
               value.push(total);
             })
@@ -299,7 +305,7 @@ const ManagerStatistical = () => {
             if (labels.length != 0) {
               labels.forEach((d) => {
                 const total = phieuruttien.reduce((sum, item) => {
-                  return item.ngay_rut_tien.split(' ')[0] == d ? sum + item.tong_tien_rut_ra : sum;
+                  return formatDate(item.ngay_rut_tien) == d ? sum + item.tong_tien_rut_ra : sum;
                 }, 0);
                 value.push(total);
               })
@@ -332,7 +338,7 @@ const ManagerStatistical = () => {
 
   const ItemDoanhThuQuangCao = () => {
     let day = dayClicked;
-    const filter = hopdongList.filter(item => item.ngay_tao.split(' ')[0] === day); // Lọc hợp đồng theo ngày
+    const filter = contractsData.filter(item => formatDate(item.ngay_hoan_thanh) === day); // Lọc hợp đồng theo ngày
     return (
       <>
         <div className='grid grid-cols-5 w-full border-y text-center mt-2 py-2'>
@@ -341,12 +347,12 @@ const ManagerStatistical = () => {
           <div>Doanh thu</div>
         </div>
         {filter.map((item, index) => {
-          const quangcao = quangcaoList.find(qc => qc.ma_quang_cao === item.ma_quang_cao);
+          const quangcao = contractsData.find(qc => qc.ma_quang_cao === item.ma_quang_cao);
           return quangcao ? (
             <div key={index} className='grid grid-cols-5 w-full text-[#A4A298] text-center' >
               <div className=''>{item.ma_hop_dong}</div>
               <div className='col-span-3'>{quangcao.ten_quang_cao}</div>
-              <div>{item.doanh_thu}</div>
+              <div>{Math.trunc(item.doanh_thu)}</div>
             </div>
           ) : null;
         })}
@@ -355,10 +361,69 @@ const ManagerStatistical = () => {
   };
 
   const ItemDoanhThuPremium = () => {
+    let day = dayClicked;
+    // Lọc các đăng ký theo ngày được chọn
+    const filter = dangkyPremium.filter(item => formatDate(item.ngay_dang_ky) === day);
 
-  }
+    const magoi_doanhthu = []; // Mảng lưu doanh thu từng gói
+    filter.forEach((item) => {
+      const goi = magoi_doanhthu.find(i => i.ma_goi === item.ma_goi); // Tìm gói trong mảng
+      if (goi) {
+        // Nếu gói đã tồn tại, cộng thêm doanh thu
+        goi.doanh_thu += item.tong_tien_thanh_toan;
+      } else {
+        // Nếu chưa tồn tại, thêm gói mới
+        const goiPre = premiumList.find(i => i.ma_goi === item.ma_goi);
+        magoi_doanhthu.push({ ma_goi: item.ma_goi, ten_goi: goiPre.ten_goi, doanh_thu: item.tong_tien_thanh_toan, trang_thai: goiPre.trang_thai });
+      }
+    });
+    return (
+      <>
+        <div className='grid grid-cols-6 w-full border-y text-center mt-2 py-2'>
+          <div className=''>Mã gói</div>
+          <div className='col-span-3'>Tên gói Premium</div>
+          <div>Doanh thu</div>
+          <div>Tình trạng</div>
+        </div>
+        {magoi_doanhthu.map((item) => (
+          <div key={item.ma_goi} className='grid grid-cols-6 w-full text-[#A4A298] text-center' >
+            <div className=''>{item.ma_goi}</div>
+            <div className='col-span-3'>{item.ten_goi}</div>
+            <div>{item.doanh_thu}</div>
+            <div>{item.trang_thai == 0 ? 'Đã xóa' : 'Dang bán'}</div>
 
+          </div>
+        ))
+        }
+      </>
+    );
+  };
 
+  const ItemChiphiNghesi = () => {
+    let day = dayClicked;
+    const filter = phieuruttien.filter(item => formatDate(item.ngay_rut_tien) === day); // Lọc hợp đồng theo ngày
+    return (
+      <>
+        <div className='grid grid-cols-7 w-full border-y text-center mt-2 py-2'>
+          <div className=''>Mã phiếu rút</div>
+          <div className=''>Mã tài khoản</div>
+          <div className='col-span-3'>Số tiền rút</div>
+          <div>Tên ngân hàng</div>
+          <div>Số tài khoản</div>
+        </div>
+        {filter.map((item, index) => (
+          <div key={index} className='grid grid-cols-7 w-full text-[#A4A298] text-center' >
+            <div className=''>{item.ma_phieu}</div>
+            <div className=''>{item.ma_tk_artist}</div>
+            <div className='col-span-3'>{item.tong_tien_rut_ra}</div>
+            <div>{item.bank_name}</div>
+            <div>{item.bank_id}</div>
+          </div>
+        ))
+        }
+      </>
+    );
+  };
 
   const handleClickColBar = {
     onClick: (e) => {
@@ -438,15 +503,56 @@ const ManagerStatistical = () => {
 
   const handleUpdatePhi = () => {
     if (valueUpdate != '') {
-      let i = confirm('Bạn có muốn lưu thay đổi?');
-      if (i) {
-        phimoiluotnghe = valueUpdate;
-        alert('Lưu thành công');
+      if (isNaN(valueUpdate)) message.error("Phí phải là số và số đó lớn hơn 0");
+      else if (!isNaN(valueUpdate) && parseInt(valueUpdate) <= 0) message.error("Phí phải là số lớn hơn 0");
+      else {
+        Modal.confirm({
+          title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+          content: 'Cập nhật phí mỗi lượt nghe ',
+          okText: 'Đồng ý',
+          cancelText: 'Hủy',
+          onOk() {
+            phimoiluotnghe = valueUpdate;
+            message.success('Lưu thành công');
+            setIsUpdatePhi(false);
+            setValueUpdate('');
+          },
+          onCancel() {
+            setIsUpdatePhi(false);
+            setValueUpdate('');
+          },
+        });
+
       }
 
     }
-    setIsUpdatePhi(false);
-    setValueUpdate('');
+
+  }
+
+  const exportToExcel = (data, fileName) => {
+    const filteredData = data.map(item => ({
+      "Ngày rút tiền": item.ngay_rut_tien,
+      "Mã phiếu rút tiền": item.ma_phieu,
+      "Số tiền rút": item.tong_tien_rut_ra,
+      "Số tài khoản": item.bank_id,
+      "Tên ngân hàng": item.bank_name
+    }));
+
+    // Tạo worksheet từ dữ liệu đã lọc
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+
+    // Tạo workbook và thêm worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    // Xuất file Excel
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  };
+
+  const handleXuatExcel = () => {
+    let day = dayClicked;
+    const filter = phieuruttien.filter(item => formatDate(item.ngay_rut_tien) === day);
+    exportToExcel(filter, "danhsachruttien_" + day);
   }
 
   return (
@@ -483,7 +589,7 @@ const ManagerStatistical = () => {
                 value={endDay.split('/').reverse().join('-')}
                 onChange={handleGetNewDate}
                 onKeyDown={(event) => event.preventDefault()}
-
+                max={new Date().toISOString().split('T')[0]}
               />
             </span>
           )
@@ -497,7 +603,7 @@ const ManagerStatistical = () => {
               Hiện tại, phí mà nghệ sĩ nhận được với mỗi lượt nghe bài hát của họ là:
               {
                 isUpdatePhi ? <>
-                  <input type="number" value={valueUpdate} placeholder={phimoiluotnghe} className='bg-[#1E1E1E] outline-none p-1' autoFocus onChange={(event) => setValueUpdate(event.target.value)} />
+                  <input type="text" value={valueUpdate} placeholder={phimoiluotnghe} className='bg-[#1E1E1E] outline-none p-1' autoFocus onChange={(event) => setValueUpdate(event.target.value)} />
                   <Button onClick={handleUpdatePhi} type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F]'>Lưu</Button>
                 </> : <>
                   <span className='text-lg font-bold text-[#EB2272]'> {phimoiluotnghe}đ</span>
@@ -531,9 +637,13 @@ const ManagerStatistical = () => {
                     case 1:
 
                       return <ItemDoanhThuQuangCao />
-
-                    default:
-                      return null;
+                    case 2:
+                      return <ItemDoanhThuPremium />
+                    case 3:
+                      return <div className='flex flex-col items-end'>
+                        <Button onClick={handleXuatExcel} type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F]'>Xuất excel</Button>
+                        <ItemChiphiNghesi />
+                      </div>
                   }
                 })()
               }
