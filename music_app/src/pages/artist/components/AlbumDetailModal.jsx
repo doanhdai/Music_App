@@ -1,5 +1,5 @@
-import { FaHeartl,FaXmark } from "react-icons"
-
+import { FaHeart } from "react-icons/fa"
+import { FaXmark } from "react-icons/fa6";
 const AlbumDetailModal = ({ album, onClose }) => {
 
   return (
@@ -127,4 +127,4 @@ export default AlbumDetailModal;
   
   
    */}
-  _
+  

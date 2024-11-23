@@ -1,6 +1,6 @@
 import ManageBar from "./components/ManageBar";
 import { useEffect, useState } from "react";
-
+import { removeVietnameseTones,extractDayMonthYear,extractYear } from "../../assets/assets";
 import { assets } from "../../assets/assets";
 import { CiSearch } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
@@ -9,11 +9,13 @@ import { BiSolidLockOpen } from "react-icons/bi";
 import { GoPlus } from "react-icons/go";
 import { TfiPencil } from "react-icons/tfi";
 import { FaTrash } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 import { BsSendPlus } from "react-icons/bs";
 import AddAlbumModal from "./components/AddAlbumModal";
 import EditAlbumModal from "./components/EditAlbumModal";
 
 const ArtistAlbumPage = () => {
+  const currentArtistId = "ACC0006";
   const fakeAlbumData = [
     
     {
@@ -43,14 +45,16 @@ const ArtistAlbumPage = () => {
       trangThai: 1,
     },
   ];
-  const [albums, setAlbum] = useState([]);
+  const [albumsData, setAlbumsData] = useState([]);
   const [showAddAlbumModal, setShowAddAlbumModal] = useState(false);
   const [currentActionType, setCurrentActionType] = useState('details');
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(2);
 
   useEffect(() => {
-    setAlbum(fakeAlbumData);
+    fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`)
+    .then(res=>res.json())
+    .then(res=>setAlbumsData(res.albums))
   }, []);
 
   
@@ -81,10 +85,11 @@ const ArtistAlbumPage = () => {
     }
   }
 
-  const filteredAlbums = albums.filter((item) => { 
+  const filteredAlbums = albumsData.filter((item) => { 
     return (
-      item.tenAlbum.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      ( selectedStatus == 2 || item.trangThai == selectedStatus) // 2 la tat ca
+      removeVietnameseTones(item.ten_album.toLowerCase())
+        .includes(removeVietnameseTones(searchQuery.toLowerCase())) &&
+      ( selectedStatus == 0 || item.trang_thai == selectedStatus) // 2 la tat ca
     )
   });
 
@@ -112,9 +117,9 @@ const ArtistAlbumPage = () => {
           
               }}
             >
-              <option value="2">Tất cả</option>
-              <option value="1">Công khai</option>
-              <option value="0">Ẩn</option>
+              <option value="0">Tất cả</option>
+              <option value="2">Công khai</option>
+              <option value="1">Ẩn</option>
             </select>
           </div>
           </div>
@@ -138,13 +143,13 @@ const ArtistAlbumPage = () => {
           />
         </div>
         <h3 className="mt-3">Tổng cộng: {filteredAlbums.length}</h3>
-        <AlbumList albums={filteredAlbums} currentActionType={currentActionType}/>
+        <AlbumList albumsData={filteredAlbums} currentActionType={currentActionType}/>
       </div>
     </>
   );
 };
 
-const AlbumList = ({ albums,currentActionType }) => {
+const AlbumList = ({ albumsData,currentActionType }) => {
 
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [editAlbumModalState, setEditAlbumModalState] = useState(false);
@@ -188,26 +193,26 @@ const AlbumList = ({ albums,currentActionType }) => {
 
   return (
     <div className="grid grid-cols-6 gap-4 mt-7 h-[540px] overflow-y-auto pb-8">
-      {albums.map((album) => (
+      {albumsData.map((album) => (
         <div
-          key={album.albumId}
+          key={album.ma_album}
           className="bg-gradient-to-b from-gray-800 to-black shadow-lg cursor-pointer h-[280px] flex flex-col justify-between rounded-lg"
           onClick={() => handleClickedSongItem(currentActionType,album)}
         >
           <div className='flex justify-center mt-1'>
           <img
-            src={album.hinhAnh}
-            alt={album.tenAlbum}
+            src={album.hinh_anh}
+            alt={album.ten_album}
             className="aspect-square object-fit h-[160px] w-[160px] rounded-lg"
           />
           </div>
           <div className="flex flex-row items-baseline justify-between px-2">
                   <div className="flex-1 flex flex-col">
-                    <h2 className="text-[16px] font-semibold py-2">{album.tenAlbum}</h2>
-                    <p className="text-white"> 2023 </p>
+                    <h2 className="text-[16px] font-semibold py-2">{album.ten_album}</h2>
+                    <p className="text-white"> {extractDayMonthYear(album.ngay_tao)} </p>
                     <p className="text-lg text-white inline-flex items-center gap-1">
                       <FaHeart size={15} />
-                      <span className='text-[14px]'>123</span>
+                      <span className='text-[14px]'>12</span>
                     </p>
                   </div>
             <div className="statusIcon flex-none text-xl ">
@@ -229,110 +234,73 @@ const AlbumList = ({ albums,currentActionType }) => {
 };
 
 const AlbumDetailModal = ({ album, onClose }) => {
-
+  const [songsOfAlbumData, setSongOfAlbumData] = useState([]);
+  console.log(album.ma_album)
+  useEffect(() => {
+       //fetch(`http://127.0.0.1:8000/api/albumsAL0009/songs`)
+    fetch(`http://127.0.0.1:8000/api/albums${album.ma_album}/songs`)
+    .then(res=>res.json())
+    .then(res => setSongOfAlbumData(res.album.songs))
+    
+  },[])
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
     >
-      <div className="max-w-2xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
+      <div className="min-w-3xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
         <div className="flex items-center justify-center ">
           <div className="flex items-stretch gap-2">
             <img
-              src={album.hinhAnh}
-              alt={album.tenAlbum}
+              src={album.hinh_anh}
+              alt={album.ten_album}
               className=" aspect-square h-40 flex-none"
             />
 
             <div className="album-infor flex flex-col justify-between ml-4  text-gray-400 p-2">
               <h5 className="text-sm ">
-                <span>{album.status === 1 ? "Cong khai" : "An"}</span>
+                <span>{album.trang_thai === 1 ? "Cong khai" : "An"}</span>
               </h5>
               <h5 className="text-xl text-white ">99%</h5>
               <h5 className="inline-flex items-center gap-2">
-                {" "}
-                2020 * 10000 <FaHeart />
+                {extractYear(album.ngay_tao) + " * " +album.luot_yeu_thich}
+                <FaHeart />
               </h5>
             </div>
           </div>
         </div>
         <div className="static overflow-y-auto ">
-          <AlbumSongList />
+        <div className="flex mt-8 flex-col gap-4 max-h-80 overflow-y-auto">
+      { songsOfAlbumData.length > 0  ?
+       songsOfAlbumData.map((song, index) => (
+          <div
+            key={song.ma_bai_hat}
+            className="flex flex-row justify-between items-center h-fit gap-4 max-w-50"
+          >
+            <div className="inline-flex items-center gap-4">
+              <h5>{index + 1}</h5>
+              <img
+                src={song.hinh_anh}
+                alt={song.ten_bai_hat}
+                className="flex-none w-10 h-10 aspect-square"
+              />
+            </div>
+            <p className="text-wrap max-w-80 flex-1 ">{song.ten_bai_hat}</p>
+            <p className="flex-none">{song.thoi_luong}</p>
+          </div>
+        )) : "không có bài hát"
+    }
+    </div>
         </div>
 
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-white py-2 px-4 rounded"
         >
-          {" "}
-          X
+          <FaXmark />
         </button>
       </div>
     </div>
   );
 };
-const AlbumSongList = () => {
-  const fakeSongData = [
-    {
-      id: 1,
-      imgUrl:
-        "https://cloudinary-marketing-res.cloudinary.com/image/upload/ar_0.5,c_fill,g_auto,w_433/q_auto/f_auto/hiking_dog_mountain.jpg",
-      title: "Show Me Love",
-      album: "99%",
-      status: "Công khai",
-      duration: "3:15",
-    },
-    {
-      id: 2,
-      title: "Show Me Love asd fas  df asd fas  df asd fas  df",
-      album: "99%",
-      status: "Công khai",
-      duration: "3:15",
-    },
-    {
-      id: 3,
-      title: "Show Me Love asd fas  df asd fas  df asd fas  df",
-      album: "99%",
-      status: "Công khai",
-      duration: "3:15",
-    },
-    {
-      id: 4,
-      title: "Show Me Love asd fas  df  adf adsf asd fas  df asd fas  df",
-      album: "99%",
-      status: "Công khai",
-      duration: "3:15",
-    },
-    {
-      id: 6,
-      title: "Show Me Love asd fas  df asd fas  df asd fas  df",
-      album: "99%",
-      status: "Công khai",
-      duration: "3:15",
-    },
-  ];
-  // useEffect(() => {
-  //   fetch("datalinke").then((res) => res.json);
-  // }, []);
-  return (
-    <div className="flex mt-8 flex-col gap-4 max-h-80 overflow-y-auto">
-      {fakeSongData.map((song, index) => (
-        <div
-          key={song.id}
-          className="flex flex-row justify-between items-center h-fit gap-4 max-w-50"
-        >
-          <div className="inline-flex items-center gap-4">
-            <h5>{index + 1}</h5>
-            <img
-              src={song.imgUrl}
-              alt={song.name}
-              className="flex-none w-10 h-10 aspect-square"
-            />
-          </div>
-          <p className="text-wrap max-w-80 flex-1 ">{song.title}</p>
-          <p className="flex-none">{song.duration}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
+
 export default ArtistAlbumPage;
