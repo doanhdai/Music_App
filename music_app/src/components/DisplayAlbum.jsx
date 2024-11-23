@@ -23,8 +23,6 @@ const DisplayAlbum = () => {
   const [likeAlbum, setLikeAlbum] = useState({});
   const [accLikeSong, setAccLikeSong] = useState([]);
   const [isDataReady, setIsDataReady] = useState(false);
-  // const [accLikeAlbum, setAccLikeAlbum] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
 
   const toggleMenu = (songId) => {
     setMenuSongId(menuSongId === songId ? null : songId);
@@ -136,6 +134,43 @@ const DisplayAlbum = () => {
     }
   };
 
+  const addSongToPlaylist = async (ma_playlist, ma_bai_hat) => {
+    try {
+      const response = await axios.get(
+        `${url_api}/api/playlist/ACC0007/${ma_playlist}`
+      );
+      const songsInPlaylist = songsInPlaylist.data.data;
+      const isSongInPlaylist = songsAlbum.some(
+        (song) => song.ma_bai_hat === ma_bai_hat
+      );
+      if (isSongInPlaylist) {
+        alert("Bài hát đã có trong playlist này!");
+        return;
+      }
+      await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: "ACC0007",
+        ma_playlist: ma_playlist,
+        ma_bai_hat: ma_bai_hat,
+      });
+      alert("Đã thêm bài hát vào playlist!");
+    } catch (error) {
+      console.error("Lỗi khi thêm bài hát vào playlist:", error);
+      alert("Không thể thêm bài hát vào playlist. Vui lòng thử lại.");
+    }
+  };
+
+  const createNewPlaylist = async (ma_bai_hat) => {
+    try {
+      await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: "ACC0007",
+        ma_bai_hat: ma_bai_hat,
+      });
+      alert("Đã tạo mới playlist và thêm bài hát!");
+    } catch (error) {
+      console.error("Lỗi khi tạo mới playlist:", error);
+      alert("Không thể tạo mới playlist. Vui lòng thử lại.");
+    }
+  };
   return (
     <>
       {detailAlbum.length != 0 && songsAlbum.length != 0 && isDataReady ? (
@@ -262,7 +297,14 @@ const DisplayAlbum = () => {
                 )}
                 {menuSongId === item.ma_bai_hat && (
                   <div className="absolute bottom-[40px] right-[10px] bg-gray-800 text-white p-2 rounded shadow-lg w-[250px] z-50">
-                    <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2">
+                    <div
+                      className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        createNewPlaylist(item.ma_bai_hat);
+                        closeMenu();
+                      }}
+                    >
                       <BsPlusLg size={27} />
                       Thêm và tạo mới playlist
                     </div>
@@ -271,6 +313,14 @@ const DisplayAlbum = () => {
                       <div
                         key={index}
                         className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSongToPlaylist(
+                            playlist.ma_playlist,
+                            item.ma_bai_hat
+                          );
+                          closeMenu();
+                        }}
                       >
                         <img className="h-10" src={assets.mck} />
                         <span>{playlist.ten_playlist}</span>

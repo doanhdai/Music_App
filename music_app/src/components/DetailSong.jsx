@@ -14,6 +14,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { IoMdMore } from "react-icons/io";
 import { MdSend } from "react-icons/md";
 import axios from "axios";
+import { BsPlusLg } from "react-icons/bs";
 
 const DetailSong = () => {
   const [menuSongId, setMenuSongId] = useState(null);
@@ -23,13 +24,14 @@ const DetailSong = () => {
   const [likeData, setLikeData] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
   const [accLike, setAccLike] = useState([]);
+  const [openPlaylist, setOpenPlaylist] = useState(false);
   const url_api = "http://localhost:8000";
   const toggleMenu = (songId) => {
     setMenuSongId(menuSongId === songId ? null : songId);
   };
   const closeMenu = () => setMenuSongId(null);
 
-  const { playWithId, playStatus, pause, songsData, usersData } =
+  const { playWithId, playStatus, pause, songsData, usersData, playlistsData } =
     useContext(PlayerContext);
   const { id } = useParams();
 
@@ -172,8 +174,51 @@ const DetailSong = () => {
       }
     }
   };
+  const addSongToPlaylist = async (ma_playlist) => {
+    try {
+      const response = await axios.get(
+        `${url_api}/api/playlist/ACC0007/${ma_playlist}`
+      );
+      const songsInPlaylist = response.data.data;
+      const isSongInPlaylist = songsInPlaylist.some(
+        (song) => song.ma_bai_hat === id
+      );
+      if (isSongInPlaylist) {
+        alert("Bài hát đã có trong playlist này!");
+        return;
+      }
+      // Nếu chưa có, thêm bài hát vào playlist
+      await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: "ACC0007",
+        ma_playlist: ma_playlist,
+        ma_bai_hat: id,
+      });
+
+      alert("Đã thêm bài hát vào playlist!");
+    } catch (error) {
+      console.error("Lỗi khi thêm bài hát vào playlist:", error);
+      alert("Không thể thêm bài hát vào playlist. Vui lòng thử lại.");
+    }
+  };
+
+  const createNewPlaylist = async () => {
+    try {
+      await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: "ACC0007",
+        ma_bai_hat: id,
+      });
+      alert("Đã tạo mới playlist và thêm bài hát!");
+    } catch (error) {
+      console.error("Lỗi khi tạo mới playlist:", error);
+      alert("Không thể tạo mới playlist. Vui lòng thử lại.");
+    }
+  };
+  const handleOpenPlaylist = (e) => {
+    e.stopPropagation();
+    setOpenPlaylist(!openPlaylist);
+  };
   return (
-    <div onClick={closeMenu}>
+    <div onClick={() => setOpenPlaylist(false)}>
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
         <img className="w-48 h-48 rounded" src={songData.hinh_anh}></img>
         <div className="flex flex-col justify-center">
@@ -209,7 +254,44 @@ const DetailSong = () => {
                 <FaHeart color="red" size={30} />
               )}
             </button>
-            <IoIosAddCircleOutline className="cursor-pointer" size={30} />
+            <div className="text-[15px] flex justify-center relative">
+              <IoAddCircleOutline
+                onClick={handleOpenPlaylist}
+                color="#00FF00"
+                size={30}
+              />
+              {openPlaylist && (
+                <div
+                  className="absolute bottom-[40px] left-0 bg-gray-800 text-white p-2 rounded shadow-lg w-[250px] z-50"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div
+                    className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+                    onClick={() => {
+                      createNewPlaylist();
+                      setOpenPlaylist(false);
+                    }}
+                  >
+                    <BsPlusLg size={27} />
+                    Thêm và tạo mới playlist
+                  </div>
+                  <hr />
+                  {playlistsData.map((playlist, index) => (
+                    <div
+                      key={index}
+                      className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+                      onClick={() => {
+                        addSongToPlaylist(playlist.ma_playlist);
+                        setOpenPlaylist(false);
+                      }}
+                    >
+                      <img className="h-10" src={playlist.hinh_anh} alt="P" />
+                      <span>{playlist.ten_playlist}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -251,7 +333,6 @@ const DetailSong = () => {
           <h2 className="font-bold text-xl">Bình luận {comments.length}</h2>
           {comments.length > 0 ? (
             comments.map((comment) => {
-              // Tìm người dùng từ usersData dựa trên userId trong comment
               const user = usersData.find(
                 (user) => user.ma_tk === comment.ma_tk
               );

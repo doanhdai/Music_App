@@ -14,8 +14,15 @@ import { formatDate } from "../utils";
 import axios from "axios";
 const DisplayArtist = () => {
   const url_api = "http://localhost:8000";
-  const { playWithId, playStatus, track, pause, playlistsData } =
-    useContext(PlayerContext);
+  const {
+    playWithId,
+    playStatus,
+    track,
+    pause,
+    playlistsData,
+    albumsData,
+    setPlaylistsData,
+  } = useContext(PlayerContext);
 
   const { id } = useParams();
   const [hoveredSong, setHoveredSong] = useState(null);
@@ -103,6 +110,17 @@ const DisplayArtist = () => {
 
   const addSongToPlaylist = async (ma_playlist, ma_bai_hat) => {
     try {
+      const response = await axios.get(
+        `${url_api}/api/playlist/ACC0007/${ma_playlist}`
+      );
+      const songsInPlaylist = response.data.data;
+      const isSongInPlaylist = songsInPlaylist.some(
+        (song) => song.ma_bai_hat === ma_bai_hat
+      );
+      if (isSongInPlaylist) {
+        alert("Bài hát đã có trong playlist này!");
+        return;
+      }
       await axios.post(`${url_api}/api/playlist`, {
         ma_tk: "ACC0007",
         ma_playlist: ma_playlist,
@@ -117,10 +135,13 @@ const DisplayArtist = () => {
 
   const createNewPlaylist = async (ma_bai_hat) => {
     try {
-      await axios.post(`${url_api}/api/playlist`, {
+      const response = await axios.post(`${url_api}/api/playlist`, {
         ma_tk: "ACC0007",
         ma_bai_hat: ma_bai_hat,
       });
+      const newPlaylist = response.data.data;
+      setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
+      
       alert("Đã tạo mới playlist và thêm bài hát!");
     } catch (error) {
       console.error("Lỗi khi tạo mới playlist:", error);
@@ -277,23 +298,16 @@ const DisplayArtist = () => {
           </div>
           <div className="mb-4 pt-10">
             <div className="flex justify-between">
-              <h1 className="my-4 font-bold text-2xl">Danh sách album</h1>
-              <h1
-                className="font-bold mr-3 cursor-pointer"
-                onClick={() => navigate(`/albums`)}
-              >
-                {" "}
-                Xem tất cả
-              </h1>
+              <h1 className="my-4 font-bold text-2xl">Các album của </h1>
             </div>
-            <div className="flex overflow-auto">
-              {albumsData.map((item, index) => (
+            <div className="flex overflow-auto justify-start">
+              {albumsData.slice(0, 6).map((item, index) => (
                 <AlbumItems
                   key={index}
-                  name={item.name}
-                  desc={item.desc}
-                  id={item.id}
-                  img={item.image}
+                  name={item.ten_album}
+                  desc={item.nguoi_so_huu}
+                  id={item.ma_album}
+                  img={item.hinh_anh}
                 />
               ))}
             </div>

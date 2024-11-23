@@ -16,9 +16,9 @@ const DisplayHome = () => {
       {(songsData.length != 0 && albumsData.length != 0 && artistsData.length != 0) ? (
         <>
           <div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               {artistsData.length > 0 ? (
-                <h1 className="mb-4 font-bold text-2xl">Nghệ sĩ đề xuất</h1>
+                <h1 className="font-bold text-2xl">Nghệ sĩ đề xuất</h1>
               ) : (
                 ""
               )}
@@ -48,9 +48,9 @@ const DisplayHome = () => {
           </div>
 
           <div className="mb-4 pt-10">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               {albumsData.length > 0 ? (
-                <h1 className="mb-4 font-bold text-2xl">Album phổ biến</h1>
+                <h1 className="font-bold text-2xl">Album phổ biến</h1>
               ) : (
                 ""
               )}
@@ -79,9 +79,9 @@ const DisplayHome = () => {
           </div>
 
           <div className="mb-4 pt-10">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               {songsData.length > 0 ? (
-                <h1 className="mb-4 font-bold text-2xl">Bài hát thịnh hành</h1>
+                <h1 className="font-bold text-2xl">Bài hát thịnh hành</h1>
               ) : (
                 ""
               )}
@@ -99,7 +99,6 @@ const DisplayHome = () => {
             </div>
             <div className="flex overflow-auto justify-start">
               {songsData
-                .filter((item) => item.chat_luong === "Thấp")
                 .slice(0, 6)
                 .map((item, index) => (
                   <SongItems
