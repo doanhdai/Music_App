@@ -80,7 +80,6 @@ const ManagerAlbum = () => {
 
   const handleShowDetails = (album) => {
     setSelectedAlbum(album);
-    setDetailsAlbumModalState(true);
   };
 
   const handleShowEditModal = (album) => {
@@ -90,7 +89,6 @@ const ManagerAlbum = () => {
 
   const handleCloseDetailModal = () => {
     setSelectedAlbum(null);
-    setDetailsAlbumModalState(false);
     setEditAlbumModalState(false);
   };
 
