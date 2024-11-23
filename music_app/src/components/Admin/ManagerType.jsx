@@ -2,12 +2,11 @@ import React, { act, useContext, useEffect, useReducer, useState, useRef } from 
 import { CiCirclePlus } from "react-icons/ci";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { IoIosSearch } from 'react-icons/io';
-import { Button } from 'antd';
+import { Button, message, Modal } from 'antd';
 import { AdminContext } from '../../context/AdminContext';
 import axios from 'axios';
 
 const url = "http://localhost:8000";
-let theloaiList = [];
 
 
 const actionList = {
@@ -35,26 +34,12 @@ function reducerBgCover(state, action) {
 const ManagerType = () => {
     const [keySelected, setKeySelected] = useState("");
     const [valueAction, setValueAction] = useState("");
-    const { isBgCover, setBgCover } = useContext(AdminContext);
+    const { isBgCover, setBgCover, theloaiList, setTheloaiList } = useContext(AdminContext);
     const [stateBgCover, dispatchBgCover] = useReducer(reducerBgCover, isBgCover);
     const [valueInputSearch, setValueInputSearch] = useState("");
     const [valueInputAdd, setValueInputAdd] = useState("");
     const [arrayValue, setArrayValue] = useState([]);
     const [errorInputAdd, setError] = useState("");
-
-    useEffect(() => {
-        const fetchTheLoaiList = async () => {
-            try {
-
-                const response = await axios.get(`${url}/api/genres`);
-                setArrayValue(response.data.data);
-                theloaiList = response.data.data;
-            } catch (error) {
-                console.log('Lỗi khi gọi API:', error);
-            }
-        };
-        fetchTheLoaiList();
-    }, []);
 
 
     useEffect(() => {
@@ -63,7 +48,7 @@ const ManagerType = () => {
 
     useEffect(() => {
         if (valueAction == actionList.select_tl_delete) {
-            alert('Bạn đang ở chế độ xóa thể loại.\nNhấp chuột vào thể loại cần xóa!');
+            message.info('Bạn đang ở chế độ xóa thể loại.\nNhấp chuột vào thể loại cần xóa!');
         }
     }, [valueAction]);
 
@@ -73,13 +58,16 @@ const ManagerType = () => {
     };
 
     const handleSearch = () => {
-        let result = [];
-        theloaiList.forEach((item) => {
-            if ((item.ten_the_loai.toLowerCase()).includes(valueInputSearch.trim().toLowerCase())) {
-                result.push(item);
-            }
-        });
-        setArrayValue(result);
+        if (valueInputSearch != '') {
+            let result = [];
+            theloaiList.forEach((item) => {
+                if ((item.ten_the_loai.toLowerCase()).includes(valueInputSearch.trim().toLowerCase())) {
+                    result.push(item);
+                }
+            });
+            setArrayValue(result);
+        }
+
     };
 
     useEffect(() => {
@@ -111,6 +99,19 @@ const ManagerType = () => {
             </form>
         )
     }
+    const callAPI_add = async () => {
+        try {
+            const response = await axios.post(`${url}/api/genre`, {
+                ten_the_loai: valueInputAdd,
+            });
+            return response.data.data;
+
+
+        } catch (err) {
+            setError('Có lỗi xảy ra khi tạo thể loại.');
+            alert('Error creating genre:', err.response || err.message || err);
+        }
+    }
 
     const addTheloai = async () => {
         let flagExist = false;
@@ -122,77 +123,86 @@ const ManagerType = () => {
             }
         });
         if (!flagExist) {
-            let submit = window.confirm("Bạn có chắc chắn muốn thực hiện hành động này?");
-            if (submit) {
+            Modal.confirm({
+                title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+                content: 'Thêm thể loại ',
+                okText: 'Đồng ý',
+                cancelText: 'Hủy',
+                onOk() {
+                    callAPI_add().then((data) => {
+                        const newMa_the_loai = data;
+                        let newTheloai = { ma_the_loai: newMa_the_loai, ten_the_loai: valueInputAdd };
+                        handleAction(actionList.add_tl_cancel);
+                        message.success("Thêm thành công");
 
-                let newTheloai;
-                handleAction(actionList.add_tl_cancel);
-                alert("Thêm thành công");
-                try {
-                    const response = await axios.post(`${url}/api/genre`, {
-                        ten_the_loai: valueInputAdd,
-                    });
-                    newTheloai = { ma_the_loai: response.data.data, ten_the_loai: valueInputAdd };
+                        setValueInputAdd('');
+                        setArrayValue([...arrayValue, newTheloai]);
+                        setTheloaiList((prev) => [...prev, newTheloai]);
+                    })
 
-                } catch (err) {
-                    setError('Có lỗi xảy ra khi tạo thể loại.');
-                    alert('Error creating genre:', err.response || err.message || err);
-                }
+                },
+                onCancel() {
 
-                setArrayValue([...arrayValue, newTheloai]);
-                theloaiList.push(newTheloai);
-
-
-
-            } else handleAction(actionList.add_tl_cancel);
-            setValueInputAdd("");
-            setError("");
+                },
+            });
         }
     }
 
-
-
-    const deleteTheLoai = async (ma_the_loai) => {
-        setValueAction(actionList.delete_tl_cancel);
-        let soluong = 0;
+    const callAPI_checkTheloai = async (ma_the_loai) => {
         try {
             const response = await axios.get(`${url}/api/genre/songs/${ma_the_loai}`);
-            if (response.status == 200)
-                soluong = 1;
-            // alert(soluong);
+            console.log(response);
+            if (response.status == 200) {
+                return 1;
+            }
+
+        } catch (err) {
+            return 0;
+        }
+    }
+
+    const callAPI_Delete = async (ma_the_loai) => {
+        try {
+            const response = await axios.delete(`${url}/api/genre/${ma_the_loai}`);
         } catch (err) {
             console.error(err);
         }
+    };
 
-        if (soluong == 0) {
-            const isConfirmed = window.confirm("Bạn có chắc chắn muốn thực hiện hành động này?");
-            if (isConfirmed) {
-                const callAPI_Delete = async (ma_the_loai) => {
-                    try {
-                        const response = await axios.delete(`${url}/api/genre/${ma_the_loai}`);
-                    } catch (err) {
-                        console.error(err);
-                    }
-                };
-                callAPI_Delete(ma_the_loai);
-                alert('Xóa thành công');
-                theloaiList = theloaiList.filter(theloai => theloai.ma_the_loai !== ma_the_loai);
-                setArrayValue((prev) => prev.filter(theloai => theloai.ma_the_loai !== ma_the_loai));
+    const deleteTheLoai = async (ma_the_loai) => {
+        setValueAction(actionList.delete_tl_cancel);
+        callAPI_checkTheloai(ma_the_loai).then((data) => {
+            const soluong = data;
+            if (soluong == 0) {
+                Modal.confirm({
+                    title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+                    content: 'Xóa thể loại ' + ma_the_loai,
+                    okText: 'Đồng ý',
+                    cancelText: 'Hủy',
+                    onOk() {
+                        callAPI_Delete(ma_the_loai);
+                        message.success('Xóa thành công');
+                        setTheloaiList((prev) => prev.filter(theloai => theloai.ma_the_loai !== ma_the_loai));
+                        setArrayValue((prev) => prev.filter(theloai => theloai.ma_the_loai !== ma_the_loai));
+                    },
+                    onCancel() {
 
+                    },
+                });
             } else {
-
+                message.error('Không thể xóa thể loại này, do thể loại đã thuộc 1 bài hát nào đó');
             }
-        } else {
-            alert('Không thể xóa thể loại này, do thể loại đã thuộc 1 bài hát nào đó');
-        }
+
+        });
+
 
 
     };
 
 
 
-    function ItemTheloai({ theloaiList }) {
-        let array1 = theloaiList;
+    function ItemTheloai({ list }) {
+        let array1 = list;
 
         return array1.map((theloai) => {
             return (
@@ -264,7 +274,7 @@ const ManagerType = () => {
                                         <div className='col-span-3 text-center'>Tên thể loại</div>
                                     </div>
                                     <div className="w-full h-[60vh] overflow-y-auto">
-                                        <ItemTheloai theloaiList={arrayValue} />
+                                        <ItemTheloai list={valueInputSearch == '' ? theloaiList : arrayValue} />
                                     </div>
                                 </div>
                             </div>
