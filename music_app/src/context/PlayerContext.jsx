@@ -25,7 +25,7 @@ const PlayerContextProvider = (props) => {
   const [track, setTrack] = useState(null);
   const [playStatus, setPlayStatus] = useState(false);
   const [volume, setVolume] = useState(1);
-
+  const [thongbaoList, setThongbaoList] = useState([]);
   const [time, setTime] = useState({
     currentTime: { second: 0, minute: 0 },
     totalTime: { second: 0, minute: 0 },
@@ -100,7 +100,7 @@ const PlayerContextProvider = (props) => {
         `${url_api}/api/playlist/${currentAccount}`
       );
       setPlaylistsData(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (error) {
       console.error(error);
       console.log(currentAccount);
@@ -362,6 +362,15 @@ const PlayerContextProvider = (props) => {
     }
   }, [track, playStatus, time]);
 
+  const getThongbaoList = async () => {
+    try {
+      const response = await axios.get(`${url_api}/api/notifications`);
+      setThongbaoList(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const contextValue = {
     audioRef,
     scrollHomeRef,
@@ -392,6 +401,7 @@ const PlayerContextProvider = (props) => {
     genresData,
     setVolume: updateVolume,
     muteVolume,
+    thongbaoList
   };
 
   return (

@@ -54,7 +54,7 @@ const ManagerQuyen = () => {
   const [valueInputAdd, setValueInputAdd] = useState("");
   const [errorInputAdd, setError] = useState("");
   const [chitietquyenAdd, setChitietquyenAdd] = useState([]);
-
+  const [isGettingChitietquyenData, setIsGettingChitietquyenData] = useState(true);
 
   const createQuyen = async (valueSentAPI) => {
     try {
@@ -125,6 +125,7 @@ const ManagerQuyen = () => {
       let chitiet = []
       response.data.chuc_nang.forEach((item) => chitiet.push(item.pivot))
       setFilteredChitietquyenList(chitiet);
+      setIsGettingChitietquyenData(false);
     } catch (err) {
       console.error(err);
     }
@@ -572,6 +573,7 @@ const ManagerQuyen = () => {
 
   useEffect(() => {
     // Lọc danh sách chi tiết quyền theo quyền hiện tại
+    setIsGettingChitietquyenData(true);
     getChitietquyen(currentQuyen);
   }, [currentQuyen]);
 
@@ -630,7 +632,10 @@ const ManagerQuyen = () => {
           {quyenList.find(quyen => quyen.ma_phan_quyen === currentQuyen)?.ngay_tao || 'N/A'}
         </span>
       </p>
-      <TableChitietquyen />
+      {
+        isGettingChitietquyenData ? <div className="wrap-loader"><span className="loader"></span></div> : <TableChitietquyen />
+      }
+
       {stateBgCover && (
         <div className="fixed top-0 left-0 w-full h-full z-30 flex items-center justify-center">
           {

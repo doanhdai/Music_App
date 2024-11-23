@@ -18,21 +18,16 @@ import ComboIcon from "./Admin/ComboIcon/ComboIcon";
 import { PlayerContext } from "../context/PlayerContext";
 
 
-let thongbaoList = [
-  { ma_tb: "NOTI0001", ten_tb: "Thông báo hệ thống", noi_dung_tb: "Hệ thống sẽ bảo trì vào lúc 23:00 tối nay.", ngay_thong_bao: "2024-11-22 09:00:33", trang_thai: "", ma_tk: "ACC0007" },
-  { ma_tb: "NOTI0002", ten_tb: "Cap nhat tai khoan", noi_dung_tb: "Tai khoan cua ban da chuyen sang quyen nghe si", ngay_thong_bao: "2024-11-22 09:00:33", trang_thai: "", ma_tk: "ACC0007" },
-  { ma_tb: "NOTI0003", ten_tb: "Thanh cong", noi_dung_tb: "Yeu cau duyet bai hat BH0010 da duyet thanh cong", ngay_thong_bao: "2024-11-22 09:00:33", trang_thai: "", ma_tk: "ACC0007" }
-]
 const NavBar = () => {
   // login
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const navigate = useNavigate();
-  const { songsData, albumsData, artistsData } = useContext(PlayerContext);
+  const { songsData, albumsData, artistsData, thongbaoList } = useContext(PlayerContext);
   const [searchTerm, setSearchTerm] = useState("");
   const account = JSON.parse(localStorage.getItem('account'));
-
+  const thongbaotheoAcc = thongbaoList.filter((item) => item.ma_tk == account.ma_tk);
 
 
   const removeVietnamese = (str) => {
@@ -89,21 +84,28 @@ const NavBar = () => {
   };
 
   const ItemNotification = () => {
-    return 
-      {
-        thongbaoList.map((item) => (
-          <li className="flex gap-2 border-b pb-1 border-[#A4A298] items-center mb-1">
-            <GiLetterBomb className="w-[45px] h-[45px] bg-transparent text-[#EB2272]" />
-            <span className=" w-full">
-              <p className="font-bold">{item.ten_tb}</p>
-              <div className="font-normal text-sm my-1">{item.noi_dung_tb}</div>
-              <div className="font-normal text-xs text-[#A4A298] mt-2">{item.ngay_thong_bao}</div>
-            </span>
-          </li>
-        ))
-      }
 
+    if (thongbaotheoAcc.length == 0) {
+      return <div className="w-full h-[40vh] flex-col flex items-center justify-center">
+        <img className="w-[50%] h-auto text-white mb-2" src="https://cdni.iconscout.com/illustration/premium/thumb/empty-notification-illustration-download-in-svg-png-gif-file-formats--new-logo-call-notifications-no-pack-user-interface-illustrations-8944796.png?f=webp" />
+        <span>Chưa có thông báo</span>
+      </div>
+    } else
+      return <>
+        {
+          thongbaoList.map((item) => account.ma_tk == item.ma_tk && (
+            <li className="flex gap-2 border-b pb-1 border-[#A4A298] items-center mb-1">
+              <GiLetterBomb className="w-[45px] h-[45px] bg-transparent text-[#EB2272]" />
+              <span className=" w-full">
+                <p className="font-bold">{item.ten_tb}</p>
+                <div className="font-normal text-sm my-1">{item.noi_dung_tb}</div>
+                <div className="font-normal text-xs text-[#A4A298] mt-2">{item.ngay_thong_bao}</div>
+              </span>
+            </li>
+          ))
+        }
 
+      </>
   }
 
   return (
@@ -163,7 +165,7 @@ const NavBar = () => {
             <div className="relative" onMouseEnter={() => setIsOpenNotification(true)} onMouseLeave={() => setIsOpenNotification(false)}>
               <div>
                 <FaRegBell size={25} />
-                {thongbaoList.length != 0 && <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>}
+                {thongbaotheoAcc.length != 0 && <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-700 rounded-full"></span>}
 
               </div>
 
@@ -174,11 +176,7 @@ const NavBar = () => {
                       className="absolute top-10 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-[25vw] h-[40vh] overflow-y-auto"
                     >
                       <ul className="text-white">
-                        {thongbaoList.length == 0 ? <div className="w-full h-[40vh] flex-col flex items-center justify-center">
-                          <img className="w-[50%] h-auto text-white mb-2" src="https://cdni.iconscout.com/illustration/premium/thumb/empty-notification-illustration-download-in-svg-png-gif-file-formats--new-logo-call-notifications-no-pack-user-interface-illustrations-8944796.png?f=webp" />
-                          <span>Chưa có thông báo</span>
-                        </div>
-                          : <ItemNotification />}
+                        <ItemNotification />
 
                       </ul>
                     </div>
@@ -198,7 +196,7 @@ const NavBar = () => {
                   className="absolute top-12 right-0 bg-gray-800 shadow-lg rounded-lg py-2 px-3 w-48"
                 >
                   <ul className="text-white">
-                  {account.ma_quyen == "AUTH0002" && (
+                    {account.ma_quyen == "AUTH0002" && (
                       <li
                         className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center"
                         onClick={() => {
