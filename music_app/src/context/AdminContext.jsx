@@ -12,6 +12,8 @@ const AdminContextProvider = (props) => {
    const [contractsData, setContract] = useState([]);
    const [quyenList, setQuyenList] = useState([]);
    const [chucnangList, setChucnangList] = useState([]);
+   const [premiumList, setPremiumList] = useState([]);
+   const [theloaiList, setTheloaiList] = useState([]);
    const [isGettingAdvertisersData, setIsGettingAdvertisersData] = useState(true);
    const [isGettingAdvertisementsData, setIsGettingAdvertisementsData] = useState(true);
    const [isGettingContractsData, setIsGettingContractsData] = useState(true);
@@ -35,6 +37,8 @@ const AdminContextProvider = (props) => {
       getAdvertisingContractData();
       getChucnang();
       getQuyen();
+      getPremiumList();
+      fetchTheLoaiList();
    }, [])
 
 
@@ -125,7 +129,24 @@ const AdminContextProvider = (props) => {
       }
    };
 
+   const getPremiumList = async () => {
+      try {
+         const response = await axios.get(`${url}/api/vouchers`);
+         setPremiumList(response.data.data);
+      } catch (err) {
+         console.error(err);
+      }
+   };
 
+   const fetchTheLoaiList = async () => {
+      try {
+
+         const response = await axios.get(`${url}/api/genres`);
+         setTheloaiList(response.data.data);
+      } catch (error) {
+         console.log('Lỗi khi gọi API:', error);
+      }
+   };
 
    const contextValue = {
       openNotification,
@@ -147,7 +168,10 @@ const AdminContextProvider = (props) => {
       setContract,
       isGettingAdvertisersData,
       isGettingAdvertisementsData,
-      isGettingContractsData
+      isGettingContractsData,
+      premiumList,
+      theloaiList,
+      setTheloaiList
    };
 
 
