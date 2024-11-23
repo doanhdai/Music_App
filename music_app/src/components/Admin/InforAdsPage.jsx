@@ -361,7 +361,7 @@ const InforAdsPage = () => {
 
     const callAPI_UpdateQC = async (ma_quang_cao) => {
         try {
-            const response = await axios.put(`${url}/api/advertisements`, {
+            const response = await axios.patch(`${url}/api/advertisements`, {
                 ma_quang_cao: ma_quang_cao,
                 ten_quang_cao: valueUpdate
             });
@@ -390,7 +390,7 @@ const InforAdsPage = () => {
 
                 },
                 onCancel() {
-                    handleAction(actionList.update_qc_cancel);
+
                 },
             });
         } else {
