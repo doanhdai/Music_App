@@ -63,7 +63,7 @@ const ManagerQuyen = () => {
 
       // Hiển thị kết quả sau khi tạo thành công
       console.log('Cập nhật phân quyền và chức năng thành công:', response.data);
-
+      // xem cai data ma ban console ra đi, cái ma_phan_quyen no la '0'
       // Lưu mã phân quyền vào localStorage
       return response.data.decentralization.ma_phan_quyen;
     } catch (error) {
@@ -429,6 +429,7 @@ const ManagerQuyen = () => {
       };
       console.log('Dữ liệu gửi xuống BE thêm');
       let ma_phan_quyen = createQuyen(valueSentAPI);
+      alert(ma_phan_quyen);  //??tu nhien tra ve cho minh object promise, chỉ can cai mã thôi, trả về nguyên object chi vậy, còn Promise nữa
       //
       //   let ma_phan_quyen  = 'Q4';//ma này lấy mặc định để làm thôi, sau khi add thì api trả về cái mã quyền mới xong gắn vào biến này la được
       let newQuyen = { ma_phan_quyen: ma_phan_quyen, ten_quyen_han: valueInputAdd, ngay_tao: timeCreated, tinh_trang: 1 };
