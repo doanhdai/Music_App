@@ -11,6 +11,7 @@ import { MdArrowCircleDown } from "react-icons/md";
 import { BsPlusLg } from "react-icons/bs";
 import { PlayerContext } from "../context/PlayerContext";
 import { formatDate } from "../utils";
+import ToastNotification from "../utils/ToastNotification/ToastNotification";
 import axios from "axios";
 const DisplayArtist = () => {
   const url_api = "http://localhost:8000";
@@ -22,6 +23,7 @@ const DisplayArtist = () => {
     playlistsData,
     albumsData,
     setPlaylistsData,
+    currentAccount,
   } = useContext(PlayerContext);
 
   const { id } = useParams();
@@ -31,6 +33,11 @@ const DisplayArtist = () => {
   const [detailArtist, setDetailArtist] = useState([]);
   const [songsArtist, setSongsArtist] = useState([]);
   const [accLike, setAccLike] = useState([]);
+  const [toastMessage, setToastMessage] = useState("");
+
+  const showToast = (message) => {
+    setToastMessage(message);
+  };
   const getSongByArtistsData = async () => {
     try {
       const response = await axios.get(`${url_api}/api/songs/artist/${id}`);
@@ -53,6 +60,10 @@ const DisplayArtist = () => {
     getAccLikesData();
   }, []);
   const toggleMenu = (songId) => {
+    if (!currentAccount) {
+      showToast("Vui lòng đăng nhập để thêm bài hát!");
+      return;
+    }
     setMenuSongId(menuSongId === songId ? null : songId);
     console.log(songId);
   };
@@ -69,22 +80,26 @@ const DisplayArtist = () => {
   useEffect(() => {
     const likedFromStorage = {};
     accLike.forEach((like) => {
-      if (like.ma_tk === "ACC0006") {
+      if (like.ma_tk === currentAccount) {
         likedFromStorage[like.ma_bai_hat] = true;
       }
     });
 
     setLikedSongs(likedFromStorage);
   }, [accLike]);
-  const handleLike = async (ma_bai_hat) => {
-    const isLiked = likedSongs[ma_bai_hat];
 
+  const handleLike = async (ma_bai_hat) => {
+    if (!currentAccount) {
+      showToast("Vui lòng đăng nhập để thích bài hát!");
+      return;
+    }
+
+    const isLiked = likedSongs[ma_bai_hat];
     if (!isLiked) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
-
       try {
         await axios.post(`${url_api}/api/song-likes`, {
-          ma_tk: "ACC0006",
+          ma_tk: `${currentAccount}`,
           ma_bai_hat: ma_bai_hat,
         });
       } catch (error) {
@@ -93,11 +108,10 @@ const DisplayArtist = () => {
       }
     } else {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
-
       try {
         await axios.delete(`${url_api}/api/song-likes`, {
           data: {
-            ma_tk: "ACC0006",
+            ma_tk: currentAccount,
             ma_bai_hat: ma_bai_hat,
           },
         });
@@ -111,45 +125,45 @@ const DisplayArtist = () => {
   const addSongToPlaylist = async (ma_playlist, ma_bai_hat) => {
     try {
       const response = await axios.get(
-        `${url_api}/api/playlist/ACC0007/${ma_playlist}`
+        `${url_api}/api/playlist/${currentAccount}/${ma_playlist}`
       );
       const songsInPlaylist = response.data.data;
       const isSongInPlaylist = songsInPlaylist.some(
         (song) => song.ma_bai_hat === ma_bai_hat
       );
       if (isSongInPlaylist) {
-        alert("Bài hát đã có trong playlist này!");
         return;
       }
       await axios.post(`${url_api}/api/playlist`, {
-        ma_tk: "ACC0007",
+        ma_tk: `${currentAccount}`,
         ma_playlist: ma_playlist,
         ma_bai_hat: ma_bai_hat,
       });
-      alert("Đã thêm bài hát vào playlist!");
     } catch (error) {
       console.error("Lỗi khi thêm bài hát vào playlist:", error);
-      alert("Không thể thêm bài hát vào playlist. Vui lòng thử lại.");
     }
   };
 
   const createNewPlaylist = async (ma_bai_hat) => {
     try {
       const response = await axios.post(`${url_api}/api/playlist`, {
-        ma_tk: "ACC0007",
+        ma_tk: `${currentAccount}`,
         ma_bai_hat: ma_bai_hat,
       });
       const newPlaylist = response.data.data;
       setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
-      
-      alert("Đã tạo mới playlist và thêm bài hát!");
     } catch (error) {
       console.error("Lỗi khi tạo mới playlist:", error);
-      alert("Không thể tạo mới playlist. Vui lòng thử lại.");
     }
   };
   return (
     <>
+      {toastMessage && (
+        <ToastNotification
+          message={toastMessage}
+          onClose={() => setToastMessage("")}
+        />
+      )}
       {detailArtist.length != 0 && songsArtist.length != 0 ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">

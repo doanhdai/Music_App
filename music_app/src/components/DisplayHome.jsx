@@ -10,10 +10,22 @@ const DisplayHome = () => {
   const navigate = useNavigate();
 
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
-  // console.log(songsData)
+
+  // Sắp xếp danh sách nghệ sĩ
+  const sortedArtistsData = artistsData.sort((a, b) => {
+    const hasSongsA = songsData.some((song) => song.ma_artist === a.ma_artist);
+    const hasSongsB = songsData.some((song) => song.ma_artist === b.ma_artist);
+
+    // Nghệ sĩ có bài hát được ưu tiên
+    if (hasSongsA && !hasSongsB) return -1;
+    if (!hasSongsA && hasSongsB) return 1;
+    return 0;
+  });
   return (
     <>
-      {(songsData.length != 0 && albumsData.length != 0 && artistsData.length != 0) ? (
+      {songsData.length != 0 &&
+      albumsData.length != 0 &&
+      artistsData.length != 0 ? (
         <>
           <div>
             <div className="flex items-center justify-between mb-4">
@@ -36,7 +48,7 @@ const DisplayHome = () => {
             </div>
             {/* <h1 className='my-4 font-bold'>Nghệ sĩ đề xuất</h1> */}
             <div className="flex overflow-auto">
-              {artistsData.slice(0, 6).map((item, index) => (
+              {sortedArtistsData.slice(0, 6).map((item, index) => (
                 <ArtistItems
                   key={index}
                   name={item.ten_artist}
@@ -98,24 +110,24 @@ const DisplayHome = () => {
               )}
             </div>
             <div className="flex overflow-auto justify-start">
-              {songsData
-                .slice(0, 6)
-                .map((item, index) => (
-                  <SongItems
-                    key={index}
-                    name={item.ten_bai_hat}
-                    artistName={item.artist}
-                    id={item.ma_bai_hat}
-                    img={item.hinh_anh}
-                  />
-                ))}
+              {songsData.slice(0, 6).map((item, index) => (
+                <SongItems
+                  key={index}
+                  name={item.ten_bai_hat}
+                  artistName={item.artist}
+                  id={item.ma_bai_hat}
+                  img={item.hinh_anh}
+                />
+              ))}
             </div>
           </div>
         </>
-      ) : <div className="wrap-loader"><span className="loader"></span></div>
-      }
+      ) : (
+        <div className="wrap-loader">
+          <span className="loader"></span>
+        </div>
+      )}
       {/* nghệ sĩ */}
-
     </>
   );
 };

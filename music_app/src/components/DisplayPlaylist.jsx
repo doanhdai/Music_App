@@ -11,8 +11,14 @@ import { PlayerContext } from "../context/PlayerContext";
 import axios from "axios";
 
 const DisplayPlaylist = () => {
-  const { playStatus, playWithId, pause, track, playlistsData } =
-    useContext(PlayerContext);
+  const {
+    playStatus,
+    playWithId,
+    pause,
+    track,
+    playlistsData,
+    currentAccount,
+  } = useContext(PlayerContext);
   const { id } = useParams();
   // console.log(songsPlaylist);
   const navigate = useNavigate();
@@ -27,7 +33,9 @@ const DisplayPlaylist = () => {
 
   const getSongPlaylistsData = async () => {
     try {
-      const response = await axios.get(`${url_api}/api/playlist/ACC0007/${id}`);
+      const response = await axios.get(
+        `${url_api}/api/playlist/${currentAccount}/${id}`
+      );
       setSongsPlaylist(response.data.data);
       console.log(response.data.data);
     } catch (error) {
@@ -42,7 +50,7 @@ const DisplayPlaylist = () => {
   useEffect(() => {
     const likedFromStorage = {};
     accLikeSong.forEach((like) => {
-      if (like.ma_tk === "ACC0006") {
+      if (like.ma_tk === currentAccount) {
         likedFromStorage[like.ma_bai_hat] = true;
       }
     });
@@ -66,7 +74,7 @@ const DisplayPlaylist = () => {
 
       try {
         await axios.post(`${url_api}/api/song-likes`, {
-          ma_tk: "ACC0006",
+          ma_tk: currentAccount,
           ma_bai_hat: ma_bai_hat,
         });
       } catch (error) {
@@ -79,7 +87,7 @@ const DisplayPlaylist = () => {
       try {
         await axios.delete(`${url_api}/api/song-likes`, {
           data: {
-            ma_tk: "ACC0006",
+            ma_tk: currentAccount,
             ma_bai_hat: ma_bai_hat,
           },
         });
@@ -93,7 +101,9 @@ const DisplayPlaylist = () => {
   const handleDeleteSong = async (idBaiHat) => {
     try {
       // Gọi API để xóa bài hát
-      await axios.delete(`${url_api}/api/playlist/ACC0007/${id}/${idBaiHat}`);
+      await axios.delete(
+        `${url_api}/api/playlist/${currentAccount}/${id}/${idBaiHat}`
+      );
 
       // Cập nhật lại danh sách bài hát sau khi xóa
       setSongsPlaylist((prevSongs) =>
