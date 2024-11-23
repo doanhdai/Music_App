@@ -77,7 +77,23 @@ export function removeVietnameseTones(str) {
              .replace(/[\u0300-\u036f]/g, '');
     return str;
   }
+export function extractDayMonthYear(dateTimeString) {
+    const dateObject = new Date(dateTimeString);
   
+    const day = String(dateObject.getDate()).padStart(2, '0');
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+    const   
+   year = dateObject.getFullYear();
+  
+    return `${day}/${month}/${year}`; 
+  
+  }
+  export function extractYear(dateTimeString) {
+    const dateObject = new Date(dateTimeString);
+    const year = dateObject.getFullYear();
+    return year; 
+  
+  }
 export const albumsData = [
     {   
         id:0,
