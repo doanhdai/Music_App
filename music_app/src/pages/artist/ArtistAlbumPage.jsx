@@ -60,7 +60,7 @@ const ArtistAlbumPage = () => {
     return (
       removeVietnameseTones(item.ten_album.toLowerCase())
         .includes(removeVietnameseTones(searchQuery.toLowerCase())) &&
-      ( selectedStatus == 0 || item.trang_thai == selectedStatus) // 2 la tat ca
+      ( selectedStatus == 3 || item.trang_thai == selectedStatus) // 2 la tat ca
     )
   });
 
@@ -88,9 +88,10 @@ const ArtistAlbumPage = () => {
           
               }}
             >
-              <option value="0">Tất cả</option>
-              <option value="2">Công khai</option>
-              <option value="1">Ẩn</option>
+              <option value="3">Tất cả</option>
+              <option value="2">Chờ duyệt</option>
+              <option value="1">Công khai</option>
+              <option value="0">Ẩn</option>
             </select>
           </div>
           </div>

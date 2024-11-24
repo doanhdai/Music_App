@@ -7,13 +7,20 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { PlayerContext } from "../context/PlayerContext";
 import { FaHeart } from "react-icons/fa";
 import { formatDate } from "../utils";
+import ToastNotification from "../utils/ToastNotification/ToastNotification";
 import axios from "axios";
 import { BsPlusLg } from "react-icons/bs";
 const DisplayAlbum = () => {
-  const { playWithId, playStatus, pause, track, playlistsData } =
-    useContext(PlayerContext);
+  const {
+    playWithId,
+    playStatus,
+    pause,
+    track,
+    playlistsData,
+    currentAccount,
+  } = useContext(PlayerContext);
   const url_api = "http://localhost:8000";
-
+  console.log(currentAccount);
   const { id } = useParams();
   const [hoveredSong, setHoveredSong] = useState(null);
   const [menuSongId, setMenuSongId] = useState(null);
@@ -23,12 +30,17 @@ const DisplayAlbum = () => {
   const [likeAlbum, setLikeAlbum] = useState({});
   const [accLikeSong, setAccLikeSong] = useState([]);
   const [isDataReady, setIsDataReady] = useState(false);
-  // const [accLikeAlbum, setAccLikeAlbum] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
-
+  const [toastMessage, setToastMessage] = useState("");
+  const showToast = (message) => {
+    setToastMessage(message);
+  };
   const toggleMenu = (songId) => {
+    if (!currentAccount) {
+      showToast("Vui lòng đăng nhập để thêm bài hát!");
+      return;
+    }
     setMenuSongId(menuSongId === songId ? null : songId);
-    console.log(songId);
+    // console.log(songId);
   };
 
   const closeMenu = () => setMenuSongId(null);
@@ -54,7 +66,7 @@ const DisplayAlbum = () => {
     try {
       const response = await axios.get(`${url_api}/api/song-likes`);
       setAccLikeSong(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +75,7 @@ const DisplayAlbum = () => {
   useEffect(() => {
     const likedFromStorage = {};
     accLikeSong.forEach((like) => {
-      if (like.ma_tk === "ACC0006") {
+      if (like.ma_tk === `${currentAccount}`) {
         likedFromStorage[like.ma_bai_hat] = true;
       }
     });
@@ -73,6 +85,10 @@ const DisplayAlbum = () => {
 
   // hàm sử lí yêu thích bài hát
   const handleLikeSong = async (ma_bai_hat) => {
+    if (!currentAccount) {
+      showToast("Vui lòng đăng nhập để thích bài hát!");
+      return;
+    }
     const isLikedSong = likedSongs[ma_bai_hat];
 
     if (!isLikedSong) {
@@ -80,7 +96,7 @@ const DisplayAlbum = () => {
 
       try {
         await axios.post(`${url_api}/api/song-likes`, {
-          ma_tk: "ACC0006",
+          ma_tk: `${currentAccount}`,
           ma_bai_hat: ma_bai_hat,
         });
       } catch (error) {
@@ -93,7 +109,7 @@ const DisplayAlbum = () => {
       try {
         await axios.delete(`${url_api}/api/song-likes`, {
           data: {
-            ma_tk: "ACC0006",
+            ma_tk: `${currentAccount}`,
             ma_bai_hat: ma_bai_hat,
           },
         });
@@ -106,7 +122,9 @@ const DisplayAlbum = () => {
 
   const fetchLikedAlbum = async () => {
     try {
-      const response = await axios.get(`${url_api}/api/albums-likes/ACC0006`);
+      const response = await axios.get(
+        `${url_api}/api/albums-likes/${currentAccount}`
+      );
       const likedAlbums = response.data.data || [];
       setLikeAlbum(likedAlbums.some((album) => album.ma_album === id));
     } catch (error) {
@@ -116,18 +134,22 @@ const DisplayAlbum = () => {
     }
   };
   const toggleLikeAlbum = async () => {
+    if (!currentAccount) {
+      showToast("Vui lòng đăng nhập để thích album!");
+      return;
+    }
     const newLikeState = !likeAlbum;
     setLikeAlbum(newLikeState);
 
     try {
       if (newLikeState) {
         await axios.post(`${url_api}/api/albums/like`, {
-          ma_tk: "ACC0006",
+          ma_tk: `${currentAccount}`,
           ma_album: id,
         });
       } else {
         await axios.delete(`${url_api}/api/albums/unlike`, {
-          data: { ma_tk: "ACC0006", ma_album: id },
+          data: { ma_tk: `${currentAccount}`, ma_album: id },
         });
       }
     } catch (error) {
@@ -136,8 +158,52 @@ const DisplayAlbum = () => {
     }
   };
 
+  const addSongToPlaylist = async (ma_playlist, ma_bai_hat) => {
+    try {
+      const response = await axios.get(
+        `${url_api}/api/playlist/${currentAccount}/${ma_playlist}`
+      );
+      const songsInPlaylist = response.data.data;
+      const isSongInPlaylist = songsInPlaylist.some(
+        (song) => song.ma_bai_hat === ma_bai_hat
+      );
+      if (isSongInPlaylist) {
+        alert("Bài hát đã có trong playlist này!");
+        return;
+      }
+      await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: currentAccount,
+        ma_playlist: ma_playlist,
+        ma_bai_hat: ma_bai_hat,
+      });
+      alert("Đã thêm bài hát vào playlist!");
+    } catch (error) {
+      console.error("Lỗi khi thêm bài hát vào playlist:", error);
+      alert("Không thể thêm bài hát vào playlist. Vui lòng thử lại.");
+    }
+  };
+
+  const createNewPlaylist = async (ma_bai_hat) => {
+    try {
+      await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: currentAccount,
+        ma_bai_hat: ma_bai_hat,
+      });
+      alert("Đã tạo mới playlist và thêm bài hát!");
+    } catch (error) {
+      console.log("tl: ", currentAccount);
+      console.error("Lỗi khi tạo mới playlist:", error);
+      alert("Không thể tạo mới playlist. Vui lòng thử lại.");
+    }
+  };
   return (
     <>
+      {toastMessage && (
+        <ToastNotification
+          message={toastMessage}
+          onClose={() => setToastMessage("")}
+        />
+      )}
       {detailAlbum.length != 0 && songsAlbum.length != 0 && isDataReady ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
@@ -159,7 +225,7 @@ const DisplayAlbum = () => {
                 />
                 <b className="pl-2">{detailAlbum.nguoi_so_huu} -</b>
                 <b className="pl-2">{detailAlbum.luot_yeu_thich} yêu thích,</b>
-                <b className="pl-2">{detailAlbum.so_luong_bai_hat} bài hát</b>
+                <b className="pl-2">{songsAlbum.length} bài hát</b>
               </p>
             </div>
           </div>
@@ -262,7 +328,14 @@ const DisplayAlbum = () => {
                 )}
                 {menuSongId === item.ma_bai_hat && (
                   <div className="absolute bottom-[40px] right-[10px] bg-gray-800 text-white p-2 rounded shadow-lg w-[250px] z-50">
-                    <div className="hover:bg-black p-2 cursor-pointer flex items-center gap-2">
+                    <div
+                      className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        createNewPlaylist(item.ma_bai_hat);
+                        closeMenu();
+                      }}
+                    >
                       <BsPlusLg size={27} />
                       Thêm và tạo mới playlist
                     </div>
@@ -271,6 +344,14 @@ const DisplayAlbum = () => {
                       <div
                         key={index}
                         className="hover:bg-black p-2 cursor-pointer flex items-center gap-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSongToPlaylist(
+                            playlist.ma_playlist,
+                            item.ma_bai_hat
+                          );
+                          closeMenu();
+                        }}
                       >
                         <img className="h-10" src={assets.mck} />
                         <span>{playlist.ten_playlist}</span>

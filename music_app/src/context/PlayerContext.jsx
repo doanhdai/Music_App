@@ -19,6 +19,7 @@ const PlayerContextProvider = (props) => {
   const [artistsData, setArtistsData] = useState([]);
   const [genresData, setGenresData] = useState([]);
   const [usersData, setUsersData] = useState([]);
+  // const [currentAccount, setCurrentAccount] = useState('');
   // const [detailPlaylist, setDetailPlaylist] = useState([]);
   // const [songsPlaylist, setSongsPlaylist] = useState([]);
   const [track, setTrack] = useState(null);
@@ -35,6 +36,24 @@ const PlayerContextProvider = (props) => {
     return match ? parseInt(match[0], 10) : null;
   };
 
+  //lấy tài khoản hiện tại của người dùng khi đã đăng nhập
+  // const getAccount = async () => {
+  const account = JSON.parse(localStorage.getItem("account")) || "ccc";
+  const currentAccount = account.ma_tk;
+  // setCurrentAccount(currentAcc.ma_tk);
+  // };
+
+  useEffect(() => {
+    getSongsData();
+    getAlbumsData();
+    getPlaylistsData();
+    getArtistsData();
+    getGenresData();
+    getAllUsersData();
+
+    // getSongByPlaylistData();
+  }, []);
+
   const getSongsData = async () => {
     try {
       const response = await axios.get(`${url_api}/api/songs`);
@@ -42,7 +61,7 @@ const PlayerContextProvider = (props) => {
         (song) => song.chat_luong === "Thấp"
       );
       setSongsData(filteredSongs);
-      // console.log(filteredSongs)
+      console.log(filteredSongs)
     } catch (error) {
       console.error(error);
     }
@@ -78,12 +97,13 @@ const PlayerContextProvider = (props) => {
   const getPlaylistsData = async () => {
     try {
       const response = await axios.get(
-        `${url_api}/api/playlist/ACC0007`
+        `${url_api}/api/playlist/${currentAccount}`
       );
       setPlaylistsData(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (error) {
       console.error(error);
+      console.log(currentAccount);
     }
   };
   const getAllUsersData = async () => {
@@ -309,17 +329,6 @@ const PlayerContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    getSongsData();
-    getAlbumsData();
-    getPlaylistsData();
-    getArtistsData();
-    getGenresData();
-    getAllUsersData();
-    getThongbaoList();
-    // getSongByPlaylistData();
-  }, []);
-
-  useEffect(() => {
     if (songsData.length > 0) {
       const savedState = JSON.parse(localStorage.getItem("musicPlayerState"));
 
@@ -382,6 +391,7 @@ const PlayerContextProvider = (props) => {
     seekSong,
     songsData,
     albumsData,
+    currentAccount,
     usersData,
     // songsPlaylist,
     // detailPlaylist,
