@@ -1,46 +1,18 @@
 import React, { useState } from 'react';
+import AdModal from '../AdModal';
 
-const ArtistUser = ({ showModal }) => {
-    const Modal = ({ isOpen, onClose }) => {
-        if (!isOpen) return null; // Không hiển thị nếu `isOpen` là false
-      
-        return (
-          <div className="fixed inset-0 flex items-center justify-center z-50 overflow-y-auto bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-              <div className="flex justify-end">
-                <button onClick={onClose} className="text-gray-400 hover:text-gray-900">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <h2 className="text-2xl font-bold mb-4">A NEW SONG IS COMING! ❤️ "APT"</h2>
-              <img
-                src="https://i.ibb.co/0Q41Z2F/rose-bruno-mars-apt.jpg"
-                alt="Rose & Bruno Mars - APT"
-                className="w-full rounded-md mb-4"
-              />
-              <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-md">
-                Nghe ngay
-              </button>
-            </div>
-          </div>
-        );
-      };
-  const [isModalOpen, setIsModalOpen] = useState(false); // Mặc định mở
+const ArtistUser = () => {
+    
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Đóng modal khi người dùng click "Tắt"
+    setIsModalOpen(false);
   };
   return (
-    <div className="container flex justify-between w-1000px mx-auto">
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
+    <>
+      <AdModal isOpen={isModalOpen} onClose={handleCloseModal} title="Anh Phuong Tuan" urlImage="http://127.0.0.1:8000/storage/images/GBw7FyfPvCt8O1RJXZakwQsj0Obf62vwftfi3rLQ.webp" />
+      <div className="container flex justify-between w-1000px mx-auto">
+      
       <div className="left-side bg-[#141414] text-white p-4 rounded-md min-w-[700px] flex flex-col">
         <h2 className="text-2xl font-bold mb-2 mx-auto">Đăng ký trở thành nghệ sĩ trên Gnine</h2>
         <p className="mb-4 ml-2">
@@ -65,6 +37,8 @@ const ArtistUser = ({ showModal }) => {
         </ul>
       </div>
     </div>
+    </>
+    
   );
 };
 
