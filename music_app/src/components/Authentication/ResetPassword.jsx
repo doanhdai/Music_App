@@ -9,6 +9,8 @@ import Notification from './Notification';
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassNew, setPassNew] = useState(false);
+  const [showRePassNew, setRePassNew] = useState(false);
   const [message, setMessage] = useState('');
   const query = new URLSearchParams(useLocation().search);
   const token = query.get('token');
@@ -41,11 +43,15 @@ const ResetPassword = () => {
           title="Mật khẩu"
           valueInput={password}
           setValueInput={setPassword}
+          show={showPassNew}
+          setShow={setPassNew}
         ></InputItem>
         <InputItem
           title="Xác nhận mật khẩu"
           valueInput={confirmPassword}
           setValueInput={setConfirmPassword}
+          show={showRePassNew}
+          setShow={setRePassNew}
         ></InputItem>
         <PasswordRules password={password}></PasswordRules>
         <AuthBtn title="Tiếp theo"></AuthBtn>

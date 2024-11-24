@@ -147,22 +147,27 @@ const InforAdsPage = () => {
     };
 
     const deleteNQC = (ma_nqc) => {
+        const qc = advertisementsData.find((item) => item.ma_nqc === ma_nqc);
+        if (qc == undefined) {
+            Modal.confirm({
+                title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+                content: 'Xóa nhà đăng kí quảng cáo ' + ma_nqc,
+                okText: 'Đồng ý',
+                cancelText: 'Hủy',
+                onOk() {
+                    setAdvertisers((prev) => prev.filter(item => item.ma_nqc !== ma_nqc))
+                    openNotification("Xóa nhà đăng kí quảng cáo");
+                    setValueAction(actionList.delete_nqc_cancel);
+                    callAPI_DeleteNQC(ma_nqc);
+                },
+                onCancel() {
+                    setValueAction(actionList.delete_nqc_cancel);
+                },
+            });
+        } else {
+            message.error(`Không thể xóa. Do nhà quảng cáo ${ma_nqc} đã có quảng cáo`);
+        }
 
-        Modal.confirm({
-            title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
-            content: 'Xóa nhà đăng kí quảng cáo ' + ma_nqc,
-            okText: 'Đồng ý',
-            cancelText: 'Hủy',
-            onOk() {
-                setAdvertisers((prev) => prev.filter(item => item.ma_nqc !== ma_nqc))
-                openNotification("Xóa nhà đăng kí quảng cáo");
-                setValueAction(actionList.delete_nqc_cancel);
-                callAPI_DeleteNQC(ma_nqc);
-            },
-            onCancel() {
-                setValueAction(actionList.delete_nqc_cancel);
-            },
-        });
 
 
 
