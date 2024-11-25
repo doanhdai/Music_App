@@ -47,7 +47,7 @@ const PremiumPay = React.lazy(()=>import("../components/premium/PremiumPay"))
 const DisplayPlaylist = React.lazy(() => import("../components/DisplayPlaylist"))
 const InforAdsPage = React.lazy(() => import("../components/Admin/InforAdsPage"))
 const ContractAdsPage = React.lazy(() => import("../components/Admin/ContractAdsPage"))
-const CategorySong = React.lazy(()=>import("../components/CategorySong"))
+const CategorySong = React.lazy(() => import("../components/CategorySong"))
 const routes = createBrowserRouter([
   {
     path: config.routes.Home,
@@ -224,7 +224,7 @@ const routes = createBrowserRouter([
       {
         index: true,
         Component: UserInfo,
-      
+
       },
       {
         path: config.routes.ManagerPremiumUser,

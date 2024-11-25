@@ -89,7 +89,7 @@ function ContractPage() {
         // Lọc theo ngày hiệu lực
         if (ngay_hieu_luc) { // Kiểm tra nếu có giá trị ngày hiệu lực
             filteredData = filteredData.filter((item) => {
-                const currentDate = new Date(item.ngay_hieu_luc).toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
+                const currentDate = item.ngay_hieu_luc.split(' ')[0]; // Chỉ lấy phần yyyy-mm-dd
                 return currentDate === ngay_hieu_luc; // So sánh chuỗi ngày
             });
         }
@@ -97,7 +97,7 @@ function ContractPage() {
         // Lọc theo ngày hoàn thành
         if (ngay_hoan_thanh) { // Kiểm tra nếu có giá trị ngày hoàn thành
             filteredData = filteredData.filter((item) => {
-                const currentDate = new Date(item.ngay_hoan_thanh).toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
+                const currentDate = item.ngay_hoan_thanh.split(' ')[0]; // Chỉ lấy phần yyyy-mm-dd
                 return currentDate === ngay_hoan_thanh; // So sánh chuỗi ngày
             });
         }
@@ -413,7 +413,7 @@ function ContractPage() {
                     {
                         contractsData.length == 0 ? <div className='w-full h-[50vh] flex items-center justify-center'>Chưa có hợp đồng</div> :
                             (<>
-                                <label className='mt-6 mb-3 block'>Tổng cộng: {contractsData.length} hợp đồng</label>
+                                <label className='mt-6 mb-3 block'>Tổng cộng: {JSON.stringify(valueSearchHopdong) === JSON.stringify({ input: '', ngay_hieu_luc: today, ngay_hoan_thanh: tomorrow }) ? contractsData.length : filterHopdong.length} hợp đồng</label>
                                 <div className='grid grid-cols-5 gap-2 w-full h-[50vh] overflow-y-auto'>
                                     <ItemHopDong list={JSON.stringify(valueSearchHopdong) === JSON.stringify({ input: '', ngay_hieu_luc: today, ngay_hoan_thanh: tomorrow }) ? contractsData : filterHopdong} />
 
