@@ -14,6 +14,7 @@ const AdminContextProvider = (props) => {
    const [chucnangList, setChucnangList] = useState([]);
    const [premiumList, setPremiumList] = useState([]);
    const [theloaiList, setTheloaiList] = useState([]);
+   const [philuotnghe, setPhiluotnghe] = useState(null);
    const [isGettingAdvertisersData, setIsGettingAdvertisersData] = useState(true);
    const [isGettingAdvertisementsData, setIsGettingAdvertisementsData] = useState(true);
    const [isGettingContractsData, setIsGettingContractsData] = useState(true);
@@ -39,6 +40,7 @@ const AdminContextProvider = (props) => {
       getQuyen();
       getPremiumList();
       fetchTheLoaiList();
+      fetchPhiluotnghe();
    }, [])
 
 
@@ -148,6 +150,16 @@ const AdminContextProvider = (props) => {
       }
    };
 
+   const fetchPhiluotnghe = async () => {
+      try {
+
+         const response = await axios.get(`${url}/api/phi-luot-nghe`);
+         setPhiluotnghe({ ma_phi: response.data[0].ma_phi, gia_tien_luot_nghe: response.data[0].gia_tien_luot_nghe });
+      } catch (error) {
+         console.log('Lỗi khi gọi API:', error);
+      }
+   };
+
    const contextValue = {
       openNotification,
       url,
@@ -171,7 +183,9 @@ const AdminContextProvider = (props) => {
       isGettingContractsData,
       premiumList,
       theloaiList,
-      setTheloaiList
+      setTheloaiList,
+      philuotnghe,
+      setPhiluotnghe
    };
 
 
