@@ -54,7 +54,7 @@ const ManagerQuyen = () => {
   const [chitietquyenAdd, setChitietquyenAdd] = useState([]);
   const [isGettingChitietquyenData, setIsGettingChitietquyenData] = useState(true);
 
-  
+
 
   // xoa
   const deleteQuyen = async (maPhanQuyen) => {
@@ -430,6 +430,7 @@ const ManagerQuyen = () => {
       };
       console.log('Dữ liệu gửi xuống BE thêm');
       let ma_phan_quyen = createQuyen(valueSentAPI);
+
       // getChitietquyen(ma_phan_quyen);  //??tu nhien tra ve cho minh object promise, chỉ can cai mã thôi, trả về nguyên object chi vậy, còn Promise nữa
       //
       //   let ma_phan_quyen  = 'Q4';//ma này lấy mặc định để làm thôi, sau khi add thì api trả về cái mã quyền mới xong gắn vào biến này la được

@@ -20,7 +20,7 @@ const DisplayAlbum = () => {
     currentAccount,
   } = useContext(PlayerContext);
   const url_api = "http://localhost:8000";
-  console.log(currentAccount);
+  // console.log(currentAccount);
   const { id } = useParams();
   const [hoveredSong, setHoveredSong] = useState(null);
   const [menuSongId, setMenuSongId] = useState(null);

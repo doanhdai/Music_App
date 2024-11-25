@@ -1,10 +1,14 @@
 import { assets } from "./assets/assets";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import ArtistWithdrawalModal from "./components/ArtistWithdrawalModal";
 import DateFilter from "./components/DateFilter";
 const ArtistWidthdrawalRequestPage = () => {
   const [isOpenWithdrawal, setIsOpenWithdrawal] = useState(false);
+  const [withdrawalData,setIsWithdrawal] = useState([]);
 
+  useEffect(() =>{
+    fetch('')
+  })
   const handleOpenWithdrawal = () => {
     setIsOpenWithdrawal(true);
   };

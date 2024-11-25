@@ -20,24 +20,12 @@ import { PlayerContext } from "../context/PlayerContext";
 
 const NavBar = () => {
   // login
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenNotification, setIsOpenNotification] = useState(false);
-  const navigate = useNavigate();
-  const { songsData, albumsData, artistsData, thongbaoList } =
-    useContext(PlayerContext);
-  const [searchTerm, setSearchTerm] = useState("");
-  let account = null;
-  let thongbaotheoAcc = [];
 
-  if (isLoggedIn) {
-    account = JSON.parse(localStorage.getItem("account"));
-    if (account) {
-      thongbaotheoAcc = thongbaoList.filter(
-        (item) => item.ma_tk === account.ma_tk
-      );
-    }
-  }
+
+  const navigate = useNavigate();
+  const { songsData, albumsData, artistsData } = useContext(PlayerContext);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const removeVietnamese = (str) => {
     if (typeof str !== "string") {
@@ -91,8 +79,6 @@ const NavBar = () => {
       },
     });
   };
-
- 
 
   return (
     <div className="sticky top-0 z-50 px-7 py-4 backdrop-blur-md bg-opacity-1">

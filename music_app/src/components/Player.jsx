@@ -1,55 +1,118 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { assets } from '../assets/assets'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from "react";
+import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 import { IoIosPause } from "react-icons/io";
 import { FaPlay } from "react-icons/fa6";
-import { PlayerContext } from '../context/PlayerContext';
+import { PlayerContext } from "../context/PlayerContext";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { IoMdPause } from "react-icons/io";
 import { IoShuffle } from "react-icons/io5";
 import { SlLoop } from "react-icons/sl";
 import { GoMute } from "react-icons/go";
 import { GoUnmute } from "react-icons/go";
+import axios from "axios";
+import AdModal from "./AdModal";
+
 const Player = () => {
-    const [volume, setVolume] = useState(0.5);
-    const [isMuted, setIsMuted] = useState(false);
-    const formatTime = (minute, second) => {
-        const formattedMinute = minute;
-        const formattedSecond = second < 10 ? `0${second}` : second;
-        return `${formattedMinute}:${formattedSecond}`;
-    };
+  const [volume, setVolume] = useState(0.5);
+  const [isMuted, setIsMuted] = useState(false);
+  const [showAd, setShowAd] = useState(false);
+  const [currentAd, setCurrentAd] = useState(null);
+  const [advertisements, setAdvertisements] = useState([]);
 
-    const {
-        seekBar,
-        track,
-        seekBg,
-        play,
-        playStatus,
-        pause,
-        time,
-        next,
-        previous,
-        seekSong,
-        setVolume: setAudioVolume
-    } = useContext(PlayerContext);
+  const formatTime = (minute, second) => {
+    const formattedMinute = minute;
+    const formattedSecond = second < 10 ? `0${second}` : second;
+    return `${formattedMinute}:${formattedSecond}`;
+  };
 
-  //  useEffect(() => {
-  //    console.log("Track changed:", track);
-  //  }, [track]);
-    const handleVolumeChange = (e) => {
-        const newVolume = parseFloat(e.target.value);
-        setVolume(newVolume);
-        setAudioVolume(newVolume);
-        newVolume >0 ? setIsMuted(false) : setIsMuted(true) 
-    };
-    const handleMuteClick = () => {
-        isMuted ? setIsMuted(false): setIsMuted(true)
-        const newVolume = volume === 0 ? 0.5 : 0;
-        setVolume(newVolume);
-        setAudioVolume(newVolume);
-        
-    };
-    return (
+  const url = "http://localhost:8000";
+  const {
+    seekBar,
+    track,
+    seekBg,
+    play,
+    playStatus,
+    pause,
+    time,
+    next,
+    previous,
+    seekSong,
+    realPlayTime,
+    setVolume: setAudioVolume,
+  } = useContext(PlayerContext);
+
+  const getAdvertisementsData = async () => {
+    try {
+      const response = await axios.get(`${url}/api/advertisements`);
+      setAdvertisements(response.data.advertisements);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    setAudioVolume(newVolume);
+    newVolume > 0 ? setIsMuted(false) : setIsMuted(true);
+  };
+
+  const handleMuteClick = () => {
+    isMuted ? setIsMuted(false) : setIsMuted(true);
+    const newVolume = volume === 0 ? 0.5 : 0;
+    setVolume(newVolume);
+    setAudioVolume(newVolume);
+  };
+  // lấy ra quảng cáo rồi random
+  useEffect(() => {
+    if (realPlayTime === 10) {
+      const activeAds = advertisements.filter(
+        (ad) => ad.trang_thai === 1 && ad.luot_phat_tich_luy > 0
+      );
+
+      if (activeAds.length > 0) {
+        const randomAd = activeAds[Math.floor(Math.random() * activeAds.length)];
+        updateAdPlayCount(randomAd.ma_quang_cao);
+        setCurrentAd(randomAd);
+        pause();
+        setShowAd(true);
+      }
+    }
+  }, [realPlayTime]);
+
+
+
+  const updateAdPlayCount = async (maQuangCao) => {
+    try {
+      await axios.put(`${url}/api/advertisements/${maQuangCao}/use`);
+      console.log(maQuangCao);
+      getAdvertisementsData();
+    } catch (err) {
+      console.error("Failed to update advertisement play count:", err);
+    }
+  };
+  useEffect(() => {
+    getAdvertisementsData();
+  }, []);
+
+  const handleAdClose = () => {
+    setShowAd(false);
+  };
+  return (
+    <>
+      {/* Modal Quảng cáo */}
+      {showAd && currentAd && (
+        <AdModal
+          isOpen={showAd}
+          onClose={handleAdClose}
+          title={currentAd.ten_quang_cao}
+          urlImage={
+            currentAd.hinh_anh ||
+            "https://replus.com.vn/wp-content/uploads/2022/07/Dich-vu-thiet-ke-thuong-hieu-hinh-anh-quang-cao.png"
+          }
+        />
+      )}
       <div className="h-[10%] bg-black flex justify-between items-center text-white px-5 py-2 ">
         <div className="hidden lg:flex items-center gap-4">
           <img className="w-12" src={assets.mck} alt="Song Thumbnail" />
@@ -138,7 +201,8 @@ const Player = () => {
           </Link>
         </div>
       </div>
-    );
-}
+    </>
+  );
+};
 
 export default Player;

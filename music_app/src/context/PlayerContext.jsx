@@ -19,6 +19,8 @@ const PlayerContextProvider = (props) => {
   const [artistsData, setArtistsData] = useState([]);
   const [genresData, setGenresData] = useState([]);
   const [usersData, setUsersData] = useState([]);
+  const [realPlayTime, setRealPlayTime] = useState(0);
+  const playTimer = useRef(null);
   // const [currentAccount, setCurrentAccount] = useState('');
   // const [detailPlaylist, setDetailPlaylist] = useState([]);
   // const [songsPlaylist, setSongsPlaylist] = useState([]);
@@ -102,7 +104,7 @@ const PlayerContextProvider = (props) => {
       setPlaylistsData(response.data.data);
       // console.log(response.data.data);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       // console.log(currentAccount);
     }
   };
@@ -127,6 +129,13 @@ const PlayerContextProvider = (props) => {
         .play()
         .then(() => {
           setPlayStatus(true);
+
+          // Bắt đầu tăng thời gian thực đã phát
+          if (!playTimer.current) {
+            playTimer.current = setInterval(() => {
+              setRealPlayTime((prevTime) => prevTime + 1);
+            }, 1000);
+          }
         })
         .catch((error) => {
           console.error("Lỗi khi phát nhạc:", error);
@@ -143,6 +152,10 @@ const PlayerContextProvider = (props) => {
         "musicPlayerState",
         JSON.stringify({ track, currentTime: audioRef.current.currentTime })
       );
+      if (playTimer.current) {
+        clearInterval(playTimer.current);
+        playTimer.current = null;
+      }
     }
   };
 
@@ -151,6 +164,7 @@ const PlayerContextProvider = (props) => {
 
     if (song) {
       setTrack(song);
+      setRealPlayTime(0)
       localStorage.removeItem("musicPlayerState");
       localStorage.setItem(
         "musicPlayerState",
@@ -166,17 +180,32 @@ const PlayerContextProvider = (props) => {
         audioRef.current.oncanplay = () => {
           audioRef.current.play();
           setPlayStatus(true);
+          if (!playTimer.current) {
+            playTimer.current = setInterval(() => {
+              setRealPlayTime((prevTime) => prevTime + 1);
+            }, 1000);
+          }
         };
       }
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (playTimer.current) {
+        clearInterval(playTimer.current);
+        playTimer.current = null;
+      }
+    };
+  }, []);
+  console.log(realPlayTime);
   const next = async () => {
     const currentIndex = getLastNumberFromCode(track.ma_bai_hat);
     if (currentIndex < songsData.length - 1) {
       const nextTrack = songsData[currentIndex];
 
       setLoadingTrack(true);
+      setRealPlayTime(0)
       setTrack(nextTrack);
 
       // Xóa dữ liệu bài hát cũ và set dữ liệu mới
@@ -210,6 +239,7 @@ const PlayerContextProvider = (props) => {
       const previousTrack = songsData[currentIndex - 2];
 
       setLoadingTrack(true);
+      setRealPlayTime(0)
       setTrack(previousTrack);
 
       // Xóa dữ liệu bài hát cũ và set dữ liệu mới
@@ -394,14 +424,14 @@ const PlayerContextProvider = (props) => {
     currentAccount,
     usersData,
     // songsPlaylist,
-    // detailPlaylist,
+    realPlayTime,
     playlistsData,
     setPlaylistsData,
     artistsData,
     genresData,
     setVolume: updateVolume,
     muteVolume,
-    thongbaoList
+    thongbaoList,
   };
 
   return (

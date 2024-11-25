@@ -25,7 +25,6 @@ const ManagerAccount = () => {
   useEffect(() => {
     setAccounts(accountsData);
   }, [accountsData]);
-  console.log(accounts)
   const displayRole = (role) => {
     switch (role) {
       case 1:

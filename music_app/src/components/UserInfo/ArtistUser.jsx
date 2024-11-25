@@ -10,7 +10,7 @@ const ArtistUser = () => {
   };
   return (
     <>
-      <AdModal isOpen={isModalOpen} onClose={handleCloseModal} title="Anh Phuong Tuan" urlImage="http://127.0.0.1:8000/storage/images/GBw7FyfPvCt8O1RJXZakwQsj0Obf62vwftfi3rLQ.webp" />
+      {/* <AdModal isOpen={isModalOpen} onClose={handleCloseModal} title="Anh Phuong Tuan" urlImage="https://replus.com.vn/wp-content/uploads/2022/07/Dich-vu-thiet-ke-thuong-hieu-hinh-anh-quang-cao.png" /> */}
       <div className="container flex justify-between w-1000px mx-auto">
       
       <div className="left-side bg-[#141414] text-white p-4 rounded-md min-w-[700px] flex flex-col">

@@ -151,19 +151,23 @@ const SongUpload = ({ closeModal }) => {
       };
     });
   }
+  // imgData chua file anh chuyen thanh link == linkImage
+  //  highQualityFile --> chua file nhac chat luong cao chuyen thanh link == linkHighMusic
+  //  lowQualityFile --> chua file nhac chat luong thap chuyen thanh link == linkLowMusic
+  
   const formData = {
     "ten_bai_hat": songName,
     "ma_tk_artist": currentArtistId,
     "ma_album": null,
     "thoi_luong": getAudioDuration(highQualityFile),
     "trang_thai": 1,
-    "hinh_anh": ImgRef,
+    "hinh_anh": imgData, // chen bien linkImage
     "ngay_phat_hanh": getCurrentDay(),
     "doanh_thu": 0,
     "the_loai": selectedGenres.map(genre => genre.ma_the_loai),
     "links": {
-      "cao": highQualityFile,
-      "thap": lowQualityFile
+      "cao": "",  //chen bien "linkHighMusic"
+      "thap": ""  //chen bien "linkLowMusic"
     },
     "subartists": selectedArtists.map(artist => artist.ma_artist) //["ACC0005", "ACC0004"] //them api
   }
