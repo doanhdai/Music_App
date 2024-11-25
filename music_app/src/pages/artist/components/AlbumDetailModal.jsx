@@ -7,7 +7,7 @@ const AlbumDetailModal = ({ album, onClose }) => {
   console.log(album.ma_album)
   useEffect(() => {
        //fetch(`http://127.0.0.1:8000/api/albumsAL0009/songs`)
-    fetch(`http://127.0.0.1:8000/api/albums${album.ma_album}/songs`)
+    fetch(`http://127.0.0.1:8000/api/albums/${album.ma_album}/songs`)
     .then(res=>res.json())
     .then(res => setSongOfAlbumData(res.album.songs))
     
