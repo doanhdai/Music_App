@@ -5,6 +5,7 @@ import { Bar, Line } from 'react-chartjs-2';
 import { AdminContext } from '../../context/AdminContext';
 import { Chart, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import * as XLSX from 'xlsx';
+import axios from "axios";
 // Đăng ký các thành phần cần thiết
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 const loaithongke = [
@@ -91,7 +92,7 @@ let phieuruttien = [
   { ma_phieu: 1, ma_tk_artist: 4, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' }
 ]
 
-let phimoiluotnghe = 500;
+
 
 const getDate = (type) => {
   const today = new Date();
@@ -143,7 +144,7 @@ function listDaysInRange(start, end) { // lấy mảng chứa các ngày từ ng
 
 
 const ManagerStatistical = () => {
-  const { contractsData, formatDate, premiumList } = useContext(AdminContext);
+  const { contractsData, formatDate, premiumList, philuotnghe, setPhiluotnghe } = useContext(AdminContext);
   const [indexThoiGianSelected, setIndexThoiGian] = useState(1);
   const [indexLoaiSelected, setIndexLoai] = useState(1);
   const [startDay, setStartDay] = useState(getDate(0));
@@ -153,7 +154,9 @@ const ManagerStatistical = () => {
   const [valueUpdate, setValueUpdate] = useState('');
   const [dayClicked, setDayClicked] = useState('');
 
-
+  // useEffect(() => {
+  //   alert(philuotnghe.ma_phi);
+  // }, [philuotnghe]);
   const chartRef = useRef(null); // Tham chiếu đến canvas
 
   function data() {// hàm này lấy ra data cho component Bar - dùng để vẽ biểu đồ
@@ -501,6 +504,18 @@ const ManagerStatistical = () => {
     setChartData(newData);
   }, [indexLoaiSelected, indexThoiGianSelected, setIndexLoai, setIndexThoiGian, startDay, endDay]);
 
+  const callAPI_updatePhi = async () => {
+    try {
+      alert(philuotnghe.ma_phi);
+      const response = await axios.put(`http://localhost:8000/api/phi-luot-nghe/${philuotnghe.ma_phi}`, {
+        gia_tien_luot_nghe: parseInt(valueUpdate)
+      });
+    } catch (err) {
+      console.log("loi sua quang cao");
+      console.error(err);
+    }
+  }
+
   const handleUpdatePhi = () => {
     if (valueUpdate != '') {
       if (isNaN(valueUpdate)) message.error("Phí phải là số và số đó lớn hơn 0");
@@ -512,10 +527,11 @@ const ManagerStatistical = () => {
           okText: 'Đồng ý',
           cancelText: 'Hủy',
           onOk() {
-            phimoiluotnghe = valueUpdate;
+            setPhiluotnghe((prev) => ({ ...prev, gia_tien_luot_nghe: valueUpdate }));
             message.success('Lưu thành công');
             setIsUpdatePhi(false);
             setValueUpdate('');
+            callAPI_updatePhi();
           },
           onCancel() {
             setIsUpdatePhi(false);
@@ -598,15 +614,15 @@ const ManagerStatistical = () => {
       </div>
       <div className='h-[80vh] overflow-y-scroll'>
         {
-          indexLoaiSelected === 3 && (
+          (indexLoaiSelected === 3 && philuotnghe != null) && (
             <div className='flex items-center gap-2 my-2'>
               Hiện tại, phí mà nghệ sĩ nhận được với mỗi lượt nghe bài hát của họ là:
               {
                 isUpdatePhi ? <>
-                  <input type="text" value={valueUpdate} placeholder={phimoiluotnghe} className='bg-[#1E1E1E] outline-none p-1' autoFocus onChange={(event) => setValueUpdate(event.target.value)} />
+                  <input type="text" value={valueUpdate} placeholder={Math.trunc(philuotnghe.gia_tien_luot_nghe)} className='bg-[#1E1E1E] outline-none p-1' autoFocus onChange={(event) => setValueUpdate(event.target.value)} />
                   <Button onClick={handleUpdatePhi} type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F]'>Lưu</Button>
                 </> : <>
-                  <span className='text-lg font-bold text-[#EB2272]'> {phimoiluotnghe}đ</span>
+                  <span className='text-lg font-bold text-[#EB2272]'> {Math.trunc(philuotnghe.gia_tien_luot_nghe)}đ</span>
                   <Button onClick={() => setIsUpdatePhi(true)} type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F]'>Thay đổi</Button>
                 </>
 
