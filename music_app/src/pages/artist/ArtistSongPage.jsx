@@ -27,7 +27,7 @@ const ArtistSongPage = () => {
   const [currentActionType, setCurrentActionType] = useState("details");
   const [showAddSongModal, setShowAddSongModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState(2);
+  const [selectedStatus, setSelectedStatus] = useState(3);
 
   const currentArtistId = "ACC0006";
   const handleShowAddSongModal = () => {
