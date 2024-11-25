@@ -20,7 +20,7 @@ const ArtistAlbumPage = () => {
   const [showAddAlbumModal, setShowAddAlbumModal] = useState(false);
   const [currentActionType, setCurrentActionType] = useState('details');
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState(2);
+  const [selectedStatus, setSelectedStatus] = useState(3);
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`)
