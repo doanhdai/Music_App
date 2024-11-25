@@ -61,7 +61,7 @@ const PlayerContextProvider = (props) => {
         (song) => song.chat_luong === "Thấp"
       );
       setSongsData(filteredSongs);
-      console.log(filteredSongs)
+      // console.log(filteredSongs)
     } catch (error) {
       console.error(error);
     }
@@ -103,7 +103,7 @@ const PlayerContextProvider = (props) => {
       // console.log(response.data.data);
     } catch (error) {
       console.error(error);
-      console.log(currentAccount);
+      // console.log(currentAccount);
     }
   };
   const getAllUsersData = async () => {

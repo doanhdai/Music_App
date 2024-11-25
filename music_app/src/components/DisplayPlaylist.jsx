@@ -30,7 +30,7 @@ const DisplayPlaylist = () => {
   const [songsPlaylist, setSongsPlaylist] = useState([]);
 
   const url_api = "http://localhost:8000";
-
+console.log(id)
   const getSongPlaylistsData = async () => {
     try {
       const response = await axios.get(
@@ -61,7 +61,7 @@ const DisplayPlaylist = () => {
     try {
       const response = await axios.get(`${url_api}/api/song-likes`);
       setAccLikeSong(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -120,7 +120,6 @@ const DisplayPlaylist = () => {
   const detailPlaylist = playlistsData?.find(
     (playlist) => playlist.ma_playlist === id
   );
-  console.log(detailPlaylist);
   return (
     <>
       {detailPlaylist && songsPlaylist != 0 ? (

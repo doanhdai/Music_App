@@ -29,6 +29,10 @@ const DetailSong = () => {
   const [isLikeDataReady, setIsLikeDataReady] = useState(false);
   const [openPlaylist, setOpenPlaylist] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [artistSong, setArtistSong] = useState({
+    mainArtist: "",
+    collabArtists: [],
+  });
   const url_api = "http://localhost:8000";
   const toggleMenu = (songId) => {
     setMenuSongId(menuSongId === songId ? null : songId);
@@ -48,7 +52,6 @@ const DetailSong = () => {
   const showToast = (message) => {
     setToastMessage(message);
   };
-  console.log(currentAccount);
   //call tất cả cmt của bài hát
   const getCommentsData = async () => {
     try {
@@ -68,11 +71,30 @@ const DetailSong = () => {
       console.log(error);
     }
   };
+  const getArtistSong = async () => {
+    try {
+      const response = await axios.get(`${url_api}/api/song/collab/${id}`);
+      const data = response.data.data[0];
+
+      // Lấy tên nghệ sĩ chính
+      const mainArtist = data.ten_artist || "Không xác định";
+
+      // Đảm bảo collab_artists tồn tại và là một mảng
+      const collabArtists = Array.isArray(data.collab_artists)
+        ? data.collab_artists.map((artist) => artist.ten_collab_artist)
+        : [];
+      setArtistSong({ mainArtist, collabArtists });
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+    }
+  };
 
   useEffect(() => {
+    getArtistSong();
     getCommentsData();
     getAccLikesData();
   }, []);
+
   //lấy thông tin của bài hát
   useEffect(() => {
     const song = songsData.find((item) => item.ma_bai_hat === id);
@@ -82,8 +104,7 @@ const DetailSong = () => {
       setSongData(null);
     }
   }, [id, songsData]);
-  console.log(songsData);
-  console.log(songData);
+
   useEffect(() => {
     const accLiked = accLike.some(
       (like) => like.ma_tk === currentAccount && like.ma_bai_hat === id
@@ -104,7 +125,7 @@ const DetailSong = () => {
       try {
         const { data } = await axios.post(`${url_api}/api/comments`, {
           noi_dung: commentContent,
-          ma_tk: `${currentAccount}`,
+          ma_tk: currentAccount,
           ma_bai_hat: id,
         });
 
@@ -146,7 +167,7 @@ const DetailSong = () => {
 
       try {
         await axios.post(`${url_api}/api/song-likes`, {
-          ma_tk: `${currentAccount}`,
+          ma_tk: currentAccount,
           ma_bai_hat: id,
         });
       } catch (error) {
@@ -157,7 +178,6 @@ const DetailSong = () => {
           ...prev,
           like_count: prev.like_count - 1,
         }));
-        setIsLikeDataReady(true)
         // localStorage.removeItem(`liked-${id}`);
       }
     } else {
@@ -201,7 +221,7 @@ const DetailSong = () => {
       }
       // Nếu chưa có, thêm bài hát vào playlist
       await axios.post(`${url_api}/api/playlist`, {
-        ma_tk: `${currentAccount}`,
+        ma_tk: currentAccount,
         ma_playlist: ma_playlist,
         ma_bai_hat: id,
       });
@@ -336,29 +356,27 @@ const DetailSong = () => {
             ></img>
             <div className="ml-5 flex flex-col">
               <h6 className="text-[#bbbbbb]">Nghệ sĩ</h6>
-              <b className="uppercase">mck</b>
+              <b href="/artist" className="uppercase">
+                {artistSong.mainArtist || songData.artist}
+              </b>
             </div>
           </div>
-          <div className="flex items-center my-5">
-            <img
-              className="rounded-full h-[70px] text-[#fff]"
-              src={assets.mck}
-            ></img>
-            <div className="ml-5 flex flex-col">
-              <h6 className="text-[#bbbbbb]">Nghệ sĩ</h6>
-              <b className="uppercase">mck</b>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <img
-              className="rounded-full h-[70px] text-[#fff]"
-              src={assets.mck}
-            ></img>
-            <div className="ml-5 flex flex-col">
-              <h6 className="text-[#bbbbbb]">Nghệ sĩ</h6>
-              <b className="uppercase">mck</b>
-            </div>
-          </div>
+          {console.log(artistSong.collabArtists)}
+          {artistSong.collabArtists.length > 0
+            ? artistSong.collabArtists.map((artist, index) => (
+                <div key={index} className="flex items-center my-2">
+                  <img
+                    className="rounded-full h-[70px] text-[#fff]"
+                    src={artist.anh_dai_dien_collab_artist || assets.mck}
+                    // alt={artist.ten_collab_artist}
+                  />
+                  <div className="ml-5 flex flex-col">
+                    <h6 className="text-[#bbbbbb]">Nghệ sĩ</h6>
+                    <b className="uppercase">{artist}</b>
+                  </div>
+                </div>
+              ))
+            : ""}
         </div>
 
         <div className="mt-10 rounded-xl mb-5">

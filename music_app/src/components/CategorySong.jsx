@@ -20,17 +20,25 @@ const CategorySong = () => {
             Bài hát thuộc: {genreName}
           </h1>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {filteredSongs.map((item, index) => (
-            <SongItems
-              key={index}
-              name={item.ten_bai_hat}
-              artistName ={item.artist}
-              id={item.ma_bai_hat}
-              img={item.hinh_anh}
-            />
-          ))}
-        </div>
+
+        {/* Kiểm tra nếu không có bài hát */}
+        {filteredSongs.length === 0 ? (
+          <p className="text-center flex h-[300px] items-center justify-center text-white">
+            Không có bài hát nào thuộc thể loại này.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+            {filteredSongs.map((item, index) => (
+              <SongItems
+                key={index}
+                name={item.ten_bai_hat}
+                artistName={item.artist}
+                id={item.ma_bai_hat}
+                img={item.hinh_anh}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
