@@ -7,18 +7,68 @@ import { MdOutlineEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
 import { albumsData, assets, songsData } from '../../assets/assets';
 import { Link } from 'react-router-dom';
-import PurchasedPremiumCard from '../premium/PurchasedPremiumCard';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from "axios";
 
+const CreatePremiumCard = ({ isActive, title, price, duration, descriptions, ma_goi }) => {
+  const [active, setActive] = useState(isActive);
+
+  // Giữ lại phần màu sắc cho card
+  const bgColor = active ? "bg-[#A8C35A]" : "bg-[#A56161]";
+  const buttonColor = active ? "bg-[#A8C35A] text-black" : "bg-[#A56161] text-white";
+
+  const handleToggle = async () => {
+    const newStatus = active ? 0 : 1;
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/api/vouchersUpdateStatus/${ma_goi}`, { trang_thai: newStatus });
+      if (response.status === 200) {
+        setActive(newStatus === 1); // Cập nhật trạng thái mới nếu thành công
+      }
+    } catch (error) {
+      console.error('Cập nhật trạng thái thất bại:', error);
+    }
+  };
+
+  return (
+    <div className="bg-gray-900 p-5 rounded-lg relative text-white">
+      <div className={`${bgColor} text-black text-sm font-semibold rounded-br-md px-6 py-1 inline-block absolute top-0 left-0`}>
+        {duration}
+      </div>
+      <div className="mt-10 text-left">
+        <h2 className="text-xl font-semibold">{title}</h2>
+        <p className="mt-2">
+          <span className="text-lg font-bold">{price}đ</span> dùng trong <span className="text-lg font-bold">{duration}</span>
+        </p>
+        <ul className="mt-4 space-y-1">
+          {descriptions.map((desc, index) => (
+            <li key={index}>+ {desc}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Thanh toggle */}
+      <div className="flex items-center mt-5">
+        <span className="text-sm mr-2">{active ? 'Bật' : 'Tắt'}</span>
+        <div
+          onClick={handleToggle}
+          className={`relative inline-flex items-center cursor-pointer w-12 h-6 transition-colors rounded-full ${active ? 'bg-green-500' : 'bg-gray-500'}`}
+        >
+          {/* Nút tròn */}
+          <span
+            className={`w-6 h-6 bg-white rounded-full transition-all transform ${active ? 'translate-x-6' : 'translate-x-0'}`}
+          ></span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AddPremiumModal = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
-    isActive: true,
     title: "",
     price: "",
     duration: 1,
-    descriptions: ["", "", ""],
   });
 
   const handleInputChange = (e) => {
@@ -26,20 +76,8 @@ const AddPremiumModal = ({ isOpen, onClose, onSubmit }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDescriptionChange = (index, value) => {
-    const newDescriptions = [...formData.descriptions];
-    newDescriptions[index] = value;
-    setFormData((prev) => ({ ...prev, descriptions: newDescriptions }));
-  };
-
   const handleSubmit = () => {
-    const mergedDescriptions = formData.descriptions.join(",");
-    const finalData = {
-      ...formData,
-      descriptions: mergedDescriptions,
-    };
-
-    onSubmit(finalData);
+    onSubmit(formData);
     onClose();
   };
 
@@ -49,21 +87,6 @@ const AddPremiumModal = ({ isOpen, onClose, onSubmit }) => {
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-20">
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg text-black">
         <h2 className="text-lg font-bold mb-4">Thêm PurchasedPremiumCard</h2>
-
-        {/* Bật/tắt trạng thái */}
-        <div className="mb-4">
-          <label className="flex items-center space-x-2 text-black">
-            <input
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, isActive: e.target.checked }))
-              }
-              className="w-4 h-4 text-blue-600"
-            />
-            <span>Trạng thái</span>
-          </label>
-        </div>
 
         {/* Tên gói */}
         <div className="mb-4">
@@ -95,32 +118,16 @@ const AddPremiumModal = ({ isOpen, onClose, onSubmit }) => {
         <div className="mb-4">
           <label className="block mb-1 font-medium text-black">Thời hạn</label>
           <select
-          name="duration"
-          value={Number(formData.duration)} // Đảm bảo giá trị là số
-          onChange={handleInputChange}
-          className="w-full border rounded px-3 py-2 text-black"
-        >
-          <option value={1}>1 tháng</option>
-          <option value={2}>2 tháng</option>
-          <option value={3}>3 tháng</option>
-          <option value={6}>6 tháng</option>
-        </select>
-
-        </div>
-
-        {/* Mô tả */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium text-black">Mô tả</label>
-          {formData.descriptions.map((desc, index) => (
-            <input
-              key={index}
-              type="text"
-              value={desc}
-              onChange={(e) => handleDescriptionChange(index, e.target.value)}
-              className="w-full border rounded px-3 py-2 mb-2 text-black"
-              placeholder={`Nhập mô tả ${index + 1}`}
-            />
-          ))}
+            name="duration"
+            value={Number(formData.duration)} // Đảm bảo giá trị là số
+            onChange={handleInputChange}
+            className="w-full border rounded px-3 py-2 text-black"
+          >
+            <option value={1}>1 tháng</option>
+            <option value={2}>2 tháng</option>
+            <option value={3}>3 tháng</option>
+            <option value={6}>6 tháng</option>
+          </select>
         </div>
 
         {/* Nút hành động */}
@@ -217,28 +224,31 @@ const ManagerPremium = () => {
       .then(res => setPremiumData(res.data))
       .catch(console.error);
   }, []);
-
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAddPremium = (data) => {
     console.log("Dữ liệu nhận được:", data);
     const requestData = {
       ten_goi: data.title,       // Tên gói
-      thoi_han: data.duration,     // Thời hạn
-      gia_goi: data.price,       // Giá gói // Doanh thu
-      mo_ta: data.descriptions,           // Mô tả (chuỗi)
-      trang_thai: data.isActive // Trạng thái (1 hoặc 0)
-  };
+      thoi_han: data.duration,   // Thời hạn
+      gia_goi: data.price,       // Giá gói
+      mo_ta: data.descriptions,  // Mô tả (chuỗi)
+    };
   
-
-  // Gửi dữ liệu lên API
-  axios.post('http://127.0.0.1:8000/api/vouchers', requestData)
+    // Gửi dữ liệu lên API
+    axios.post('http://127.0.0.1:8000/api/vouchers', requestData)
       .then(response => {
-          console.log("Dữ liệu đã được thêm vào:", response.data);
-          // Xử lý thêm nếu cần (ví dụ: thông báo thành công, cập nhật UI)
+        console.log("Dữ liệu đã được thêm vào:", response.data);
+  
+        // Gọi lại API để cập nhật danh sách mới
+        return axios.get("http://127.0.0.1:8000/api/vouchers");
+      })
+      .then(res => {
+        setPremiumData(res.data); // Cập nhật lại danh sách gói
       })
       .catch(error => {
-          console.error("Lỗi khi gửi API:", error);
+        console.error("Lỗi khi thêm gói:", error);
       });
   };
   const handleDelete = (ma_goi) => {
@@ -325,8 +335,9 @@ const ManagerPremium = () => {
           {/* <p className='mt-7 '>Tổng có : 100 Gói .</p> */}
             <div className="grid grid-cols-4 gap-3 mt-5">
             {premiumData.map((item, index) => (
-              <PurchasedPremiumCard
+              <CreatePremiumCard
                 key={index}
+                ma_goi= {item.ma_goi}
                 isActive={item.trang_thai === 1}
                 title={item.ten_goi}
                 price={`${item.gia_goi} VND`}

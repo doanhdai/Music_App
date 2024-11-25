@@ -39,7 +39,7 @@ const routes = {
     Playlist: "/playlist/:id",
 
     PremiumSection: "buyPremium",
-
+    PremiumPay: "/PremiumPay/:ma_goi",
     CategorySong:"/category/:id"
 };
 

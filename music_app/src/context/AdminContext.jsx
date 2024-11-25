@@ -132,7 +132,7 @@ const AdminContextProvider = (props) => {
    const getPremiumList = async () => {
       try {
          const response = await axios.get(`${url}/api/vouchers`);
-         setPremiumList(response.data.data);
+         setPremiumList(response.data);
       } catch (err) {
          console.error(err);
       }

@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "../../utils";
 import EditSongModal from "../../pages/artist/components/EditSongModal";
 import { PlayerContext } from "../../context/PlayerContext";
+import SongDetailModal from "../../pages/artist/components/SongDetailModal";
 
 const ManagerSong = () => {
   const { songsData } = useContext(PlayerContext);
@@ -243,7 +244,7 @@ const ManagerSong = () => {
       {/* Modal chi tiết bài hát */}
       <SongDetailModal
         className="float-start"
-        song={selectedSong}
+        songData={selectedSong}
         detailsSongModalState={detailsSongModalState}
         onClose={handleCloseDetailModal}
       />
@@ -257,75 +258,3 @@ const ManagerSong = () => {
   );
 };
 export default ManagerSong;
-
-const SongDetailModal = ({ song, onClose }) => {
-  if (!song) return null;
-  const songData = songData2[1];
-  return (
-    <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-      onClick={onClose}
-    >
-      <div className="bg-[#1E1E1E]  p-10 p rounded-lg max-w-screen-sm shadow-lg  relative">
-        <div className="flex items-center gap-10 justify-center ">
-          <div className="flex items-stretch">
-            <img
-              // src={songData.hinh_anh}
-              src={assets.mck}
-              alt={songData.ten_bai_hat}
-              className="mb-4 w-40 h-40 rounded"
-            />
-
-            <div className="flex flex-col justify-between ml-4 gap-5 text-white">
-              <h5 className="text-sm text-gray-400">
-                {songData.trang_thai === 1 ? "Công khai" : "ẩn"}
-              </h5>
-              <h3 className="text-lg text-wrap font-semibold">
-                {songData.ten_bai_hat}
-              </h3>
-              <h5 className="text-sm text-gray-400">
-                Ngày phát hành:
-                <span className="text-white">{songData.ngay_phat_hanh}</span>
-              </h5>
-              <h5 className="text-sm text-gray-400">
-                Album:
-                <span className="text-white">{songData.ma_album} ma album</span>
-              </h5>
-              <h5 className="text-sm text-gray-400">
-                Thể loại:
-                <span className="text-white">
-                  99%{songData.theloa} the loai
-                </span>
-              </h5>
-              <h5 className="text-sm text-gray-400">
-                Nghệ sĩ:
-                <span className="text-white">{songData.ma_artist}</span>
-              </h5>
-            </div>
-          </div>
-          <div className="flex flex-col  gap-3 justify-between w-[60] ml-2">
-            <div className="flex flex-row items-center text-gray-400 gap-2">
-              <FaHeart />
-              <span>11{song.luot_yeu_thich}</span>
-            </div>
-            <div className="flex flex-row items-center text-gray-400 gap-2">
-              <FaHeadphones />
-              <span>11{song.luot_nghe}</span>
-            </div>
-            <div className="flex flex-row items-center text-gray-400 gap-2">
-              <IoTimeSharp />
-              <span>3:2</span>
-            </div>
-          </div>
-        </div>
-
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-white py-2 px-4 rounded"
-        >
-          <IoClose size={25} />
-        </button>
-      </div>
-    </div>
-  );
-};
