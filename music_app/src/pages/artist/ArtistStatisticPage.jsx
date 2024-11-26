@@ -285,6 +285,7 @@ const ArtistStatistic = () => {
       borderColor: "rgba(75, 192, 192, 1)",
       fill: false,
       tension: 0.4,
+      pointRadius: 5,
     });
   }
 
@@ -295,6 +296,7 @@ const ArtistStatistic = () => {
       borderColor: "rgba(153, 102, 255, 1)",
       fill: false,
       tension: 0.4,
+      pointRadius: 5,
     });
   }
   const options = {

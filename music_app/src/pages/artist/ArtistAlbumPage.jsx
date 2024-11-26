@@ -15,13 +15,23 @@ import AddAlbumModal from "./components/AddAlbumModal";
 import EditAlbumModal from "./components/EditAlbumModal";
 import AlbumDetailModal from "./components/AlbumDetailModal";
 const ArtistAlbumPage = () => {
-  const currentArtistId = "ACC0006";
+
   const [albumsData, setAlbumsData] = useState([]);
   const [showAddAlbumModal, setShowAddAlbumModal] = useState(false);
   const [currentActionType, setCurrentActionType] = useState('details');
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(3);
 
+  
+  const storedUser = localStorage.getItem("account");
+  const parsedUser = JSON.parse(storedUser);
+  if (!storedUser) {
+    console.log("No user found in localStorage.");
+  }
+  //const currentArtistId = parsedUser.ma_tai_khoan;;
+ 
+  const currentArtistId = "ACC0006";
+  
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`)
     .then(res=>res.json())
