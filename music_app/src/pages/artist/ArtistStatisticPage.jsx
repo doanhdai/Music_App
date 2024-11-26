@@ -1,15 +1,8 @@
-import DateFilter from "./components/DateFilter";
 
-import { RiArrowDownWideFill } from "react-icons/ri";
-import { BsHeadphones } from "react-icons/bs";
-import { LuClock2 } from "react-icons/lu";
+import  { useState, useRef, useEffect, } from 'react';
 
+import {  Line } from 'react-chartjs-2';
 
-import React, { useState, useRef, useEffect, useContext } from 'react';
-import { Button, message, Modal } from 'antd'
-import { assets } from '../../assets/assets';
-import { Bar, Line } from 'react-chartjs-2';
-import { AdminContext } from '../../context/AdminContext';
 
 //import * as XLSX from 'xlsx';
 // Đăng ký các thành phần cần thiết
@@ -37,20 +30,20 @@ const loaithoigian = [
   { index: 4, ten: 'Tất cả' }
 ];
 
-let incomeData = [
+let incomeData = [ 
   {"ngay_thong_ke":"2024-11-11 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100000000,"luot_nghe":100000000},
   {"ngay_thong_ke":"2024-11-12 00:00:00","ma_bai_hat":"BH0002","doanh_thu":10100,"luot_nghe":2000000},
   {"ngay_thong_ke":"2024-11-13 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10010000,"luot_nghe":1000000},
   {"ngay_thong_ke":"2024-11-14 00:00:00","ma_bai_hat":"BH0003","doanh_thu":10100,"luot_nghe":100000000},
   {"ngay_thong_ke":"2024-11-15 00:00:00","ma_bai_hat":"BH0002","doanh_thu":10010000,"luot_nghe":2000000},
   {"ngay_thong_ke":"2024-11-16 00:00:00","ma_bai_hat":"BH0001","doanh_thu":100000000,"luot_nghe":1000000},
-  {"ngay_thong_ke":"2024-11-17 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100100,"luot_nghe":100000000},
-  {"ngay_thong_ke":"2024-11-18 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
+  {"ngay_thong_ke":"2024-1-17 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100100,"luot_nghe":100000000},
+  {"ngay_thong_ke":"2024-2-18 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
   {"ngay_thong_ke":"2024-11-19 00:00:00","ma_bai_hat":"BH0001","doanh_thu":100000000,"luot_nghe":1000000},
-  {"ngay_thong_ke":"2024-11-20 00:00:00","ma_bai_hat":"BH0003","doanh_thu":1001000,"luot_nghe":100000000},
-  {"ngay_thong_ke":"2024-11-21 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
-  {"ngay_thong_ke":"2024-11-22 00:00:00","ma_bai_hat":"BH0001","doanh_thu":101,"luot_nghe":1000000},
-  {"ngay_thong_ke":"2024-11-23 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100000000,"luot_nghe":100000000},
+  {"ngay_thong_ke":"2024-6-20 00:00:00","ma_bai_hat":"BH0003","doanh_thu":1001000,"luot_nghe":100000000},
+  {"ngay_thong_ke":"2024-7-21 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
+  {"ngay_thong_ke":"2024-8-22 00:00:00","ma_bai_hat":"BH0001","doanh_thu":101,"luot_nghe":1000000},
+  {"ngay_thong_ke":"2024-9-23 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100000000,"luot_nghe":100000000},
   {"ngay_thong_ke":"2024-11-24 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
   {"ngay_thong_ke":"2024-11-25 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10100,"luot_nghe":1000000},
   {"ngay_thong_ke":"2024-11-26 00:00:00","ma_bai_hat":"BH0003","doanh_thu":102000,"luot_nghe":100000000},
@@ -97,16 +90,21 @@ function listDaysInRange(start, end) { // lấy mảng chứa các ngày từ ng
 const ArtistStatistic = () => {
   const [timeFrame, setTimeFrame] = useState(1);
   const [showRevenue, setShowRevenue] = useState(true);
-  const [showViews, setShowViews] = useState(true);
-  
+  const [showViews, setShowViews] = useState(false);
+  const [statisticType, setStatisticType] = useState(1)
   const chartRef = useRef(null); 
   
   
   // Function to filter and prepare data based on selected time frame
+
+
   const prepareData = () => {
     const now = new Date();
     const revenueByDate = {};
     const viewsByDate = {};
+    const currentDate = new Date();
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(currentDate.getMonth() - 6);
 
     // Filter data based on the selected time frame
     incomeData.forEach((item) => {
@@ -123,9 +121,9 @@ const ArtistStatistic = () => {
           }
           break;
         case 2:
-          if (date >= new Date(now.setMonth(now.getMonth() - 6))) {
+          if (date >=sixMonthsAgo && date <= currentDate ) {
             includeData = true;
-          }
+          }        
           break;
         case 3:
           if (date.getFullYear() === now.getFullYear()) {
@@ -172,12 +170,14 @@ const ArtistStatistic = () => {
         }
         break; }
       case 2:
-        for (let i = 5; i >= 0; i--) {
-          const monthDate = new Date(now.setMonth(now.getMonth() - i));
+        for (let i = 7; i > 1; i--) {
+          const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
           const monthLabel = monthDate.toLocaleString("default", {
             month: "long",
           });
           labels.push(monthLabel);
+
+          // Calculate total revenues for the current month in the loop
           revenues.push(
             Object.keys(revenueByDate).reduce((acc, dateKey) => {
               const date = new Date(dateKey);
@@ -190,6 +190,8 @@ const ArtistStatistic = () => {
               return acc;
             }, 0)
           );
+
+          // Calculate total views for the current month in the loop
           views.push(
             Object.keys(viewsByDate).reduce((acc, dateKey) => {
               const date = new Date(dateKey);
@@ -203,7 +205,7 @@ const ArtistStatistic = () => {
             }, 0)
           );
         }
-        break;
+        break; 
       case 3:
         for (let month = 0; month < 12; month++) {
           const monthDate = new Date(now.getFullYear(), month, 1);
@@ -255,13 +257,13 @@ const ArtistStatistic = () => {
       default:
         break;
     }
-
     return { labels, revenues, views };
   };
 
   const { labels, revenues, views } = prepareData();
 
   // Chart configuration
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const chartData = {
     labels,
     datasets: [],
@@ -281,7 +283,8 @@ const ArtistStatistic = () => {
       label: "Doanh thu",
       data: revenues,
       borderColor: "rgba(75, 192, 192, 1)",
-      fill: true,
+      fill: false,
+      tension: 0.4,
     });
   }
 
@@ -290,10 +293,10 @@ const ArtistStatistic = () => {
       label: "Lượt nghe",
       data: views,
       borderColor: "rgba(153, 102, 255, 1)",
-      fill: true,
+      fill: false,
+      tension: 0.4,
     });
   }
-
   const options = {
     responsive: true,
     plugins: {
@@ -302,7 +305,7 @@ const ArtistStatistic = () => {
       },
       title: {
         display: true,
-        text: `Thống kê Doanh thu và Lượt nghe - ${timeFrame}`,
+        text: `Thống kê theo ${loaithoigian[timeFrame-1].ten}`,
       },
     },
   };
@@ -312,14 +315,17 @@ const ArtistStatistic = () => {
      case 1 : 
       setShowRevenue(true)
       setShowViews(false)
+      setStatisticType(1)
       break;
      case 2 : 
       setShowRevenue(false);
       setShowViews(true); 
+      setStatisticType(2)
       break;
      case 3:
       setShowRevenue(true);
       setShowViews(true); 
+      setStatisticType(3)
       break;
      default:
       break;
@@ -355,56 +361,3 @@ const ArtistStatistic = () => {
 };
 
 export default ArtistStatistic;
-
-// const ArtistStatistic = () => {
-//   let incomeData = [
-// {"ngay_thong_ke":"2024-11-11 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100000000,"luot_nghe":100000000},
-// {"ngay_thong_ke":"2024-11-12 00:00:00","ma_bai_hat":"BH0002","doanh_thu":10100,"luot_nghe":2000000},
-// {"ngay_thong_ke":"2024-11-13 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10010000,"luot_nghe":1000000},
-// {"ngay_thong_ke":"2024-11-14 00:00:00","ma_bai_hat":"BH0003","doanh_thu":10100,"luot_nghe":100000000},
-// {"ngay_thong_ke":"2024-11-15 00:00:00","ma_bai_hat":"BH0002","doanh_thu":10010000,"luot_nghe":2000000},
-// {"ngay_thong_ke":"2024-11-16 00:00:00","ma_bai_hat":"BH0001","doanh_thu":100000000,"luot_nghe":1000000},
-// {"ngay_thong_ke":"2024-11-17 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100100,"luot_nghe":100000000},
-// {"ngay_thong_ke":"2024-11-18 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
-// {"ngay_thong_ke":"2024-11-19 00:00:00","ma_bai_hat":"BH0001","doanh_thu":100000000,"luot_nghe":1000000},
-// {"ngay_thong_ke":"2024-11-20 00:00:00","ma_bai_hat":"BH0003","doanh_thu":1001000,"luot_nghe":100000000},
-// {"ngay_thong_ke":"2024-11-21 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
-// {"ngay_thong_ke":"2024-11-22 00:00:00","ma_bai_hat":"BH0001","doanh_thu":101,"luot_nghe":1000000},
-// {"ngay_thong_ke":"2024-11-23 00:00:00","ma_bai_hat":"BH0003","doanh_thu":100000000,"luot_nghe":100000000},
-// {"ngay_thong_ke":"2024-11-24 00:00:00","ma_bai_hat":"BH0002","doanh_thu":100000000,"luot_nghe":2000000},
-// {"ngay_thong_ke":"2024-11-25 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10100,"luot_nghe":1000000},
-// {"ngay_thong_ke":"2024-11-26 00:00:00","ma_bai_hat":"BH0003","doanh_thu":102000,"luot_nghe":100000000},
-// {"ngay_thong_ke":"2024-11-27 00:00:00","ma_bai_hat":"BH0002","doanh_thu":104000,"luot_nghe":2000000},
-// {"ngay_thong_ke":"2024-11-28 00:00:00","ma_bai_hat":"BH0001","doanh_thu":10400,"luot_nghe":1000000},
-// {"ngay_thong_ke":"2024-11-29 00:00:00","ma_bai_hat":"BH0003","doanh_thu":10300,"luot_nghe":100000000},
-// {"ngay_thong_ke":"2024-11-30 00:00:00","ma_bai_hat":"BH0002","doanh_thu":102000,"luot_nghe":2000000},
-//   ]
-
-//   const [startDay, setStartDay] = useState(getDate(0));
-//   const [endDay, setEndDay] = useState(getDate(1));
-// return (
-//   <>
-//      <span className='flex gap-2 items-center'>
-//               <input
-//                 className="inputDate p-1 w-fit mt-3 outline-none bg-[#A4A298] mb-2 text-black"
-//                 type="date"
-//                 name="startDay"
-//                 value={startDay.split('/').reverse().join('-')}
-//                 onChange={handleGetNewDate}
-//                 onKeyDown={(event) => event.preventDefault()}
-//               />
-//               <span>đến</span>
-//               <input
-//                 className="inputDate p-1 w-fit mt-3 outline-none bg-[#A4A298] mb-2 text-black"
-//                 type="date"
-//                 name="endDay"
-//                 value={endDay.split('/').reverse().join('-')}
-//                 onChange={handleGetNewDate}
-//                 onKeyDown={(event) => event.preventDefault()}
-
-//               />
-//             </span>
-//   </>
-// )
-// }
- 
