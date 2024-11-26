@@ -26,12 +26,7 @@ const ArtistSongPage = () => {
   const handleCloseAddSongModal = () => {
     setShowAddSongModal(false);
   };
-  const handleEditStatusChange = () => {
-    setCurrentActionType('edit');
-  }
-  const handleDeleteStatusChange = () => {
-    setCurrentActionType('delete');
-  }
+
   const actionList = {
     delete: " xóa",
     edit: "chỉnh sửa",
