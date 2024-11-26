@@ -4,6 +4,7 @@ import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { AdminContext } from '../../context/AdminContext';
 import axios from 'axios';
 import { getFunctionalDetail } from '../../services/UserServices';
+import { message, Modal } from 'antd';
 
 const url = "http://localhost:8000";
 
@@ -60,7 +61,6 @@ const ManagerQuyen = () => {
   const deleteQuyen = async (maPhanQuyen) => {
     try {
       const response = await axios.delete(`${url}/api/decentralizations/${maPhanQuyen}`);
-      console.log('Xóa phân quyền thành công:', response.data);
     } catch (error) {
       console.error('Lỗi khi xóa phân quyền:', error.response?.data || error.message);
     }
@@ -118,16 +118,9 @@ const ManagerQuyen = () => {
     try {
       // Gửi yêu cầu POST tới API store để tạo phân quyền và chức năng
       const response = await axios.post(`${url}/api/decentralizations`, valueSentAPI);
-
-      // Hiển thị kết quả sau khi tạo thành công
-      console.log('Cập nhật phân quyền và chức năng thành công:', response.data);
-      // xem cai data ma ban console ra đi, cái ma_phan_quyen no la '0'
-      // Lưu mã phân quyền vào localStorage
-      getChitietquyen(response.data.decentralization.ma_phan_quyen);
       return response.data.decentralization.ma_phan_quyen;
     } catch (error) {
       console.error('Lỗi khi gọi API:', error.response?.data || error.message);
-      alert('Có lỗi xảy ra khi tạo phân quyền và chức năng!');
     }
   };
 
@@ -136,8 +129,11 @@ const ManagerQuyen = () => {
   };
 
   const handleAction = (action) => {
-    // if (currentQuyen == quyenList[0].ma_phan_quyen && action == actionList.update)
-    //   alert('Đây là quyền cao cấp. Không thể thay đổi quyền này!');
+    if (currentQuyen == quyenList[0].ma_phan_quyen && action == actionList.update) {
+      message.error('Đây là quyền cao cấp. Không thể thay đổi quyền này!');
+      return;
+    }
+
     // else {
     if (action == actionList.update) setChiTietQuyenUpdate(filteredChitietquyenList);
     if (action == actionList.add) {
@@ -174,18 +170,24 @@ const ManagerQuyen = () => {
 
   const handleDeleteQuyen = () => {
     if (!(accountsData.some((item) => item.ma_phan_quyen == currentQuyen))) {
-      console.log('Mã quyền gửi xuống BE xóa');
-      console.log(currentQuyen);
-      if (window.confirm('Bạn có chắc chắn muốn xóa phân quyền này?')) {
-        deleteQuyen(currentQuyen);
-      }
-      //xóa là xóa khoi sql luon, khon gphai cap nhat trang thai, tại đã có kieerm tra dieu khien coi có tài khoản nào thuộc quyền này chưa?
+      Modal.confirm({
+        title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+        content: 'Xóa nhà đăng kí quảng cáo ',
+        okText: 'Đồng ý',
+        cancelText: 'Hủy',
+        onOk() {
+          deleteQuyen(currentQuyen);
+          setQuyenList((prev) => prev.filter((item) => item.ma_phan_quyen != currentQuyen));
+          setCurrentQuyen(quyenList[0].ma_phan_quyen);
+        },
+        onCancel() {
 
-      //
-      setQuyenList((prev) => prev.filter((item) => item.ma_phan_quyen != currentQuyen));
-      setCurrentQuyen(quyenList[0].ma_phan_quyen);
+        },
+      });
+
+
     }
-    else alert('Không thể xóa quyền này do có tài khoản thuộc quyền này!');
+    else message.error('Không thể xóa quyền này do có tài khoản thuộc quyền này!');
   }
 
   const TableChitietquyenUpdate = () => (
@@ -421,29 +423,34 @@ const ManagerQuyen = () => {
     }
 
     if (!flagExist) {
-      const timeCreated = getCurrentDateTime();
-      //call api luu tru o day
-      const valueSentAPI = {
-        ten_quyen_han: valueInputAdd,   // Tên quyền hạn
-        ngay_tao: timeCreated,          // Ngày tạo
-        chi_tiet_phan_quyen: chitietquyenAdd  // Mảng chi tiết quyền hạn
-      };
-      console.log('Dữ liệu gửi xuống BE thêm');
-      let ma_phan_quyen = createQuyen(valueSentAPI);
+      Modal.confirm({
+        title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+        content: 'Thêm quyền ',
+        okText: 'Đồng ý',
+        cancelText: 'Hủy',
+        onOk() {
+          const timeCreated = getCurrentDateTime();
+          //call api luu tru o day
+          const valueSentAPI = {
+            ten_quyen_han: valueInputAdd,   // Tên quyền hạn
+            ngay_tao: timeCreated,          // Ngày tạo
+            chi_tiet_phan_quyen: chitietquyenAdd  // Mảng chi tiết quyền hạn
+          };
+          createQuyen(valueSentAPI).then((data) => {
+            let newQuyen = { ma_phan_quyen: data, ten_quyen_han: valueInputAdd, ngay_tao: timeCreated, tinh_trang: 1 };
+            setQuyenList((prev) => [...prev, newQuyen]);
+            setError("");
+            setValueInputAdd("");
+            setChitietquyenAdd([]);
+            message.success('Thêm quyền thành công');
+            handleAction(actionList.add_cancel);
+          })
+        },
+        onCancel() {
 
-      // getChitietquyen(ma_phan_quyen);  //??tu nhien tra ve cho minh object promise, chỉ can cai mã thôi, trả về nguyên object chi vậy, còn Promise nữa
-      //
-      //   let ma_phan_quyen  = 'Q4';//ma này lấy mặc định để làm thôi, sau khi add thì api trả về cái mã quyền mới xong gắn vào biến này la được
-      let newQuyen = { ma_phan_quyen: ma_phan_quyen, ten_quyen_han: valueInputAdd, ngay_tao: timeCreated, tinh_trang: 1 };
-      setQuyenList((prev) => [...prev, newQuyen]);
-      const updatedChitietquyenAdd = chitietquyenAdd.map((item) => ({
-        ...item,
-        ma_phan_quyen: ma_phan_quyen
-      }));
-      setError("");
-      setValueInputAdd("");
-      setChitietquyenAdd([]);
-      handleAction(actionList.add_cancel);
+        },
+      });
+
 
     }
 
@@ -463,32 +470,30 @@ const ManagerQuyen = () => {
       });
     }
     if (!flagExist) {
-      let i = confirm('Bạn có muốn lưu thay đổi?');
-      if (i) {
+      Modal.confirm({
+        title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+        content: 'Cập nhật quyền ',
+        okText: 'Đồng ý',
+        cancelText: 'Hủy',
+        onOk() {
+          const firstMaPhanQuyen = chitietquyenUpdate[0]?.ma_phan_quyen;
+          valueInputAdd ? updateTenQuyenHan(firstMaPhanQuyen, valueInputAdd) : null;
+          updatePhanQuyen(chitietquyenUpdate);
+          //
+          setFilteredChitietquyenList(chitietquyenUpdate);
+          if (valueInputAdd != '') {
+            quyenList.find((item) => item.ma_phan_quyen === currentQuyen).ten_quyen_han = valueInputAdd;
+          }
+          setError("");
+          setValueInputAdd("");
+          setChiTietQuyenUpdate([]);
+          handleAction(actionList.cancel_update);
+        },
+        onCancel() {
 
-        //call api o day
-        const valueSentAPI = [{
-          ten_quyen_han: valueInputAdd,
-          chi_tiet_phan_quyen: chitietquyenUpdate
-        }]
-        console.log('Dữ liệu gửi xuống BE sửa');
-        const firstMaPhanQuyen = chitietquyenUpdate[0]?.ma_phan_quyen;
-        valueInputAdd ? updateTenQuyenHan(firstMaPhanQuyen, valueInputAdd) : null;
-        updatePhanQuyen(chitietquyenUpdate);
-        //
-        setFilteredChitietquyenList(chitietquyenUpdate);
-        if (valueInputAdd != '') {
-          quyenList.find((item) => item.ma_phan_quyen === currentQuyen).ten_quyen_han = valueInputAdd;
-        }
-        setError("");
-        setValueInputAdd("");
-        setChiTietQuyenUpdate([]);
-        handleAction(actionList.cancel_update);
+        },
+      });
 
-
-      } else {
-
-      }
 
     }
 
