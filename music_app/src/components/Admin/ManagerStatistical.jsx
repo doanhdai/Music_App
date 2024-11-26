@@ -38,45 +38,45 @@ let dangkyPremium = [
   { ma_tk: 9, ma_goi: 'GOI0001', ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 19000 }
 ]
 
-let premiumList = [
-  { ma_goi: 1, ten_goi: 'goi 1', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
-  { ma_goi: 2, ten_goi: 'goi 2', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 1 },
-  { ma_goi: 3, ten_goi: 'goi 3', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
-  { ma_goi: 4, ten_goi: 'goi 4', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
-  { ma_goi: 5, ten_goi: 'goi 5', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 1 },
-  { ma_goi: 6, ten_goi: 'goi 6', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 }
-]
-let contractsData = [
-  { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 3, ma_quang_cao: 3, luot_phat: 111, doanh_thu: 4500000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 4, ma_quang_cao: 4, luot_phat: 209, doanh_thu: 9000000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 5, ma_quang_cao: 1, luot_phat: 230, doanh_thu: 10500000, ngay_hieu_luc: '23/12/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 6, ma_quang_cao: 3, luot_phat: 146, doanh_thu: 5400000, ngay_hieu_luc: '23/11/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '09/09/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '12/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '12/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
-  { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '14/10/2024 18:00:33', ngay_hoan_thanh: '10-10-2024 18:00:33' }
-]
+// let premiumList = [
+//   { ma_goi: 1, ten_goi: 'goi 1', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
+//   { ma_goi: 2, ten_goi: 'goi 2', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 1 },
+//   { ma_goi: 3, ten_goi: 'goi 3', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
+//   { ma_goi: 4, ten_goi: 'goi 4', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
+//   { ma_goi: 5, ten_goi: 'goi 5', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 1 },
+//   { ma_goi: 6, ten_goi: 'goi 6', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 }
+// ]
+// let contractsData = [
+//   { ma_hop_dong: 1, ma_quang_cao: 1, luot_phat: 211, doanh_thu: 10000000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 2, ma_quang_cao: 2, luot_phat: 231, doanh_thu: 10440000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 3, ma_quang_cao: 3, luot_phat: 111, doanh_thu: 4500000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 4, ma_quang_cao: 4, luot_phat: 209, doanh_thu: 9000000, ngay_hieu_luc: '23/10/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 5, ma_quang_cao: 1, luot_phat: 230, doanh_thu: 10500000, ngay_hieu_luc: '23/12/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 6, ma_quang_cao: 3, luot_phat: 146, doanh_thu: 5400000, ngay_hieu_luc: '23/11/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '09/09/2023 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 70000000, ngay_hieu_luc: '12/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/11/2024 18:00:33', ngay_hoan_thanh: '11-10-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 1, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '11/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 2, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '12/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 3, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '12/10/2024 18:00:33', ngay_hoan_thanh: '11-11-2024 18:00:33' },
+//   { ma_hop_dong: 7, ma_quang_cao: 4, luot_phat: 189, doanh_thu: 50000000, ngay_hieu_luc: '14/10/2024 18:00:33', ngay_hoan_thanh: '10-10-2024 18:00:33' }
+// ]
 
-let quangcaoList = [
-  { ma_quang_cao: 1, ten_quang_cao: 'Chạy ngay đi vừa ra mắt! Nghe thử ngay!', ngay_tao: '23/10/2001', ma_nqc: 'NQC1', hinh_anh: assets.mck },
-  { ma_quang_cao: 2, ten_quang_cao: 'Nghe bài hát mới của Sơn Tùng MTP', ngay_tao: '05/02/1998', ma_nqc: 'NQC1', hinh_anh: assets.mck },
-  { ma_quang_cao: 3, ten_quang_cao: 'Rap Việt vừa ra mắt! Xem ngay trên trang youtube: Đông Tây Promotion', ngay_tao: '02/01/1996', ma_nqc: 'NQC2', hinh_anh: assets.mck },
-  { ma_quang_cao: 4, ten_quang_cao: 'Mộng Yu cùng AMEE! Nghe Mộng Yu ngay!', ngay_tao: '22/07/1990', ma_nqc: 'NQC3', hinh_anh: assets.mck }
-]
+// let quangcaoList = [
+//   { ma_quang_cao: 1, ten_quang_cao: 'Chạy ngay đi vừa ra mắt! Nghe thử ngay!', ngay_tao: '23/10/2001', ma_nqc: 'NQC1', hinh_anh: assets.mck },
+//   { ma_quang_cao: 2, ten_quang_cao: 'Nghe bài hát mới của Sơn Tùng MTP', ngay_tao: '05/02/1998', ma_nqc: 'NQC1', hinh_anh: assets.mck },
+//   { ma_quang_cao: 3, ten_quang_cao: 'Rap Việt vừa ra mắt! Xem ngay trên trang youtube: Đông Tây Promotion', ngay_tao: '02/01/1996', ma_nqc: 'NQC2', hinh_anh: assets.mck },
+//   { ma_quang_cao: 4, ten_quang_cao: 'Mộng Yu cùng AMEE! Nghe Mộng Yu ngay!', ngay_tao: '22/07/1990', ma_nqc: 'NQC3', hinh_anh: assets.mck }
+// ]
 
 let phieuruttien = [
   { ma_phieu: 1, ma_tk_artist: 1, ngay_rut_tien: '10-11-2024 18:00:33', tong_tien_rut_ra: 12500000, bank_id: '090912344452', bank_name: 'Agribank' },

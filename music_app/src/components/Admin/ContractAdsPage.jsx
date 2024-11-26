@@ -17,7 +17,7 @@ tomorrowNewDate.setDate(todayNewDate.getDate() + 1); // Thêm 1 ngày
 const tomorrow = tomorrowNewDate.toISOString().split('T')[0];
 
 function ContractPage() {
-    const { isGettingContractsData, openNotification, url, advertisementsData, formatDate, contractsData, setContract } = useContext(AdminContext);
+    const { isGettingContractsData, openNotification, url, advertisementsData, formatDate, contractsData, setContract, setAdvertisements } = useContext(AdminContext);
     const [isAdding, setIsAdding] = useState(false);
     const { isBgCover, setBgCover } = useContext(AdminContext);
     const [keySelected, setKeySelected] = useState("");
@@ -38,9 +38,8 @@ function ContractPage() {
     //     }
     // };
 
-    // useEffect(() => {
-    //     setHopdongList(adsContractData);
-    // }, []);
+
+
 
     function ItemHopDong({ list }) {
         let array1 = list;
@@ -48,7 +47,6 @@ function ContractPage() {
             <div className='bg-[#1E1E1E] ' key={hopdong.ma_hop_dong}>
                 <div className='flex justify-between'>
                     <div className='bg-[#E0066F] text-black p-1 font-bold'>{hopdong.ma_hop_dong}</div>
-                    <div className='bg-[#E0066F] text-black p-1 '>{hopdong.ngay_hoan_thanh === '' ? 'Còn thời hạn' : 'Hoàn thành'}</div>
                 </div>
 
                 <div className='p-2 flex flex-col gap-1 text-gray-400 '>
@@ -63,7 +61,7 @@ function ContractPage() {
                         <span className='text-base font-bold'> - </span>
                         <span>{hopdong.ngay_hoan_thanh !== null ? formatDate(hopdong.ngay_hoan_thanh) : '?'}</span>
                     </div>
-                    <div className='text-lg'>{hopdong.doanh_thu} đ</div>
+                    <div className='text-lg'>{Math.trunc(hopdong.doanh_thu)} đ</div>
                 </div>
             </div>
         ))
@@ -214,7 +212,7 @@ function ContractPage() {
         const date1 = new Date(formData.ngay_hieu_luc);
         const date2 = new Date(formData.ngay_hoan_thanh);
 
-        if (date1 > date2) {
+        if (date1 >= date2) {
             message.error("Ngày kết thúc phải lớn hơn ngày hiệu lực");
             error = true;
         }
@@ -244,103 +242,132 @@ function ContractPage() {
 
     function FormAdd() {
         const quangcao = advertisementsData.find((item) => item.ma_quang_cao == keySelected);
+        const now = Date.now();
+
+        const advertisementsExpired =
+            advertisementsData.map((item) => {
+                // Lọc hợp đồng liên quan đến quảng cáo hiện tại
+                const relatedContracts = contractsData.filter(
+                    (q) => q.ma_quang_cao === item.ma_quang_cao
+                );
+
+                // Kiểm tra nếu hợp đồng còn hạn
+                const isExpired = relatedContracts.every((q) => {
+                    const specificDate = new Date(q.ngay_hoan_thanh).getTime();
+                    return now > specificDate; // Tất cả hợp đồng đều hết hạn
+                });
+
+                // Nếu chưa hết hạn, giữ nguyên; nếu hết hạn, bỏ qua
+                return isExpired ? item : null;
+            }).filter(Boolean) // Loại bỏ phần tử null
         return (
-            <div className=' flex bg-[#1E1E1E]'>
-                <div className='w-[25vw]  p-2  border-r '>
-                    <div>
-                        <form className='flex gap-2 h-[40px] items-center mb-2'>
-                            <div className='flex items-center p-2 w-[80%] bg-black justify-between rounded-3xl'>
-                                <IoIosSearch className="text-white text-2xl cursor-pointer " />
-                                <input
-                                    className="bg-black w-[100%] outline-none ml-3 text-white"
-                                    type="text"
-                                    name='search'
-                                    placeholder="Tên quảng cáo"
-                                    value={valueSearchQC}
-                                    onChange={(e) => setValueSearchQC(e.target.value)}
-                                    autoFocus
-                                />
+            <>
+                {
+                    (advertisementsExpired.length == 0) ? <><div className='w-fit bg-black flex flex-col items-center p-3'>Tạo thêm quảng cáo, để tiến hành thêm hợp đồng.
+                        <button className='bg-[#A4A298] p-1 px-2 my-2 text-[#1E1E1E] w-fit' onClick={() => {
+
+                            setIsAdding(false);
+                            setBgCover(false);
+                            setKeySelected("");
+                        }}>Đồng ý và thoát</button>
+                    </div>  </> : (<div className=' flex bg-[#1E1E1E]'>
+                        <div className='w-[25vw]  p-2  border-r '>
+                            <div>
+                                <form className='flex gap-2 h-[40px] items-center mb-2'>
+                                    <div className='flex items-center p-2 w-[80%] bg-black justify-between rounded-3xl'>
+                                        <IoIosSearch className="text-white text-2xl cursor-pointer " />
+                                        <input
+                                            className="bg-black w-[100%] outline-none ml-3 text-white"
+                                            type="text"
+                                            name='search'
+                                            placeholder="Tên quảng cáo"
+                                            value={valueSearchQC}
+                                            onChange={(e) => setValueSearchQC(e.target.value)}
+                                            autoFocus
+                                        />
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                    <div className='w-full h-[40vh] overflow-y-auto'>
-                        {
-                            (valueSearchQC == '' ? advertisementsData : filterQC).map((item) =>
-                                <div key={item.ma_quang_cao} className='grid grid-cols-5 w-fit my-3 items-center'>
-                                    <div className=' text-left'>{item.ma_quang_cao}</div>
-                                    <div style={{ maxHeight: '1.5em' }} className='overflow-hidden  col-span-3'>{item.ten_quang_cao}</div>
-                                    <Button type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F] '
-                                        onClick={() => setKeySelected(item.ma_quang_cao)}
-                                    >
-                                        Chọn
-                                    </Button>
-                                </div>)
-                        }
-                    </div>
-                    <form>
+                            <div className='w-full h-[40vh] overflow-y-auto'>
+                                {
+                                    (valueSearchQC == '' ? advertisementsExpired : filterQC).map((item) =>
+                                        <div key={item.ma_quang_cao} className='grid grid-cols-5 w-fit my-3 items-center'>
+                                            <div className=' text-left'>{item.ma_quang_cao}</div>
+                                            <div style={{ maxHeight: '1.5em' }} className='overflow-hidden  col-span-3'>{item.ten_quang_cao}</div>
+                                            <Button type="primary" className='rounded-3xl bg-[#E0066F] h-hull w-fit hover:!bg-[#E0066F] '
+                                                onClick={() => setKeySelected(item.ma_quang_cao)}
+                                            >
+                                                Chọn
+                                            </Button>
+                                        </div>)
+                                }
+                            </div>
+                            <form>
 
-                    </form>
-                </div>
-                <div className='flex gap-2 p-2 items-center w-[40vw]'>
-                    <div className=" rounded-lg  mr-5 max-w-sm  ">
-                        <div
-                            id="image-preview"
-                            className=" bg-white aspect-square w-40   border-2  rounded-lg "
-                        >
-                            {quangcao && (
-                                <img
-                                    src={quangcao.hinh_anh}
-                                    alt="Uploaded"
-                                    className="aspect-square object-cover rounded-lg"
+                            </form>
+                        </div>
+                        <div className='flex gap-2 p-2 items-center w-[40vw]'>
+                            <div className=" rounded-lg  mr-5 max-w-sm  ">
+                                <div
+                                    id="image-preview"
+                                    className=" bg-white aspect-square w-40   border-2  rounded-lg "
+                                >
+                                    {quangcao && (
+                                        <img
+                                            src={quangcao.hinh_anh}
+                                            alt="Uploaded"
+                                            className="aspect-square object-cover rounded-lg"
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                            <form onSubmit={addHopdong}>
+                                <p style={{ maxHeight: '1.5em' }} className='text-xl  font-bold mb-2 overflow-y-scroll '>{quangcao ? quangcao.ten_quang_cao : 'Chưa chọn quảng cáo'}</p>
+                                <p className='text-[#A4A298]'>Nhập số lượt phát</p>
+                                <input
+                                    className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2"
+                                    type="number"
+                                    name="luot_phat"
+                                    min={10}
                                 />
-                            )}
-                        </div>
-                    </div>
-                    <form onSubmit={addHopdong}>
-                        <p style={{ maxHeight: '1.5em' }} className='text-xl  font-bold mb-2 overflow-y-scroll '>{quangcao ? quangcao.ten_quang_cao : 'Chưa chọn quảng cáo'}</p>
-                        <p className='text-[#A4A298]'>Nhập số lượt phát</p>
-                        <input
-                            className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2"
-                            type="number"
-                            name="luot_phat"
-                            min={10}
-                        />
-                        <p className='text-[#EB2272] italic'></p>
-                        <p className='text-[#A4A298]'>Nhập giá hợp đồng</p>
-                        <input
-                            className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2"
-                            type="number"
-                            name="doanh_thu"
-                            min={100000}
-                        />
-                        <p className='text-[#A4A298]'>Chọn ngày hợp đồng có hiệu lực</p>
-                        <input
-                            className=" p-1 w-[300px] mt-3 outline-none bg-[#A4A298] mb-2 text-black"
-                            type="date"
-                            name='ngay_hieu_luc'
-                            defaultValue={today} // Giá trị mặc định là ngày hiện tại
-                            min={today} // Giới hạn tối đa là ngày hiện tại
-                        />
-                        <p className='text-[#A4A298]'>Chọn ngày kết thúc hợp đồng</p>
-                        <input
-                            className=" p-1 w-[300px] mt-3 outline-none bg-[#A4A298] mb-2 text-black"
-                            type="date"
-                            name='ngay_hoan_thanh'
-                            defaultValue={tomorrow} // Giá trị mặc định là ngày hiện tại
-                            min={tomorrow} // Giới hạn tối đa là ngày hiện tại
-                        />
-                        <div className="flex justify-center my-3 gap-2">
-                            <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => {
+                                <p className='text-[#EB2272] italic'></p>
+                                <p className='text-[#A4A298]'>Nhập giá hợp đồng</p>
+                                <input
+                                    className=" p-1 w-[300px] mt-3 outline-none bg-black mb-2"
+                                    type="number"
+                                    name="doanh_thu"
+                                    min={100000}
+                                />
+                                <p className='text-[#A4A298]'>Chọn ngày hợp đồng có hiệu lực</p>
+                                <input
+                                    className=" p-1 w-[300px] mt-3 outline-none bg-[#A4A298] mb-2 text-black"
+                                    type="date"
+                                    name='ngay_hieu_luc'
+                                    defaultValue={today} // Giá trị mặc định là ngày hiện tại
+                                    min={today} // Giới hạn tối đa là ngày hiện tại
+                                />
+                                <p className='text-[#A4A298]'>Chọn ngày kết thúc hợp đồng</p>
+                                <input
+                                    className=" p-1 w-[300px] mt-3 outline-none bg-[#A4A298] mb-2 text-black"
+                                    type="date"
+                                    name='ngay_hoan_thanh'
+                                    defaultValue={tomorrow} // Giá trị mặc định là ngày hiện tại
+                                    min={tomorrow} // Giới hạn tối đa là ngày hiện tại
+                                />
+                                <div className="flex justify-center my-3 gap-2">
+                                    <button className='bg-[#A4A298] p-1 pl-2 pr-2 text-[#1E1E1E]' onClick={() => {
 
-                                setIsAdding(false);
-                                setBgCover(false);
-                                setKeySelected("");
-                            }}>Hủy</button>
-                            <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black' type='submit'>Xác nhận</button>
+                                        setIsAdding(false);
+                                        setBgCover(false);
+                                        setKeySelected("");
+                                    }}>Hủy</button>
+                                    <button className='bg-[#EB2272] p-1 pl-2 pr-2 text-black' type='submit'>Xác nhận</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-            </div>
+                    </div>)
+                }
+            </>
         )
     }
     return (
