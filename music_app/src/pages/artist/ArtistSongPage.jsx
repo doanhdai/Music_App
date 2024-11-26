@@ -1,23 +1,13 @@
 import ManageBar from "./components/ManageBar";
 import { useEffect, useState } from "react";
-import { assets, songsData } from "../../assets/assets";
+import { assets, } from "../../assets/assets";
 
-import { FiEye } from "react-icons/fi";
-import { FaHeart } from "react-icons/fa";
-import { FaHeadphones } from "react-icons/fa6";
-import { IoTimeSharp } from "react-icons/io5";
+
 import { CiSearch } from "react-icons/ci";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { GoPlus } from "react-icons/go";
 import { TfiPencil } from "react-icons/tfi";
 import { FaTrash } from "react-icons/fa";
-import { BsSendPlus } from "react-icons/bs";
-import { FaPlay } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
-import { IoIosMore } from "react-icons/io";
-import { songData2 } from "../../assets/assets";
-import { Button } from "antd";
-import { FaX } from "react-icons/fa6";
 import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 import SongDetailModal from "./components/SongDetailModal";

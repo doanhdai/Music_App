@@ -21,8 +21,13 @@ const ManagerAlbum = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
   useEffect(() => {
+    // fetch('http://127.0.0.1:8000/api/albums/list-albums') 
+    // .then((response)=>response.json())
+    // .then((res)=>res.albums)
+    // .then(data=>console.log(data))
     setAlbum(albumsData);
   }, [albumsData]);
+
   console.log(album);
   const displayStatus = (status) => {
     switch (status) {
