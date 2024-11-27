@@ -3,7 +3,7 @@ import { uploadImageAPI } from "../../../services/UserServices";
 
 const ImageUpload = ({initialImage}, ref) => {
   const [file, setFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(initialImage);
   const uploadImage = async (formData) => {
     try {
       const resImage = await uploadImageAPI(formData);
