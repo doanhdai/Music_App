@@ -128,8 +128,13 @@ const DetailSong = () => {
           ma_tk: currentAccount,
           ma_bai_hat: id,
         });
+        const newComment = {
+          ...data,
+          ngay_tao: new Date().toISOString(), 
+        };
 
-        setCommentsData((prev) => [...prev, data]);
+        setCommentsData((prev) => [...prev, newComment]);
+        setCommentContent("");
         setCommentContent("");
       } catch (error) {
         console.error("Lỗi khi thêm bình luận:", error);

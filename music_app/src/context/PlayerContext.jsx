@@ -21,9 +21,6 @@ const PlayerContextProvider = (props) => {
   const [usersData, setUsersData] = useState([]);
   const [realPlayTime, setRealPlayTime] = useState(0);
   const playTimer = useRef(null);
-  // const [currentAccount, setCurrentAccount] = useState('');
-  // const [detailPlaylist, setDetailPlaylist] = useState([]);
-  // const [songsPlaylist, setSongsPlaylist] = useState([]);
   const [track, setTrack] = useState(null);
   const [playStatus, setPlayStatus] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -40,7 +37,7 @@ const PlayerContextProvider = (props) => {
 
   //lấy tài khoản hiện tại của người dùng khi đã đăng nhập
   // const getAccount = async () => {
-  const account = JSON.parse(localStorage.getItem("account")) || "ccc";
+  const account = JSON.parse(localStorage.getItem("account")) || "";
   const currentAccount = account.ma_tk;
   // setCurrentAccount(currentAcc.ma_tk);
   // };
@@ -423,7 +420,6 @@ const PlayerContextProvider = (props) => {
     albumsData,
     currentAccount,
     usersData,
-    // songsPlaylist,
     realPlayTime,
     playlistsData,
     setPlaylistsData,
