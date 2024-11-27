@@ -17,7 +17,7 @@ import Poster from "../../../components/Poster";
 import { PlayerContext } from "../../../context/PlayerContext";
 
 const Home = () => {
-  const { audioRef, track } = useContext(PlayerContext);
+  const { audioRef, track, currentAccount } = useContext(PlayerContext);
   const displayColor = useRef(null);
   const location = useLocation();
   const isAlbum = /\/albums(\/|$)/.test(location.pathname);
@@ -71,7 +71,8 @@ const Home = () => {
           </Suspense>
         </div>
       </div>
-      <Player />
+      {currentAccount  ?<Player /> : <Poster/>}
+      
       <audio
         ref={audioRef}
         src={track?.link_bai_hat || ""}

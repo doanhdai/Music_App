@@ -46,6 +46,7 @@ const Player = () => {
     try {
       const response = await axios.get(`${url}/api/advertisements`);
       setAdvertisements(response.data.advertisements);
+      
     } catch (err) {
       console.error(err);
     }
@@ -64,25 +65,33 @@ const Player = () => {
     setVolume(newVolume);
     setAudioVolume(newVolume);
   };
-  // lấy ra quảng cáo rồi random
+  // lấy ra quảng cáo rồi random nè
   useEffect(() => {
+    // số 10 là số giây muốn hiện quảng cáo nè
     if (realPlayTime === 10) {
       const activeAds = advertisements.filter(
         (ad) => ad.trang_thai === 1 && ad.luot_phat_tich_luy > 0
       );
 
       if (activeAds.length > 0) {
-        const randomAd = activeAds[Math.floor(Math.random() * activeAds.length)];
+        const randomAd =
+          activeAds[Math.floor(Math.random() * activeAds.length)];
         updateAdPlayCount(randomAd.ma_quang_cao);
         setCurrentAd(randomAd);
         pause();
         setShowAd(true);
       }
+    } else if(realPlayTime === 5){
+      updateListen()
     }
   }, [realPlayTime]);
-
-
-
+  const updateListen = async() => {
+    try {
+      await axios.post(`${url}/api/song/listens/${track.ma_bai_hat}`)
+    } catch (error) {
+        console.log(error)
+    }
+  }
   const updateAdPlayCount = async (maQuangCao) => {
     try {
       await axios.put(`${url}/api/advertisements/${maQuangCao}/use`);

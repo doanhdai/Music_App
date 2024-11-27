@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import ArtistNavbar from "./components/ArtisNavbar";
-//  
+//  pmchi@example.com
 // hashed_password_5
 const ArtistLayout2 = () => {
   const displayColor = useRef(null);
