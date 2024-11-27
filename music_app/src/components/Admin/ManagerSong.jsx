@@ -67,12 +67,12 @@ const ManagerSong = () => {
       .replace(/Đ/g, "D");
   };
 
-  const handleShowDetails = (song) => {
-    setSelectedSong(song);
+  const handleShowDetails = () => {
+
     setDetailsSongModalState(true);
   };
-  const handleShowEditModal = (song) => {
-    setSelectedSong(song);
+  const handleShowEditModal = () => {
+  
     setEditSongModalState(true);
   };
   const handleCloseDetailModal = () => {
@@ -81,21 +81,32 @@ const ManagerSong = () => {
     setEditSongModalState(false);
   };
 
-  function deleteSong(song) {
+  function deleteSong() {
     //gửi data song để xóa
-    alert("xoa" + song);
+    alert("xoa" );
   }
 
   const clickedAction = {
-    details: (song) => handleShowDetails(song),
-    edit: (song) => handleShowEditModal(song),
-    delete: (song) => deleteSong(song),
+    details: () => handleShowDetails(),
+    edit: () => handleShowEditModal(),
+    delete: () => deleteSong(),
   };
-
+  const fetchSongDetailData = async (ma_bai_hat) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
+      const data = await response.json();
+      console.log(data.data);
+      setSelectedSong(data.data);
+    } catch (error) {
+      console.error("Error fetching song data:", error);
+    }
+  };
   function handleClickedSongItem(actionType, songInformation) {
     const action = clickedAction[actionType];
+    console.log(songInformation);
+    fetchSongDetailData(songInformation.ma_bai_hat)
     if (action) {
-      return clickedAction[actionType](songInformation);
+      return clickedAction[actionType]();
     } else {
       alert(`Wrong action type ${actionType}`);
     }
