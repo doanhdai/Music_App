@@ -21,17 +21,19 @@ const ManagerAlbum = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
   useEffect(() => {
+
     setAlbum(albumsData);
   }, [albumsData]);
+
   console.log(album);
   const displayStatus = (status) => {
     switch (status) {
       case 1:
-        return "Chờ duyệt";
+        return "bị khóa";
       case 2:
         return "Công khai";
       case 3:
-        return "bị Khóa";
+        return "Chờ duyệt";
       default:
         return "";
     }
@@ -123,7 +125,7 @@ const ManagerAlbum = () => {
         .includes(removeVietnamese(searchQuery).toLowerCase());
       const matchesStatus =
         selectedStatus === "" ||
-        displayStatus(album.trang_thai) === selectedStatus;
+        album.trang_thai == selectedStatus;
       const matchesReleaseDate = releaseDate
         ? album.ngay_tao === releaseDate
         : true;
@@ -157,8 +159,9 @@ const ManagerAlbum = () => {
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
               <option value="">Tất cả</option>
-              <option value="public">Công khai</option>
-              <option value="private">Ẩn</option>
+              <option value="1">Công khai</option>
+              <option value="0">Ẩn</option>
+              <option value="2">Chờ duyệt</option>
             </select>
           </div>
 
@@ -241,7 +244,7 @@ const ManagerAlbum = () => {
                   </p>
                 </div>
                 <div className="statusIcon flex-none text-xl">
-                  {album.isPublic ? (
+                  {album.trang_thai == 1 ? (
                     <BiSolidLockOpen size={15} />
                   ) : (
                     <BiSolidLock size={15} />
@@ -267,54 +270,3 @@ const ManagerAlbum = () => {
 
 export default ManagerAlbum;
 
-// const AlbumDetailModal = ({ album, onClose }) => {
-//   console.log(album.id);
-//   return (
-//     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-//       <div className="w-full max-w-xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative">
-//         <div className="flex items-center">
-//           <div className="flex items-center justify-start gap-2">
-//             <img
-//               src={album.image}
-//               alt={album.name}
-//               className="aspect-square h-40 flex-none"
-//             />
-//             <div className="album-info flex flex-col justify-between ml-4 text-gray-400 py-4">
-//               <h5 className="text-sm">
-//                 <span>{album.isPublic ? "Công khai" : "Ẩn"}</span>
-//               </h5>
-//               <h5 className="text-4xl text-white ">{album.name}</h5>
-//               <h5 className="inline-flex items-center my-3">20/11/2024</h5>
-//               <h5 className="flex items-center ">
-//                 <span className="mr-3 mb-1">324</span>
-//                 <FaHeart size={15} />
-//               </h5>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Song List */}
-//         <div className="overflow-y-auto mt-4">
-//           <SongItem />
-//           {/* {songsData
-//             .filter(song => song.albumId === album.id)
-//             .map((song) => (
-//               <div key={song.id} className="flex justify-between p-2 text-white bg-gray-700 rounded-lg mb-2">
-//                 <span>{song.name}</span>
-//                 <span>{song.duration}</span>
-//               </div>
-//             ))
-          
-//             } */}
-//         </div>
-
-//         <button
-//           onClick={onClose}
-//           className="absolute top-2 right-2 text-white py-3 px-3 rounded"
-//         >
-//           <IoClose size={25} />
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
