@@ -98,6 +98,7 @@ const Player = () => {
 
   const handleAdClose = () => {
     setShowAd(false);
+    play();
   };
   return (
     <>

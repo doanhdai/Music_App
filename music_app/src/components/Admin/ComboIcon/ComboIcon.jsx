@@ -37,6 +37,7 @@ const ComboIcon = () => {
               <li
                 key={item.ma_tb} // Đảm bảo mỗi phần tử có key duy nhất
                 className="flex gap-2 border-b pb-1 border-[#A4A298] items-center mb-1"
+                onClick={() => { }}
               >
                 <GiLetterBomb className="w-[45px] h-[45px] bg-transparent text-[#EB2272]" />
                 <span className="w-full">
