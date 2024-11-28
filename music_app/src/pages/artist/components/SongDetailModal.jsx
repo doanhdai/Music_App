@@ -11,7 +11,6 @@ const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-      onClick={onClose}
     >
       <div className="bg-[#1E1E1E]  p-10 p rounded-lg max-w-screen-sm shadow-lg  relative">
         <div className="flex items-center gap-10 justify-center ">
@@ -42,7 +41,7 @@ const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
                 Thể loại: 
                 <span className="text-white">     
                 {
-                    songData?.the_loai.length
+                    songData?.the_loai?.length
                       ? songData?.the_loai.map(theLoai => theLoai.ten_the_loai).join(", ")
                       : "Chọn thể loại"
                   }
@@ -72,9 +71,9 @@ const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
 
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-white py-2 px-4 rounded"
+          className="absolute top-2 right-2 text-white py-2 px-4 "
         >
-         <FaX/>
+         <FaX className="cursor-pointer" />
         </button>
       </div>
     </div>

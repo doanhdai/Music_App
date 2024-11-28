@@ -11,7 +11,7 @@ import { FaTrash } from "react-icons/fa";
 import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 import SongDetailModal from "./components/SongDetailModal";
-
+import { removeVietnameseTones } from "../../assets/assets";
 const ArtistSongPage = () => {
   const [songsData, setSongsData] = useState([]);
   const [currentActionType, setCurrentActionType] = useState("details");
@@ -58,7 +58,7 @@ const ArtistSongPage = () => {
   // 3 : all
   const filteredSongs = songsData.filter((item) => { 
     return (
-      item.ten_bai_hat.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      removeVietnameseTones(item.ten_bai_hat.toLowerCase()).includes(removeVietnameseTones(searchQuery.toLowerCase())) &&
       ( selectedStatus == 3 || item.trang_thai == selectedStatus) // 2 la tat ca
     )
   });
