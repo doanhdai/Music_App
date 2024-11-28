@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaHeart, FaPlay, FaRegHeart } from "react-icons/fa";
 import { IoMdPause } from "react-icons/io";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { CiCircleMinus } from "react-icons/ci";
 import { PlayerContext } from "../context/PlayerContext";
 import axios from "axios";
 
@@ -13,7 +12,6 @@ const SongLiked = () => {
     playWithId,
     pause,
     track,
-    playlistsData,
     currentAccount,
     songsData,
     songDataById,

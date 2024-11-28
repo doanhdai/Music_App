@@ -22,8 +22,9 @@ const DisplayAlbum = () => {
     songsData,
     songDataById,
     setSongDataById,
+    handleClickLikeUpdateGUI,
+    setSongLiked,
     play,
-    handleClickLikeUpdateGUI
   } = useContext(PlayerContext);
   const url_api = "http://localhost:8000";
   // console.log(currentAccount);
@@ -62,7 +63,6 @@ const DisplayAlbum = () => {
 
         setDetailAlbum(albumData);
         setSongsAlbum(filteredSongs);
-        console.log(albumData);
       } else {
         setDetailAlbum(null);
         setSongsAlbum([]);
@@ -72,7 +72,6 @@ const DisplayAlbum = () => {
       console.log(error);
     }
   };
-
 
   useEffect(() => {
     getSongByAlbumsData();
@@ -101,7 +100,6 @@ const DisplayAlbum = () => {
     setLikedSongs(likedFromStorage);
   }, [accLikeSong]);
 
-  // hàm sử lí yêu thích bài hát
   const handleLikeSong = async (ma_bai_hat) => {
     if (!currentAccount) {
       showToast("Vui lòng đăng nhập để thích bài hát!");
@@ -111,6 +109,7 @@ const DisplayAlbum = () => {
     handleClickLikeUpdateGUI(isLikedSong == undefined ? true : false, ma_bai_hat);
     if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
+      setSongLiked((prev) => [...prev, ma_bai_hat]);
 
       try {
         await axios.post(`${url_api}/api/song-likes`, {
@@ -120,9 +119,11 @@ const DisplayAlbum = () => {
       } catch (error) {
         console.error("Lỗi khi like bài hát:", error);
         setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
+        // setSongLiked((prev) => prev.filter((id) => id !== ma_bai_hat));
       }
     } else {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
+      // setSongLiked((prev) => prev.filter((id) => id !== ma_bai_hat));
 
       try {
         await axios.delete(`${url_api}/api/song-likes`, {
@@ -134,40 +135,54 @@ const DisplayAlbum = () => {
       } catch (error) {
         console.error("Lỗi khi bỏ like bài hát:", error);
         setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
+        setSongLiked((prev) => [...prev, ma_bai_hat]);
       }
     }
   };
-
   const fetchLikedAlbum = async () => {
     try {
       const response = await axios.get(
         `${url_api}/api/albums-likes/${currentAccount}`
       );
-      const likedAlbums = response.data.data || [];
-      setLikeAlbum(likedAlbums.some((album) => album.ma_album === id));
+      const likedAlbums = response.data.albums || [];
+      if (likedAlbums.length === 0) {
+        setLikeAlbum(false);
+        console.log("Danh sách album rỗng.");
+      } else {
+        setLikeAlbum(likedAlbums.some((album) => album.ma_album === id));
+      }
     } catch (error) {
       console.error("Error fetching liked albums:", error);
+      setLikeAlbum(false);
     } finally {
       setIsDataReady(true);
     }
   };
+
   const toggleLikeAlbum = async () => {
     if (!currentAccount) {
       showToast("Vui lòng đăng nhập để thích album!");
       return;
     }
+
     const newLikeState = !likeAlbum;
     setLikeAlbum(newLikeState);
 
     try {
       if (newLikeState) {
         await axios.post(`${url_api}/api/albums/like`, {
-          ma_tk: `${currentAccount}`,
+          ma_tk: currentAccount,
           ma_album: id,
         });
-      } else {
-        await axios.delete(`${url_api}/api/albums/unlike`, {
-          data: { ma_tk: `${currentAccount}`, ma_album: id },
+      }
+      if (!newLikeState) {
+        await axios({
+          method: "DELETE",
+          url: `${url_api}/api/albums/unlike`,
+          data: {
+            ma_tk: currentAccount,
+            ma_album: id,
+          },
         });
       }
     } catch (error) {
@@ -211,28 +226,28 @@ const DisplayAlbum = () => {
       });
       const newPlaylist = response.data.data;
       setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
+      showToast("Đã tạo mới playlist và thêm bài hát!");
     } catch (error) {
       console.error("Lỗi khi tạo mới playlist:", error);
     }
   };
 
   const handleClickBtnPlay = () => {
-
     const storedState = localStorage.getItem("musicPlayerState");
-    const currentState = storedState ? JSON.parse(storedState) : '';
-    if (currentState == '') {
+    const currentState = storedState ? JSON.parse(storedState) : "";
+    if (currentState == "") {
       playWithId(songsAlbum[0].ma_bai_hat);
     } else {
-      const index = songDataById.findIndex((item) => item.ma_bai_hat == currentState.track.ma_bai_hat);
+      const index = songDataById.findIndex(
+        (item) => item.ma_bai_hat == currentState.track.ma_bai_hat
+      );
       if (index == -1) {
         playWithId(songsAlbum[0].ma_bai_hat);
       } else {
         play();
       }
     }
-
-
-  }
+  };
   return (
     <>
       {toastMessage && (
@@ -341,8 +356,10 @@ const DisplayAlbum = () => {
               )}
               <Link
                 to={`/song/${item.ma_bai_hat}`}
-                className={`${track.ma_bai_hat === item.ma_bai_hat ? 'text-[#E0066F] font-bold text-lg' : 'text-[#fff]'} flex items-center pr-2`}
-
+                className={`${track.ma_bai_hat === item.ma_bai_hat
+                  ? "text-[#E0066F] font-bold text-lg"
+                  : "text-[#fff]"
+                  } flex items-center pr-2`}
               >
                 <img className="inline w-10 mr-4 " src={item.hinh_anh} />
                 {item.ten_bai_hat}

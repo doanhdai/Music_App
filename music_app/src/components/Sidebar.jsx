@@ -72,6 +72,23 @@ const Sidebar = ({ onOutsideClick }) => {
       setSelectedPlaylist(null);
     }
   };
+const createNewPlaylist = async () => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/playlist/${currentAccount}`
+    );
+
+    const newPlaylist = response.data;
+
+    if (newPlaylist && newPlaylist.id && newPlaylist.name) {
+      setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
+    }
+  } catch (error) {
+    console.error("Lỗi không tạo được playlist:", error);
+  }
+};
+
+
 
   return (
     <>
@@ -126,7 +143,9 @@ const Sidebar = ({ onOutsideClick }) => {
               />
               <div>
                 <p>Bài hát đã yêu thích</p>
-                <h5 className="text-slate-200 text-sm">Playlist - {songLiked.length} song</h5>
+                <h5 className="text-slate-200 text-sm">
+                  Playlist - {songLiked.length} song
+                </h5>
               </div>
             </div>
           </div>
@@ -137,7 +156,10 @@ const Sidebar = ({ onOutsideClick }) => {
                 <p className="font-light">
                   Hãy tạo danh sách phát cho riêng bạn
                 </p>
-                <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4">
+                <button
+                  onClick={createNewPlaylist}
+                  className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4"
+                >
                   Tạo danh sách phát
                 </button>
               </div>
