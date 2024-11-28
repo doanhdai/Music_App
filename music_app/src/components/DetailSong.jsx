@@ -130,7 +130,7 @@ const DetailSong = () => {
         });
         const newComment = {
           ...data,
-          ngay_tao: new Date().toISOString(), 
+          ngay_tao: new Date().toISOString(),
         };
 
         setCommentsData((prev) => [...prev, newComment]);
@@ -369,18 +369,18 @@ const DetailSong = () => {
           {console.log(artistSong.collabArtists)}
           {artistSong.collabArtists.length > 0
             ? artistSong.collabArtists.map((artist, index) => (
-                <div key={index} className="flex items-center my-2">
-                  <img
-                    className="rounded-full h-[70px] text-[#fff]"
-                    src={artist.anh_dai_dien_collab_artist || assets.mck}
-                    // alt={artist.ten_collab_artist}
-                  />
-                  <div className="ml-5 flex flex-col">
-                    <h6 className="text-[#bbbbbb]">Nghệ sĩ</h6>
-                    <b className="uppercase">{artist}</b>
-                  </div>
+              <div key={index} className="flex items-center my-2">
+                <img
+                  className="rounded-full h-[70px] text-[#fff]"
+                  src={artist.anh_dai_dien_collab_artist || assets.mck}
+                // alt={artist.ten_collab_artist}
+                />
+                <div className="ml-5 flex flex-col">
+                  <h6 className="text-[#bbbbbb]">Nghệ sĩ</h6>
+                  <b className="uppercase">{artist}</b>
                 </div>
-              ))
+              </div>
+            ))
             : ""}
         </div>
 
