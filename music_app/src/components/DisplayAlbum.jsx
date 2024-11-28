@@ -229,7 +229,7 @@ const DisplayAlbum = () => {
           onClose={() => setToastMessage("")}
         />
       )}
-      {detailAlbum.length != 0 && songsAlbum.length != 0 && isDataReady ? (
+      {detailAlbum.length != 0 && isDataReady ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
             <img

@@ -27,7 +27,9 @@ const DisplayArtist = () => {
     songsData,
     songDataById,
     setSongDataById,
-    play
+    play,
+    isCallingAPISongArtist,
+    setIsCallingAPISongArtist
   } = useContext(PlayerContext);
 
   const { id } = useParams();
@@ -50,6 +52,7 @@ const DisplayArtist = () => {
         setDetailArtist(artistData);
         // console.log(artistData);
         setSongsArtist(artistData.bai_hat);
+        setIsCallingAPISongArtist(false);
         setSongDataById(songsData.filter((item) =>
           artistData.bai_hat.some((item1) => item.ma_bai_hat == item1.ma_bai_hat)
         ))
@@ -189,7 +192,7 @@ const DisplayArtist = () => {
           onClose={() => setToastMessage("")}
         />
       )}
-      {detailArtist.length != 0 && songsArtist.length != 0 ? (
+      {detailArtist.length != 0 && !isCallingAPISongArtist ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
             <img className="w-48 rounded" src={detailArtist.hinh_anh}></img>
