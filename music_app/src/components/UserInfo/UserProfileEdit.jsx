@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { assets } from "../../assets/assets";
-import { updateUserAPI, uploadImageAPI } from "../../services/UserServices";
+import { updateUserAPI, uploadImage } from "../../services/UserServices";
 import AuthBtn from "../Authentication/AuthBtn";
 const UserProfileEdit = ({onCancel}) => {
   const account = JSON.parse(localStorage.getItem('account'));
@@ -8,16 +8,6 @@ const UserProfileEdit = ({onCancel}) => {
   const [file, setFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
 
-  const uploadImage = async (formData) => {
-    try {
-      const resImage = await uploadImageAPI(formData);
-      console.log('Path image:', resImage.data.path);
-      return resImage.data.path;    // Trả về đường dẫn ảnh
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw error; // Ném lỗi để xử lý sau
-    }
-  };
   const handleFileChange = (e) => {
       setFile(e.target.files[0]);
       const imageUrl = URL.createObjectURL(e.target.files[0]);
