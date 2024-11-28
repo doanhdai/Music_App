@@ -173,11 +173,10 @@ const SongLiked = () => {
                 )}
                 <Link
                   to={`/song/${item.ma_bai_hat}`}
-                  className={`${
-                    track.ma_bai_hat === item.ma_bai_hat
-                      ? "text-[#E0066F]"
-                      : "text-[#fff]"
-                  }`}
+                  className={`${track.ma_bai_hat === item.ma_bai_hat
+                    ? "text-[#E0066F]"
+                    : "text-[#fff]"
+                    }`}
                 >
                   <img
                     className="inline w-10 mr-4"

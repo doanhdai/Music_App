@@ -18,10 +18,11 @@ const DisplayAlbum = () => {
     track,
     playlistsData,
     currentAccount,
+    setPlaylistsData,
     songsData,
     songDataById,
     setSongDataById,
-    setPlaylistsData,
+    handleClickLikeUpdateGUI,
     setSongLiked,
     play,
   } = useContext(PlayerContext);
@@ -105,7 +106,7 @@ const DisplayAlbum = () => {
       return;
     }
     const isLikedSong = likedSongs[ma_bai_hat];
-
+    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : false, ma_bai_hat);
     if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
       setSongLiked((prev) => [...prev, ma_bai_hat]);
@@ -157,7 +158,7 @@ const DisplayAlbum = () => {
       setIsDataReady(true);
     }
   };
-  
+
   const toggleLikeAlbum = async () => {
     if (!currentAccount) {
       showToast("Vui lòng đăng nhập để thích album!");
@@ -215,19 +216,19 @@ const DisplayAlbum = () => {
     }
   };
 
+
+
   const createNewPlaylist = async (ma_bai_hat) => {
     try {
       const response = await axios.post(`${url_api}/api/playlist`, {
-        ma_tk: currentAccount,
+        ma_tk: `${currentAccount}`,
         ma_bai_hat: ma_bai_hat,
       });
-      const newPlaylist = response.data;
+      const newPlaylist = response.data.data;
       setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
-
       showToast("Đã tạo mới playlist và thêm bài hát!");
     } catch (error) {
       console.error("Lỗi khi tạo mới playlist:", error);
-      showToast("Không thể tạo mới playlist. Vui lòng thử lại.");
     }
   };
 
@@ -355,11 +356,10 @@ const DisplayAlbum = () => {
               )}
               <Link
                 to={`/song/${item.ma_bai_hat}`}
-                className={`${
-                  track.ma_bai_hat === item.ma_bai_hat
-                    ? "text-[#E0066F] font-bold text-lg"
-                    : "text-[#fff]"
-                } flex items-center pr-2`}
+                className={`${track.ma_bai_hat === item.ma_bai_hat
+                  ? "text-[#E0066F] font-bold text-lg"
+                  : "text-[#fff]"
+                  } flex items-center pr-2`}
               >
                 <img className="inline w-10 mr-4 " src={item.hinh_anh} />
                 {item.ten_bai_hat}

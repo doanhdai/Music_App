@@ -46,6 +46,8 @@ const DetailSong = () => {
     usersData,
     playlistsData,
     currentAccount,
+    handleClickLikeUpdateGUI,
+    setPlaylistsData
   } = useContext(PlayerContext);
   const { id } = useParams();
   const showToast = (message) => {
@@ -161,6 +163,7 @@ const DetailSong = () => {
       showToast("Vui lòng đăng nhập để yêu thích bài hát!");
       return;
     }
+    handleClickLikeUpdateGUI(!hasLiked, id);
     if (!hasLiked) {
       setHasLiked(true);
       setLikeData((prev) => ({
@@ -238,14 +241,14 @@ const DetailSong = () => {
 
   const createNewPlaylist = async () => {
     try {
-      await axios.post(`${url_api}/api/playlist`, {
-        ma_tk: `${currentAccount}`,
+      const response = await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: currentAccount,
         ma_bai_hat: id,
       });
-      alert("Đã tạo mới playlist và thêm bài hát!");
+      const newPlaylist = response.data.data;
+      setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
     } catch (error) {
       console.error("Lỗi khi tạo mới playlist:", error);
-      alert("Không thể tạo mới playlist. Vui lòng thử lại.");
     }
   };
   const handleOpenPlaylist = (e) => {
