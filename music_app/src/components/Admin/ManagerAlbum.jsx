@@ -25,7 +25,6 @@ const ManagerAlbum = () => {
     setAlbum(albumsData);
   }, [albumsData]);
 
-  console.log(album);
   const displayStatus = (status) => {
     switch (status) {
       case 1:
