@@ -115,6 +115,13 @@ export function extractDayMonthYear(dateTimeString) {
       };
     });
   }
+ export function getTimeHourMinute(dateTimeString) {
+    const dateObj = new Date(dateTimeString);
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+  
 export const albumsData = [
     {   
         id:0,

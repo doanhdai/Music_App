@@ -2,13 +2,20 @@ import { assets } from "./assets/assets";
 import { useState,useEffect } from "react";
 import ArtistWithdrawalModal from "./components/ArtistWithdrawalModal";
 import DateFilter from "./components/DateFilter";
+import { extractDayMonthYear, getTimeHourMinute } from "../../assets/assets";
+
 const ArtistWidthdrawalRequestPage = () => {
   const [isOpenWithdrawal, setIsOpenWithdrawal] = useState(false);
-  const [withdrawalData,setIsWithdrawal] = useState([]);
-
+  const [withdrawalData,setWithdrawalData] = useState([]);
+  const currrentArtistId ="ACC0006"
   useEffect(() =>{
-    fetch('')
-  })
+    fetch('http://127.0.0.1:8000/api/artist-slip')
+    .then(res => res.json())
+    .then(res => res.phieuRutTien)
+    .then(res => res.filter( item=> item.ma_tk_artist === currrentArtistId))
+    .then(res => setWithdrawalData(res))
+  },[])
+
   const handleOpenWithdrawal = () => {
     setIsOpenWithdrawal(true);
   };
@@ -55,16 +62,19 @@ const ArtistWidthdrawalRequestPage = () => {
             <p>Số tài khoản</p>
           </div>
           <hr className="mx-5" />
-
-          <div className="py-2 mx-5 grid grid-cols-5 sm:grid-cols-[1fr_1fr_1fr_3fr_2fr_2fr] pl-2 text-center hover:bg-[#ffffff2b]">
-            <p className="text-lg ">1</p>
-            <p className="text-lg ">1/2/22</p>
-            <p className="text-lg ">19:10</p>
-            <p className="text-lg ">100000</p>
-            <p className="text-lg ">ACB</p>
-            <p className="text-lg ">102349a09</p>
+          {withdrawalData?.map( (item) =>(
+            <div 
+              key={item.ma_phieu}
+              className="py-2 mx-5 grid grid-cols-5 sm:grid-cols-[1fr_1fr_1fr_3fr_2fr_2fr] pl-2 text-center hover:bg-[#ffffff2b]">        
+              <p className="text-lg ">{item.ma_phieu}</p>
+              <p className="text-lg ">{extractDayMonthYear(item.ngay_rut_tien)}</p>
+              <p className="text-lg ">{getTimeHourMinute(item.ngay_rut_tien)}</p>
+              <p className="text-lg ">{item.tong_tien_rut_ra}</p>
+              <p className="text-lg ">{item.ten_bank}</p>
+              <p className="text-lg ">102349a09</p>
+            </div>
+            ))}
           </div>
-        </div>
       </div>
       <ArtistWithdrawalModal
         isOpen={isOpenWithdrawal}
