@@ -24,6 +24,7 @@ const NavBar = () => {
 
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
+  console.log(artistsData)
   const [searchTerm, setSearchTerm] = useState("");
 
 
@@ -55,7 +56,7 @@ const NavBar = () => {
 
     const searchTermNoAccent = removeVietnamese(trimmedTerm.toLowerCase());
     const artistResults = (artistsData || []).filter((artist) =>
-      removeVietnamese(artist.ten_nghe_si)
+      removeVietnamese(artist.ten_artist)
         .toLowerCase()
         .includes(searchTermNoAccent)
     );

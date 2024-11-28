@@ -4,6 +4,7 @@ import AlbumItems from "./AlbumItems";
 import SongItems from "./SongItems";
 import ArtistItems from "./ArtistItems";
 import { PlayerContext } from "../context/PlayerContext";
+import { assets } from "../assets/assets";
 
 const Search = () => {
   const { genresData } = useContext(PlayerContext);
@@ -53,11 +54,10 @@ const Search = () => {
                 <div className="flex overflow-auto">
                   {artistResults.map((artist, index) => (
                     <ArtistItems
-                      key={index}
-                      name={artist.ma_nghe_si}
-                      desc={artist.ten_nghe_si}
+                      key={artist.ma_artist}
                       id={artist.ma_nghe_si}
-                      img={artist.hinh_anh}
+                      artist={artist.ten_artist}
+                      img={assets.mck}
                     />
                   ))}
                 </div>

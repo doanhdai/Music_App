@@ -1,7 +1,7 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
 
-const ArtistItems = ({id, name, img, artist}) => {
+const ArtistItems = ({id, img, artist}) => {
 
     const navigate= useNavigate()
 
@@ -11,8 +11,8 @@ const ArtistItems = ({id, name, img, artist}) => {
       className="min-w-[180px] p-2 px-3 rounded cursor-pointer hover:bg-[#fffff26]"
     >
       <img className="h-44 w-44 rounded-full" src={img}></img>
-      <p className="font-bold mt-2 mb-1">{name}</p>
-      <p className="text-slate-200 text-sm">{artist}</p>
+      <p className="font-bold mt-2 mb-1">{artist}</p>
+      {/* <p className="text-slate-200 text-sm">{artist}</p> */}
     </div>
   );
 }

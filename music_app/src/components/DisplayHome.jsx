@@ -24,8 +24,8 @@ const DisplayHome = () => {
   return (
     <>
       {songsData.length != 0 &&
-        albumsData.length != 0 &&
-        artistsData.length != 0 ? (
+      albumsData.length != 0 &&
+      artistsData.length != 0 ? (
         <>
           <div>
             <div className="flex items-center justify-between mb-4">
@@ -51,8 +51,8 @@ const DisplayHome = () => {
               {sortedArtistsData.slice(0, 6).map((item, index) => (
                 <ArtistItems
                   key={index}
-                  name={item.ten_artist}
                   id={item.ma_artist}
+                  artist={item.ten_artist}
                   img={assets.mck}
                 />
               ))}
