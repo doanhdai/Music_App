@@ -158,8 +158,8 @@ const AlbumList = ({ albumsData,currentActionType,setCurrentActionType }) => {
   };
 
   function deleteAlbum(album) {
-    if (confirm(`Bạn có chắc muốn xóa bài hát ${song.ten_bai_hat} không?`)) {
-      fetch(`http://127.0.0.1:8000/api/song/${song.ma_bai_hat}`, {
+    if (confirm(`Bạn có chắc muốn xóa album ${album.ten_album} không?`)) {
+      fetch(`http://127.0.0.1:8000/api/song/${album.ma_album}`, {
         method: 'DELETE'
       })
       .then(response => {
@@ -195,7 +195,7 @@ const AlbumList = ({ albumsData,currentActionType,setCurrentActionType }) => {
 
   return (
     <div className="grid grid-cols-6 gap-4 mt-7 h-[540px] overflow-y-auto pb-8">
-      {albumsData?  
+      {albumsData ?  
       (albumsData.map((album) => (
         <div
           key={album.ma_album}
@@ -223,7 +223,10 @@ const AlbumList = ({ albumsData,currentActionType,setCurrentActionType }) => {
             </div>
           </div>
         </div>
-      ))) :  'Chưa có album'}
+      ))) :  ( 
+      <div className="flex items-center h-[500px] justify-center text-center text-white">
+        Chưa có album 
+      </div>)}
      
       {selectedAlbum && (
         <AlbumDetailModal album={selectedAlbum} detailsAlbumSodalState={detailsAlbumSodalState} onClose={handleCloseDetailModal} />

@@ -62,7 +62,7 @@ const ArtistWidthdrawalRequestPage = () => {
             <p>Số tài khoản</p>
           </div>
           <hr className="mx-5" />
-          {withdrawalData?.map( (item) =>(
+          {withdrawalData? withdrawalData.map( (item) =>(
             <div 
               key={item.ma_phieu}
               className="py-2 mx-5 grid grid-cols-5 sm:grid-cols-[1fr_1fr_1fr_3fr_2fr_2fr] pl-2 text-center hover:bg-[#ffffff2b]">        
@@ -73,7 +73,7 @@ const ArtistWidthdrawalRequestPage = () => {
               <p className="text-lg ">{item.ten_bank}</p>
               <p className="text-lg ">102349a09</p>
             </div>
-            ))}
+            )) : ""}
           </div>
       </div>
       <ArtistWithdrawalModal

@@ -187,6 +187,11 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
 
   return (
     <div className="mt-5 bg-[#121212] h-screen overflow-scroll">
+      {!songsData ? (
+        <div className="flex items-center h-[500px] justify-center text-center text-white">
+          Chưa có bài hát 
+        </div>
+      ) : (<> 
       <div className=" py-2 grid grid-cols-5 sm:grid-cols-[4fr_2fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
         <p>Tên bài hất</p>
         <p>Album</p>
@@ -196,7 +201,7 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
       </div>
       <hr className="mx-5" />
 
-      {songsData.map((item, index) => (
+      { songsData.map((item, index) => (
         <div
           key={index}
           className="grid grid-cols-5 sm:grid-cols-[4fr_2fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
@@ -216,7 +221,7 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
           </p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
         </div>
-      ))}
+      ))} 
       <SongDetailModal
         className="float-start"
         songData={selectedSong}
@@ -229,7 +234,9 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
         editSongModalState={editSongModalState}
         onClose={handleCloseDetailModal}
       />
+      </>)}
     </div>
+    
   );
 };
 
