@@ -106,7 +106,8 @@ const DisplayArtist = () => {
     }
 
     const isLiked = likedSongs[ma_bai_hat];
-    handleClickLikeUpdateGUI(isLiked == undefined ? true : false, ma_bai_hat);
+
+    handleClickLikeUpdateGUI(isLiked == undefined ? true : (isLiked ? false : true), ma_bai_hat);
     if (!isLiked) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
       try {

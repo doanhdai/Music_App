@@ -106,10 +106,9 @@ const DisplayAlbum = () => {
       return;
     }
     const isLikedSong = likedSongs[ma_bai_hat];
-    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : false, ma_bai_hat);
+    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : (isLikedSong ? false : true), ma_bai_hat);
     if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
-      setSongLiked((prev) => [...prev, ma_bai_hat]);
 
       try {
         await axios.post(`${url_api}/api/song-likes`, {
@@ -135,7 +134,6 @@ const DisplayAlbum = () => {
       } catch (error) {
         console.error("Lỗi khi bỏ like bài hát:", error);
         setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
-        setSongLiked((prev) => [...prev, ma_bai_hat]);
       }
     }
   };
