@@ -81,7 +81,7 @@ const DisplayPlaylist = () => {
   };
   const handleLikeSong = async (ma_bai_hat) => {
     const isLikedSong = likedSongs[ma_bai_hat];
-    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : false, ma_bai_hat);
+    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : (isLikedSong ? false : true), ma_bai_hat);
     if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
 
