@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ImageUpload from "./ImageUpload";
 import { FaXmark } from "react-icons/fa6";
-
+import { getAudioDuration } from "../../../assets/assets";
 const AddSongModal = ({ onClose, modalState }) => {
   if (!modalState) return null;
   return <SongUpload closeModal={onClose} />;
@@ -122,35 +122,10 @@ const SongUpload = ({ closeModal }) => {
       );
     }
   };
-  function getCurrentDay() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-  
-    return `${year}-${month}-${day}`;
-  }
+ 
   
   const imgData = ImgRef.current?.getData();
-  async function getAudioDuration(file) {
-    const url = URL.createObjectURL(file);
 
-    return new Promise((resolve) => {
-      const audio = document.createElement("audio");
-      audio.muted = true; // Mute the audio to avoid unexpected playback
-
-      const source = document.createElement("source");
-      source.src = url;
-
-      audio.appendChild(source);
-      audio.preload = "metadata"; // Load metadata only
-
-      audio.onloadedmetadata = () => {
-        resolve(audio.duration);
-        URL.revokeObjectURL(url); // Release the URL object
-      };
-    });
-  }
   // imgData chua file anh chuyen thanh link == linkImage
   //  highQualityFile --> chua file nhac chat luong cao chuyen thanh link == linkHighMusic
   //  lowQualityFile --> chua file nhac chat luong thap chuyen thanh link == linkLowMusic
@@ -162,7 +137,7 @@ const SongUpload = ({ closeModal }) => {
     "thoi_luong": getAudioDuration(highQualityFile),
     "trang_thai": 1,
     "hinh_anh": imgData, // chen bien linkImage
-    "ngay_phat_hanh": getCurrentDay(),
+    "ngay_phat_hanh": new Date(),
     "doanh_thu": 0,
     "the_loai": selectedGenres.map(genre => genre.ma_the_loai),
     "links": {

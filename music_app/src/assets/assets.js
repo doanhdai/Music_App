@@ -94,6 +94,25 @@ export function extractDayMonthYear(dateTimeString) {
     return year; 
   
   }
+  export  async function getAudioDuration(file) {
+    const url = URL.createObjectURL(file);
+
+    return new Promise((resolve) => {
+      const audio = document.createElement("audio");
+      audio.muted = true; // Mute the audio to avoid unexpected playback
+
+      const source = document.createElement("source");
+      source.src = url;
+
+      audio.appendChild(source);
+      audio.preload = "metadata"; // Load metadata only
+
+      audio.onloadedmetadata = () => {
+        resolve(audio.duration);
+        URL.revokeObjectURL(url); // Release the URL object
+      };
+    });
+  }
 export const albumsData = [
     {   
         id:0,
