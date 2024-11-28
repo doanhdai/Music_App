@@ -24,7 +24,6 @@ const NavBar = () => {
 
   const navigate = useNavigate();
   const { songsData, albumsData, artistsData } = useContext(PlayerContext);
-  console.log(artistsData)
   const [searchTerm, setSearchTerm] = useState("");
 
 
