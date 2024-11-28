@@ -5,11 +5,10 @@ import { FaXmark } from "react-icons/fa6";
 import { PlayerContext } from "../../../context/PlayerContext";
 import { getAudioDuration , } from "../../../assets/assets";
 const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
-  if (editSongModalState === false) return null;
+  if (editSongModalState === false || songDetails === null) return null;
 
   const { genresData, artistsData } = useContext(PlayerContext);
-  const [currentSongData, setCurrentSongData] = useState(null);
-  const [songName, setSongName] = useState(currentSongData.ma_bai_hat);
+  const [songName, setSongName] = useState('');
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedArtists, setSelectedArtists] = useState([]);
   const [genreSearch, setGenreSearch] = useState("");
@@ -19,30 +18,13 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   const [highQualityFile, setHighQualityFile] = useState(null);
   const [lowQualityFile, setLowQualityFile] = useState(null);
 
-
   const ImgRef = useRef(null);
   const imgData = ImgRef.current?.getData();
-
   useEffect(() => {
-    const fetchSongData = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/song/${songDetails.ma_bai_hat}`);
-        const data = await response.json();
-        setCurrentSongData(data.data);
-
-        // Cập nhật songName, selectedGenres, selectedArtists khi dữ liệu đã có
-        setSongName(data.data.ten_bai_hat || "");
-        setSelectedGenres(data.data.the_loai || []);
-        setSelectedArtists(data.data.subartists || []);
-      } catch (error) {
-        console.error("Error fetching song data:", error);
-      }
-    };
-  
-    fetchSongData();
-  }, [songDetails.ma_bai_hat]);
-
-
+    setSongName(songDetails?.ten_bai_hat)
+    setSelectedGenres(songDetails?.the_loai)
+    setSelectedArtists(songDetails?.subartists)
+  },[])
 
 
   const toggleDropdown = (type) => {
@@ -58,24 +40,31 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   const handleCheckboxChange = (type, value) => {
     console.log("add",selectedGenres)
     if (type === "genre") {
-      setSelectedGenres((prev) =>
-        prev.includes(value)
-          ? prev.filter((g) => g !== value)
-          : [...prev, value]
-      );
+      setSelectedGenres((prevSelectedGenres) => {
+        if (prevSelectedGenres.some((g) => g.ma_the_loai === value.ma_the_loai)) {
+          return prevSelectedGenres.filter(
+            (g) => g.ma_the_loai !== value.ma_the_loai
+          );
+        } else {
+          return [...prevSelectedGenres, value];
+        }
+      });
     } else {
-      setSelectedArtists((prev) =>
-        prev.includes(value)
-          ? prev.filter((a) => a !== value)
-          : [...prev, value]
-      );
+      setSelectedArtists((prevSelectedArtists) => {
+        if (prevSelectedArtists.some((g) => g.ma_artist === value.ma_artist)) {
+          return prevSelectedArtists.filter(
+            (g) => g.ma_artist !== value.ma_artist
+          );
+        } else {
+          return [...prevSelectedArtists, value];
+        }
+      });
     }
     
   };
-  console.log("current",selectedGenres)
   const formData = {
     ten_bai_hat: songName,
-    ma_tk_artist: currentSongData,
+    ma_tk_artist: "aad",
     ma_album: null,
     thoi_luong: getAudioDuration(highQualityFile),
     trang_thai: 1,
@@ -111,7 +100,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
         <h2 className="text-2xl font-bold mb-5 text-center">Sửa bài hát mới</h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} initialImage={currentSongData?.hinh_anh}/>
+            <ImageUpload ref={ImgRef} initialImage={songDetails?.hinh_anh}/>
             <div className="w-sm">
               {/* Song Name */}
               <div className="mb-4">
@@ -165,7 +154,9 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                           <input
                             type="checkbox"
                             className="form-checkbox h-5 w-5 text-black"
-                            checked={selectedGenres.includes(genre)}
+                            checked={selectedGenres.some(
+                              (g) => g.ma_the_loai === genre.ma_the_loai
+                            )}
                             onChange={() =>
                               handleCheckboxChange("genre", genre)
                             }

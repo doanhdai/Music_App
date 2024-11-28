@@ -93,6 +93,7 @@ const ManagerSong = () => {
   };
   const fetchSongDetailData = async (ma_bai_hat) => {
     try {
+      
       const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
       const data = await response.json();
       console.log(data.data);
