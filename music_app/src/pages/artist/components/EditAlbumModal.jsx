@@ -1,29 +1,55 @@
-import React, { useState, useRef, useEffect } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useState, useRef, useEffect, useContext } from "react";
 import ImageUpload from "./ImageUpload";
 import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
-import { songData2 } from "../../../assets/assets";
+import { PlayerContext } from "../../../context/PlayerContext";
 
 const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
-  if (editAlbumModalState === false) return null;
-
-  const ImgRef = useRef(null);
-  const [albumName, setAlbumName] = useState(selectedAlbum.tenAlbum);
+  if (editAlbumModalState === false || selectedAlbum === null) return null;
+  
+  
+  const { songsData } = useContext(PlayerContext);
+  const [albumName, setAlbumName] = useState(selectedAlbum.ten_album);
   const [selectedSongs,setSelectedSongs] = useState([]);
+  const [originAlbumData, setOriginAlbumData] = useState()
+  const ImgRef = useRef(null);
+  const imgData = ImgRef.current?.getData()
 
-  const handleSelectionSongChange = (selected) => {
-    setSelectedSongs(selected);
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/albums${selectedAlbum.ma_album}/songs`);
+        const data = await response.json();
+        setSelectedSongs(data.album.songs);
+        setOriginAlbumData(data.album);
+      } catch (error) {
+        console.error('Error fetching songs:', error);
+      }
+    };
+  
+    if (selectedAlbum.ma_album) {
+      fetchSongs();
+    }
   }
+  ,[selectedAlbum.ma_album])
+  console.log(originAlbumData)
+
   const handleSongRemoved = (songId) => {
     const selectedItems = selectedSongs;
     delete selectedItems[songId];
     setSelectedSongs({...selectedItems });
   };
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const imgData = ImgRef.current.getData();
+    
     // Handle the form submission logic here
-    console.log("submit add new album");
+    console.log({
+      albumName,
+      selectedSongs
+    });
   };
 
   return (
@@ -31,12 +57,12 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
       <div className="max-w-xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
         <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={onClose}/>
         <h2 className="text-2xl font-bold mb-5 text-center">
-            Chỉnh sửa album
+            Tạo album mới
         </h2>
       {/*  submit form */}
         <form  id="albumForm" onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} className="w-56 flex-none" />
+            <ImageUpload ref={ImgRef} initialImage={selectedAlbum.hinh_anh} className="w-56 flex-none" />
 
             <div className="w-sm">
             <div className="mb-4">
@@ -53,7 +79,7 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
                   placeholder="Nhập tên album"
                 />
                 {/* drop box bai hat */}
-                <CheckboxSearch selectedSongs={selectedSongs} placeholderText="Chọn bài hát" dataKey="" onSelect={handleSelectionSongChange}/>
+                <CheckboxSearch songsData={songsData} selectedSongs={selectedSongs} placeholderText="Chọn bài hát" dataKey="" setSelectedSongs={setSelectedSongs}/>
               </div>
             </div>
           </div>
@@ -102,50 +128,41 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
     );
   };
   
-  const CheckboxSearch = ({selectedSongs, placeholderText, dataKey, onSelect }) => {
+  const CheckboxSearch = ({songsData,selectedSongs, placeholderText, dataKey, setSelectedSongs }) => {
     // dataKey is the key of data when api return result ex: { songs: [....]}
     const [isDropdownOpen, setDropdownOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedItems, setSelectedItems] = useState({});
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     let count = 0;
     
     const toggleDropdown = () => {
       setDropdownOpen(!isDropdownOpen);
     };
   
-    const songData = songData2; // results variable bellow is real
-  
-    const handleSearchChange = async (e) => {
-      const term = e.target.value;
-      setSearchTerm(term);
-  
-      if (term) {
-        try {
-          const response = await fetch(`${apiUrl}?q=${term}`);
-          const results = await response.json();
-          setSearchResults(results[dataKey] || []);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      } else {
-        setSearchResults([]);
-      }
-    };
-  
+    
+    
+    const filteredSongs = songsData?.filter((item) => { 
+      return (
+        item.ten_bai_hat.toLowerCase().includes(searchQuery.toLowerCase())
+       
+      )
+    });
+
     const handleCheckboxChange = (item) => {
-      const updatedSelection = { ...selectedSongs };
-  
-      // Toggle selection of the item
-      if (updatedSelection[item.ma_bai_hat]) {
-        delete updatedSelection[item.ma_bai_hat]; // Remove item if already selected
+      const updatedSelection = [...selectedSongs]; // Create a copy of the array
+    
+      // Find the index of the item in the array
+      const index = updatedSelection.findIndex(song => song.ma_bai_hat === item.ma_bai_hat);
+    
+      if (index !== -1) {
+        // Remove the item if it's already in the array
+        updatedSelection.splice(index, 1);
       } else {
-        updatedSelection[item.ma_bai_hat] = item; // Add item with all details
+        // Add the item to the array
+        updatedSelection.push(item);
       }
-  
-      if (onSelect) {
-        onSelect(updatedSelection);
-      }
+    
+      setSelectedSongs(updatedSelection);
+      console.log(updatedSelection);
     };
   
     return (
@@ -167,20 +184,20 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
               type="text"
               placeholder={placeholderText}
               className="p-2 border-b border-gray-300 w-full"
-              value={searchTerm}
-              onChange={handleSearchChange}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <div className="max-h-60 overflow-y-auto">
               {/*  replace songData to searchResults for real result   */}
-              {songData.length > 0 ? (
-                songData.map((item) => (
+              {filteredSongs != null ? (
+                filteredSongs.map((item) => (
                   <div
                     key={item.ma_bai_hat}
                     className="flex items-center p-2 hover:bg-gray-100"
                   >
                     <input
                       type="checkbox"
-                      checked={!!selectedSongs[item.ma_bai_hat]}
+                      checked={selectedSongs?.some(song => song.ma_bai_hat === item.ma_bai_hat)}
                       onChange={() => handleCheckboxChange(item)}
                       className="mr-2"
                     />
@@ -190,7 +207,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
                   </div>
                 ))
               ) : (
-                <div className="p-2 text-gray-500">No items found</div>
+                <div className="p-2 text-gray-500">Không tìm thấy bài hát</div>
               )}
             </div>
             

@@ -24,8 +24,8 @@ const DisplayHome = () => {
   return (
     <>
       {songsData.length != 0 &&
-      albumsData.length != 0 &&
-      artistsData.length != 0 ? (
+        albumsData.length != 0 &&
+        artistsData.length != 0 ? (
         <>
           <div>
             <div className="flex items-center justify-between mb-4">

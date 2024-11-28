@@ -3,7 +3,7 @@ import { uploadImageAPI } from "../../../services/UserServices";
 
 const ImageUpload = ({initialImage}, ref) => {
   const [file, setFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(initialImage);
   const uploadImage = async (formData) => {
     try {
       const resImage = await uploadImageAPI(formData);
@@ -31,7 +31,7 @@ const ImageUpload = ({initialImage}, ref) => {
       />
       <div
         id="image-preview"
-        className="flex bg-white aspect-square items-center justify-center w-40   border-2  rounded-lg cursor-pointer"
+        className="flex bg-white aspect-square items-center justify-center w-40    rounded-lg cursor-pointer"
         onClick={() => document.getElementById("file-input").click()} // Trigger file input on click
       >
         {avatarPreview ? (

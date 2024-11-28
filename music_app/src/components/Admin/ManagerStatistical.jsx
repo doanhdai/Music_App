@@ -21,22 +21,22 @@ const loaithoigian = [
   { index: 4, ten: 'Chọn thời gian khác' }
 ];
 
-let dangkyPremium = [
-  { ma_tk: 1, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 20000 },
-  { ma_tk: 2, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 10000 },
-  { ma_tk: 3, ma_goi: 'GOI0003', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 23000 },
-  { ma_tk: 4, ma_goi: 'GOI0003', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 13000 },
-  { ma_tk: 5, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 23000 },
-  { ma_tk: 2, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 12000 },
-  { ma_tk: 4, ma_goi: 'GOI0003', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 10000 },
-  { ma_tk: 3, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 24000 },
-  { ma_tk: 5, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 22000 },
-  { ma_tk: 5, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 13000 },
-  { ma_tk: 6, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 14000 },
-  { ma_tk: 7, ma_goi: 'GOI0003', ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 21000 },
-  { ma_tk: 8, ma_goi: 'GOI0002', ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 20000 },
-  { ma_tk: 9, ma_goi: 'GOI0001', ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 19000 }
-]
+// let dangkyPremium = [
+//   { ma_tk: 1, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 20000 },
+//   { ma_tk: 2, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 10000 },
+//   { ma_tk: 3, ma_goi: 'GOI0003', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 23000 },
+//   { ma_tk: 4, ma_goi: 'GOI0003', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 13000 },
+//   { ma_tk: 5, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 23000 },
+//   { ma_tk: 2, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 12000 },
+//   { ma_tk: 4, ma_goi: 'GOI0003', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 10000 },
+//   { ma_tk: 3, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 24000 },
+//   { ma_tk: 5, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 22000 },
+//   { ma_tk: 5, ma_goi: 'GOI0002', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 13000 },
+//   { ma_tk: 6, ma_goi: 'GOI0001', ngay_dang_ky: '11-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 14000 },
+//   { ma_tk: 7, ma_goi: 'GOI0003', ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 21000 },
+//   { ma_tk: 8, ma_goi: 'GOI0002', ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 20000 },
+//   { ma_tk: 9, ma_goi: 'GOI0001', ngay_dang_ky: '10-11-2024 18:00:33', ngay_het_han: '11-11-2024 18:00:33', tong_tien_thanh_toan: 19000 }
+// ]
 
 // let premiumList = [
 //   { ma_goi: 1, ten_goi: 'goi 1', thoi_han: 2, gia_goi: 15000, doanh_thu: 1500000, mo_ta: 'abc', trang_thai: 0 },
@@ -144,7 +144,7 @@ function listDaysInRange(start, end) { // lấy mảng chứa các ngày từ ng
 
 
 const ManagerStatistical = () => {
-  const { contractsData, formatDate, premiumList, philuotnghe, setPhiluotnghe } = useContext(AdminContext);
+  const { contractsData, formatDate, premiumList, philuotnghe, setPhiluotnghe, dangkyPremium } = useContext(AdminContext);
   const [indexThoiGianSelected, setIndexThoiGian] = useState(1);
   const [indexLoaiSelected, setIndexLoai] = useState(1);
   const [startDay, setStartDay] = useState(getDate(0));
