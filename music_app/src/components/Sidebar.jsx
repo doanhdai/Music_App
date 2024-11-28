@@ -10,7 +10,7 @@ import { PlayerContext } from "../context/PlayerContext";
 import axios from "axios";
 
 const Sidebar = ({ onOutsideClick }) => {
-  const { playlistsData, setPlaylistsData, currentAccount, songLiked } =
+  const { playlistsData, setPlaylistsData, currentAccount, songLiked, setPlaylistId, setIsGettingPlaylistData } =
     useContext(PlayerContext);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,21 +72,21 @@ const Sidebar = ({ onOutsideClick }) => {
       setSelectedPlaylist(null);
     }
   };
-const createNewPlaylist = async () => {
-  try {
-    const response = await axios.post(
-      `http://localhost:8000/api/playlist/${currentAccount}`
-    );
+  const createNewPlaylist = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/playlist/${currentAccount}`
+      );
 
-    const newPlaylist = response.data;
+      const newPlaylist = response.data;
 
-    if (newPlaylist && newPlaylist.id && newPlaylist.name) {
-      setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
+      if (newPlaylist && newPlaylist.id && newPlaylist.name) {
+        setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
+      }
+    } catch (error) {
+      console.error("Lỗi không tạo được playlist:", error);
     }
-  } catch (error) {
-    console.error("Lỗi không tạo được playlist:", error);
-  }
-};
+  };
 
 
 
@@ -168,7 +168,7 @@ const createNewPlaylist = async () => {
                 <div className="h-[85%] overflow-y-auto">
                   {filteredPlaylists.map((item, index) => (
                     <div
-                      onClick={() => navigate(`/playlist/${item.ma_playlist}`)}
+                      onClick={() => { setIsGettingPlaylistData(true); setPlaylistId(item.ma_playlist); navigate(`/playlist/${item.ma_playlist}`); }}
                       onContextMenu={(e) =>
                         handleContextMenu(e, item.ma_playlist)
                       }
