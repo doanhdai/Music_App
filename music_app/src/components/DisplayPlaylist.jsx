@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaHeart, FaPlay, FaRegHeart } from "react-icons/fa";
 import { IoMdPause } from "react-icons/io";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 import { CiCircleMinus } from "react-icons/ci";
@@ -20,7 +20,11 @@ const DisplayPlaylist = () => {
     songDataById,
     setSongDataById,
     play,
-    handleClickLikeUpdateGUI
+    handleClickLikeUpdateGUI,
+    playlistId,
+    setPlaylistId,
+    isGettingPlaylistData,
+    setIsGettingPlaylistData
   } = useContext(PlayerContext);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,13 +34,14 @@ const DisplayPlaylist = () => {
   const [accLikeSong, setAccLikeSong] = useState([]);
   const [songsPlaylist, setSongsPlaylist] = useState([]);
   const url_api = "http://localhost:8000";
-  console.log(id);
   const getSongPlaylistsData = async () => {
     try {
       const response = await axios.get(
         `${url_api}/api/playlist/${currentAccount}/${id}`
       );
+
       setSongsPlaylist(response.data.data);
+      setIsGettingPlaylistData(false);
       setSongDataById(
         songsData.filter((item) =>
           response.data.data.some(
@@ -44,6 +49,7 @@ const DisplayPlaylist = () => {
           )
         )
       );
+
       console.log(response.data.data);
     } catch (error) {
       console.log(error);
@@ -53,7 +59,7 @@ const DisplayPlaylist = () => {
   useEffect(() => {
     getSongPlaylistsData();
     getAccLikesData();
-  }, []);
+  }, [playlistId, setPlaylistId]);
   useEffect(() => {
     const likedFromStorage = {};
     accLikeSong.forEach((like) => {
@@ -127,7 +133,6 @@ const DisplayPlaylist = () => {
   const detailPlaylist = playlistsData?.find(
     (playlist) => playlist.ma_playlist === id
   );
-
   const handleClickBtnPlay = () => {
     const storedState = localStorage.getItem("musicPlayerState");
     const currentState = storedState ? JSON.parse(storedState) : "";
@@ -146,7 +151,7 @@ const DisplayPlaylist = () => {
   };
   return (
     <>
-      {detailPlaylist && songsPlaylist != 0 ? (
+      {detailPlaylist && !isGettingPlaylistData ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
             <img

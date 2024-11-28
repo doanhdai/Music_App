@@ -13,7 +13,7 @@ const PlayerContextProvider = (props) => {
   const bgHomeHeader = useRef();
   const url_api = "http://localhost:8000";
   const [songDataById, setSongDataById] = useState([]);
-
+  const [playlistId, setPlaylistId] = useState("");
   const [loadingTrack, setLoadingTrack] = useState(false);
   const [songsData, setSongsData] = useState([]);
   const [albumsData, setAlbumsData] = useState([]);
@@ -33,6 +33,7 @@ const PlayerContextProvider = (props) => {
     totalTime: { second: 0, minute: 0 },
   });
   const [isCallingAPISongArtist, setIsCallingAPISongArtist] = useState(true);
+  const [isGettingPlaylistData, setIsGettingPlaylistData] = useState(true);
   const getLastNumberFromCode = (code) => {
     // cái này sẽ sai khi mã bài hát không liên tục: có 19 bài hát nhưng có mã bài hát BH029 thì sẽ sai
     const match = code.match(/\d+$/);
@@ -524,7 +525,11 @@ const PlayerContextProvider = (props) => {
 
     isCallingAPISongArtist,
     setIsCallingAPISongArtist,
-    handleClickLikeUpdateGUI
+    handleClickLikeUpdateGUI,
+    playlistId,
+    setPlaylistId,
+    isGettingPlaylistData,
+    setIsGettingPlaylistData
   };
 
   return (
