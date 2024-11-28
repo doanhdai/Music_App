@@ -224,7 +224,7 @@ const DisplayPlaylist = () => {
                     )}
                   </p>
                 )}
-                <Link to={`/song/${item.ma_bai_hat}`} className={`${track.ma_bai_hat === item.ma_bai_hat ? 'text-[#E0066F]' : 'text-[#fff]'}`}>
+                <Link to={`/song/${item.ma_bai_hat}`} className={`${track.ma_bai_hat === item.ma_bai_hat ? 'text-[#E0066F] font-bold text-lg' : 'text-[#fff]'}`}>
                   <img
                     className="inline w-10 mr-4"
                     src={assets.mck}

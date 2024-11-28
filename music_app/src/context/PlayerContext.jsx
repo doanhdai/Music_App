@@ -31,7 +31,7 @@ const PlayerContextProvider = (props) => {
     currentTime: { second: 0, minute: 0 },
     totalTime: { second: 0, minute: 0 },
   });
-
+  const [isCallingAPISongArtist, setIsCallingAPISongArtist] = useState(true);
   const getLastNumberFromCode = (code) => { // cái này sẽ sai khi mã bài hát không liên tục: có 19 bài hát nhưng có mã bài hát BH029 thì sẽ sai
     const match = code.match(/\d+$/);
     return match ? parseInt(match[0], 10) : null;
@@ -489,7 +489,9 @@ const PlayerContextProvider = (props) => {
     muteVolume,
     thongbaoList,
     songDataById,
-    setSongDataById
+    setSongDataById,
+    isCallingAPISongArtist,
+    setIsCallingAPISongArtist
   };
 
   return (
