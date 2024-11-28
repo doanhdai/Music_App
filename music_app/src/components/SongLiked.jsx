@@ -3,12 +3,11 @@ import { FaHeart, FaPlay, FaRegHeart } from "react-icons/fa";
 import { IoMdPause } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { assets } from "../assets/assets";
-
 import { CiCircleMinus } from "react-icons/ci";
 import { PlayerContext } from "../context/PlayerContext";
 import axios from "axios";
 
-const DisplayPlaylist = () => {
+const SongLiked = () => {
   const {
     playStatus,
     playWithId,
@@ -20,8 +19,9 @@ const DisplayPlaylist = () => {
     songDataById,
     setSongDataById,
     play,
+    songLiked,
+    setSongLiked
   } = useContext(PlayerContext);
-  const { id } = useParams();
   const navigate = useNavigate();
   const [menuSongId, setMenuSongId] = useState(null);
   const [hoveredSong, setHoveredSong] = useState(null);
@@ -29,30 +29,11 @@ const DisplayPlaylist = () => {
   const [accLikeSong, setAccLikeSong] = useState([]);
   const [songsPlaylist, setSongsPlaylist] = useState([]);
   const url_api = "http://localhost:8000";
-  console.log(id);
-  const getSongPlaylistsData = async () => {
-    try {
-      const response = await axios.get(
-        `${url_api}/api/playlist/${currentAccount}/${id}`
-      );
-      setSongsPlaylist(response.data.data);
-      setSongDataById(
-        songsData.filter((item) =>
-          response.data.data.some(
-            (item1) => item.ma_bai_hat == item1.ma_bai_hat
-          )
-        )
-      );
-      console.log(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
-    getSongPlaylistsData();
     getAccLikesData();
   }, []);
+
   useEffect(() => {
     const likedFromStorage = {};
     accLikeSong.forEach((like) => {
@@ -67,65 +48,37 @@ const DisplayPlaylist = () => {
     try {
       const response = await axios.get(`${url_api}/api/song-likes`);
       setAccLikeSong(response.data);
-      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
+
   const handleLikeSong = async (ma_bai_hat) => {
     const isLikedSong = likedSongs[ma_bai_hat];
 
-    if (!isLikedSong) {
-      setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
+    // Xóa bài hát khỏi danh sách đã like
+    setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
 
-      try {
-        await axios.post(`${url_api}/api/song-likes`, {
+    try {
+      await axios.delete(`${url_api}/api/song-likes`, {
+        data: {
           ma_tk: currentAccount,
           ma_bai_hat: ma_bai_hat,
-        });
-      } catch (error) {
-        console.error("Lỗi khi like bài hát:", error);
-        setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
-      }
-    } else {
-      setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: false }));
+        },
+      });
 
-      try {
-        await axios.delete(`${url_api}/api/song-likes`, {
-          data: {
-            ma_tk: currentAccount,
-            ma_bai_hat: ma_bai_hat,
-          },
-        });
-      } catch (error) {
-        console.error("Lỗi khi bỏ like bài hát:", error);
-        setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
-      }
-    }
-  };
-
-  const handleDeleteSong = async (idBaiHat) => {
-    try {
-      // Gọi API để xóa bài hát
-      await axios.delete(
-        `${url_api}/api/playlist/${currentAccount}/${id}/${idBaiHat}`
-      );
-
-      // Cập nhật lại danh sách bài hát sau khi xóa
-      setSongsPlaylist((prevSongs) =>
-        prevSongs.filter((song) => song.ma_bai_hat !== idBaiHat)
+      // Loại bỏ bài hát khỏi danh sách likedSongs và songLiked
+      setSongLiked((prev) =>
+        prev.filter((song) => song.ma_bai_hat !== ma_bai_hat)
       );
     } catch (error) {
-      console.error("Lỗi khi xóa bài hát:", error);
+      console.error("Lỗi khi bỏ like bài hát:", error);
+      setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
     }
   };
-  const toggleMenu = (songId) => {
-    setMenuSongId(menuSongId === songId ? null : songId);
-  };
+
   const closeMenu = () => setMenuSongId(null);
-  const detailPlaylist = playlistsData?.find(
-    (playlist) => playlist.ma_playlist === id
-  );
+
 
   const handleClickBtnPlay = () => {
     const storedState = localStorage.getItem("musicPlayerState");
@@ -145,7 +98,7 @@ const DisplayPlaylist = () => {
   };
   return (
     <>
-      {detailPlaylist && songsPlaylist != 0 ? (
+      {songLiked.length !== 0 ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
             <img
@@ -156,7 +109,7 @@ const DisplayPlaylist = () => {
             <div className="flex flex-col justify-center">
               <p>Playlist</p>
               <h2 className="text-5xl font-bold mb-4 md:text-7xl">
-                {detailPlaylist.ten_playlist}
+                Liked song
               </h2>
               <p className="mt-1 flex items-center">
                 <img
@@ -165,7 +118,7 @@ const DisplayPlaylist = () => {
                   alt="Spotify logo"
                 />
                 <b className="pl-2">Đài -</b>
-                <b className="pl-2">{songsPlaylist.length} bài hát</b>
+                <b className="pl-2">{songLiked.length} bài hát</b>
               </p>
             </div>
           </div>
@@ -187,13 +140,13 @@ const DisplayPlaylist = () => {
               <b className="mr-4">#</b>
               <p> Title</p>
               <p>Album</p>
-              <p></p>
+              {/* <p></p> */}
               <p className="flex justify-center">Thích</p>
             </div>
 
             <hr />
 
-            {songsPlaylist.map((item, index) => (
+            {songLiked.map((item, index) => (
               <div
                 key={index}
                 className="grid grid-cols-5 sm:grid-cols-[0.2fr_2.8fr_2fr_0.5fr_0.5fr] mt-10 mb-4 pl-2 text-[#fff] items-center hover:bg-[#ffffff2b] cursor-pointer"
@@ -235,10 +188,10 @@ const DisplayPlaylist = () => {
                   />
                   {item.ten_bai_hat}
                 </Link>
-                <p className="text-[15px]">{item.album.ten_album}</p>
-                <p onClick={() => handleDeleteSong(item.ma_bai_hat)}>
+                <p className="text-[15px]">{item.album}</p>
+                {/* <p onClick={() => handleDeleteSong(item.ma_bai_hat)}>
                   <CiCircleMinus size={20} />
-                </p>
+                </p> */}
                 <div className="text-[15px] flex justify-center relative">
                   <button onClick={() => handleLikeSong(item.ma_bai_hat)}>
                     {!likedSongs[item.ma_bai_hat] ? (
@@ -261,4 +214,4 @@ const DisplayPlaylist = () => {
   );
 };
 
-export default DisplayPlaylist;
+export default SongLiked;

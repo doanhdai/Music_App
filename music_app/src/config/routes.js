@@ -40,7 +40,9 @@ const routes = {
 
     PremiumSection: "buyPremium",
     PremiumPay: "/PremiumPay/:ma_goi",
-    CategorySong:"/category/:id"
+    CategorySong:"/category/:id",
+
+    SongLiked : "/song_like"
 };
 
 export default routes;

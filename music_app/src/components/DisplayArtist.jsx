@@ -164,7 +164,7 @@ const DisplayArtist = () => {
           onClose={() => setToastMessage("")}
         />
       )}
-      {detailArtist.length != 0 && songsArtist.length != 0 ? (
+      {detailArtist ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
             <img className="w-48 rounded" src={detailArtist.hinh_anh}></img>

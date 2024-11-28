@@ -26,7 +26,6 @@ const DetailSong = () => {
   const [likeData, setLikeData] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
   const [accLike, setAccLike] = useState([]);
-  const [isLikeDataReady, setIsLikeDataReady] = useState(false);
   const [openPlaylist, setOpenPlaylist] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [artistSong, setArtistSong] = useState({
@@ -168,7 +167,7 @@ const DetailSong = () => {
         ...prev,
         like_count: prev.like_count + 1,
       }));
-      // localStorage.setItem(`liked-${id}`, "true");
+
 
       try {
         await axios.post(`${url_api}/api/song-likes`, {
@@ -183,7 +182,7 @@ const DetailSong = () => {
           ...prev,
           like_count: prev.like_count - 1,
         }));
-        // localStorage.removeItem(`liked-${id}`);
+
       }
     } else {
       setHasLiked(false);
@@ -191,7 +190,6 @@ const DetailSong = () => {
         ...prev,
         like_count: prev.like_count - 1,
       }));
-      // localStorage.removeItem(`liked-${id}`);
 
       try {
         await axios.delete(`${url_api}/api/song-likes`, {
@@ -207,7 +205,7 @@ const DetailSong = () => {
           ...prev,
           like_count: prev.like_count + 1,
         }));
-        // localStorage.setItem(`liked-${id}`, "true");
+
       }
     }
   };

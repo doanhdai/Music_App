@@ -10,7 +10,7 @@ import { PlayerContext } from "../context/PlayerContext";
 import axios from "axios";
 
 const Sidebar = ({ onOutsideClick }) => {
-  const { playlistsData, setPlaylistsData, currentAccount } =
+  const { playlistsData, setPlaylistsData, currentAccount, songLiked } =
     useContext(PlayerContext);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -99,6 +99,37 @@ const Sidebar = ({ onOutsideClick }) => {
             </div>
           </div>
 
+          <div className="flex items-center">
+            <div className="flex items-center w-[230px] bg-black justify-between p-1 rounded-xl ml-2">
+              <IoIosSearch className="text-white text-2xl cursor-pointer" />
+              <input
+                className="bg-black w-[100%] outline-none ml-3"
+                placeholder="Tìm trong thư viện"
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="ml-5">
+              <TbFilterPlus />
+            </div>
+          </div>
+          <div className="h-[12%] overflow-y-auto">
+            <div
+              onClick={() => navigate(`/song_like`)}
+              className="min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#ffffff26]"
+            >
+              <img
+                className="rounded h-[50px] mr-3"
+                src={assets.likeSong}
+                alt="Playlist Cover"
+              />
+              <div>
+                <p>Bài hát đã yêu thích</p>
+                <h5 className="text-slate-200 text-sm">Playlist - {songLiked.length} song</h5>
+              </div>
+            </div>
+          </div>
           {currentAccount !== undefined ? (
             playlistsData && playlistsData.length === 0 ? (
               <div className="p-4 bg-[#242424] m-2 rounded font-semibold flex flex-col items-start gap-1 pl-4">
@@ -112,22 +143,6 @@ const Sidebar = ({ onOutsideClick }) => {
               </div>
             ) : (
               <>
-                <div className="flex items-center">
-                  <div className="flex items-center w-[230px] bg-black justify-between p-1 rounded-xl ml-2">
-                    <IoIosSearch className="text-white text-2xl cursor-pointer" />
-                    <input
-                      className="bg-black w-[100%] outline-none ml-3"
-                      placeholder="Tìm trong thư viện"
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </div>
-                  <div className="ml-5">
-                    <TbFilterPlus />
-                  </div>
-                </div>
-
                 <div className="h-[85%] overflow-y-auto">
                   {filteredPlaylists.map((item, index) => (
                     <div

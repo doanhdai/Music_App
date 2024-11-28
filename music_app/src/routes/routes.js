@@ -48,6 +48,7 @@ const DisplayPlaylist = React.lazy(() => import("../components/DisplayPlaylist")
 const InforAdsPage = React.lazy(() => import("../components/Admin/InforAdsPage"))
 const ContractAdsPage = React.lazy(() => import("../components/Admin/ContractAdsPage"))
 const CategorySong = React.lazy(() => import("../components/CategorySong"))
+const Songliked = React.lazy(()=> import("../components/SongLiked"))
 const routes = createBrowserRouter([
   {
     path: config.routes.Home,
@@ -100,6 +101,10 @@ const routes = createBrowserRouter([
       {
         path: config.routes.CategorySong,
         Component: CategorySong
+      },
+      {
+        path: config.routes.SongLiked,
+        Component: Songliked
       }
     ],
   },

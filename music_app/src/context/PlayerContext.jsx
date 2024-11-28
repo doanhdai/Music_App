@@ -26,6 +26,7 @@ const PlayerContextProvider = (props) => {
   const [track, setTrack] = useState(null);
   const [playStatus, setPlayStatus] = useState(false);
   const [volume, setVolume] = useState(1);
+    const [songLiked, setSongLiked] = useState([]);
   const [thongbaoList, setThongbaoList] = useState([]);
   const [time, setTime] = useState({
     currentTime: { second: 0, minute: 0 },
@@ -56,7 +57,7 @@ const PlayerContextProvider = (props) => {
     getArtistsData();
     getGenresData();
     getAllUsersData();
-
+getLikesData();
     // getSongByPlaylistData();
   }, []);
 
@@ -64,7 +65,7 @@ const PlayerContextProvider = (props) => {
     try {
       const response = await axios.get(`${url_api}/api/songs`);
       const filteredSongs = response.data.data.filter(
-        (song) => song.chat_luong === "Thấp"
+        (song) => song.chat_luong === "Thấp" && song.trang_thai === 1
       );
       setSongsData(filteredSongs);
       // console.log(filteredSongs)
@@ -72,7 +73,20 @@ const PlayerContextProvider = (props) => {
       console.error(error);
     }
   };
+  const getLikesData = async () => {
+    try {
+      const response = await axios.get(
+        `${url_api}/api/song/account-like/${currentAccount}`
+      );
+      const filteredSongs = response.data.data.filter(
+        (song) => song.trang_thai === 1
+      );
 
+      setSongLiked(filteredSongs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const getArtistsData = async () => {
     try {
       const response = await axios.get(`${url_api}/api/songs/artists`);
@@ -488,7 +502,9 @@ const PlayerContextProvider = (props) => {
     muteVolume,
     thongbaoList,
     songDataById,
-    setSongDataById
+    setSongDataById,
+    songLiked,
+    setSongLiked
   };
 
   return (

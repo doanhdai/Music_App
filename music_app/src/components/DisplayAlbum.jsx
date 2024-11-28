@@ -45,16 +45,32 @@ const DisplayAlbum = () => {
 
   const closeMenu = () => setMenuSongId(null);
 
-  const getSongByAlbumsData = async () => {
-    try {
-      const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
-      setDetailAlbum(response.data.album);
-      setSongsAlbum(response.data.album.songs);
-      // console.log(response.data.album);
-    } catch (error) {
-      console.log(error);
+const getSongByAlbumsData = async () => {
+  try {
+    const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
+
+    // Kiểm tra trạng thái của album
+    const albumData = response.data.album;
+    if (albumData.trang_thai === 1) {
+      // Lọc các bài hát trong album có trạng thái === 1
+      const filteredSongs = albumData.songs.filter(
+        (song) => song.trang_thai === 1
+      );
+
+      setDetailAlbum(albumData); // Cập nhật thông tin album
+      setSongsAlbum(filteredSongs); // Cập nhật danh sách bài hát đã lọc
+      console.log(albumData);
+    } else {
+      // Nếu trạng thái album không phải 1, không cập nhật state
+      setDetailAlbum(null);
+      setSongsAlbum([]);
+      console.log("Album không hợp lệ");
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   useEffect(() => {
     getSongByAlbumsData();
