@@ -46,7 +46,7 @@ const Player = () => {
     try {
       const response = await axios.get(`${url}/api/advertisements`);
       setAdvertisements(response.data.advertisements);
-      
+
     } catch (err) {
       console.error(err);
     }
@@ -78,18 +78,19 @@ const Player = () => {
           activeAds[Math.floor(Math.random() * activeAds.length)];
         updateAdPlayCount(randomAd.ma_quang_cao);
         setCurrentAd(randomAd);
-        pause();
+
         setShowAd(true);
+        pause();
       }
-    } else if(realPlayTime === 5){
+    } else if (realPlayTime === 5) {
       updateListen()
     }
   }, [realPlayTime]);
-  const updateListen = async() => {
+  const updateListen = async () => {
     try {
       await axios.post(`${url}/api/song/listens/${track.ma_bai_hat}`)
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
   }
   const updateAdPlayCount = async (maQuangCao) => {

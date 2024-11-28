@@ -15,6 +15,7 @@ const AdminContextProvider = (props) => {
    const [premiumList, setPremiumList] = useState([]);
    const [theloaiList, setTheloaiList] = useState([]);
    const [philuotnghe, setPhiluotnghe] = useState(null);
+   const [dangkyPremium, setDangkyPremium] = useState([]);
    const [isGettingAdvertisersData, setIsGettingAdvertisersData] = useState(true);
    const [isGettingAdvertisementsData, setIsGettingAdvertisementsData] = useState(true);
    const [isGettingContractsData, setIsGettingContractsData] = useState(true);
@@ -41,6 +42,7 @@ const AdminContextProvider = (props) => {
       getPremiumList();
       fetchTheLoaiList();
       fetchPhiluotnghe();
+      fetchDangkyPremium();
    }, [])
 
 
@@ -162,6 +164,16 @@ const AdminContextProvider = (props) => {
       }
    };
 
+   const fetchDangkyPremium = async () => {
+      try {
+
+         const response = await axios.get(`${url}/api/voucherRegisters`);
+         setDangkyPremium(response.data);
+      } catch (error) {
+         console.log('Lỗi khi gọi API:', error);
+      }
+   };
+
    const contextValue = {
       openNotification,
       url,
@@ -187,7 +199,8 @@ const AdminContextProvider = (props) => {
       theloaiList,
       setTheloaiList,
       philuotnghe,
-      setPhiluotnghe
+      setPhiluotnghe,
+      dangkyPremium
    };
 
 
