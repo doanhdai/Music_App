@@ -24,6 +24,12 @@ const DisplayArtist = () => {
     albumsData,
     setPlaylistsData,
     currentAccount,
+    songsData,
+    songDataById,
+    setSongDataById,
+    play,
+    isCallingAPISongArtist,
+    setIsCallingAPISongArtist
   } = useContext(PlayerContext);
 
   const { id } = useParams();
@@ -46,6 +52,10 @@ const DisplayArtist = () => {
         setDetailArtist(artistData);
         // console.log(artistData);
         setSongsArtist(artistData.bai_hat);
+        setIsCallingAPISongArtist(false);
+        setSongDataById(songsData.filter((item) =>
+          artistData.bai_hat.some((item1) => item.ma_bai_hat == item1.ma_bai_hat)
+        ))
         // console.log(artistData.bai_hat);
       } else {
         console.log("Không tìm thấy nghệ sĩ.");
@@ -156,6 +166,24 @@ const DisplayArtist = () => {
       console.error("Lỗi khi tạo mới playlist:", error);
     }
   };
+
+  const handleClickBtnPlay = () => {
+
+    const storedState = localStorage.getItem("musicPlayerState");
+    const currentState = storedState ? JSON.parse(storedState) : '';
+    if (currentState == '') {
+      playWithId(songsArtist[0].ma_bai_hat);
+    } else {
+      const index = songDataById.findIndex((item) => item.ma_bai_hat == currentState.track.ma_bai_hat);
+      if (index == -1) {
+        playWithId(songsArtist[0].ma_bai_hat);
+      } else {
+        play();
+      }
+    }
+
+
+  }
   return (
     <>
       {toastMessage && (
@@ -164,7 +192,8 @@ const DisplayArtist = () => {
           onClose={() => setToastMessage("")}
         />
       )}
-      {detailArtist ? (
+
+      {detailArtist.length != 0 && !isCallingAPISongArtist ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
             <img className="w-48 rounded" src={detailArtist.hinh_anh}></img>
@@ -189,7 +218,7 @@ const DisplayArtist = () => {
                     <IoMdPause onClick={pause} size={20} />
                   ) : (
                     <FaPlay
-                      onClick={() => playWithId(songsArtist.ma_bai_hat)}
+                      onClick={() => handleClickBtnPlay()}
                     />
                   )}
                 </button>
@@ -242,7 +271,8 @@ const DisplayArtist = () => {
                 </p>
                 <Link
                   to={`/song/${item.ma_bai_hat}`}
-                  className="text-white flex items-center pr-2"
+                  className={`${track.ma_bai_hat === item.ma_bai_hat ? 'text-[#E0066F] font-bold text-lg' : 'text-[#fff]'} flex items-center pr-2`}
+
                 >
                   <img className="inline w-10 mr-4" src={item.hinh_anh} />
                   {item.ten_bai_hat}
