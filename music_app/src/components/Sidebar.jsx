@@ -26,6 +26,9 @@ const Sidebar = ({ onOutsideClick }) => {
   };
 
   const removeVietnameseTones = (str) => {
+    if (!str || typeof str !== "string") {
+      return ""; // Trả về chuỗi rỗng nếu giá trị không hợp lệ
+    }
     return str
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")

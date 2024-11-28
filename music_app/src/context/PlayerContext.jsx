@@ -195,7 +195,6 @@ const PlayerContextProvider = (props) => {
       }
     };
   }, []);
-  console.log(realPlayTime);
   const next = async () => {
     const currentIndex = getLastNumberFromCode(track.ma_bai_hat);
     if (currentIndex < songsData.length - 1) {
