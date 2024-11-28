@@ -26,7 +26,7 @@ const PlayerContextProvider = (props) => {
   const [track, setTrack] = useState(null);
   const [playStatus, setPlayStatus] = useState(false);
   const [volume, setVolume] = useState(1);
-    const [songLiked, setSongLiked] = useState([]);
+  const [songLiked, setSongLiked] = useState([]);
   const [thongbaoList, setThongbaoList] = useState([]);
   const [time, setTime] = useState({
     currentTime: { second: 0, minute: 0 },
@@ -57,7 +57,8 @@ const PlayerContextProvider = (props) => {
     getArtistsData();
     getGenresData();
     getAllUsersData();
-getLikesData();
+    getLikesData();
+    getThongbaoList();
     // getSongByPlaylistData();
   }, []);
 
@@ -81,7 +82,8 @@ getLikesData();
       const filteredSongs = response.data.data.filter(
         (song) => song.trang_thai === 1
       );
-
+      console.log('danh sach yeu thich');
+      console.log(filteredSongs);
       setSongLiked(filteredSongs);
     } catch (error) {
       console.log(error);
@@ -120,7 +122,8 @@ getLikesData();
         `${url_api}/api/playlist/${currentAccount}`
       );
       setPlaylistsData(response.data.data);
-      // console.log(response.data.data);
+      console.log('danh sách playlist');
+      console.log(response.data.data);
     } catch (error) {
       // console.error(error);
       // console.log(currentAccount);
@@ -470,6 +473,16 @@ getLikesData();
       console.error(error);
     }
   };
+  const handleClickLikeUpdateGUI = (like, ma_bai_hat) => { //like == true, like == false == hết like
+    if (like) {
+      const song = songsData.find((item) => item.ma_bai_hat == ma_bai_hat);
+      setSongLiked((prev) => [...prev, song]);
+    } else {
+      setSongLiked((prev) => prev.filter((item) => item.ma_bai_hat != ma_bai_hat));
+    }
+
+
+  }
 
   const contextValue = {
     audioRef,
@@ -508,8 +521,8 @@ getLikesData();
     setSongLiked,
 
     isCallingAPISongArtist,
-    setIsCallingAPISongArtist
-
+    setIsCallingAPISongArtist,
+    handleClickLikeUpdateGUI
   };
 
   return (

@@ -18,10 +18,12 @@ const DisplayAlbum = () => {
     track,
     playlistsData,
     currentAccount,
+    setPlaylistsData,
     songsData,
     songDataById,
     setSongDataById,
-    play
+    play,
+    handleClickLikeUpdateGUI
   } = useContext(PlayerContext);
   const url_api = "http://localhost:8000";
   // console.log(currentAccount);
@@ -49,27 +51,27 @@ const DisplayAlbum = () => {
 
   const closeMenu = () => setMenuSongId(null);
 
-const getSongByAlbumsData = async () => {
-  try {
-    const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
-    const albumData = response.data.album;
-    if (albumData.trang_thai === 1) {
-      const filteredSongs = albumData.songs.filter(
-        (song) => song.trang_thai === 1
-      );
+  const getSongByAlbumsData = async () => {
+    try {
+      const response = await axios.get(`${url_api}/api/albums/${id}/songs`);
+      const albumData = response.data.album;
+      if (albumData.trang_thai === 1) {
+        const filteredSongs = albumData.songs.filter(
+          (song) => song.trang_thai === 1
+        );
 
-      setDetailAlbum(albumData);
-      setSongsAlbum(filteredSongs);
-      console.log(albumData);
-    } else {
-      setDetailAlbum(null);
-      setSongsAlbum([]);
-      console.log("Album không hợp lệ");
+        setDetailAlbum(albumData);
+        setSongsAlbum(filteredSongs);
+        console.log(albumData);
+      } else {
+        setDetailAlbum(null);
+        setSongsAlbum([]);
+        console.log("Album không hợp lệ");
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
 
   useEffect(() => {
@@ -106,7 +108,7 @@ const getSongByAlbumsData = async () => {
       return;
     }
     const isLikedSong = likedSongs[ma_bai_hat];
-
+    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : false, ma_bai_hat);
     if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
 
@@ -199,17 +201,18 @@ const getSongByAlbumsData = async () => {
     }
   };
 
+
+
   const createNewPlaylist = async (ma_bai_hat) => {
     try {
-      await axios.post(`${url_api}/api/playlist`, {
-        ma_tk: currentAccount,
+      const response = await axios.post(`${url_api}/api/playlist`, {
+        ma_tk: `${currentAccount}`,
         ma_bai_hat: ma_bai_hat,
       });
-      alert("Đã tạo mới playlist và thêm bài hát!");
+      const newPlaylist = response.data.data;
+      setPlaylistsData((prevPlaylists) => [...prevPlaylists, newPlaylist]);
     } catch (error) {
-      console.log("tl: ", currentAccount);
       console.error("Lỗi khi tạo mới playlist:", error);
-      alert("Không thể tạo mới playlist. Vui lòng thử lại.");
     }
   };
 

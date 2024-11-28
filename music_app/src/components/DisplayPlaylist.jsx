@@ -20,6 +20,7 @@ const DisplayPlaylist = () => {
     songDataById,
     setSongDataById,
     play,
+    handleClickLikeUpdateGUI
   } = useContext(PlayerContext);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const DisplayPlaylist = () => {
   };
   const handleLikeSong = async (ma_bai_hat) => {
     const isLikedSong = likedSongs[ma_bai_hat];
-
+    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : false, ma_bai_hat);
     if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
 
@@ -222,11 +223,10 @@ const DisplayPlaylist = () => {
                 )}
                 <Link
                   to={`/song/${item.ma_bai_hat}`}
-                  className={`${
-                    track.ma_bai_hat === item.ma_bai_hat
-                      ? "text-[#E0066F]"
-                      : "text-[#fff]"
-                  }`}
+                  className={`${track.ma_bai_hat === item.ma_bai_hat
+                    ? "text-[#E0066F]"
+                    : "text-[#fff]"
+                    }`}
                 >
                   <img
                     className="inline w-10 mr-4"
