@@ -56,4 +56,15 @@ const getFunctionalDetail = async (maPhanQuyen, maChucNang) => {
     }
   };
 
-export {loginAPI, createAccountAPI, uploadImageAPI,updateAccountAPI,updateUserAPI,getFunctionalDetail};
+  const uploadImage = async (formData) => {
+    try {
+      const resImage = await uploadImageAPI(formData);
+      console.log('Path image:', resImage.data.path);
+      return resImage.data.path;    // Trả về đường dẫn ảnh
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error; // Ném lỗi để xử lý sau
+    }
+  };
+
+export {loginAPI, createAccountAPI, uploadImageAPI,updateAccountAPI,updateUserAPI,getFunctionalDetail, uploadImage};
