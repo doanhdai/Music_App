@@ -47,6 +47,7 @@ function ContractPage() {
             <div className='bg-[#1E1E1E] ' key={hopdong.ma_hop_dong}>
                 <div className='flex justify-between'>
                     <div className='bg-[#E0066F] text-black p-1 font-bold'>{hopdong.ma_hop_dong}</div>
+                    {hopdong.trang_thai_hop_dong == 0 && <div className='bg-[#E0066F] text-black p-1 '>Hoàn thành</div>}
                 </div>
 
                 <div className='p-2 flex flex-col gap-1 text-gray-400 '>

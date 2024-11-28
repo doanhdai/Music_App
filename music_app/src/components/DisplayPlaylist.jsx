@@ -11,6 +11,7 @@ import { PlayerContext } from "../context/PlayerContext";
 import axios from "axios";
 
 const DisplayPlaylist = () => {
+
   const {
     playStatus,
     playWithId,
@@ -18,6 +19,10 @@ const DisplayPlaylist = () => {
     track,
     playlistsData,
     currentAccount,
+    songsData,
+    songDataById,
+    setSongDataById,
+    play
   } = useContext(PlayerContext);
   const { id } = useParams();
   // console.log(songsPlaylist);
@@ -28,15 +33,17 @@ const DisplayPlaylist = () => {
   const [accLikeSong, setAccLikeSong] = useState([]);
   // const [detailPlaylist, setDetailPlaylist] = useState([]);
   const [songsPlaylist, setSongsPlaylist] = useState([]);
-
   const url_api = "http://localhost:8000";
-console.log(id)
+  console.log(id)
   const getSongPlaylistsData = async () => {
     try {
       const response = await axios.get(
         `${url_api}/api/playlist/${currentAccount}/${id}`
       );
       setSongsPlaylist(response.data.data);
+      setSongDataById(songsData.filter((item) =>
+        response.data.data.some((item1) => item.ma_bai_hat == item1.ma_bai_hat)
+      ))
       console.log(response.data.data);
     } catch (error) {
       console.log(error);
@@ -120,6 +127,24 @@ console.log(id)
   const detailPlaylist = playlistsData?.find(
     (playlist) => playlist.ma_playlist === id
   );
+
+  const handleClickBtnPlay = () => {
+
+    const storedState = localStorage.getItem("musicPlayerState");
+    const currentState = storedState ? JSON.parse(storedState) : '';
+    if (currentState == '') {
+      playWithId(songsPlaylist[0].ma_bai_hat);
+    } else {
+      const index = songDataById.findIndex((item) => item.ma_bai_hat == currentState.track.ma_bai_hat);
+      if (index == -1) {
+        playWithId(songsPlaylist[0].ma_bai_hat);
+      } else {
+        play();
+      }
+    }
+
+
+  }
   return (
     <>
       {detailPlaylist && songsPlaylist != 0 ? (
@@ -155,7 +180,7 @@ console.log(id)
                     <IoMdPause onClick={pause} size={20} />
                   ) : (
                     <FaPlay
-                      onClick={() => playWithId(songsArtist.ma_bai_hat)}
+                      onClick={() => handleClickBtnPlay()}
                     />
                   )}
                 </button>
@@ -199,7 +224,7 @@ console.log(id)
                     )}
                   </p>
                 )}
-                <Link to={`/song/${item.ma_bai_hat}`} className="text-white">
+                <Link to={`/song/${item.ma_bai_hat}`} className={`${track.ma_bai_hat === item.ma_bai_hat ? 'text-[#E0066F]' : 'text-[#fff]'}`}>
                   <img
                     className="inline w-10 mr-4"
                     src={assets.mck}
