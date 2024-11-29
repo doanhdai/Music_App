@@ -15,6 +15,7 @@ import NavBar from "../../../components/NavBar";
 import Footer from "../../../components/Footer";
 import Poster from "../../../components/Poster";
 import { PlayerContext } from "../../../context/PlayerContext";
+import CheckRole from "../../Admin/CheckRole";
 
 const Home = () => {
   const { audioRef, track, currentAccount, setSongDataById } = useContext(PlayerContext);
@@ -49,7 +50,9 @@ const Home = () => {
   // }, [bgColor]);
 
   return (
-    <div className="h-screen bg-black">
+    <>
+      <CheckRole />
+      <div className="h-screen bg-black">
       <div className="h-[90%] flex">
         <Sidebar />
         <div
@@ -79,6 +82,8 @@ const Home = () => {
         preload="auto"
       ></audio>
     </div>
+    </>
+    
   );
 };
 export default Home;

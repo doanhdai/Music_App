@@ -4,7 +4,6 @@ import { RiAccountCircleLine } from 'react-icons/ri';
 import { CiLogin } from 'react-icons/ci';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { assets } from '../../assets/assets';
-
 const pageTitles = {
     '/admin': 'Quản lý tài khoản',
     '/admin/Manager_song': 'Quản lý bài hát',
@@ -48,7 +47,11 @@ const HeaderAdmin = () => {
                                     <RiAccountCircleLine size={20} className="mr-3" />
                                     Tài khoản
                                 </li>
-                                <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center">
+                                <li className="hover:bg-black p-2 rounded-md cursor-pointer flex items-center" onClick={() => {
+                                      localStorage.removeItem("account");
+                                      localStorage.removeItem("isLoggedIn");
+                                      window.location.href = "/";
+                                    }}>
                                     <CiLogin size={20} className="mr-3" />
                                     Đăng xuất
                                 </li>
