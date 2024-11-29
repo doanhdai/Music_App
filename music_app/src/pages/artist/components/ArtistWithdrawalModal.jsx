@@ -18,7 +18,7 @@ export const createWithdraw = async (withdrawData) => {
       data: response.data
     };
   } catch (error) {
-    console.error('Error creating song:', error);
+    console.error('Error creating withdraw:', error);
     return {
       success: false,
       error: error.response?.data || error.message
@@ -40,8 +40,8 @@ const ArtistWithdrawalModal = ({ isOpen, onClose ,tongTienCoTheRut}) => {
     'tong_tien_rut_ra':price,
   }
   
-  function handleSubmit() {
-    const response = createWithdraw(formData);
+   async function handleSubmit() {
+    const response = await createWithdraw(formData);
     if (response.success){
       alert('Rút tiền thành công!');
       onClose();
