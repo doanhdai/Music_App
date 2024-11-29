@@ -39,6 +39,8 @@ const Player = () => {
     previous,
     seekSong,
     realPlayTime,
+    toggleShuffle,
+    isShuffle,
     setVolume: setAudioVolume,
   } = useContext(PlayerContext);
 
@@ -46,7 +48,6 @@ const Player = () => {
     try {
       const response = await axios.get(`${url}/api/advertisements`);
       setAdvertisements(response.data.advertisements);
-
     } catch (err) {
       console.error(err);
     }
@@ -83,16 +84,16 @@ const Player = () => {
         pause();
       }
     } else if (realPlayTime === 5) {
-      updateListen()
+      updateListen();
     }
   }, [realPlayTime]);
   const updateListen = async () => {
     try {
-      await axios.post(`${url}/api/song/listens/${track.ma_bai_hat}`)
+      await axios.post(`${url}/api/song/listens/${track.ma_bai_hat}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const updateAdPlayCount = async (maQuangCao) => {
     try {
       await axios.put(`${url}/api/advertisements/${maQuangCao}/use`);
@@ -167,8 +168,16 @@ const Player = () => {
             >
               <MdSkipNext size={25} />
             </div>
-            <div className="w-6 h-6 flex justify-center items-center">
-              <SlLoop size={20} />
+            <div
+              // onClick={toggleShuffle}
+              className="w-6 h-6 flex justify-center items-center"
+            >
+              {" "}
+              {!isShuffle ? (
+                <SlLoop size={20} />
+              ) : (
+                <SlLoop color="#00FF00" size={20} />
+              )}
             </div>
           </div>
           <div className="flex items-center gap-5 ">

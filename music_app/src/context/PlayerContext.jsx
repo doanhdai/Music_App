@@ -1,6 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import Index from "../pages/NotFound";
 
 export const PlayerContext = createContext();
@@ -28,6 +27,8 @@ const PlayerContextProvider = (props) => {
   const [volume, setVolume] = useState(1);
   const [songLiked, setSongLiked] = useState([]);
   const [thongbaoList, setThongbaoList] = useState([]);
+  const [isShuffle, setIsShuffle] = useState(false); // Trạng thái có đang trộn bài hát hay không
+  const [shuffledSongs, setShuffledSongs] = useState([]); // Danh sách bài hát đã trộn
   const [time, setTime] = useState({
     currentTime: { second: 0, minute: 0 },
     totalTime: { second: 0, minute: 0 },
@@ -75,6 +76,21 @@ const PlayerContextProvider = (props) => {
       console.error(error);
     }
   };
+
+  // Tự động chuyển sang bài hát tiếp theo
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.onended = () => {
+        next();
+      };
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.onended = null; 
+      }
+    };
+  }, [track, songsData, songDataById]);
   const getLikesData = async () => {
     try {
       const response = await axios.get(
@@ -83,8 +99,6 @@ const PlayerContextProvider = (props) => {
       const filteredSongs = response.data.data.filter(
         (song) => song.trang_thai === 1
       );
-      console.log('danh sach yeu thich');
-      console.log(filteredSongs);
       setSongLiked(filteredSongs);
     } catch (error) {
       console.log(error);
@@ -123,8 +137,6 @@ const PlayerContextProvider = (props) => {
         `${url_api}/api/playlist/${currentAccount}`
       );
       setPlaylistsData(response.data.data);
-      console.log('danh sách playlist');
-      console.log(response.data.data);
     } catch (error) {
       // console.error(error);
       // console.log(currentAccount);
@@ -259,8 +271,6 @@ const PlayerContextProvider = (props) => {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = nextTrack.link_bai_hat;
-
-        // Lắng nghe sự kiện oncanplay để phát nhạc
         audioRef.current.oncanplay = () => {
           audioRef.current.play();
           setPlayStatus(true);
@@ -309,36 +319,6 @@ const PlayerContextProvider = (props) => {
 
       setLoadingTrack(false);
     }
-    // const songsList = playedSongData
-    // const currentIndex = getCurrentIndexInSongData(track.ma_bai_hat, songsList);
-    // if (currentIndex > 0) {
-    //   const previousTrack = songsList[currentIndex - 1];
-
-    //   setLoadingTrack(true);
-    //   setRealPlayTime(0)
-    //   setTrack(previousTrack);
-
-    //   // Xóa dữ liệu bài hát cũ và set dữ liệu mới
-    //   localStorage.removeItem("musicPlayerState");
-    //   localStorage.setItem(
-    //     "musicPlayerState",
-    //     JSON.stringify({
-    //       track: previousTrack,
-    //       currentTime: 0,
-    //     })
-    //   );
-
-    //   if (audioRef.current) {
-    //     audioRef.current.pause();
-    //     audioRef.current.src = previousTrack.link_bai_hat;
-    //     audioRef.current.oncanplay = () => {
-    //       audioRef.current.play();
-    //       setPlayStatus(true);
-    //     };
-    //   }
-
-    //   setLoadingTrack(false);
-    // }
   };
 
   const seekSong = (e) => {
@@ -476,17 +456,17 @@ const PlayerContextProvider = (props) => {
       console.error(error);
     }
   };
-  const handleClickLikeUpdateGUI = (like, ma_bai_hat) => { //like == true, like == false == hết like
+  const handleClickLikeUpdateGUI = (like, ma_bai_hat) => {
+    //like == true, like == false == hết like
     if (like) {
       const song = songsData.find((item) => item.ma_bai_hat == ma_bai_hat);
       setSongLiked((prev) => [...prev, song]);
     } else {
-      setSongLiked((prev) => prev.filter((item) => item.ma_bai_hat != ma_bai_hat));
+      setSongLiked((prev) =>
+        prev.filter((item) => item.ma_bai_hat != ma_bai_hat)
+      );
     }
-
-
-  }
-
+  };
   const contextValue = {
     audioRef,
     scrollHomeRef,
@@ -529,7 +509,9 @@ const PlayerContextProvider = (props) => {
     playlistId,
     setPlaylistId,
     isGettingPlaylistData,
-    setIsGettingPlaylistData
+    setIsGettingPlaylistData,
+    // toggleShuffle,
+    isShuffle,
   };
 
   return (

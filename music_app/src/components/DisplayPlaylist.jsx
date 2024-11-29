@@ -153,6 +153,7 @@ const DisplayPlaylist = () => {
       }
     }
   };
+  console.log(songsPlaylist)
   return (
     <>
       {detailPlaylist && !isGettingPlaylistData ? (
@@ -176,7 +177,7 @@ const DisplayPlaylist = () => {
                 />
                 <b className="pl-2">Đài -</b>
                 <b className="pl-2">
-                  {songsPlaylist[0].ma_bai_hat === null
+                  {songsPlaylist.length === 0 || songsPlaylist[0].ma_bai_hat === null 
                     ? 0
                     : songsPlaylist.length}{" "}
                   bài hát
@@ -185,7 +186,7 @@ const DisplayPlaylist = () => {
             </div>
           </div>
 
-          {songsPlaylist[0].ma_bai_hat === null ? (
+          {  songsPlaylist.length === 0 ||songsPlaylist[0].ma_bai_hat === null ? (
             <div className="h-60 flex justify-center items-center text-center">
               <p>Playlist chưa có bài hát nào!</p>
             </div>

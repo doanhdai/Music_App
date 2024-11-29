@@ -21,7 +21,7 @@ const AdminContextProvider = (props) => {
    const [isGettingContractsData, setIsGettingContractsData] = useState(true);
    const getAccountsData = async () => {
       try {
-         const res = await axios.get(`${url}/api/accounts`);
+         const res = await axios.get(`${url}/api/accountUser`);
          setAccountsData(res.data);
          // console.log(res.data);
       } catch (error) {

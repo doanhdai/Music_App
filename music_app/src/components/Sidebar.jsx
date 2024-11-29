@@ -133,7 +133,24 @@ const Sidebar = ({ onOutsideClick }) => {
               <TbFilterPlus />
             </div>
           </div>
-
+          <div className="h-[12%] overflow-y-auto">
+            <div
+              onClick={() => navigate(`/song_like`)}
+              className="min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#ffffff26]"
+            >
+              <img
+                className="rounded h-[50px] mr-3"
+                src={assets.likeSong}
+                alt="Playlist Cover"
+              />
+              <div>
+                <p>Bài hát đã yêu thích</p>
+                <h5 className="text-slate-200 text-sm">
+                  Playlist - {songLiked.length} song
+                </h5>
+              </div>
+            </div>
+          </div>
           {currentAccount !== undefined ? (
             playlistsData && playlistsData.length === 0 ? (
               <div className="p-4 bg-[#242424] m-2 rounded font-semibold flex flex-col items-start gap-1 pl-4">
@@ -150,24 +167,6 @@ const Sidebar = ({ onOutsideClick }) => {
               </div>
             ) : (
               <>
-                <div className="h-[12%] overflow-y-auto">
-                  <div
-                    onClick={() => navigate(`/song_like`)}
-                    className="min-w-[195px] p-2 px-2 rounded flex items-center cursor-pointer hover:bg-[#ffffff26]"
-                  >
-                    <img
-                      className="rounded h-[50px] mr-3"
-                      src={assets.likeSong}
-                      alt="Playlist Cover"
-                    />
-                    <div>
-                      <p>Bài hát đã yêu thích</p>
-                      <h5 className="text-slate-200 text-sm">
-                        Playlist - {songLiked.length} song
-                      </h5>
-                    </div>
-                  </div>
-                </div>
                 <div className="h-[85%] overflow-y-auto">
                   {filteredPlaylists.map((item, index) => (
                     <div
