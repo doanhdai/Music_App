@@ -74,7 +74,7 @@ const ManagerQuyen = () => {
             old.ma_phan_quyen === item.ma_phan_quyen &&
             old.ma_chuc_nang === item.ma_chuc_nang
         );
-  
+
         // Kiểm tra sự khác biệt giữa bản ghi mới và cũ
         return (
           !oldItem || // Nếu không tìm thấy bản ghi cũ, coi như thay đổi
@@ -84,13 +84,13 @@ const ManagerQuyen = () => {
           oldItem.xoa !== item.xoa
         );
       });
-  
+
       // Gửi yêu cầu cập nhật cho các bản ghi đã thay đổi
       if (dataToUpdate.length === 0) {
         console.log("Không có bản ghi nào cần cập nhật.");
         return;
       }
-  
+
       const responses = await Promise.all(
         dataToUpdate.map(async (item) => {
           const { ma_phan_quyen, ma_chuc_nang, xem, them, sua, xoa } = item;
@@ -111,7 +111,7 @@ const ManagerQuyen = () => {
           }
         })
       );
-  
+
       // Kiểm tra kết quả tổng thể
       const successCount = responses.filter((res) => res.success).length;
       const failCount = responses.length - successCount;
@@ -202,25 +202,31 @@ const ManagerQuyen = () => {
 
 
   const handleDeleteQuyen = () => {
-    if (!(accountsData.some((item) => item.ma_phan_quyen == currentQuyen))) {
-      Modal.confirm({
-        title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
-        content: 'Xóa nhà đăng kí quảng cáo ',
-        okText: 'Đồng ý',
-        cancelText: 'Hủy',
-        onOk() {
-          deleteQuyen(currentQuyen);
-          setQuyenList((prev) => prev.filter((item) => item.ma_phan_quyen != currentQuyen));
-          setCurrentQuyen(quyenList[0].ma_phan_quyen);
-        },
-        onCancel() {
+    if (currentQuyen == quyenList[0].ma_phan_quyen) {
+      message.error('Đây quyền cao cấp. Không thể xóa!');
 
-        },
-      });
+    } else {
+      if (!(accountsData.some((item) => item.ma_phan_quyen == currentQuyen))) {
+        Modal.confirm({
+          title: 'Bạn có chắc chắn muốn thực hiện hành động này?',
+          content: 'Xóa nhà đăng kí quảng cáo ',
+          okText: 'Đồng ý',
+          cancelText: 'Hủy',
+          onOk() {
+            deleteQuyen(currentQuyen);
+            setQuyenList((prev) => prev.filter((item) => item.ma_phan_quyen != currentQuyen));
+            setCurrentQuyen(quyenList[0].ma_phan_quyen);
+          },
+          onCancel() {
+
+          },
+        });
 
 
+      }
+      else message.error('Không thể xóa quyền này do có tài khoản thuộc quyền này!');
     }
-    else message.error('Không thể xóa quyền này do có tài khoản thuộc quyền này!');
+
   }
 
   const TableChitietquyenUpdate = () => (

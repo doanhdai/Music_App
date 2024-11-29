@@ -16,9 +16,11 @@ const AdminContextProvider = (props) => {
    const [theloaiList, setTheloaiList] = useState([]);
    const [philuotnghe, setPhiluotnghe] = useState(null);
    const [dangkyPremium, setDangkyPremium] = useState([]);
+   const [phieuruttien, setPhieuruttien] = useState([]);
    const [isGettingAdvertisersData, setIsGettingAdvertisersData] = useState(true);
    const [isGettingAdvertisementsData, setIsGettingAdvertisementsData] = useState(true);
    const [isGettingContractsData, setIsGettingContractsData] = useState(true);
+   const [thongbaoList, setThongbaoList] = useState([]);
    const getAccountsData = async () => {
       try {
          const res = await axios.get(`${url}/api/accounts`);
@@ -43,6 +45,8 @@ const AdminContextProvider = (props) => {
       fetchTheLoaiList();
       fetchPhiluotnghe();
       fetchDangkyPremium();
+      fetchPhieuruttien();
+      getThongbaoList();
    }, [])
 
 
@@ -173,7 +177,23 @@ const AdminContextProvider = (props) => {
          console.log('Lỗi khi gọi API:', error);
       }
    };
+   const fetchPhieuruttien = async () => {
+      try {
 
+         const response = await axios.get(`${url}/api/artist-slip`);
+         setPhieuruttien(response.data.phieuRutTien);
+      } catch (error) {
+         console.log('Lỗi khi gọi API:', error);
+      }
+   };
+   const getThongbaoList = async () => {
+      try {
+         const response = await axios.get(`${url_api}/api/notifications`);
+         setThongbaoList(response.data);
+      } catch (error) {
+         console.error(error);
+      }
+   };
    const contextValue = {
       openNotification,
       url,
@@ -200,7 +220,11 @@ const AdminContextProvider = (props) => {
       setTheloaiList,
       philuotnghe,
       setPhiluotnghe,
-      dangkyPremium
+      dangkyPremium,
+      phieuruttien,
+      setPhieuruttien,
+      thongbaoList,
+      setThongbaoList
    };
 
 

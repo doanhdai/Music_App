@@ -18,7 +18,9 @@ const SongLiked = () => {
     setSongDataById,
     play,
     songLiked,
-    setSongLiked
+    setSongLiked,
+    isGettingSongLike,
+    setIsGettingSongLike
   } = useContext(PlayerContext);
   const navigate = useNavigate();
   const [menuSongId, setMenuSongId] = useState(null);
@@ -46,6 +48,7 @@ const SongLiked = () => {
     try {
       const response = await axios.get(`${url_api}/api/song-likes`);
       setAccLikeSong(response.data);
+      setIsGettingSongLike(false);
     } catch (error) {
       console.log(error);
     }
@@ -96,7 +99,7 @@ const SongLiked = () => {
   };
   return (
     <>
-      {songLiked.length !== 0 ? (
+      {!isGettingSongLike ? (
         <div onClick={closeMenu}>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-col">
             <img

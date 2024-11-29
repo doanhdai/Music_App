@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Index from "../pages/NotFound";
 
 export const PlayerContext = createContext();
-let playedSongData = []; //biến này lưu mã 3 bài gần nhất theo thứ tự đã nghe, để phục vụ cho back song nút previous
+let playedSongData = []; //biến này lưu mã 10 bài gần nhất theo thứ tự đã nghe, để phục vụ cho back song nút previous
 const PlayerContextProvider = (props) => {
   const audioRef = useRef();
   const seekBg = useRef();
@@ -34,11 +34,8 @@ const PlayerContextProvider = (props) => {
   });
   const [isCallingAPISongArtist, setIsCallingAPISongArtist] = useState(true);
   const [isGettingPlaylistData, setIsGettingPlaylistData] = useState(true);
-  const getLastNumberFromCode = (code) => {
-    // cái này sẽ sai khi mã bài hát không liên tục: có 19 bài hát nhưng có mã bài hát BH029 thì sẽ sai
-    const match = code.match(/\d+$/);
-    return match ? parseInt(match[0], 10) : null;
-  };
+  const [isGettingSongLike, setIsGettingSongLike] = useState(true);
+
 
   const getCurrentIndexInSongData = (ma_bai_hat, songList) => {
     return songList.findIndex((element) => element.ma_bai_hat == ma_bai_hat);
@@ -519,7 +516,7 @@ const PlayerContextProvider = (props) => {
     thongbaoList,
     songDataById,
     setSongDataById,
-
+    account,
     songLiked,
     setSongLiked,
 
@@ -529,7 +526,9 @@ const PlayerContextProvider = (props) => {
     playlistId,
     setPlaylistId,
     isGettingPlaylistData,
-    setIsGettingPlaylistData
+    setIsGettingPlaylistData,
+    isGettingSongLike,
+    setIsGettingSongLike
   };
 
   return (
