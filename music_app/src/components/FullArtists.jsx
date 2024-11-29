@@ -1,14 +1,9 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { albumsData, assets, songsData } from "../assets/assets";
-
 import ArtistItems from "./ArtistItems";
 import { PlayerContext } from "../context/PlayerContext";
 
 const FullArtists = () => {
-  // const {id} = useParams()
   const { artistsData } = useContext(PlayerContext);
-  const navigate = useNavigate();
 
   return (
     <>
@@ -18,8 +13,7 @@ const FullArtists = () => {
           {artistsData.map((item, index) => (
             <ArtistItems
               key={index}
-              name={item.ten_artist}
-              //   desc={item.desc}
+              artist={item.ten_artist}
               id={item.ma_artist}
               img={item.anh_dai_dien}
             />

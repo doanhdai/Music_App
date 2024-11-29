@@ -6,6 +6,7 @@ import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import AddEmployeeAccountForm from "./AddEmployeeAccountForm";
 import { AdminContext } from "../../../context/AdminContext";
+import { formatDate } from "../../../utils";
 const ManagerAccount = () => {
   const { accountsData } = useContext(AdminContext);
 
@@ -21,10 +22,12 @@ const ManagerAccount = () => {
   const [filterRole, setFilterRole] = useState("All_role");
   const [filterStatus, setFilterStatus] = useState("All_status");
 
-  // const maskPassword = (password) => "*".repeat(password.length);
+  const maskPassword = (password) => "*".repeat(password.length);
   useEffect(() => {
     setAccounts(accountsData);
   }, [accountsData]);
+
+  // hiển thị quyền
   const displayRole = (role) => {
     switch (role) {
       case 1:
@@ -37,8 +40,7 @@ const ManagerAccount = () => {
         return "null";
     }
   };
-
-  // Hàm chuyển đổi status từ mã sang tên hiển thị
+  //hiển thị trạng thái
   const displayStatus = (status) => {
     switch (status) {
       case 1:
@@ -119,7 +121,6 @@ const ManagerAccount = () => {
       setIsModalVisible(true);
     }
   };
-  //reset data
   const handleSearchAndReset = () => {
     setAccounts(applyFilters());
     setSearchTerm("");
@@ -140,14 +141,7 @@ const ManagerAccount = () => {
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = date.getFullYear();
-
-      return `${day}/${month}/${year}`;
-    };
+console.log(accountsData)
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between items-center">
@@ -258,7 +252,7 @@ const ManagerAccount = () => {
                     onClick={() => handleAccountClick(item)}
                   >
                     <Link to="" className="text-white">
-                      {index}
+                      {item.ma_tk}
                     </Link>
                     <p className="text-[15px]">{item.email}</p>
                     <p className="text-[15px] hidden sm:block">
@@ -267,7 +261,7 @@ const ManagerAccount = () => {
                     <p className="text-[15px]">MCK</p>
                     <p className="text-[15px]">{formatDate(item.ngay_tao)}</p>
                     <p className="text-[15px]">
-                      {displayRole(item.ma_phan_quyen)}
+                      {item.phan_quyen.ten_quyen_han}
                     </p>
                     <p className="text-[15px]">
                       {displayStatus(item.trang_thai)}

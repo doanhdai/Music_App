@@ -1,6 +1,4 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { albumsData, assets, songsData } from "../assets/assets";
 import AlbumItems from "./AlbumItems";
 import { PlayerContext } from "../context/PlayerContext";
 

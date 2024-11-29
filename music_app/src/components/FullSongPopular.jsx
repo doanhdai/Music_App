@@ -1,11 +1,9 @@
 import React, { useContext } from 'react'
-// import { useNavigate } from 'react-router-dom'
-import { songsData } from '../assets/assets'
 import SongItems from './SongItems'
 import { PlayerContext } from '../context/PlayerContext';
 
 const FullSongPopular = () => {
-  const { songsData, albumsData } = useContext(PlayerContext);
+  const { songsData, } = useContext(PlayerContext);
   return (
     <>
       <div className="mb-4">
@@ -17,7 +15,7 @@ const FullSongPopular = () => {
               <SongItems
                 key={index}
                 name={item.ten_bai_hat}
-                desc={item.ten_bai_hat}
+                artistName={item.ten_bai_hat}
                 id={item.ma_bai_hat}
                 img={item.hinh_anh}
               />
