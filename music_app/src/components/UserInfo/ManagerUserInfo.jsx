@@ -48,8 +48,6 @@ const ManagerUserInfo = () => {
   return (
     <div className="pt-3 mx-[38px] flex space-x-4">
       <div className="w-1/2">
-        {/* <UserProfile />
-        <UserProfileEdit /> */}
         {isEditingUser ? (
                 <UserProfileEdit onCancel={handleCancelUserClick} />
             ) : (
@@ -70,9 +68,6 @@ const ManagerUserInfo = () => {
                   password = {account.password}
                  />
             )}
-        {/* <AccountProfile />
-        <AccountProfileEdit /> */}
-        
       </div>
     </div>
   );
