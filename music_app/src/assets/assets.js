@@ -115,6 +115,18 @@ export function extractDayMonthYear(dateTimeString) {
       };
     });
   }
+ export function getTimeHourMinute(dateTimeString) {
+    const dateObj = new Date(dateTimeString);
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+  export function getCurrentAccoutId(){
+    return JSON.parse(localStorage.getItem("account")).ma_tk;
+  }
+  export function getAccountMaQuyen(){
+    return JSON.parse(localStorage.getItem("account")).ma_quyen;
+  }
 export const albumsData = [
     {   
         id:0,

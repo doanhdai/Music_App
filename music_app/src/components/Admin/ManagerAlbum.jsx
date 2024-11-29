@@ -27,11 +27,11 @@ const ManagerAlbum = () => {
 
   const displayStatus = (status) => {
     switch (status) {
-      case 1:
+      case 0:
         return "bị khóa";
-      case 2:
+      case 1:
         return "Công khai";
-      case 3:
+      case 2:
         return "Chờ duyệt";
       default:
         return "";
