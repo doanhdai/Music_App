@@ -17,8 +17,8 @@ const PremiumCard = ({isActive, title, price, duration, purchase_date, expiry_da
       </div>
       <h2 className="mt-12 text-xl font-semibold">{title}</h2>
       <p className="text-white mt-2">
-        <strong className="text-lg">{price}</strong> dùng trong{" "}
-        <strong className="text-lg">{duration}</strong>
+        <strong className="text-lg">{price} VND</strong> dùng trong{" "}
+        <strong className="text-lg">{duration} tháng</strong>
       </p>
       <p className="text-white text-sm mt-2">
         Ngày mua: <span className="font-mono">{purchase_date}</span>
