@@ -20,9 +20,9 @@ import SongDetailModal from "../../pages/artist/components/SongDetailModal";
 const ManagerSong = () => {
   const { songsData } = useContext(PlayerContext);
   const [selectedSong, setSelectedSong] = useState(null);
-  const [baihat, setSong] = useState([]);
+  const [baihat, setSong] = useState(songsData);
   const [searchTerm, setSearchTerm] = useState("");
-  const [releaseDate, setReleaseDate] = useState("");
+  const [releaseDate, setReleaseDate] = useState(null);
   const [currentActionType, setCurrentActionType] = useState("details");
   const [editSongModalState, setEditSongModalState] = useState(false);
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
@@ -36,11 +36,11 @@ const ManagerSong = () => {
   };
   const displayStatus = (status) => {
     switch (status) {
-      case 1:
-        return "Chờ duyệt";
       case 2:
+        return "Chờ duyệt";
+      case 1:
         return "Công khai";
-      case 3:
+      case 0:
         return "bị Khóa";
       default:
         return "";
@@ -114,11 +114,21 @@ const ManagerSong = () => {
   }
   const handleSearchAndReset = () => {
     const results = filteredSongs();
+    console.log('click', results)
     setSong(results);
     setSearchTerm("");
     setFilterStatus("All_status");
   };
-
+  function isDateMatch(itemDate, inputDate) {
+    const itemDateObj = new Date(itemDate);
+    const inputDateObj = new Date(inputDate);
+    
+    return (
+      itemDateObj.getFullYear() === inputDateObj.getFullYear() ||
+      itemDateObj.getMonth() === inputDateObj.getMonth() ||
+      itemDateObj.getDate() === inputDateObj.getDate()
+    );
+}
   const filteredSongs = () => {
     return songsData.filter((song) => {
       const matchesText = removeVietnamese(song.ten_bai_hat)
@@ -126,14 +136,16 @@ const ManagerSong = () => {
         .includes(removeVietnamese(searchTerm).toLowerCase());
       const matchesStatus =
         filterStatus === "All_status" ||
-        displayStatus(song.trang_thai) === filterStatus;
-      const matchesDate = !releaseDate || song.ngay_phat_hanh === releaseDate;
+        song.trang_thai == filterStatus;
+
+      const matchesDate = !releaseDate || isDateMatch(song.ngay_phat_hanh, releaseDate);
+      console.log('d', matchesDate)
       return matchesText && matchesStatus && matchesDate;
     });
   };
   // console.log("Dữ liệu ban đầu:", songsData);
-  console.log("Điều kiện lọc:", searchTerm);
-  console.log("Kết quả sau lọc:", filteredSongs());
+  // console.log("Điều kiện lọc:", searchTerm);
+  // console.log("Kết quả sau lọc:", filteredSongs());
 
   return (
     <div className="pt-3 mx-[38px]">
@@ -160,9 +172,9 @@ const ManagerSong = () => {
               onChange={(e) => setFilterStatus(e.target.value)}
             >
               <option value="All_status">Tất cả</option>
-              <option>Công khai</option>
-              <option>Bị khóa</option>
-              <option>Chờ duyệt</option>
+              <option value="1">Công khai</option>
+              <option value="0">Ẩn</option>
+              <option value="2">Chờ duyệt</option>
             </select>
           </div>
           <div className="flex flex-col">
@@ -198,19 +210,11 @@ const ManagerSong = () => {
             >
               <MdOutlineEdit size={20} />
             </div>
-            <div
-              onClick={() => handleClickStatusChange("delete")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
-              }`}
-            >
-              <MdDeleteOutline size={20} />
-            </div>
           </div>
         </div>
       </div>
 
-      {filteredSongs().length === 0 ? (
+      {baihat.length === 0 ? (
         <div className="flex items-center h-[500px] justify-center text-center text-white">
           Không có bài hát bạn tìm
         </div>
@@ -218,7 +222,7 @@ const ManagerSong = () => {
         <div>
           <p className="mt-4">Tổng có: 100 bài hát.</p>
 
-          <div className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] mt-2 p-4 text-[#fff] ">
+          <div className="grid grid-cols-5 sm:grid-cols-[1fr_4fr_2fr_2fr_1.5fr] items-center mt-2 p-4 text-[#fff] ">
             <p>Mã bài hát</p>
             <p>Tên bài hát</p>
             <p className="hidden sm:block">album</p>
@@ -227,7 +231,7 @@ const ManagerSong = () => {
           </div>
           <hr />
           <div className="overflow-y-auto h-[440px]">
-            {songsData
+            {baihat
               .filter((item) => item.chat_luong === "Thấp")
               .map((item, index) => (
                 <div
@@ -237,10 +241,10 @@ const ManagerSong = () => {
                 >
                   <p className="text-white">{item.ma_bai_hat}</p>
                   <p className="text-[15px] flex items-center">
-                    <img className="inline w-10 mr-2" src={item.hinh_anh} />
+                    <img className="inline w-10 mr-2" src={item.hinh_anh} alt="error"/>
                     {item.ten_bai_hat}
                   </p>
-                  <p className="text-[15px] hidden sm:block">Ngày cuối</p>
+                  <p className="text-[15px] hidden sm:block">{item.ten_album}</p>
                   <p className="text-[15px]">
                     {formatDate(item.ngay_phat_hanh)}
                   </p>

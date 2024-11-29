@@ -2,7 +2,14 @@ import { FaHeart } from "react-icons/fa"
 import { FaXmark } from "react-icons/fa6";
 import { useState,useEffect, } from "react";
 import { extractYear } from "../../../assets/assets";
-const AlbumDetailModal = ({ album, onClose }) => {
+const AlbumDetailModal = ({ album, detailsAlbumSodalState, onClose }) => {
+  if (!detailsAlbumSodalState) return null;
+  
+  const status = {
+    0:"Ẩn",
+    1: "Công khai",
+    2: "Chờ duyệt"
+  }
   const [songsOfAlbumData, setSongOfAlbumData] = useState([]);
   console.log(album.ma_album)
   useEffect(() => {
@@ -27,7 +34,7 @@ const AlbumDetailModal = ({ album, onClose }) => {
 
             <div className="album-infor flex flex-col justify-between ml-4  text-gray-400 p-2">
               <h5 className="text-sm ">
-                <span>{album.trang_thai === 1 ? "Cong khai" : "An"}</span>
+                <span>{status[album.trang_thai]}</span>
               </h5>
               <h5 className="text-xl text-white ">99%</h5>
               <h5 className="inline-flex items-center gap-2">
