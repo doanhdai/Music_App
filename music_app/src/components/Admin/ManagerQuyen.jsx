@@ -65,26 +65,59 @@ const ManagerQuyen = () => {
       console.error('Lỗi khi xóa phân quyền:', error.response?.data || error.message);
     }
   };
-  // updataphanquyen
-  const updatePhanQuyen = async (dataArray) => {
+  const updatePhanQuyen = async (dataArray, existingData) => {
     try {
-      for (const item of dataArray) {
-        const { ma_phan_quyen, ma_chuc_nang, xem, them, sua, xoa } = item;
-
-        // Gửi yêu cầu cập nhật từng bản ghi
-        const response = await axios.put(`${url}/api/functionalDetail/update`, {
-          ma_phan_quyen,
-          ma_chuc_nang,
-          xem,
-          them,
-          sua,
-          xoa,
-        });
-        console.log(`Updated: ${ma_chuc_nang}`, response.data);
+      // Lọc các bản ghi có sự thay đổi
+      const dataToUpdate = dataArray.filter((item) => {
+        const oldItem = existingData.find(
+          (old) =>
+            old.ma_phan_quyen === item.ma_phan_quyen &&
+            old.ma_chuc_nang === item.ma_chuc_nang
+        );
+  
+        // Kiểm tra sự khác biệt giữa bản ghi mới và cũ
+        return (
+          !oldItem || // Nếu không tìm thấy bản ghi cũ, coi như thay đổi
+          oldItem.xem !== item.xem ||
+          oldItem.them !== item.them ||
+          oldItem.sua !== item.sua ||
+          oldItem.xoa !== item.xoa
+        );
+      });
+  
+      // Gửi yêu cầu cập nhật cho các bản ghi đã thay đổi
+      if (dataToUpdate.length === 0) {
+        console.log("Không có bản ghi nào cần cập nhật.");
+        return;
       }
-      console.log("Tất cả bản ghi đã được cập nhật.");
+  
+      const responses = await Promise.all(
+        dataToUpdate.map(async (item) => {
+          const { ma_phan_quyen, ma_chuc_nang, xem, them, sua, xoa } = item;
+          try {
+            const response = await axios.put(`${url}/api/functionalDetail/update`, {
+              ma_phan_quyen,
+              ma_chuc_nang,
+              xem,
+              them,
+              sua,
+              xoa,
+            });
+            console.log(`Updated: ${ma_phan_quyen}`, response.data);
+            return { success: true, data: response.data };
+          } catch (error) {
+            console.error(`Lỗi khi cập nhật: ${ma_phan_quyen}`, error.response?.data || error.message);
+            return { success: false, error: error.response?.data || error.message };
+          }
+        })
+      );
+  
+      // Kiểm tra kết quả tổng thể
+      const successCount = responses.filter((res) => res.success).length;
+      const failCount = responses.length - successCount;
+      console.log(`Cập nhật hoàn tất: ${successCount} thành công, ${failCount} thất bại.`);
     } catch (error) {
-      console.error("Lỗi khi cập nhật:", error.response?.data || error.message);
+      console.error("Lỗi không xác định khi cập nhật:", error.message);
     }
   };
   const updateTenQuyenHan = async (maPhanQuyen, tenQuyenHanMoi) => {
@@ -478,7 +511,7 @@ const ManagerQuyen = () => {
         onOk() {
           const firstMaPhanQuyen = chitietquyenUpdate[0]?.ma_phan_quyen;
           valueInputAdd ? updateTenQuyenHan(firstMaPhanQuyen, valueInputAdd) : null;
-          updatePhanQuyen(chitietquyenUpdate);
+          updatePhanQuyen(chitietquyenUpdate, filteredChitietquyenList);
           //
           setFilteredChitietquyenList(chitietquyenUpdate);
           if (valueInputAdd != '') {

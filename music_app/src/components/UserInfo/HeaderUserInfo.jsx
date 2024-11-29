@@ -1,11 +1,6 @@
-import React, { useState, startTransition } from "react";
-import { FaRegBell } from "react-icons/fa6";
-import { assets } from "../../assets/assets";
-import { IoSettingsOutline } from "react-icons/io5";
-import { CiLogin } from "react-icons/ci";
-import { RiAccountCircleLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import ComboIcon from "../Admin/ComboIcon/ComboIcon";
+// import ComboIcon from "../Admin/ComboIcon/ComboIcon";
 
 const HeaderUserInfo = () => {
   // const navigate = useNavigate();

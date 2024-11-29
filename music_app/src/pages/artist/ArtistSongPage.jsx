@@ -11,7 +11,7 @@ import { FaTrash } from "react-icons/fa";
 import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 import SongDetailModal from "./components/SongDetailModal";
-
+import { removeVietnameseTones } from "../../assets/assets";
 const ArtistSongPage = () => {
   const [songsData, setSongsData] = useState([]);
   const [currentActionType, setCurrentActionType] = useState("details");
@@ -58,7 +58,7 @@ const ArtistSongPage = () => {
   // 3 : all
   const filteredSongs = songsData.filter((item) => { 
     return (
-      item.ten_bai_hat.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      removeVietnameseTones(item.ten_bai_hat.toLowerCase()).includes(removeVietnameseTones(searchQuery.toLowerCase())) &&
       ( selectedStatus == 3 || item.trang_thai == selectedStatus) // 2 la tat ca
     )
   });
@@ -120,15 +120,16 @@ const ArtistSongPage = () => {
         />
       </div>
       <h3 className="mt-3">Tổng cộng: {filteredSongs.length}</h3>
-      <SongList2
+      <SongList
         songsData={filteredSongs}
         currentActionType={currentActionType}
+        setCurrentActionType={setCurrentActionType}
       />
     </div>
   );
 };
 
-const SongList2 = ({ songsData, currentActionType }) => {
+const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
   // fake data
 
   const [selectedSong, setSelectedSong] = useState(null);
@@ -150,8 +151,23 @@ const SongList2 = ({ songsData, currentActionType }) => {
   };
 
   function deleteSong(song) {
-    //gửi data song để xóa
-    alert("xoa");
+    if (confirm(`Bạn có chắc muốn xóa bài hát ${song.ten_bai_hat} không?`)) {
+      fetch(`http://127.0.0.1:8000/api/song/${song.ma_bai_hat}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Bài hát đã được xóa thành công.');
+          alert("Bài hát đã được xóa thành công.")
+          setCurrentActionType('details')
+        } else {
+          console.error('Xóa bài hát thất bại.');
+        }
+      })
+      .catch(error => {
+        console.error('Lỗi khi xóa bài hát:', error);
+      });
+    }
   }
 
   const clickedAction = {
@@ -171,6 +187,11 @@ const SongList2 = ({ songsData, currentActionType }) => {
 
   return (
     <div className="mt-5 bg-[#121212] h-screen overflow-scroll">
+      {!songsData ? (
+        <div className="flex items-center h-[500px] justify-center text-center text-white">
+          Chưa có bài hát 
+        </div>
+      ) : (<> 
       <div className=" py-2 grid grid-cols-5 sm:grid-cols-[4fr_2fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
         <p>Tên bài hất</p>
         <p>Album</p>
@@ -180,7 +201,7 @@ const SongList2 = ({ songsData, currentActionType }) => {
       </div>
       <hr className="mx-5" />
 
-      {songsData.map((item, index) => (
+      { songsData.map((item, index) => (
         <div
           key={index}
           className="grid grid-cols-5 sm:grid-cols-[4fr_2fr_2fr_2fr] mt-10 mb-4 pl-2 text-white items-center hover:bg-[#ffffff2b] cursor-pointer"
@@ -200,7 +221,7 @@ const SongList2 = ({ songsData, currentActionType }) => {
           </p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
         </div>
-      ))}
+      ))} 
       <SongDetailModal
         className="float-start"
         songData={selectedSong}
@@ -213,7 +234,9 @@ const SongList2 = ({ songsData, currentActionType }) => {
         editSongModalState={editSongModalState}
         onClose={handleCloseDetailModal}
       />
+      </>)}
     </div>
+    
   );
 };
 

@@ -89,9 +89,9 @@ const ComboIcon = () => {
             }
           </div>
           <div className="relative" onMouseEnter={() => setIsOpen(true)}>
-            <p className="bg-purple-500 text-black w-10 h-10 rounded-full flex items-center justify-center">
-              {/* <img className="h-10 rounded-full" src={account.avatar} /> */}
-            </p>
+          <p className="text-black w-10 h-10 rounded-full flex items-center justify-center overflow-hidden">
+            <img className="w-full h-full object-cover" src={account.avatar} alt="avatar" />
+          </p>
             {isOpen && (
               <div
                 onMouseLeave={() => setIsOpen(false)}
