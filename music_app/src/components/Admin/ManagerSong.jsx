@@ -72,7 +72,7 @@ const ManagerSong = () => {
     setDetailsSongModalState(true);
   };
   const handleShowEditModal = () => {
-  
+
     setEditSongModalState(true);
   };
   const handleCloseDetailModal = () => {
@@ -83,7 +83,7 @@ const ManagerSong = () => {
 
   function deleteSong() {
     //gửi data song để xóa
-    alert("xoa" );
+    alert("xoa");
   }
 
   const clickedAction = {
@@ -93,7 +93,7 @@ const ManagerSong = () => {
   };
   const fetchSongDetailData = async (ma_bai_hat) => {
     try {
-      
+
       const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
       const data = await response.json();
       console.log(data.data);
@@ -192,17 +192,15 @@ const ManagerSong = () => {
           <div className="flex space-x-5">
             <div
               onClick={() => handleClickStatusChange("edit")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
               onClick={() => handleClickStatusChange("delete")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdDeleteOutline size={20} />
             </div>

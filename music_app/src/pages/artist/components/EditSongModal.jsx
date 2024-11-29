@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useRef, useEffect,useContext,} from "react";
+import { useState, useRef, useEffect, useContext, } from "react";
 import ImageUpload from "./ImageUpload";
 import { FaXmark } from "react-icons/fa6";
 import { PlayerContext } from "../../../context/PlayerContext";
-import { getAudioDuration , } from "../../../assets/assets";
+import { getAudioDuration, } from "../../../assets/assets";
 const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   if (editSongModalState === false || songDetails === null) return null;
 
@@ -24,7 +24,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
     setSongName(songDetails?.ten_bai_hat)
     setSelectedGenres(songDetails?.the_loai)
     setSelectedArtists(songDetails?.subartists)
-  },[])
+  }, [])
 
 
   const toggleDropdown = (type) => {
@@ -38,7 +38,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   };
 
   const handleCheckboxChange = (type, value) => {
-    console.log("add",selectedGenres)
+    console.log("add", selectedGenres)
     if (type === "genre") {
       setSelectedGenres((prevSelectedGenres) => {
         if (prevSelectedGenres.some((g) => g.ma_the_loai === value.ma_the_loai)) {
@@ -60,7 +60,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
         }
       });
     }
-    
+
   };
   const formData = {
     ten_bai_hat: songName,
@@ -100,7 +100,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
         <h2 className="text-2xl font-bold mb-5 text-center">Sửa bài hát mới</h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} initialImage={songDetails?.hinh_anh}/>
+            <ImageUpload ref={ImgRef} initialImage={songDetails?.hinh_anh} />
             <div className="w-sm">
               {/* Song Name */}
               <div className="mb-4">
