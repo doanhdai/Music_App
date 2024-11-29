@@ -120,15 +120,16 @@ const ArtistSongPage = () => {
         />
       </div>
       <h3 className="mt-3">Tổng cộng: {filteredSongs.length}</h3>
-      <SongList2
+      <SongList
         songsData={filteredSongs}
         currentActionType={currentActionType}
+        setCurrentActionType={setCurrentActionType}
       />
     </div>
   );
 };
 
-const SongList2 = ({ songsData, currentActionType }) => {
+const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
   // fake data
 
   const [selectedSong, setSelectedSong] = useState(null);
@@ -150,8 +151,23 @@ const SongList2 = ({ songsData, currentActionType }) => {
   };
 
   function deleteSong(song) {
-    //gửi data song để xóa
-    alert("xoa");
+    if (confirm(`Bạn có chắc muốn xóa bài hát ${song.ten_bai_hat} không?`)) {
+      fetch(`http://127.0.0.1:8000/api/song/${song.ma_bai_hat}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Bài hát đã được xóa thành công.');
+          alert("Bài hát đã được xóa thành công.")
+          setCurrentActionType('details')
+        } else {
+          console.error('Xóa bài hát thất bại.');
+        }
+      })
+      .catch(error => {
+        console.error('Lỗi khi xóa bài hát:', error);
+      });
+    }
   }
 
   const clickedAction = {

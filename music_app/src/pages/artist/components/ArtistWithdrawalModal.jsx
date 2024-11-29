@@ -6,13 +6,12 @@ const ArtistWithdrawalModal = ({ isOpen, onClose }) => {
 
   const [price, setPrice] = useState(0); // Default price
   const [selectedBank, setSelectedBank] = useState("Chọn ngân hàng");
+  const [stkBank, setStkBank] = useState('');
 
-  const handleBankChange = (event) => {
-    setSelectedBank(event.target.value);
-  };
-  const handleSliderChange = (event) => {
-    setPrice(event.target.value);
-  };
+  
+  let formData = {
+    
+  }
 
   function getCurrentDate() {
     const currentDate = new Date();
@@ -44,7 +43,7 @@ const ArtistWithdrawalModal = ({ isOpen, onClose }) => {
             max="1000"
             step="10"
             value={price}
-            onChange={handleSliderChange}
+            onChange={(e) => setPrice(e.target.value)}
             className="w-full h-2 bg-[#A4A298]  cursor-pointer"
           />
            <div className="flex justify-between w-full mt-2">
@@ -61,7 +60,7 @@ const ArtistWithdrawalModal = ({ isOpen, onClose }) => {
             id="bank-select"
             className="rounded-md px-2 py-1 ml-3 text-white bg-black "
             value={selectedBank}
-            onChange={handleBankChange}
+            onChange={(e) => setSelectedBank(e.target.value)}
           >
             <option value="Option 1">Agribank</option>
             <option value="Option 2">1</option>
@@ -73,6 +72,8 @@ const ArtistWithdrawalModal = ({ isOpen, onClose }) => {
           <input
             type="text"
             className="w-full rounded-md px-4 py-0.5 text-white bg-black appearance-none"
+            value={stkBank}
+            onChange={(e) => setStkBank(e.target.value)}
           />
         </div>
         <div className="flex mt-10 justify-center ">

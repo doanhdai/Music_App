@@ -43,7 +43,7 @@ const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
                 {
                     songData?.the_loai?.length
                       ? songData?.the_loai.map(theLoai => theLoai.ten_the_loai).join(", ")
-                      : "Chọn thể loại"
+                      : "Chưa có"
                   }
                 </span>
               </h5>
