@@ -62,7 +62,7 @@ const SongUpload = ({ closeModal }) => {
 
     const [fileMusicLow, setFileMusicLow] = useState(null);
     const [fileMusicHigh, setFileMusicHigh] = useState(null);
-  const ACCESS_TOKEN = 'sl.CBlFYSqqTUj6sgoe-QyANXoRjH6oXWnaAHtrA8pBH--urVct8hmFwoeClAma2b72nUtOeiRdKI-YiPGKYFwBMuqBiCd_IokudNZB9rUj4XtP6VS0N9jGpg7u0OTDhrLRj1sEB_wH27Ki3R4';
+  const ACCESS_TOKEN = '';
   const handleFileMusicHighChange = (event) => {
     setFileMusicHigh(event.target.files[0]);
   };
