@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useRef, useEffect, useContext } from "react";
-import ImageUpload from "./ImageUpload";
+import { uploadImage } from "../../../services/UserServices";
 import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { PlayerContext } from "../../../context/PlayerContext";
@@ -13,8 +13,10 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   const [albumName, setAlbumName] = useState(selectedAlbum.ten_album);
   const [selectedSongs,setSelectedSongs] = useState([]);
   const [originAlbumData, setOriginAlbumData] = useState()
-  const ImgRef = useRef(null);
-  const imgData = ImgRef.current?.getData()
+  
+  const [file, setFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -41,15 +43,30 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
     setSelectedSongs({...selectedItems });
   };
   
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setAvatarPreview(URL.createObjectURL(selectedFile));
+    }
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     
+    e.preventDefault();
+    const formFileImage = new FormData();
+    formFileImage.append('image', file);
+    
+    const avatar = await uploadImage(formFileImage);
+      const formData = {
+        "ten_album": albumName,
+        "hinh_anh": avatar,
+        "songs": selectedSongs
+      
+      }
     // Handle the form submission logic here
-    console.log({
-      albumName,
-      selectedSongs
-    });
+    console.log(formData);
   };
 
   return (
@@ -62,7 +79,31 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
       {/*  submit form */}
         <form  id="albumForm" onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} initialImage={selectedAlbum.hinh_anh} className="w-56 flex-none" />
+            {/* Image Upload Section */}
+            <div className="rounded-lg mr-5 max-w-sm">
+              <h2 className="text-lg font-semibold text-gray-400 mb-2">Chèn ảnh</h2>
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              <div
+                className="flex bg-white aspect-square items-center justify-center w-40 border-2 rounded-lg cursor-pointer"
+                onClick={() => fileInputRef.current.click()}
+              >
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Uploaded"
+                    className="aspect-square object-cover rounded-lg"
+                  />
+                ) : (
+                  <span className="text-gray-400">Click để tải ảnh</span>
+                )}
+              </div>
+            </div>
 
             <div className="w-sm">
             <div className="mb-4">
