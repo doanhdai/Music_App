@@ -4,6 +4,8 @@ import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { songData2 } from "../../../assets/assets";
 import { uploadImage } from "../../../services/UserServices";
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddAlbumModal = ({ onClose, modalState }) => {
   if (modalState === false) return null;
@@ -74,17 +76,33 @@ const AlbumUpLoad = ({closeModal}) => {
     e.preventDefault();
     const formFileImage = new FormData();
     formFileImage.append('image', file);
+    const checkMaAlbumNotNull =  selectedSongs.some(item => item.ma_album !== null); // Kiểm tra nếu có phần tử có ma_album là null
+    if (checkMaAlbumNotNull) {
+      toast.error('🦄 Lỗi tồn tại bài hát đã có album', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        
+        });
+      throw new Error("Lỗi tồn tại bài hát đã có album");  
+     }
     
     try {
+      
       const avatar = await uploadImage(formFileImage);
       const formData = {
         "ten_album": albumName,
         "hinh_anh": avatar,
-        "songs": selectedSongs
-      
+        "songs": selectedSongs    
       }
+      
       console.log(formData);
-      const response = await fetch(`http://127.0.0.1:8000/api/albums/${currentArtistId}`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -101,11 +119,19 @@ const AlbumUpLoad = ({closeModal}) => {
       //Parse the successful response
       const data = await response.json();
       console.log("Form submitted successfully:", data);
-      alert("Form submitted successfully!");
+      toast.success('Tạo album thành công', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        });
+      closeModal()
     } catch (error) {
       // Handle errors
       console.error("Error submitting form:", error);
-      alert(`Error: ${error.message} `);
+      
     }
   };
   return (
@@ -198,7 +224,9 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
            
             <p className="text-wrap max-w-80 flex-1 ">{song.ten_bai_hat}</p>
             <p className="flex-none">{song.thoi_luong}</p>
-            <button type="button" className="p-2 hover:bg-slate-500" onClick={() => removeSong(song.ma_bai_hat) }>X</button>
+            <button type="button" className="p-2 hover:bg-slate-500" onClick={() => removeSong(song.ma_bai_hat) }>
+              <FaXmark />
+            </button>
           </div>
         ))}
       </div>
@@ -274,7 +302,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
                   >
                     <input
                       type="checkbox"
-                      checked={selectedSongs.some(song => song.ma_bai_hat === item.ma_bai_hat)}
+                      checked={selectedSongs?.some(song => song.ma_bai_hat === item.ma_bai_hat)}
                       onChange={() => handleCheckboxChange(item)}
                       className="mr-2"
                     />
