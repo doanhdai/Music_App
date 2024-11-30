@@ -12,6 +12,9 @@ import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 import SongDetailModal from "./components/SongDetailModal";
 import { removeVietnameseTones } from "../../assets/assets";
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const ArtistSongPage = () => {
   const [songsData, setSongsData] = useState([]);
   const [currentActionType, setCurrentActionType] = useState("details");
@@ -19,7 +22,9 @@ const ArtistSongPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(3);
 
-  const currentArtistId = "ACC0006";
+  const account = JSON.parse(localStorage.getItem('account')) || {};
+  const currentArtistId = account.ma_artist || "ACC0006";
+  
   const handleShowAddSongModal = () => {
     setShowAddSongModal(true);
   };
@@ -44,14 +49,14 @@ const ArtistSongPage = () => {
   };
   // fetch data from server
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/songs/artist/${currentArtistId}`)
+    fetch(`http://127.0.0.1:8000/api/song/admin/artist/${currentArtistId}`)
       .then(res=> res.json())
       .then(res => {
         console.log(res.data[0].bai_hat);
         setSongsData(res.data[0].bai_hat);
       });
     
-  }, []);
+  }, [currentActionType]);
   // 0 : an/ xoa
   // 1 : hoat dong
   // 2 : cho duyet
@@ -88,8 +93,8 @@ const ArtistSongPage = () => {
               }}
             >
               <option value="3">Tất cả</option>
-              <option value="2">Chờ duyệt</option>
               <option value="1">Công khai</option>
+              <option value="2">Chờ duyệt</option>          
               <option value="0">Ẩn</option>
             </select>
           </div>
@@ -102,6 +107,15 @@ const ArtistSongPage = () => {
           >
             <GoPlus className="m-auto" />
             {/* add song */}
+          </button>
+           {/* edit*/}
+           <button
+            onClick={() => handleClickStatusChange("edit")}
+            className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${
+              currentActionType === "edit" ? "bg-[#EB2272]" : ""
+            }`}
+          >
+            <TfiPencil className="m-auto" />
           </button>
 
           {/* delete */}
@@ -136,12 +150,17 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
   const [editSongModalState, setEditSongModalState] = useState(false);
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
 
-  const handleShowDetails = (song) => {
-    setSelectedSong(song);
+  const statusSong ={
+    0: "Ẩn",
+    1: "Công khai",
+    2: "Chờ duyệt",
+  }
+  const handleShowDetails = () => {
+
     setDetailsSongModalState(true);
   };
-  const handleShowEditModal = (song) => {
-    setSelectedSong(song);
+  const handleShowEditModal = () => {
+  
     setEditSongModalState(true);
   };
   const handleCloseDetailModal = () => {
@@ -150,36 +169,67 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
     setEditSongModalState(false);
   };
 
-  function deleteSong(song) {
-    if (confirm(`Bạn có chắc muốn xóa bài hát ${song.ten_bai_hat} không?`)) {
+
+  function deleteSong() {
+    const song = selectedSong
+    if (confirm(`Bạn có chắc muốn xóa album ${song.ten_bai_hat} không?`)) {
       fetch(`http://127.0.0.1:8000/api/song/${song.ma_bai_hat}`, {
-        method: 'DELETE'
+        method: "DELETE",
       })
-      .then(response => {
-        if (response.ok) {
-          console.log('Bài hát đã được xóa thành công.');
-          alert("Bài hát đã được xóa thành công.")
-          setCurrentActionType('details')
-        } else {
-          console.error('Xóa bài hát thất bại.');
-        }
-      })
-      .catch(error => {
-        console.error('Lỗi khi xóa bài hát:', error);
-      });
+        .then((response) => {
+          if (response.ok) {
+            toast.success('Đã xóa bài hát thành công', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              });
+            setCurrentActionType("details");
+          } else {
+            toast.error('🦄 Xóa bài hát thất bại!', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+    
+              });
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi khi xóa bài hát:", error);
+        });
     }
   }
 
   const clickedAction = {
-    details: (song) => handleShowDetails(song),
-    edit: (song) => handleShowEditModal(song),
-    delete: (song) => deleteSong(song),
+    details: () => handleShowDetails(),
+    edit: () => handleShowEditModal(),
+    delete: () => deleteSong(),
   };
 
+  const fetchSongDetailData = async (ma_bai_hat) => {
+    try {
+      
+      const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
+      const data = await response.json();
+      console.log(data.data);
+      setSelectedSong(data.data);
+    } catch (error) {
+      console.error("Error fetching song data:", error);
+    }
+  };
   function handleClickedSongItem(actionType, songInformation) {
     const action = clickedAction[actionType];
+    console.log(songInformation);
+    fetchSongDetailData(songInformation.ma_bai_hat)
     if (action) {
-      return clickedAction[actionType](songInformation);
+      return clickedAction[actionType]();
     } else {
       alert(`Wrong action type ${actionType}`);
     }
@@ -217,7 +267,7 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
 
           <p className="text-[15px] text-center">{item.ten_album}</p>
           <p className="text-[15px] text-center">
-            {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
+            {statusSong[item.trang_thai]}
           </p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
         </div>

@@ -46,7 +46,7 @@ const AlbumDetailModal = ({ album, detailsAlbumSodalState, onClose }) => {
         </div>
         <div className="static overflow-y-auto ">
         <div className="flex mt-8 flex-col gap-4 max-h-80 overflow-y-auto">
-      { songsOfAlbumData.length > 0  ?
+      { songsOfAlbumData?.length > 0  ?
        songsOfAlbumData.map((song, index) => (
           <div
             key={song.ma_bai_hat}
