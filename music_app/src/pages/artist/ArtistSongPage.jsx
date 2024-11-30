@@ -49,7 +49,7 @@ const ArtistSongPage = () => {
   };
   // fetch data from server
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/songs/artist/${currentArtistId}`)
+    fetch(`http://127.0.0.1:8000/api/song/admin/artist/${currentArtistId}`)
       .then(res=> res.json())
       .then(res => {
         console.log(res.data[0].bai_hat);
@@ -108,6 +108,15 @@ const ArtistSongPage = () => {
             <GoPlus className="m-auto" />
             {/* add song */}
           </button>
+           {/* edit*/}
+           <button
+            onClick={() => handleClickStatusChange("edit")}
+            className={`text-xl h-10 w-10 rounded-full bg-[#1E1E1E]  text-white ${
+              currentActionType === "edit" ? "bg-[#EB2272]" : ""
+            }`}
+          >
+            <TfiPencil className="m-auto" />
+          </button>
 
           {/* delete */}
           <button
@@ -141,12 +150,17 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
   const [editSongModalState, setEditSongModalState] = useState(false);
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
 
-  const handleShowDetails = (song) => {
-    setSelectedSong(song);
+  const statusSong ={
+    0: "Ẩn",
+    1: "Công khai",
+    2: "Chờ duyệt",
+  }
+  const handleShowDetails = () => {
+
     setDetailsSongModalState(true);
   };
-  const handleShowEditModal = (song) => {
-    setSelectedSong(song);
+  const handleShowEditModal = () => {
+  
     setEditSongModalState(true);
   };
   const handleCloseDetailModal = () => {
@@ -155,9 +169,11 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
     setEditSongModalState(false);
   };
 
-  function deleteSong(song) {
+
+  function deleteSong() {
+    const song = selectedSong
     if (confirm(`Bạn có chắc muốn xóa album ${song.ten_bai_hat} không?`)) {
-      fetch(`http://127.0.0.1:8000/api/albums/${song.ma_bai_hat}`, {
+      fetch(`http://127.0.0.1:8000/api/song/${song.ma_bai_hat}`, {
         method: "DELETE",
       })
         .then((response) => {
@@ -192,15 +208,28 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
   }
 
   const clickedAction = {
-    details: (song) => handleShowDetails(song),
-    edit: (song) => handleShowEditModal(song),
-    delete: (song) => deleteSong(song),
+    details: () => handleShowDetails(),
+    edit: () => handleShowEditModal(),
+    delete: () => deleteSong(),
   };
 
+  const fetchSongDetailData = async (ma_bai_hat) => {
+    try {
+      
+      const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
+      const data = await response.json();
+      console.log(data.data);
+      setSelectedSong(data.data);
+    } catch (error) {
+      console.error("Error fetching song data:", error);
+    }
+  };
   function handleClickedSongItem(actionType, songInformation) {
     const action = clickedAction[actionType];
+    console.log(songInformation);
+    fetchSongDetailData(songInformation.ma_bai_hat)
     if (action) {
-      return clickedAction[actionType](songInformation);
+      return clickedAction[actionType]();
     } else {
       alert(`Wrong action type ${actionType}`);
     }
@@ -238,7 +267,7 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
 
           <p className="text-[15px] text-center">{item.ten_album}</p>
           <p className="text-[15px] text-center">
-            {item.trang_thai === 1 ? "Công khai" : "Ẩn"}
+            {statusSong[item.trang_thai]}
           </p>
           <p className="text-[15px] text-center">{item.thoi_luong}</p>
         </div>
