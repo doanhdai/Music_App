@@ -41,6 +41,8 @@ const Player = () => {
     realPlayTime,
     toggleShuffle,
     isShuffle,
+    isRepeat,
+    toggleRepeat,
     setVolume: setAudioVolume,
   } = useContext(PlayerContext);
 
@@ -138,8 +140,15 @@ const Player = () => {
 
         <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1">
           <div className="flex gap-4 items-center">
-            <div className="w-6 h-6 flex justify-center items-center">
-              <IoShuffle size={20} />
+            <div
+              onClick={toggleShuffle}
+              className="w-6 h-6 flex justify-center items-center"
+            >
+              {!isShuffle ? (
+                <IoShuffle size={20} />
+              ) : (
+                <IoShuffle color="#00FF00" size={20} />
+              )}
             </div>
             <div
               onClick={previous}
@@ -169,11 +178,11 @@ const Player = () => {
               <MdSkipNext size={25} />
             </div>
             <div
-              // onClick={toggleShuffle}
+              onClick={toggleRepeat}
               className="w-6 h-6 flex justify-center items-center"
             >
               {" "}
-              {!isShuffle ? (
+              {!isRepeat ? (
                 <SlLoop size={20} />
               ) : (
                 <SlLoop color="#00FF00" size={20} />

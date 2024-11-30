@@ -244,7 +244,7 @@ const ManagerSong = () => {
                     <img className="inline w-10 mr-2" src={item.hinh_anh} alt="error"/>
                     {item.ten_bai_hat}
                   </p>
-                  <p className="text-[15px] hidden sm:block">{item.ten_album}</p>
+                  <p className="text-[15px] hidden sm:block">{item.album}</p>
                   <p className="text-[15px]">
                     {formatDate(item.ngay_phat_hanh)}
                   </p>
