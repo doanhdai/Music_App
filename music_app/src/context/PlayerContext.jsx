@@ -481,6 +481,8 @@ const PlayerContextProvider = (props) => {
   const toggleRepeat = () => {
     setIsRepeat((prev) => !prev);
   };
+
+
   const playRandomSong = () => {
     if (songsData.length > 1) {
       let randomIndex;
@@ -562,6 +564,7 @@ const PlayerContextProvider = (props) => {
     toggleRepeat,
     // toggleShuffle,
     isShuffle,
+    setIsShuffle
   };
 
   return (

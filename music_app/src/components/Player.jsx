@@ -41,6 +41,7 @@ const Player = () => {
     realPlayTime,
     toggleShuffle,
     isShuffle,
+    setIsShuffle,
     isRepeat,
     toggleRepeat,
     setVolume: setAudioVolume,
@@ -141,7 +142,7 @@ const Player = () => {
         <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1">
           <div className="flex gap-4 items-center">
             <div
-              onClick={toggleShuffle}
+              onClick={() => setIsShuffle(!isShuffle)}
               className="w-6 h-6 flex justify-center items-center"
             >
               {!isShuffle ? (
