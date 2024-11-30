@@ -18,11 +18,12 @@ const AlbumUpLoad = ({closeModal}) => {
   const [albumName, setAlbumName] = useState("");
   const [songsData, setSongsData] = useState(null)
   const [selectedSongs,setSelectedSongs] = useState([]);
-  
+
 
   const account = JSON.parse(localStorage.getItem('account')) || {};
   const currentArtistId = account.ma_artist || "ACC0006"; 
-  //http://127.0.0.1:8000/api/songs/artist/ACC0003
+  //http://127.0.0.1:8000/api/songs/artist/ACC0003 
+  // lay bai hat dang cong khai theo nghe si
   useEffect(() => {
     const fetchSongs = async () => {
 
