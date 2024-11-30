@@ -29,7 +29,7 @@ const ArtistWithdrawalModal = ({ isOpen, onClose ,tongTienCoTheRut}) => {
   if (isOpen === false) return null;
 
   const [price, setPrice] = useState(0); // Default price
-  const [selectedBank, setSelectedBank] = useState("Chọn ngân hàng");
+  const [selectedBank, setSelectedBank] = useState(nganHangList[0].ten);
   const [stkBank, setStkBank] = useState('');
 
   const account = JSON.parse(localStorage.getItem('account')) || {};
@@ -40,11 +40,8 @@ const ArtistWithdrawalModal = ({ isOpen, onClose ,tongTienCoTheRut}) => {
 // Function to validate the formData object
 function validateFormData(data) {
     const errors = [];
-    if (!data.tk_ngan_hang || data.tk_ngan_hang.length !== 6) {
+    if ( data.bank_id.length !== 6) {
         errors.push("Mã tài khoảng có 6 ký tự");
-    }
-    if (!Number.isInteger(data.tong_tien_rut_ra)) {
-        errors.push("Số tiền rút ra là số nguyên");
     }
     return errors;
 }
@@ -53,12 +50,12 @@ function validateFormData(data) {
     let formData = {
       'ma_tk_artist': currentArtistId,
       'tong_tien_rut_ra': parseInt(price),
-      'ngan_hang': selectedBank,
-      'tk_ngan_hang': stkBank,
+      'bank_name': selectedBank,
+      'bank_id': stkBank,
     }
     const validationErrors = validateFormData(formData);
     if (validationErrors.length > 0) {
-      alert("Lỗi nhập số tiền là số nguyên, tk 6 ký tự", validationErrors);
+      alert("Lỗi  tk 6 ký tự", validationErrors);
   } else {
     const response = await createWithdraw(formData);
     if (response.success){
