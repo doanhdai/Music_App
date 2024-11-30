@@ -20,7 +20,8 @@ const AlbumUpLoad = ({closeModal}) => {
   const [selectedSongs,setSelectedSongs] = useState([]);
   
 
-  const currentArtistId = "ACC0006";
+  const account = JSON.parse(localStorage.getItem('account')) || {};
+  const currentArtistId = account.ma_artist || "ACC0006"; 
   //http://127.0.0.1:8000/api/songs/artist/ACC0003
   useEffect(() => {
     const fetchSongs = async () => {
@@ -89,7 +90,7 @@ const AlbumUpLoad = ({closeModal}) => {
     } catch (error) {
       // Handle errors
       console.error("Error submitting form:", error);
-      alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message} `);
     }
   };
   return (

@@ -12,6 +12,9 @@ import AddSongModal from "./components/AddSongModal";
 import EditSongModal from "./components/EditSongModal";
 import SongDetailModal from "./components/SongDetailModal";
 import { removeVietnameseTones } from "../../assets/assets";
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const ArtistSongPage = () => {
   const [songsData, setSongsData] = useState([]);
   const [currentActionType, setCurrentActionType] = useState("details");
@@ -19,7 +22,9 @@ const ArtistSongPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(3);
 
-  const currentArtistId = "ACC0006";
+  const account = JSON.parse(localStorage.getItem('account')) || {};
+  const currentArtistId = account.ma_artist || "ACC0006";
+  
   const handleShowAddSongModal = () => {
     setShowAddSongModal(true);
   };
@@ -51,7 +56,7 @@ const ArtistSongPage = () => {
         setSongsData(res.data[0].bai_hat);
       });
     
-  }, []);
+  }, [currentActionType]);
   // 0 : an/ xoa
   // 1 : hoat dong
   // 2 : cho duyet
@@ -88,8 +93,8 @@ const ArtistSongPage = () => {
               }}
             >
               <option value="3">Tất cả</option>
-              <option value="2">Chờ duyệt</option>
               <option value="1">Công khai</option>
+              <option value="2">Chờ duyệt</option>          
               <option value="0">Ẩn</option>
             </select>
           </div>
@@ -151,22 +156,38 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
   };
 
   function deleteSong(song) {
-    if (confirm(`Bạn có chắc muốn xóa bài hát ${song.ten_bai_hat} không?`)) {
-      fetch(`http://127.0.0.1:8000/api/song/${song.ma_bai_hat}`, {
-        method: 'DELETE'
+    if (confirm(`Bạn có chắc muốn xóa album ${song.ten_bai_hat} không?`)) {
+      fetch(`http://127.0.0.1:8000/api/albums/${song.ma_bai_hat}`, {
+        method: "DELETE",
       })
-      .then(response => {
-        if (response.ok) {
-          console.log('Bài hát đã được xóa thành công.');
-          alert("Bài hát đã được xóa thành công.")
-          setCurrentActionType('details')
-        } else {
-          console.error('Xóa bài hát thất bại.');
-        }
-      })
-      .catch(error => {
-        console.error('Lỗi khi xóa bài hát:', error);
-      });
+        .then((response) => {
+          if (response.ok) {
+            toast.success('Đã xóa bài hát thành công', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              });
+            setCurrentActionType("details");
+          } else {
+            toast.error('🦄 Xóa bài hát thất bại!', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+    
+              });
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi khi xóa bài hát:", error);
+        });
     }
   }
 

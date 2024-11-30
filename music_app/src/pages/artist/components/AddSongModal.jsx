@@ -3,7 +3,8 @@ import axios from 'axios';
 import { FaXmark } from "react-icons/fa6";
 import UploadMusic from "../../../services/UploadMusic";
 import { uploadImage } from "../../../services/UserServices";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
@@ -29,7 +30,7 @@ export const fetchGenres = async () => {
 
 export const createSong = async (songData) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/songs`, songData, {
+    const response = await axios.post(`${API_BASE_URL}/song`, songData, {
       headers: {
         'Content-Type': 'application/json',
         // Add authorization header if needed
@@ -61,7 +62,7 @@ const SongUpload = ({ closeModal }) => {
 
     const [fileMusicLow, setFileMusicLow] = useState(null);
     const [fileMusicHigh, setFileMusicHigh] = useState(null);
-  const ACCESS_TOKEN = '';
+  const ACCESS_TOKEN = 'sl.CBlFYSqqTUj6sgoe-QyANXoRjH6oXWnaAHtrA8pBH--urVct8hmFwoeClAma2b72nUtOeiRdKI-YiPGKYFwBMuqBiCd_IokudNZB9rUj4XtP6VS0N9jGpg7u0OTDhrLRj1sEB_wH27Ki3R4';
   const handleFileMusicHighChange = (event) => {
     setFileMusicHigh(event.target.files[0]);
   };
@@ -187,7 +188,7 @@ const SongUpload = ({ closeModal }) => {
         ma_tk_artist: currentArtistId,
         ma_album: null,
         thoi_luong: Math.round(audioDuration),
-        trang_thai: 1,
+        trang_thai: 2,
         hinh_anh: avatar,
         ngay_phat_hanh: getCurrentDay(),
         doanh_thu: 0,
@@ -199,9 +200,21 @@ const SongUpload = ({ closeModal }) => {
         subartists: selectedArtists.map(artist => artist.ma_artist)
       };
     console.log(formData);
-      // Submit song
-    //   const response = await createSong(formData);
     
+      // Submit song
+    const response = await createSong(formData);
+     if (response.success ) {
+      toast.success('Tạo bài hát thành công', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        });
+        closeModal()
+     } 
+     
     } catch (error) {
       console.error("Song upload error:", error);
     }
