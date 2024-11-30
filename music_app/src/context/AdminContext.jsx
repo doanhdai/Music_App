@@ -23,7 +23,7 @@ const AdminContextProvider = (props) => {
    const [thongbaoList, setThongbaoList] = useState([]);
    const getAccountsData = async () => {
       try {
-         const res = await axios.get(`${url}/api/accounts`);
+         const res = await axios.get(`${url}/api/accountUser`);
          setAccountsData(res.data);
          // console.log(res.data);
       } catch (error) {

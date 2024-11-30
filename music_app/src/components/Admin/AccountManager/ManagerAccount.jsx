@@ -6,6 +6,8 @@ import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import AddEmployeeAccountForm from "./AddEmployeeAccountForm";
 import { AdminContext } from "../../../context/AdminContext";
+import { formatDate } from "../../../utils";
+import { assets } from "../../../assets/assets";
 const ManagerAccount = () => {
   const { accountsData } = useContext(AdminContext);
 
@@ -21,32 +23,19 @@ const ManagerAccount = () => {
   const [filterRole, setFilterRole] = useState("All_role");
   const [filterStatus, setFilterStatus] = useState("All_status");
 
-  // const maskPassword = (password) => "*".repeat(password.length);
+  const maskPassword = (password) => "*".repeat(password.length);
   useEffect(() => {
     setAccounts(accountsData);
   }, [accountsData]);
-  const displayRole = (role) => {
-    switch (role) {
-      case 1:
-        return "Người nghe";
-      case 2:
-        return "Nghệ sĩ";
-      case 3:
-        return "Manager";
-      default:
-        return "null";
-    }
-  };
-
-  // Hàm chuyển đổi status từ mã sang tên hiển thị
+  //hiển thị trạng thái
   const displayStatus = (status) => {
     switch (status) {
+      case 0:
+        return "bị khóa";
       case 1:
-        return "Chờ duyệt";
+        return "hoạt động";
       case 2:
-        return "Công khai";
-      case 3:
-        return "Khóa";
+        return "xóa";
       default:
         return "";
     }
@@ -119,7 +108,6 @@ const ManagerAccount = () => {
       setIsModalVisible(true);
     }
   };
-  //reset data
   const handleSearchAndReset = () => {
     setAccounts(applyFilters());
     setSearchTerm("");
@@ -133,21 +121,13 @@ const ManagerAccount = () => {
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
       const matchesRole =
-        filterRole === "All_role" || displayRole(account.role) === filterRole;
+        filterRole === "All_role" || account.role === filterRole;
       const matchesStatus =
         filterStatus === "All_status" ||
         displayStatus(account.trang_thai) === filterStatus;
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = date.getFullYear();
-
-      return `${day}/${month}/${year}`;
-    };
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between items-center">
@@ -237,15 +217,15 @@ const ManagerAccount = () => {
         </div>
       ) : (
         <div>
-          <p className="mt-4">Tổng có: {accounts.length} tài khoản.</p>
-          <div className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] mt-2 p-4 text-[#fff]">
-            <p className="text-[#E0066F]">#ID</p>
-            <p className="text-[#E0066F]">Gmail</p>
-            <p className="hidden sm:block text-[#E0066F]">Mật khẩu</p>
-            <p className="text-[#E0066F]">Tên</p>
-            <p className="text-[#E0066F]"> Ngày tạo</p>
-            <p className="text-[#E0066F]">Quyền</p>
-            <p className="text-[#E0066F]">Trạng thái</p>
+          {/* <p className="mt-4">Tổng có: {accounts.length} tài khoản.</p> */}
+          <div className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2.5fr_2fr_1.5fr_1fr_0.7fr] mt-2 p-4 text-[#fff]">
+            <p className="text-[#E0066F] text-sm">#ID</p>
+            <p className="text-[#E0066F] text-sm">Tên người dùng</p>
+            <p className="text-[#E0066F] text-sm">Gmail</p>
+            <p className="hidden sm:block text-sm text-[#E0066F]">Mật khẩu</p>
+            <p className="text-[#E0066F] text-sm"> Ngày tạo</p>
+            <p className="text-[#E0066F] text-sm">Quyền</p>
+            <p className="text-[#E0066F] text-sm">Trạng thái</p>
           </div>
           <hr />
           <div className="h-[460px] overflow-y-auto">
@@ -254,24 +234,27 @@ const ManagerAccount = () => {
                 item.status !== 0 && (
                   <div
                     key={index}
-                    className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2fr_2fr_1.5fr_1.5fr_1fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
+                    className="grid grid-cols-5 sm:grid-cols-[1fr_3fr_2.5fr_2fr_1.5fr_1fr_0.7fr] text-[#fff] items-center p-4 hover:bg-[#E0066F] cursor-pointer"
                     onClick={() => handleAccountClick(item)}
                   >
                     <Link to="" className="text-white">
-                      {index}
+                      {item.ma_tk.length > 7
+                        ? `${item.ma_tk.slice(0, 7)}...`
+                        : item.ma_tk}
                     </Link>
-                    <p className="text-[15px]">{item.email}</p>
-                    <p className="text-[15px] hidden sm:block">
-                      {(item.mat_khau)}
+                    <p className="text-sm flex items-center">
+                      <img
+                        className="h-9 rounded-full mr-2"
+                        src={assets.mck}
+                      />
+                      {item.user.ten_user}
                     </p>
-                    <p className="text-[15px]">MCK</p>
-                    <p className="text-[15px]">{formatDate(item.ngay_tao)}</p>
-                    <p className="text-[15px]">
-                      {displayRole(item.ma_phan_quyen)}
-                    </p>
-                    <p className="text-[15px]">
-                      {displayStatus(item.trang_thai)}
-                    </p>
+                    <p className="text-sm">{item.email}</p>
+                    <p className="text-sm hidden sm:block">{maskPassword(item.mat_khau)}</p>
+
+                    <p className="text-sm">{formatDate(item.ngay_tao)}</p>
+                    <p className="text-sm">{/* {item.user.ten_quyen_han} */}</p>
+                    <p className="text-sm">{displayStatus(item.trang_thai)}</p>
                   </div>
                 )
             )}
@@ -311,9 +294,8 @@ const ManagerAccount = () => {
               onChange={(e) => setEditedStatus(parseInt(e.target.value))}
               className="w-full p-2 border rounded"
             >
-              <option value={1}>Chờ duyệt</option>
-              <option value={2}>Công khai</option>
-              <option value={3}>Khóa</option>
+              <option value={1}>Hoạt động</option>
+              <option value={2}>Khóa</option>
             </select>
           </div>
         )}

@@ -12,7 +12,6 @@ const ArtistItems = ({id, img, artist}) => {
     >
       <img className="h-44 w-44 rounded-full" src={img}></img>
       <p className="font-bold mt-2 mb-1">{artist}</p>
-      {/* <p className="text-slate-200 text-sm">{artist}</p> */}
     </div>
   );
 }

@@ -58,7 +58,7 @@ const DetailSong = () => {
     try {
       const response = await axios.get(`${url_api}/api/comments/song/${id}`);
       setCommentsData(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -78,7 +78,7 @@ const DetailSong = () => {
       const data = response.data.data[0];
 
       // Lấy tên nghệ sĩ chính
-      const mainArtist = data.ten_artist || "Không xác định";
+      const mainArtist = data.ten_artist || "";
 
       // Đảm bảo collab_artists tồn tại và là một mảng
       const collabArtists = Array.isArray(data.collab_artists)
@@ -86,7 +86,7 @@ const DetailSong = () => {
         : [];
       setArtistSong({ mainArtist, collabArtists });
     } catch (error) {
-      console.error("Lỗi khi gọi API:", error);
+      // console.error("Lỗi khi gọi API:", error);
     }
   };
 
@@ -367,7 +367,7 @@ const DetailSong = () => {
               </b>
             </div>
           </div>
-          {console.log(artistSong.collabArtists)}
+          {/* {console.log(artistSong.collabArtists)} */}
           {artistSong.collabArtists.length > 0
             ? artistSong.collabArtists.map((artist, index) => (
               <div key={index} className="flex items-center my-2">
