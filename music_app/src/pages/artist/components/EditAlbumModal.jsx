@@ -17,14 +17,22 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   const [file, setFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
   const fileInputRef = useRef(null);
+  const [statusAlbum, setStatusAlbum] = useState(null);
 
+  const account = JSON.parse(localStorage.getItem('account')) || {};
+  const currentMaQuyen = account.ma_quyen;
+  const isReadOnly = currentMaQuyen === 'AUTH0002' ? true : false;
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/albums${selectedAlbum.ma_album}/songs`);
+        const response = await fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum.ma_album}`);
         const data = await response.json();
-        setSelectedSongs(data.album.songs);
-        setOriginAlbumData(data.album);
+        console.log(data.album)
+        setSelectedSongs(data.data.songs);
+        setOriginAlbumData(data.data);
+        setStatusAlbum(data.data.trang_thai);
+        setAvatarPreview(data.data.hinh_anh);
+        console.log(data.data)
       } catch (error) {
         console.error('Error fetching songs:', error);
       }
@@ -34,13 +42,25 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
       fetchSongs();
     }
   }
-  ,[selectedAlbum.ma_album])
-  console.log(originAlbumData)
+  ,[selectedAlbum?.ma_album])
 
+  const statusList = [
+    { status: 0, ten: "Ẩn"},
+    { status: 1, ten: 'Công khai' },
+    { status: 2, ten: 'Chờ duyệt'}
+  ]
   const handleSongRemoved = (songId) => {
-    const selectedItems = selectedSongs;
-    delete selectedItems[songId];
-    setSelectedSongs({...selectedItems });
+    const updatedSelection = [...selectedSongs]; // Create a copy of the array
+      // Find the index of the item in the array
+      const index = updatedSelection.findIndex(song => song.ma_bai_hat === songId);
+      if (index !== -1) {
+        // Remove the item if it's already in the array
+        updatedSelection.splice(index, 1);
+      } else {
+        // Add the item to the array
+        updatedSelection.push(item);
+      }
+      setSelectedSongs(updatedSelection);
   };
   
   const handleFileChange = (e) => {
@@ -74,7 +94,7 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
       <div className="max-w-xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
         <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={onClose}/>
         <h2 className="text-2xl font-bold mb-5 text-center">
-            Tạo album mới
+            Sửa album
         </h2>
       {/*  submit form */}
         <form  id="albumForm" onSubmit={handleSubmit}>
@@ -106,6 +126,23 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
             </div>
 
             <div className="w-sm">
+            <div className="mb-4 relative">
+                <label className="block text-lg font-semibold text-gray-400">
+                  Trạng thái
+                </label>
+                <select
+                  className="rounded-md px-2 py-1 ml-3 text-white bg-black "
+                  value={statusAlbum}
+                  onChange={(e) => setStatusAlbum(e.target.value)}
+                > {
+                    statusList.map((item, index) => (
+                      <option key={index} value={item.status}  disabled={isReadOnly && item.status === 1}>
+                        {item.ten}
+                      </option>
+                    ))
+                  }      
+                </select>
+            </div> 
             <div className="mb-4">
                 <label className="text-lg font-semibold text-gray-400" >
                     Tên album
@@ -142,7 +179,7 @@ export default EditAlbumModal;
 
 
 const AlbumSongList = ({selectedSongs,removeSong}) => {
-  if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
+  if (selectedSongs== null) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
 
     const songsArray = Object.values(selectedSongs);
     return (

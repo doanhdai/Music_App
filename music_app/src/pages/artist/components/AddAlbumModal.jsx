@@ -51,9 +51,17 @@ const AlbumUpLoad = ({closeModal}) => {
   }, [currentArtistId]);
 
   const handleSongRemoved = (songId) => {
-    const selectedItems = selectedSongs;
-    delete selectedItems[songId];
-    setSelectedSongs({...selectedItems });
+    const updatedSelection = [...selectedSongs]; // Create a copy of the array
+      // Find the index of the item in the array
+      const index = updatedSelection.findIndex(song => song.ma_bai_hat === songId);
+      if (index !== -1) {
+        // Remove the item if it's already in the array
+        updatedSelection.splice(index, 1);
+      } else {
+        // Add the item to the array
+        updatedSelection.push(item);
+      }
+      setSelectedSongs(updatedSelection);
   };
  
   
