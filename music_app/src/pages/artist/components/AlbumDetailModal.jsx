@@ -11,14 +11,14 @@ const AlbumDetailModal = ({ album, detailsAlbumSodalState, onClose }) => {
     2: "Chờ duyệt"
   }
   const [songsOfAlbumData, setSongOfAlbumData] = useState([]);
-  console.log(album.ma_album)
+  const [albumData, setAlbumData] = useState([]);
   useEffect(() => {
-       //fetch(`http://127.0.0.1:8000/api/albumsAL0009/songs`)
-    fetch(`http://127.0.0.1:8000/api/albums${album.ma_album}/songs`)
+    fetch(`http://127.0.0.1:8000/api/albums/${album.ma_album}/songs`)
     .then(res=>res.json())
-    .then(res => setSongOfAlbumData(res.album.songs))
+    .then(res => setAlbumData(res.album))
     
-  },[])
+  },[detailsAlbumSodalState])
+  console.log('d',albumData)
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
@@ -27,18 +27,18 @@ const AlbumDetailModal = ({ album, detailsAlbumSodalState, onClose }) => {
         <div className="flex items-center justify-center ">
           <div className="flex items-stretch gap-2">
             <img
-              src={album.hinh_anh}
-              alt={album.ten_album}
+              src={albumData.hinh_anh}
+              alt={albumData.ten_album}
               className=" aspect-square h-40 flex-none"
             />
 
             <div className="album-infor flex flex-col justify-between ml-4  text-gray-400 p-2">
               <h5 className="text-sm ">
-                <span>{status[album.trang_thai]}</span>
+                <span>{status[albumData.trang_thai]}</span>
               </h5>
-              <h5 className="text-xl text-white ">99%</h5>
+              <h5 className="text-xl text-white ">{albumData.ten_album}</h5>
               <h5 className="inline-flex items-center gap-2">
-                {extractYear(album.ngay_tao) + " * " +album.luot_yeu_thich}
+                {extractYear(albumData.ngay_tao) + " * " +albumData.luot_yeu_thich}
                 <FaHeart />
               </h5>
             </div>
@@ -46,8 +46,8 @@ const AlbumDetailModal = ({ album, detailsAlbumSodalState, onClose }) => {
         </div>
         <div className="static overflow-y-auto ">
         <div className="flex mt-8 flex-col gap-4 max-h-80 overflow-y-auto">
-      { songsOfAlbumData.length > 0  ?
-       songsOfAlbumData.map((song, index) => (
+      { albumData.songs?.length > 0  ?
+       albumData.songs.map((song, index) => (
           <div
             key={song.ma_bai_hat}
             className="flex flex-row justify-between items-center h-fit gap-4 max-w-50"

@@ -15,14 +15,14 @@ const ArtistNavbar = () => {
   return (
     <div>
       <div className="w-full flex justify-between  font-semibold ">
-        <h1 className="ml-5 text-2xl">Trang chu</h1>
+        <h1 className="ml-5 text-2xl">Quản lý</h1>
 
         <div className="flex items-center gap-4">
 
-        <ComboIcon/>
+          <ComboIcon />
         </div>
       </div>
-      
+
     </div>
   );
 };

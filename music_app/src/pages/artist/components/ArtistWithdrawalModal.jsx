@@ -29,25 +29,43 @@ const ArtistWithdrawalModal = ({ isOpen, onClose ,tongTienCoTheRut}) => {
   if (isOpen === false) return null;
 
   const [price, setPrice] = useState(0); // Default price
-  const [selectedBank, setSelectedBank] = useState("Chọn ngân hàng");
+  const [selectedBank, setSelectedBank] = useState(nganHangList[0].ten);
   const [stkBank, setStkBank] = useState('');
 
   const account = JSON.parse(localStorage.getItem('account')) || {};
   const currentArtistId = account.ma_artist || "ACC0006";
 
-  let formData = {
-    'ma_tk_artist': currentArtistId,
-    'tong_tien_rut_ra':price,
-  }
-  
+ 
+
+// Function to validate the formData object
+function validateFormData(data) {
+    const errors = [];
+    if ( data.bank_id.length !== 6) {
+        errors.push("Mã tài khoảng có 6 ký tự");
+    }
+    return errors;
+}
+
    async function handleSubmit() {
+    let formData = {
+      'ma_tk_artist': currentArtistId,
+      'tong_tien_rut_ra': parseInt(price),
+      'bank_name': selectedBank,
+      'bank_id': stkBank,
+    }
+    const validationErrors = validateFormData(formData);
+    if (validationErrors.length > 0) {
+      alert("Lỗi  tk 6 ký tự", validationErrors);
+  } else {
     const response = await createWithdraw(formData);
     if (response.success){
       alert('Rút tiền thành công!');
-      onClose();
+      onclose();
     } else {
       alert('Lỗi rút tiền!');
     }
+  }
+    
   }
   function getCurrentDate() {
     const currentDate = new Date();
@@ -106,7 +124,7 @@ const ArtistWithdrawalModal = ({ isOpen, onClose ,tongTienCoTheRut}) => {
             onChange={(e) => setSelectedBank(e.target.value)}
           > {
               nganHangList.map((bank, index) => (
-                <option key={index} value={bank.ma}>
+                <option key={index} value={bank.ten}>
                   {bank.ten}
                 </option>
               ))

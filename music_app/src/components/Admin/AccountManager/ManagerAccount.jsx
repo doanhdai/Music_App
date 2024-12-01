@@ -295,17 +295,15 @@ const ManagerAccount = () => {
               <CiCirclePlus size={20} />
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
-                isEditMode ? "bg-[#E0066F]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isEditMode ? "bg-[#E0066F]" : "bg-black"
+                }`}
               onClick={handleEditClick}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
-                isDeleteMode ? "bg-[#E0066F]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isDeleteMode ? "bg-[#E0066F]" : "bg-black"
+                }`}
               onClick={handleDeleteClick}
             >
               <MdDeleteOutline size={20} />

@@ -16,8 +16,11 @@ import { formatDate } from "../../utils";
 import EditSongModal from "../../pages/artist/components/EditSongModal";
 import { PlayerContext } from "../../context/PlayerContext";
 import SongDetailModal from "../../pages/artist/components/SongDetailModal";
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ManagerSong = () => {
+ // const [songsData ,setSongsData] = useState([]);
   const { songsData } = useContext(PlayerContext);
   const [selectedSong, setSelectedSong] = useState(null);
   const [baihat, setSong] = useState(songsData);
@@ -28,32 +31,42 @@ const ManagerSong = () => {
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All_status");
 
-
+  useEffect(() =>{
+    //api chua xong
+    fetch(``)
+  },[editSongModalState]);
   const actionList = {
     delete: " xóa",
     edit: "chỉnh sửa",
     details: " xem chi tiết",
   };
-  const displayStatus = (status) => {
-    switch (status) {
-      case 2:
-        return "Chờ duyệt";
-      case 1:
-        return "Công khai";
-      case 0:
-        return "bị Khóa";
-      default:
-        return "";
-    }
-  };
+
   const handleClickStatusChange = (actionType) => {
     // status include details,edit,delete
     if (actionType === currentActionType) {
       setCurrentActionType("details");
-      alert(`Thoát trạng thái ${actionList[actionType]}`);
+      toast.info(`Thoát trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } else {
       setCurrentActionType(actionType);
-      alert(`Đang ở trạng thái ${actionList[actionType]}`);
+      toast.info(`Đang ở trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
   const removeVietnamese = (str) => {
@@ -72,7 +85,7 @@ const ManagerSong = () => {
     setDetailsSongModalState(true);
   };
   const handleShowEditModal = () => {
-  
+
     setEditSongModalState(true);
   };
   const handleCloseDetailModal = () => {
@@ -83,7 +96,7 @@ const ManagerSong = () => {
 
   function deleteSong() {
     //gửi data song để xóa
-    alert("xoa" );
+    alert("xoa");
   }
 
   const clickedAction = {
@@ -93,7 +106,7 @@ const ManagerSong = () => {
   };
   const fetchSongDetailData = async (ma_bai_hat) => {
     try {
-      
+
       const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
       const data = await response.json();
       console.log(data.data);
@@ -122,13 +135,13 @@ const ManagerSong = () => {
   function isDateMatch(itemDate, inputDate) {
     const itemDateObj = new Date(itemDate);
     const inputDateObj = new Date(inputDate);
-    
+
     return (
       itemDateObj.getFullYear() === inputDateObj.getFullYear() ||
       itemDateObj.getMonth() === inputDateObj.getMonth() ||
       itemDateObj.getDate() === inputDateObj.getDate()
     );
-}
+  }
   const filteredSongs = () => {
     return songsData.filter((song) => {
       const matchesText = removeVietnamese(song.ten_bai_hat)
@@ -204,9 +217,8 @@ const ManagerSong = () => {
           <div className="flex space-x-5">
             <div
               onClick={() => handleClickStatusChange("edit")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdOutlineEdit size={20} />
             </div>
@@ -241,7 +253,7 @@ const ManagerSong = () => {
                 >
                   <p className="text-white">{item.ma_bai_hat}</p>
                   <p className="text-[15px] flex items-center">
-                    <img className="inline w-10 mr-2" src={item.hinh_anh} alt="error"/>
+                    <img className="inline w-10 mr-2" src={item.hinh_anh} alt="error" />
                     {item.ten_bai_hat}
                   </p>
                   <p className="text-[15px] hidden sm:block">{item.album}</p>

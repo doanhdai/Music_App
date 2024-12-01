@@ -20,7 +20,9 @@ const AdminContent = () => {
                             <HeaderAdmin />
                         </div>
                         <div className='h-[88.5%] my-2 bg-gradient-to-b from-[#311523] to-[#121212]'>
-                            <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
+                            <Suspense fallback={<div className="wrap-loader">
+                                <span className="loader"></span>
+                            </div>}>
                                 <Outlet />
                             </Suspense>
                         </div>

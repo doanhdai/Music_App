@@ -144,7 +144,7 @@ function listDaysInRange(start, end) { // lấy mảng chứa các ngày từ ng
 
 
 const ManagerStatistical = () => {
-  const { contractsData, formatDate, premiumList, philuotnghe, setPhiluotnghe, dangkyPremium } = useContext(AdminContext);
+  const { contractsData, formatDate, premiumList, philuotnghe, setPhiluotnghe, dangkyPremium, phieuruttien } = useContext(AdminContext);
   const [indexThoiGianSelected, setIndexThoiGian] = useState(1);
   const [indexLoaiSelected, setIndexLoai] = useState(1);
   const [startDay, setStartDay] = useState(getDate(0));
@@ -463,7 +463,7 @@ const ManagerStatistical = () => {
       const end = new Date(endDay.split("/").reverse().join("-"));
 
       if (start >= end) {
-        alert('Khoảng ngày không hợp lệ. Ngày bắt đầu phải bé hơn ngày kết thúc!');
+        message.error('Khoảng ngày không hợp lệ. Ngày bắt đầu phải bé hơn ngày kết thúc!');
 
       } else {
         const timeDifference = end - start;
@@ -474,7 +474,7 @@ const ManagerStatistical = () => {
         if (daysDifference <= 32)
           setStartDay(value);
         else
-          alert('Ngày bắt đầu và ngày kết thúc chênh lệch không quá 32 ngày!');
+          message.error('Ngày bắt đầu và ngày kết thúc chênh lệch không quá 32 ngày!');
       }
 
     } else if (name === 'endDay') {
@@ -482,7 +482,7 @@ const ManagerStatistical = () => {
       const end = new Date(value.split("/").reverse().join("-"));
 
       if (start >= end) {
-        alert('Khoảng ngày không hợp lệ. Ngày bắt đầu phải bé hơn ngày kết thúc!');
+        message.error('Khoảng ngày không hợp lệ. Ngày bắt đầu phải bé hơn ngày kết thúc!');
 
       } else {
         const timeDifference = end - start;
@@ -493,7 +493,7 @@ const ManagerStatistical = () => {
         if (daysDifference <= 32)
           setEndDay(value);
         else
-          alert('Ngày bắt đầu và ngày kết thúc chênh lệch không quá 32 ngày!');
+          message.error('Ngày bắt đầu và ngày kết thúc chênh lệch không quá 32 ngày!');
       }
 
     }
@@ -506,7 +506,7 @@ const ManagerStatistical = () => {
 
   const callAPI_updatePhi = async () => {
     try {
-      alert(philuotnghe.ma_phi);
+
       const response = await axios.put(`http://localhost:8000/api/phi-luot-nghe/${philuotnghe.ma_phi}`, {
         gia_tien_luot_nghe: parseInt(valueUpdate)
       });
