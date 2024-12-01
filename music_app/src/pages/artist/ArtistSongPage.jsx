@@ -41,10 +41,28 @@ const ArtistSongPage = () => {
     // status include details,edit,delete
     if (actionType === currentActionType) {
       setCurrentActionType("details");
-      alert(`Thoát trạng thái ${actionList[actionType]}`);
+      toast.info(`Thoát trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } else {
       setCurrentActionType(actionType);
-      alert(`Đang ở trạng thái ${actionList[actionType]}`);
+      toast.info(`Đang ở trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
   // fetch data from server
@@ -243,7 +261,7 @@ const SongList = ({ songsData, currentActionType, setCurrentActionType }) => {
         </div>
       ) : (<> 
       <div className=" py-2 grid grid-cols-5 sm:grid-cols-[4fr_2fr_2fr_2fr] pl-2 text-center  text-[#fff] ">
-        <p>Tên bài hất</p>
+        <p>Tên bài hát</p>
         <p>Album</p>
         <p>Trạng thái</p>
         <img className="m-auto w-4 " src={assets.clock_icon}></img>{" "}

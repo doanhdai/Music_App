@@ -24,31 +24,19 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   const currentMaQuyen = account.ma_quyen;
   const isReadOnly = currentMaQuyen === 'AUTH0002' ? true : false;
   useEffect(() => {
-    const fetchSongs = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum.ma_album}`);
-        const data = await response.json();
-        const fetchSelectedSong = () =>{
-          if (data.data.songs === undefined || data.data.songs === null) {
-            return [];
-          }
-          else return data.data.songs
-        }
-        setSelectedSongs(fetchSelectedSong);
-        setOriginAlbumData(data.data);
-        setStatusAlbum(data.data.trang_thai);
-        setAvatarPreview(data.data.hinh_anh);       
-        console.log(data.data)
-      } catch (error) {
-        console.error('Error fetching songs:', error);
-      }
-    };
+        fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum.ma_album}/songs`)
+          .then(res=>res.json())
+          .then(res => {
+            setOriginAlbumData(res.album);
+            setStatusAlbum(res.album.trang_thai);
+            setAvatarPreview(res.album.hinh_anh); 
+            setSelectedSongs(res.album.songs);  
+            console.log(res.album);
+          })
+        
+             
   
-    if (selectedAlbum.ma_album) {
-      fetchSongs();
-    }
-  }
-  ,[selectedAlbum.ma_album])
+  },[selectedAlbum.ma_album])
   
 
   const statusList = [
@@ -78,60 +66,81 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
     }
   };
 
-  const handleSubmit =async (e) => {
-
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formFileImage = new FormData();
-    formFileImage.append('image', file);
-    
-    const avatar = file === null ? avatarPreview : await uploadImage(formFileImage);
-    const formData = {
-      "ten_album": albumName,
-      "hinh_anh": avatar,
-      "trang_thai": 1,
-      "songs": selectedSongs
-      }
-    // Handle the form submission logic here
-    console.log("submit",formData);
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body:  JSON.stringify(formData),
-      });
-  
-      if (!response.ok) {
-        // Attempt to parse the error message from the backend
-        const errorData = await response.json();
-        throw new Error(errorData.message || "An error occurred while processing your request.");
-      }
 
-      //Parse the successful response
-      const data = await response.json();
-      console.log("Form submitted successfully:", data);
-      toast.success('Tạo album thành công', {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
+    try {
+        // Prepare the image file for upload
+        const formFileImage = new FormData();
+        if (file) {
+            formFileImage.append('image', file);
+        }
+
+        // Upload the image if a file is provided, otherwise use the preview
+        const avatar = file ? await uploadImage(formFileImage) : avatarPreview;
+
+        // Construct the form data
+        const formData = {
+            "ten_album": albumName,
+            "hinh_anh": avatar,
+            "trang_thai": statusAlbum,
+            "songs": selectedSongs || []
+        };
+
+        console.log("Submitting form data:", formData);
+
+        // Submit the form data to the server
+        const response = await fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum?.ma_album}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData),
         });
-        onClose()
+
+        // Check if the response is successful
+        if (!response.ok) {
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch {
+                errorData = { message: "Unknown error occurred." };
+            }
+            throw new Error(errorData.message || "An error occurred while processing your request.");
+        }
+
+        // Parse and log the successful response
+        const data = await response.json();
+        console.log("Form submitted successfully:", data);
+
+        // Display success notification
+        toast.success('Sửa album thành công', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+        });
+
+        // Call the onClose handler if defined
+        if (onClose) onClose();
+
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error('Sửa album thất bại', {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
+        console.error("Error submitting form:", error);
+
+        // Display error notification
+        toast.error('Sửa album thất bại', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
         });
     }
-  };
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -224,7 +233,6 @@ export default EditAlbumModal;
 
 const AlbumSongList = ({selectedSongs,removeSong}) => {
   if (selectedSongs == null) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
-    console.log('l',selectedSongs);
     const songsArray = Object.values(selectedSongs);
     return (
       <div className="flex my-5 flex-col gap-2 h-60 overflow-y-auto ">

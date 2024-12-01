@@ -16,8 +16,11 @@ import { formatDate } from "../../utils";
 import EditSongModal from "../../pages/artist/components/EditSongModal";
 import { PlayerContext } from "../../context/PlayerContext";
 import SongDetailModal from "../../pages/artist/components/SongDetailModal";
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ManagerSong = () => {
+ // const [songsData ,setSongsData] = useState([]);
   const { songsData } = useContext(PlayerContext);
   const [selectedSong, setSelectedSong] = useState(null);
   const [baihat, setSong] = useState(songsData);
@@ -28,7 +31,10 @@ const ManagerSong = () => {
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All_status");
 
-
+  useEffect(() =>{
+    //api chua xong
+    fetch(``)
+  },[editSongModalState]);
   const actionList = {
     delete: " xóa",
     edit: "chỉnh sửa",
@@ -50,10 +56,28 @@ const ManagerSong = () => {
     // status include details,edit,delete
     if (actionType === currentActionType) {
       setCurrentActionType("details");
-      alert(`Thoát trạng thái ${actionList[actionType]}`);
+      toast.info(`Thoát trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } else {
       setCurrentActionType(actionType);
-      alert(`Đang ở trạng thái ${actionList[actionType]}`);
+      toast.info(`Đang ở trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
   const removeVietnamese = (str) => {
