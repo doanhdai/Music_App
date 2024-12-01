@@ -7,15 +7,15 @@ import { uploadImage } from "../../../services/UserServices";
 import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AddAlbumModal = ({ onClose, modalState }) => {
+const AddAlbumModal = ({ handleCloseAddAlbumModal, modalState }) => {
   if (modalState === false) return null;
-  return <AlbumUpLoad closeModal= {onClose}/>;
+  return <AlbumUpLoad closeModal= {handleCloseAddAlbumModal}/>;
 };
 export default AddAlbumModal;
 
 
 
-const AlbumUpLoad = ({closeModal}) => {
+const AlbumUpLoad = ({closeModal,}) => {
 
 
   const [albumName, setAlbumName] = useState("");
@@ -135,11 +135,11 @@ const AlbumUpLoad = ({closeModal}) => {
         pauseOnHover: false,
         draggable: true,
         });
-      closeModal()
+      closeModal();
+      
     } catch (error) {
       // Handle errors
-      console.error("Error submitting form:", error);
-      
+      console.error("Error submitting form:", error);  
     }
   };
   return (
