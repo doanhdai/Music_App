@@ -10,7 +10,7 @@ import { formatDate, removeVietnamese } from "../../../utils";
 import { assets } from "../../../assets/assets";
 import axios from "axios";
 const ManagerAccount = () => {
-  const { accountsData } = useContext(AdminContext);
+  const { accountsData, setAccountsData } = useContext(AdminContext);
 
   const [accounts, setAccounts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -23,7 +23,7 @@ const ManagerAccount = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("All_role");
   const [filterStatus, setFilterStatus] = useState("All_status");
-
+  // const [permissions, setPermissions] = useState([]);
   const maskPassword = (password) => "*".repeat(password.length);
   useEffect(() => {
     setAccounts(accountsData);
@@ -39,7 +39,26 @@ const ManagerAccount = () => {
         return "";
     }
   };
-
+  // const getPermissions = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "http://localhost:8000/api/decentralizations"
+  //     );
+  //     const filteredPermissions = response.data.filter(
+  //       (item) =>
+  //         item.ma_phan_quyen !== "AUTH0001" &&
+  //         item.ma_phan_quyen !== "AUTH0002" &&
+  //         item.ma_phan_quyen !== "AUTH0003"
+  //     );
+  //     setPermissions(filteredPermissions);
+  //     console.log(permissions);
+  //   } catch (error) {
+  //     console.error("Lỗi khi gọi API:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getPermissions();
+  // }, []);
   const showDeleteConfirm = (account) => {
     setSelectedAccount(account);
     setIsModalVisible(true);
@@ -81,6 +100,8 @@ const ManagerAccount = () => {
 
   const handleAddCancel = () => {
     setIsAddModalVisible(false);
+    resetFields();
+    onCancel();
   };
 
   //hàm sử lí khi sửa tài khoản
@@ -201,32 +222,8 @@ const ManagerAccount = () => {
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
-  const updateAccountToArtist = async (ma_tk) => {
-    try {
-      const res = await axios.patch(
-        `http://localhost:8000/api/accounts/${ma_tk}/toartist`
-      );
-      console.log("Cập nhật quyền hạn thành công:", res.data);
-
-      // Cập nhật danh sách tài khoản
-      setAccounts((prevAccounts) =>
-        prevAccounts.map((account) =>
-          account.ma_tk === ma_tk
-            ? {
-                ...account,
-                phan_quyen: {
-                  ...account.phan_quyen,
-                  ma_phan_quyen: "AUTH0002",
-                  ten_quyen_han: "Nghệ sĩ",
-                },
-              }
-            : account
-        )
-      );
-      setIsModalVisible(false);
-    } catch (error) {
-      console.error("Lỗi khi cập nhật quyền hạn:", error);
-    }
+  const handleAccountAdded = (newAccount) => {
+    setAccountsData((prevAccounts) => [...prevAccounts, newAccount]);
   };
 
   useEffect(() => {
@@ -369,6 +366,7 @@ const ManagerAccount = () => {
       <AddEmployeeAccountForm
         isModal={isAddModalVisible}
         onCancel={handleAddCancel}
+        onAccountAdded={handleAccountAdded}
       />
       <Modal
         title={isDeleteMode ? "Xác nhận xóa" : "Chỉnh sửa tài khoản"}

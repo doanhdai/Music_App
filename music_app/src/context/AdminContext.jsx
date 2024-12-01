@@ -199,6 +199,7 @@ const AdminContextProvider = (props) => {
     philuotnghe,
     setPhiluotnghe,
     dangkyPremium,
+    setAccountsData,
   };
 
   return (
