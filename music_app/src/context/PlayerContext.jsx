@@ -29,6 +29,7 @@ const PlayerContextProvider = (props) => {
   const [thongbaoList, setThongbaoList] = useState([]);
   const [isShuffle, setIsShuffle] = useState(false); // Trạng thái có đang trộn bài hát hay không
   const [shuffledSongs, setShuffledSongs] = useState([]); // Danh sách bài hát đã trộn
+  const [isRepeat, setIsRepeat] = useState(false);
   const [time, setTime] = useState({
     currentTime: { second: 0, minute: 0 },
     totalTime: { second: 0, minute: 0 },
@@ -78,7 +79,12 @@ const PlayerContextProvider = (props) => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.onended = () => {
-        next();
+        if (isRepeat) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play();
+        } else {
+          next();
+        }
       };
     }
 
@@ -87,7 +93,8 @@ const PlayerContextProvider = (props) => {
         audioRef.current.onended = null;
       }
     };
-  }, [track, songsData, songDataById]);
+  }, [isRepeat, track, songsData, songDataById]);
+
   const getLikesData = async () => {
     try {
       const response = await axios.get(
@@ -241,40 +248,44 @@ const PlayerContextProvider = (props) => {
     };
   }, []);
   const next = async () => {
-    let songsList = songDataById.length === 0 ? songsData : songDataById;
-    let currentIndex = getCurrentIndexInSongData(track.ma_bai_hat, songsList);
-    if (currentIndex == songsList.length - 1) {
-      setSongDataById([]);
-      currentIndex = -1;
-      songsList = songsData;
-    }
-    if (currentIndex < songsList.length - 1) {
-      const nextTrack = songsList[currentIndex + 1];
-      setLoadingTrack(true);
-      setRealPlayTime(0);
-      setTrack(nextTrack);
-      saveToPlayedSongData(nextTrack.ma_bai_hat);
-
-      // Xóa dữ liệu bài hát cũ và set dữ liệu mới
-      localStorage.removeItem("musicPlayerState");
-      localStorage.setItem(
-        "musicPlayerState",
-        JSON.stringify({
-          track: nextTrack,
-          currentTime: 0,
-        })
-      );
-
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = nextTrack.link_bai_hat;
-        audioRef.current.oncanplay = () => {
-          audioRef.current.play();
-          setPlayStatus(true);
-        };
+    if (isShuffle) {
+      playRandomSong();
+    } else {
+      let songsList = songDataById.length === 0 ? songsData : songDataById;
+      let currentIndex = getCurrentIndexInSongData(track.ma_bai_hat, songsList);
+      if (currentIndex == songsList.length - 1) {
+        setSongDataById([]);
+        currentIndex = -1;
+        songsList = songsData;
       }
+      if (currentIndex < songsList.length - 1) {
+        const nextTrack = songsList[currentIndex + 1];
+        setLoadingTrack(true);
+        setRealPlayTime(0);
+        setTrack(nextTrack);
+        saveToPlayedSongData(nextTrack.ma_bai_hat);
 
-      setLoadingTrack(false);
+        // Xóa dữ liệu bài hát cũ và set dữ liệu mới
+        localStorage.removeItem("musicPlayerState");
+        localStorage.setItem(
+          "musicPlayerState",
+          JSON.stringify({
+            track: nextTrack,
+            currentTime: 0,
+          })
+        );
+
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.src = nextTrack.link_bai_hat;
+          audioRef.current.oncanplay = () => {
+            audioRef.current.play();
+            setPlayStatus(true);
+          };
+        }
+
+        setLoadingTrack(false);
+      }
     }
   };
 
@@ -464,6 +475,45 @@ const PlayerContextProvider = (props) => {
       );
     }
   };
+  const toggleRepeat = () => {
+    setIsRepeat((prev) => !prev);
+  };
+
+
+  const playRandomSong = () => {
+    if (songsData.length > 1) {
+      let randomIndex;
+      let currentIndex = getCurrentIndexInSongData(
+        track?.ma_bai_hat,
+        songsData
+      );
+
+      do {
+        randomIndex = Math.floor(Math.random() * songsData.length);
+      } while (randomIndex === currentIndex); // Đảm bảo bài hát mới không trùng bài hiện tại
+
+      const randomTrack = songsData[randomIndex];
+      setTrack(randomTrack);
+      setRealPlayTime(0);
+
+      localStorage.setItem(
+        "musicPlayerState",
+        JSON.stringify({
+          track: randomTrack,
+          currentTime: 0,
+        })
+      );
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = randomTrack.link_bai_hat;
+        audioRef.current.oncanplay = () => {
+          audioRef.current.play();
+          setPlayStatus(true);
+        };
+      }
+    }
+  };
   const contextValue = {
     audioRef,
     scrollHomeRef,
@@ -507,8 +557,11 @@ const PlayerContextProvider = (props) => {
     setPlaylistId,
     isGettingPlaylistData,
     setIsGettingPlaylistData,
+    isRepeat,
+    toggleRepeat,
     // toggleShuffle,
     isShuffle,
+    setIsShuffle
   };
 
   return (

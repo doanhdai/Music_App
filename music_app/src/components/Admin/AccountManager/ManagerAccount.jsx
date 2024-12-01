@@ -6,8 +6,9 @@ import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import AddEmployeeAccountForm from "./AddEmployeeAccountForm";
 import { AdminContext } from "../../../context/AdminContext";
-import { formatDate } from "../../../utils";
+import { formatDate, removeVietnamese } from "../../../utils";
 import { assets } from "../../../assets/assets";
+import axios from "axios";
 const ManagerAccount = () => {
   const { accountsData } = useContext(AdminContext);
 
@@ -34,8 +35,6 @@ const ManagerAccount = () => {
         return "bị khóa";
       case 1:
         return "hoạt động";
-      case 2:
-        return "xóa";
       default:
         return "";
     }
@@ -54,15 +53,28 @@ const ManagerAccount = () => {
     }
   };
 
-  const handleOkDelete = () => {
-    setAccounts((prevAccounts) =>
-      prevAccounts.map((account) =>
-        account === selectedAccount ? { ...account, trang_thai: 0 } : account
-      )
-    );
-    setIsModalVisible(false);
-    setIsDeleteMode(false);
+  const handleOkDelete = async () => {
+    const { ma_tk } = selectedAccount;
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/accounts/${ma_tk}`,
+        {
+          trang_thai: 2,
+        }
+      );
+      console.log("Cập nhật trạng thái tài khoản thành công:", response.data);
+      setAccounts((prevAccounts) =>
+        prevAccounts.filter((account) => account.ma_tk !== ma_tk)
+      );
+
+      setIsModalVisible(false);
+      setIsDeleteMode(false);
+    } catch (error) {
+      console.error("Lỗi khi xóa tài khoản:", error);
+      alert("Không thể xóa tài khoản. Vui lòng thử lại.");
+    }
   };
+
   const handleAddClick = () => {
     setIsAddModalVisible(true);
   };
@@ -70,16 +82,73 @@ const ManagerAccount = () => {
   const handleAddCancel = () => {
     setIsAddModalVisible(false);
   };
-  const handleOkEdit = () => {
-    setAccounts((prevAccounts) =>
-      prevAccounts.map((account) =>
-        account === selectedAccount
-          ? { ...account, role: editedRole, trang_thai: editedStatus }
-          : account
-      )
-    );
-    setIsModalVisible(false);
-    setIsEditMode(false);
+
+  //hàm sử lí khi sửa tài khoản
+  const handleOkEdit = async () => {
+    const { ma_tk } = selectedAccount;
+    let updatedAccount = { ...selectedAccount };
+    let isUpdated = false;
+
+    try {
+      // Kiểm tra và cập nhật quyền hạn
+      if (
+        editedRole !== selectedAccount.phan_quyen.ma_phan_quyen &&
+        editedRole !== ""
+      ) {
+        if (
+          selectedAccount.phan_quyen.ma_phan_quyen === "AUTH0002" &&
+          editedRole === "AUTH0003"
+        ) {
+          console.error("Không thể chuyển quyền từ Nghệ sĩ về Người nghe.");
+          alert("Không thể chuyển quyền từ Nghệ sĩ về Người nghe.");
+          return;
+        }
+
+        if (editedRole === "AUTH0002") {
+          const resRole = await axios.patch(
+            `http://localhost:8000/api/accounts/${ma_tk}/toartist`
+          );
+          console.log("Cập nhật quyền hạn thành công:", resRole.data);
+          updatedAccount = {
+            ...updatedAccount,
+            phan_quyen: { ma_phan_quyen: "AUTH0002", ten_quyen_han: "Nghệ sĩ" },
+          };
+          isUpdated = true;
+        }
+      }
+
+      // Kiểm tra và cập nhật trạng thái
+      if (editedStatus !== selectedAccount.trang_thai && editedStatus !== "") {
+        const resStatus = await axios.patch(
+          `http://localhost:8000/api/accounts/${ma_tk}`,
+          {
+            trang_thai: editedStatus,
+          }
+        );
+        console.log("Cập nhật trạng thái thành công:", resStatus.data);
+        updatedAccount = {
+          ...updatedAccount,
+          trang_thai: editedStatus,
+        };
+        isUpdated = true;
+      }
+
+      if (isUpdated) {
+        setAccounts((prevAccounts) =>
+          prevAccounts.map((account) =>
+            account.ma_tk === ma_tk ? updatedAccount : account
+          )
+        );
+        console.log("Cập nhật tài khoản thành công:", updatedAccount);
+      } else {
+        console.log("Không có thay đổi nào cần cập nhật.");
+      }
+
+      setIsModalVisible(false);
+      setIsEditMode(false);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật tài khoản:", error);
+    }
   };
 
   const handleCancel = () => {
@@ -117,17 +186,55 @@ const ManagerAccount = () => {
 
   const applyFilters = () => {
     return accountsData.filter((account) => {
-      const matchesSearchTerm = account.email
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      const matchesSearchTerm =
+        account.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        removeVietnamese(account.user.ten_user)
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        account.ma_tk.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesRole =
-        filterRole === "All_role" || account.role === filterRole;
+        filterRole === "All_role" ||
+        account.phan_quyen.ma_phan_quyen === filterRole;
       const matchesStatus =
         filterStatus === "All_status" ||
-        displayStatus(account.trang_thai) === filterStatus;
+        account.trang_thai.toString() === filterStatus;
       return matchesSearchTerm && matchesRole && matchesStatus;
     });
   };
+  const updateAccountToArtist = async (ma_tk) => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:8000/api/accounts/${ma_tk}/toartist`
+      );
+      console.log("Cập nhật quyền hạn thành công:", res.data);
+
+      // Cập nhật danh sách tài khoản
+      setAccounts((prevAccounts) =>
+        prevAccounts.map((account) =>
+          account.ma_tk === ma_tk
+            ? {
+                ...account,
+                phan_quyen: {
+                  ...account.phan_quyen,
+                  ma_phan_quyen: "AUTH0002",
+                  ten_quyen_han: "Nghệ sĩ",
+                },
+              }
+            : account
+        )
+      );
+      setIsModalVisible(false);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật quyền hạn:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isModalVisible) {
+      setEditedRole("");
+      setEditedStatus("");
+    }
+  }, [isModalVisible]);
   return (
     <div className="pt-3 mx-[38px]">
       <div className="flex justify-between items-center">
@@ -153,9 +260,9 @@ const ManagerAccount = () => {
               onChange={(e) => setFilterRole(e.target.value)}
             >
               <option value="All_role">Tất cả người dùng</option>
-              <option>Người nghe</option>
-              <option>Nghệ sĩ</option>
-              <option>Manager</option>
+              <option value="AUTH0003">Người nghe</option>
+              <option value="AUTH0002">Nghệ sĩ</option>
+              <option value="AUTH0001">Manager</option>
             </select>
           </div>
           <div className="flex flex-col">
@@ -166,9 +273,8 @@ const ManagerAccount = () => {
               onChange={(e) => setFilterStatus(e.target.value)}
             >
               <option value="All_status">Tất cả</option>
-              <option>Chờ duyệt</option>
-              <option>Công khai</option>
-              <option>Khóa</option>
+              <option value="1">Hoạt động</option>
+              <option value="0">Khóa</option>
             </select>
           </div>
           <div className="flex flex-col">
@@ -243,17 +349,16 @@ const ManagerAccount = () => {
                         : item.ma_tk}
                     </Link>
                     <p className="text-sm flex items-center">
-                      <img
-                        className="h-9 rounded-full mr-2"
-                        src={assets.mck}
-                      />
+                      <img className="h-9 rounded-full mr-2" src={assets.mck} />
                       {item.user.ten_user}
                     </p>
                     <p className="text-sm">{item.email}</p>
-                    <p className="text-sm hidden sm:block">{maskPassword(item.mat_khau)}</p>
+                    <p className="text-sm hidden sm:block">
+                      {maskPassword(item.mat_khau)}
+                    </p>
 
                     <p className="text-sm">{formatDate(item.ngay_tao)}</p>
-                    <p className="text-sm">{/* {item.user.ten_quyen_han} */}</p>
+                    <p className="text-sm">{item.phan_quyen.ten_quyen_han}</p>
                     <p className="text-sm">{displayStatus(item.trang_thai)}</p>
                   </div>
                 )
@@ -281,12 +386,12 @@ const ManagerAccount = () => {
             <label>Quyền:</label>
             <select
               value={editedRole}
-              onChange={(e) => setEditedRole(parseInt(e.target.value))}
+              onChange={(e) => setEditedRole(e.target.value)}
               className="w-full p-2 border rounded mb-4"
             >
-              <option value={1}>Người nghe</option>
-              <option value={2}>Nghệ sĩ</option>
-              <option value={3}>Manager</option>
+              <option value="">Chọn quyền</option>
+              <option value="AUTH0003">Người nghe</option>
+              <option value="AUTH0002">Nghệ sĩ</option>
             </select>
             <label className="mt-2">Trạng thái:</label>
             <select
@@ -294,8 +399,9 @@ const ManagerAccount = () => {
               onChange={(e) => setEditedStatus(parseInt(e.target.value))}
               className="w-full p-2 border rounded"
             >
-              <option value={1}>Hoạt động</option>
-              <option value={2}>Khóa</option>
+              <option value="">Chọn trạng thái</option>
+              <option value="1">Hoạt động</option>
+              <option value="0">Khóa</option>
             </select>
           </div>
         )}

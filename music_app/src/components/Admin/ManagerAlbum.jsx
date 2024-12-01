@@ -10,13 +10,15 @@ import SongItem from "./ManagerAlbum/SongItem";
 import EditAlbumModal from "../../pages/artist/components/EditAlbumModal";
 import { PlayerContext } from "../../context/PlayerContext";
 import AlbumDetailModal from "../../pages/artist/components/AlbumDetailModal";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const ManagerAlbum = () => {
   const { albumsData } = useContext(PlayerContext);
   const [album, setAlbum] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [currentActionType, setCurrentActionType] = useState("details");
   const [editAlbumModalState, setEditAlbumModalState] = useState(false);
+  const [detailsAlbumSodalState, setDetailsAlbumModalState] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
@@ -42,7 +44,10 @@ const ManagerAlbum = () => {
   };
 
   const closeModal = () => {
+    setDetailsAlbumModalState(false);
+    setEditAlbumModalState(false);
     setSelectedAlbum(null);
+    setCurrentActionType("details")
   };
 
   const actionList = {
@@ -72,15 +77,34 @@ const ManagerAlbum = () => {
   const handleClickStatusChange = (actionType) => {
     if (actionType === currentActionType) {
       setCurrentActionType("details");
-      alert(`Thoát trạng thái ${actionList[actionType]}`);
+      toast.info(`Thoát trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } else {
       setCurrentActionType(actionType);
-      alert(`Đang ở trạng thái ${actionList[actionType]}`);
+      toast.info(`Đang ở trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
 
   const handleShowDetails = (album) => {
     setSelectedAlbum(album);
+    setDetailsAlbumModalState(true);
   };
 
   const handleShowEditModal = (album) => {
@@ -88,9 +112,10 @@ const ManagerAlbum = () => {
     setEditAlbumModalState(true);
   };
 
-  const handleCloseDetailModal = () => {
+  const handleCloseEditModal = () => {
     setSelectedAlbum(null);
     setEditAlbumModalState(false);
+    setCurrentActionType("details");
   };
 
   const deleteAlbum = (album) => {
@@ -199,14 +224,7 @@ const ManagerAlbum = () => {
             >
               <MdOutlineEdit size={20} />
             </div>
-            <div
-              onClick={() => handleClickStatusChange("delete")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "delete" ? "bg-[#EB2272]" : "bg-black"
-              }`}
-            >
-              <MdDeleteOutline size={20} />
-            </div>
+
           </div>
         </div>
       </div>
@@ -254,13 +272,15 @@ const ManagerAlbum = () => {
           ))
         )}
         {selectedAlbum && (
-          <AlbumDetailModal album={selectedAlbum} onClose={closeModal} />
+          <AlbumDetailModal 
+            album={selectedAlbum} onClose={closeModal} 
+            detailsAlbumSodalState={detailsAlbumSodalState} />
         )}
         <EditAlbumModal
           className="float-start"
           selectedAlbum={selectedAlbum}
           editAlbumModalState={editAlbumModalState}
-          onClose={handleCloseDetailModal}
+          onClose={handleCloseEditModal}
         />
       </div>
     </div>

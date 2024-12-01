@@ -7,7 +7,7 @@ import { extractDayMonthYear } from "../../../assets/assets";
 
 const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
   if (!detailsSongModalState ) return null;
-  //console.log(songData)
+  console.log(songData)
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
@@ -49,14 +49,14 @@ const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
               </h5>
               <h5 className="text-sm text-gray-400">
                 Nghệ sĩ:
-                <span className="text-white">{songData?.ma_artist}</span>
+                <span className="text-white">{songData?.artist}</span>
               </h5>
             </div>
           </div>
           <div className="flex flex-col  gap-3 justify-between w-[60] ml-2">
             <div className="flex flex-row items-center text-gray-400 gap-2">
               <FaHeart className="" />
-              <span>{songData?.luot_yeu_thich}</span>
+              <span>{songData? songData?.luot_yeu_thich: 0}</span>
             </div>
             <div className="flex flex-row items-center text-gray-400 gap-2">
               <FaHeadphones />
