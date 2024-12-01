@@ -84,21 +84,7 @@ const AlbumUpLoad = ({closeModal,}) => {
     e.preventDefault();
     const formFileImage = new FormData();
     formFileImage.append('image', file);
-    const checkMaAlbumNotNull =  selectedSongs.some(item => item.ma_album !== null); // Kiểm tra nếu có phần tử có ma_album là null
-    if (checkMaAlbumNotNull) {
-      toast.error('🦄 Lỗi tồn tại bài hát đã có album', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        
-        });
-      throw new Error("Lỗi tồn tại bài hát đã có album");  
-     }
+    
     
     try {
       
@@ -123,6 +109,32 @@ const AlbumUpLoad = ({closeModal,}) => {
         const errorData = await response.json();
         throw new Error(errorData.message || "An error occurred while processing your request.");
       }
+      //gui thong bao
+      const notificationData = {
+          ten_tb: 'Xét duyệt album',
+          noi_dung_tb: `Yêu cầu xét duyệt album ${albumName}`,
+          ma_tk: currentArtistId,
+      };
+
+      fetch(`http://127.0.0.1:8000/api/notifications`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(notificationData)
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log('Success:', 1 , data);
+      })
+      .catch(error => {
+          console.error('Error:', error);
+      });
 
       //Parse the successful response
       const data = await response.json();
@@ -271,7 +283,20 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
         updatedSelection.splice(index, 1);
       } else {
         // Add the item to the array
+        if (item.ma_album === null){
         updatedSelection.push(item);
+      } else{
+        toast.error('🦄 Lỗi tồn tại bài hát đã có album', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",   
+          });
+      }
       }
     
       setSelectedSongs(updatedSelection);
