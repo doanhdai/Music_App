@@ -213,13 +213,13 @@ const ManagerAccount = () => {
         prevAccounts.map((account) =>
           account.ma_tk === ma_tk
             ? {
-                ...account,
-                phan_quyen: {
-                  ...account.phan_quyen,
-                  ma_phan_quyen: "AUTH0002",
-                  ten_quyen_han: "Nghệ sĩ",
-                },
-              }
+              ...account,
+              phan_quyen: {
+                ...account.phan_quyen,
+                ma_phan_quyen: "AUTH0002",
+                ten_quyen_han: "Nghệ sĩ",
+              },
+            }
             : account
         )
       );
@@ -298,17 +298,15 @@ const ManagerAccount = () => {
               <CiCirclePlus size={20} />
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
-                isEditMode ? "bg-[#E0066F]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isEditMode ? "bg-[#E0066F]" : "bg-black"
+                }`}
               onClick={handleEditClick}
             >
               <MdOutlineEdit size={20} />
             </div>
             <div
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${
-                isDeleteMode ? "bg-[#E0066F]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer ${isDeleteMode ? "bg-[#E0066F]" : "bg-black"
+                }`}
               onClick={handleDeleteClick}
             >
               <MdDeleteOutline size={20} />
