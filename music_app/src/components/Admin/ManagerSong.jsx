@@ -85,7 +85,7 @@ const ManagerSong = () => {
     setDetailsSongModalState(true);
   };
   const handleShowEditModal = () => {
-  
+
     setEditSongModalState(true);
   };
   const handleCloseDetailModal = () => {
@@ -96,7 +96,7 @@ const ManagerSong = () => {
 
   function deleteSong() {
     //gửi data song để xóa
-    alert("xoa" );
+    alert("xoa");
   }
 
   const clickedAction = {
@@ -106,7 +106,7 @@ const ManagerSong = () => {
   };
   const fetchSongDetailData = async (ma_bai_hat) => {
     try {
-      
+
       const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
       const data = await response.json();
       console.log(data.data);
@@ -135,13 +135,13 @@ const ManagerSong = () => {
   function isDateMatch(itemDate, inputDate) {
     const itemDateObj = new Date(itemDate);
     const inputDateObj = new Date(inputDate);
-    
+
     return (
       itemDateObj.getFullYear() === inputDateObj.getFullYear() ||
       itemDateObj.getMonth() === inputDateObj.getMonth() ||
       itemDateObj.getDate() === inputDateObj.getDate()
     );
-}
+  }
   const filteredSongs = () => {
     return songsData.filter((song) => {
       const matchesText = removeVietnamese(song.ten_bai_hat)
@@ -217,9 +217,8 @@ const ManagerSong = () => {
           <div className="flex space-x-5">
             <div
               onClick={() => handleClickStatusChange("edit")}
-              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${
-                currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
-              }`}
+              className={`w-[36px] h-[36px] flex items-center justify-center rounded-full ${currentActionType === "edit" ? "bg-[#EB2272]" : "bg-black"
+                }`}
             >
               <MdOutlineEdit size={20} />
             </div>
@@ -254,7 +253,7 @@ const ManagerSong = () => {
                 >
                   <p className="text-white">{item.ma_bai_hat}</p>
                   <p className="text-[15px] flex items-center">
-                    <img className="inline w-10 mr-2" src={item.hinh_anh} alt="error"/>
+                    <img className="inline w-10 mr-2" src={item.hinh_anh} alt="error" />
                     {item.ten_bai_hat}
                   </p>
                   <p className="text-[15px] hidden sm:block">{item.album}</p>

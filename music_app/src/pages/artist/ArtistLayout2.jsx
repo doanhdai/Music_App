@@ -52,7 +52,9 @@ const ArtistLayout2 = () => {
         <ArtistSidebar2 />
         <div ref={displayColor} className="w-[100%] m-2 pt-4 rounded text-white overflow-auto lh:w-[75%] lg:ml-0">
           <ArtistNavbar className="mb-10" />
-          <Suspense fallback={<div className="h-screen bg-black text-white flex justify-center items-center">Loading...</div>}>
+          <Suspense fallback={<div className="wrap-loader">
+            <span className="loader"></span>
+          </div>}>
             <Outlet />
           </Suspense>
           <hr />

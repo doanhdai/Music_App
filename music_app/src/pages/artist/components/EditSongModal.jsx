@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useRef, useEffect,useContext,} from "react";
+import { useState, useRef, useEffect, useContext, } from "react";
 import axios from 'axios';
 import { FaXmark } from "react-icons/fa6";
 import UploadMusic from "../../../services/UploadMusic";
 import { uploadImage } from "../../../services/UserServices";
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PlayerContext } from '../../../context/PlayerContext';
 
@@ -73,7 +73,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
 
   const fileInputRef = useRef(null);
   const ACCESS_TOKEN = 'sl.CBlFYSqqTUj6sgoe-QyANXoRjH6oXWnaAHtrA8pBH--urVct8hmFwoeClAma2b72nUtOeiRdKI-YiPGKYFwBMuqBiCd_IokudNZB9rUj4XtP6VS0N9jGpg7u0OTDhrLRj1sEB_wH27Ki3R4';
-  
+
   const account = JSON.parse(localStorage.getItem('account')) || {};
   const currentMaQuyen = account.ma_quyen;
   const isReadOnly = currentMaQuyen === 'AUTH0002' ? true : false; //quyen nghe readonly
@@ -84,12 +84,12 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   const handleFileMusicLowChange = (event) => {
     setFileMusicLow(event.target.files[0]);
   };
-  const uploadMusicHigh = UploadMusic({ 
+  const uploadMusicHigh = UploadMusic({
     quality: "high",
     file: fileMusicHigh,
     accessToken: ACCESS_TOKEN,
   });
-  const uploadMusicLow = UploadMusic({ 
+  const uploadMusicLow = UploadMusic({
     quality: "low",
     file: fileMusicLow,
     accessToken: ACCESS_TOKEN,
@@ -114,12 +114,12 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
       ten_artist: item.ten_subartist
     }));
     setSelectedArtists(newArray)
-  },[songDetails.ma_bai_hat])
+  }, [songDetails.ma_bai_hat])
 
   const statusList = [
-    { status: 0, ten: "Ẩn"},
+    { status: 0, ten: "Ẩn" },
     { status: 1, ten: 'Công khai' },
-    { status: 2, ten: 'Chờ duyệt'}
+    { status: 2, ten: 'Chờ duyệt' }
   ];
   const toggleDropdown = (type) => {
     if (type === "genre") {
@@ -132,7 +132,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   };
 
   const handleCheckboxChange = (type, value) => {
-    console.log("edit",selectedArtists)
+    console.log("edit", selectedArtists)
     if (type === "genre") {
       setSelectedGenres((prevSelectedGenres) => {
         if (prevSelectedGenres.some((g) => g.ma_the_loai === value.ma_the_loai)) {
@@ -147,14 +147,14 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
       setSelectedArtists((prevSelectedArtists) => {
         if (prevSelectedArtists.some((g) => g.ma_artist === value.ma_artist)) {
           return prevSelectedArtists.filter(
-            (g) => g.ma_artist !== value.ma_artist 
+            (g) => g.ma_artist !== value.ma_artist
           );
         } else {
           return [...prevSelectedArtists, value];
         }
       });
     }
-    
+
   };
 
   // Get current date
@@ -171,7 +171,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
       audio.src = URL.createObjectURL(file);
     });
   };
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -180,12 +180,12 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
 
     try {
 
-        const avatar = file === null? songDetailOriginal.hinh_anh : await uploadImage(formFileImage);
-        const shareLinkHigh =fileMusicHigh === null ? songDetailOriginal.link_bai_hat[1].link_bai_hat : await uploadMusicHigh();
-        const shareLinkLow =fileMusicLow === null ? songDetailOriginal.link_bai_hat[0].link_bai_hat : await uploadMusicLow();
-        // link chat cu chat luong cao khi khong them file
-       // nếu không có file mới set thời lượng 90s
-      const audioDuration =fileMusicLow === null ? 90 : await getAudioDuration(shareLinkLow );
+      const avatar = file === null ? songDetailOriginal.hinh_anh : await uploadImage(formFileImage);
+      const shareLinkHigh = fileMusicHigh === null ? songDetailOriginal.link_bai_hat[1].link_bai_hat : await uploadMusicHigh();
+      const shareLinkLow = fileMusicLow === null ? songDetailOriginal.link_bai_hat[0].link_bai_hat : await uploadMusicLow();
+      // link chat cu chat luong cao khi khong them file
+      // nếu không có file mới set thời lượng 90s
+      const audioDuration = fileMusicLow === null ? 90 : await getAudioDuration(shareLinkLow);
 
       // Prepare form data
       const formData = {
@@ -200,26 +200,26 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
         the_loai: selectedGenres.map(genre => genre.ma_the_loai),
         links: {
           cao: shareLinkHigh,
-          thap: shareLinkLow ,
+          thap: shareLinkLow,
         },
         subartists: selectedArtists.map(artist => artist.ma_artist)
       };
-    console.log(formData);
-    
+      console.log(formData);
+
       // Submit song
-    // const response = await createSong(formData);
-    //  if (response.success ) {
-    //   toast.success('Sửa bài hát thành công', {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     });
-    //     onClose()
-    //  } 
-     
+      // const response = await createSong(formData);
+      //  if (response.success ) {
+      //   toast.success('Sửa bài hát thành công', {
+      //     position: "top-right",
+      //     autoClose: 5000,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     });
+      //     onClose()
+      //  } 
+
     } catch (error) {
       console.error("Song upload error:", error);
     }
@@ -234,8 +234,8 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
         <h2 className="text-2xl font-bold mb-5 text-center">Sửa bài hát mới</h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row">
-           {/* Image Upload Section */}
-           <div className="rounded-lg mr-5 max-w-sm">
+            {/* Image Upload Section */}
+            <div className="rounded-lg mr-5 max-w-sm">
               <h2 className="text-lg font-semibold text-gray-400 mb-2">Chèn ảnh</h2>
               <input
                 type="file"
@@ -261,7 +261,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
               </div>
             </div>
             <div className="w-sm">
-            <div className="mb-4 relative">
+              <div className="mb-4 relative">
                 <label className="block text-lg font-semibold text-gray-400">
                   Trạng thái
                 </label>
@@ -271,13 +271,13 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                   onChange={(e) => setStatusSong(e.target.value)}
                 > {
                     statusList.map((item, index) => (
-                      <option key={index} value={item.status}  disabled={isReadOnly && item.status === 1}>
+                      <option key={index} value={item.status} disabled={isReadOnly && item.status === 1}>
                         {item.ten}
                       </option>
                     ))
-                  }      
+                  }
                 </select>
-            </div> 
+              </div>
               {/* Song Name */}
               <div className="mb-4">
                 <label className="text-lg font-semibold text-gray-400">
@@ -291,9 +291,9 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                   className="w-full p-2 border border-gray-300 text-black rounded"
                   placeholder="Enter song name"
                 />
-              </div>            
-                {/* Status Selection */}
-              
+              </div>
+              {/* Status Selection */}
+
               {/* Genre Selection */}
               <div className="mb-4 relative">
                 <label className="block text-lg font-semibold text-gray-400">
@@ -396,14 +396,14 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                 )}
               </div>
               {/* High-Quality File Upload */}
-              <div className={`mb-4 ${isReadOnly ? "hidden" : "" }`}>
+              <div className={`mb-4 ${isReadOnly ? "hidden" : ""}`}>
                 <label className="block text-lg font-semibold text-gray-400 mb-2">
                   File chất lượng cao
                 </label>
                 <input
                   type="file"
-                  
-                    onChange={handleFileMusicHighChange} 
+
+                  onChange={handleFileMusicHighChange}
                   className="w-full p-2 border bg-white text-black rounded"
                 />
                 {fileMusicHigh && (
@@ -414,13 +414,13 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
               </div>
 
               {/* Low-Quality File Upload */}
-              <div className={`mb-4 ${isReadOnly ? "hidden" : "" }`}>
+              <div className={`mb-4 ${isReadOnly ? "hidden" : ""}`}>
                 <label className="block text-lg font-semibold text-gray-400 mb-2">
                   File chất lượng thấp
                 </label>
                 <input
                   type="file"
-                 
+
                   onChange={handleFileMusicLowChange}
                   className="w-full p-2 border bg-white text-black rounded"
                 />

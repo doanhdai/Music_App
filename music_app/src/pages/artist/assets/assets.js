@@ -8,3 +8,5 @@ export const assets = {
     albumArtistSlidebar,
     goldCointStatistic,
 }
+
+
