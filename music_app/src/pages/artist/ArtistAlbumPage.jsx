@@ -38,7 +38,7 @@ const ArtistAlbumPage = () => {
     fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`)
       .then((res) => res.json())
       .then((res) => setAlbumsData(res.albums));
-  }, [currentActionType]);
+  }, [currentActionType,showAddAlbumModal]);
 
   const handleShowAddAlbumModal = () => {
     setShowAddAlbumModal(true);
@@ -128,7 +128,7 @@ const ArtistAlbumPage = () => {
             </button>
           </div>
           <AddAlbumModal
-            onClose={handleCloseAddAlbumModal}
+            handleCloseAddAlbumModal={handleCloseAddAlbumModal}
             modalState={showAddAlbumModal}
           />
         </div>
