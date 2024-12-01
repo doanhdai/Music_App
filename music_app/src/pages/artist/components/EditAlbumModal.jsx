@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   if (editAlbumModalState === false || selectedAlbum === null) return null;
   
-  
+  console.log(selectedAlbum)
   const { songsData } = useContext(PlayerContext);
   const [albumName, setAlbumName] = useState(selectedAlbum.ten_album);
   const [selectedSongs,setSelectedSongs] = useState([]);

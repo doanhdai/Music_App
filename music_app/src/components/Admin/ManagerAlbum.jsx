@@ -10,7 +10,8 @@ import SongItem from "./ManagerAlbum/SongItem";
 import EditAlbumModal from "../../pages/artist/components/EditAlbumModal";
 import { PlayerContext } from "../../context/PlayerContext";
 import AlbumDetailModal from "../../pages/artist/components/AlbumDetailModal";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const ManagerAlbum = () => {
   const { albumsData } = useContext(PlayerContext);
   const [album, setAlbum] = useState([]);
@@ -46,6 +47,7 @@ const ManagerAlbum = () => {
     setDetailsAlbumModalState(false);
     setEditAlbumModalState(false);
     setSelectedAlbum(null);
+    setCurrentActionType("details")
   };
 
   const actionList = {
@@ -75,10 +77,28 @@ const ManagerAlbum = () => {
   const handleClickStatusChange = (actionType) => {
     if (actionType === currentActionType) {
       setCurrentActionType("details");
-      alert(`Thoát trạng thái ${actionList[actionType]}`);
+      toast.info(`Thoát trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } else {
       setCurrentActionType(actionType);
-      alert(`Đang ở trạng thái ${actionList[actionType]}`);
+      toast.info(`Đang ở trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
 
@@ -95,6 +115,7 @@ const ManagerAlbum = () => {
   const handleCloseEditModal = () => {
     setSelectedAlbum(null);
     setEditAlbumModalState(false);
+    setCurrentActionType("details");
   };
 
   const deleteAlbum = (album) => {

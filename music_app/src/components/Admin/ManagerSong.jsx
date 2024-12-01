@@ -40,18 +40,7 @@ const ManagerSong = () => {
     edit: "chỉnh sửa",
     details: " xem chi tiết",
   };
-  const displayStatus = (status) => {
-    switch (status) {
-      case 2:
-        return "Chờ duyệt";
-      case 1:
-        return "Công khai";
-      case 0:
-        return "bị Khóa";
-      default:
-        return "";
-    }
-  };
+
   const handleClickStatusChange = (actionType) => {
     // status include details,edit,delete
     if (actionType === currentActionType) {
@@ -61,7 +50,7 @@ const ManagerSong = () => {
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
-        pauseOnHover: true,
+        pauseOnHover: false,
         draggable: true,
         progress: undefined,
         theme: "light",
@@ -73,7 +62,7 @@ const ManagerSong = () => {
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
-        pauseOnHover: true,
+        pauseOnHover: false,
         draggable: true,
         progress: undefined,
         theme: "light",
