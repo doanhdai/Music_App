@@ -76,8 +76,8 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
 
   const account = JSON.parse(localStorage.getItem('account')) || {};
   const currentMaQuyen = account.ma_quyen;
-  const isReadOnly = currentMaQuyen === 'AUTH0002' ? true : false; //quyen nghe readonly
-
+  const isAdmin = currentMaQuyen === 'AUTH0001' ? true: false; //check la admin
+ 
   const handleFileMusicHighChange = (event) => {
     setFileMusicHigh(event.target.files[0]);
   };
@@ -106,7 +106,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
     setOwnerId(songDetails?.ma_artist)
     setStatusSong(songDetails?.trang_thai)
     setSongName(songDetails?.ten_bai_hat)
-    setSelectedGenres(songDetails?.the_loai)
+    setSelectedGenres(songDetails?.the_loai )
     setAvatarPreview(songDetails?.hinh_anh)
     //doi key object ma_subartist to ma_artist..
     const newArray = songDetails.subartists?.map(item => ({
@@ -119,7 +119,8 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
   const statusList = [
     { status: 0, ten: "Ẩn" },
     { status: 1, ten: 'Công khai' },
-    { status: 2, ten: 'Chờ duyệt' }
+    { status: 2, ten: 'Chờ duyệt'},
+    { status: 3, ten: 'Từ chối duyệt'},
   ];
   const toggleDropdown = (type) => {
     if (type === "genre") {
@@ -243,11 +244,11 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                 accept="image/*"
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
-                readOnly={isReadOnly}
+                readOnly={ isAdmin}
               />
               <div
                 className="flex bg-white aspect-square items-center justify-center w-40 border-2 rounded-lg cursor-pointer"
-                onClick={() => fileInputRef.current.click()}
+                onClick={!isAdmin? () => fileInputRef.current.click(): ()=>{}}
               >
                 {avatarPreview ? (
                   <img
@@ -266,12 +267,16 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                   Trạng thái
                 </label>
                 <select
-                  className="rounded-md px-2 py-1 ml-3 text-white bg-black "
+                  className="rounded-md px-3 py-1  text-white bg-black "
                   value={statusSong}
                   onChange={(e) => setStatusSong(e.target.value)}
                 > {
                     statusList.map((item, index) => (
-                      <option key={index} value={item.status} disabled={isReadOnly && item.status === 1}>
+                      <option key={index} value={item.status}  
+                      disabled={
+                        (isAdmin && (item.status === 0 || item.status === 2 || item.status === 3)) ||
+                        (!isAdmin && (item.status === 1 || item.status === 3 ))
+                      }>
                         {item.ten}
                       </option>
                     ))
@@ -287,7 +292,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                   type="text"
                   value={songName}
                   onChange={(e) => setSongName(e.target.value)}
-                  readOnly={isReadOnly}
+                  readOnly={!isAdmin}
                   className="w-full p-2 border border-gray-300 text-black rounded"
                   placeholder="Enter song name"
                 />
@@ -303,14 +308,14 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                   type="text"
                   readOnly
                   value={
-                    selectedGenres.length
+                    selectedGenres !== null
                       ? selectedGenres.map(theLoai => theLoai.ten_the_loai).join(", ")
                       : "Chọn thể loại"
                   }
                   onClick={() => toggleDropdown("genre")}
                   className="w-full p-2 border border-gray-300 rounded text-black cursor-pointer"
                 />
-                {genreDropdownOpen && isReadOnly && (
+                {genreDropdownOpen && isAdmin && (
                   <div className="absolute z-10 bg-white border border-gray-300 w-full max-h-40 overflow-y-auto">
                     <input
                       type="text"
@@ -361,7 +366,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                   onClick={() => toggleDropdown("artist")}
                   className="w-full p-2 border border-gray-300 rounded text-black cursor-pointer"
                 />
-                {artistDropdownOpen && isReadOnly && (
+                {artistDropdownOpen && isAdmin && (
                   <div className="absolute z-10 bg-white border border-gray-300 w-full max-h-40 overflow-y-auto">
                     <input
                       type="text"
@@ -396,7 +401,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
                 )}
               </div>
               {/* High-Quality File Upload */}
-              <div className={`mb-4 ${isReadOnly ? "hidden" : ""}`}>
+              <div className={`mb-4 ${ isAdmin ? "" : "hidden" }`}>
                 <label className="block text-lg font-semibold text-gray-400 mb-2">
                   File chất lượng cao
                 </label>
@@ -414,7 +419,7 @@ const EditSongModal = ({ onClose, editSongModalState, songDetails }) => {
               </div>
 
               {/* Low-Quality File Upload */}
-              <div className={`mb-4 ${isReadOnly ? "hidden" : ""}`}>
+              <div className={`mb-4 ${ isAdmin ? "" : "hidden" }`}>
                 <label className="block text-lg font-semibold text-gray-400 mb-2">
                   File chất lượng thấp
                 </label>
