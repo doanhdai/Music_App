@@ -28,7 +28,7 @@ const ArtistAlbumPage = () => {
   const [selectedStatus, setSelectedStatus] = useState(3);
 
   const account = JSON.parse(localStorage.getItem('account')) || {};
-  const currentArtistId = account.ma_artist || "ACC0006";
+  const currentArtistId = account.ma_tk 
 
   //const currentArtistId = parsedUser.ma_tai_khoan;;
 

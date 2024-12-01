@@ -22,7 +22,8 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
 
   const account = JSON.parse(localStorage.getItem('account')) || {};
   const currentMaQuyen = account.ma_quyen;
-  const isReadOnly = currentMaQuyen === 'AUTH0002' ? true : false;
+  const isAdmin = currentMaQuyen === 'AUTH0001' ? true: false;
+  
   useEffect(() => {
         fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum.ma_album}/songs`)
           .then(res=>res.json())
@@ -42,7 +43,8 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   const statusList = [
     { status: 0, ten: "Ẩn"},
     { status: 1, ten: 'Công khai' },
-    { status: 2, ten: 'Chờ duyệt'}
+    { status: 2, ten: 'Chờ duyệt'},
+    { status: 3, ten: 'Không duyệt'}
   ]
   const handleSongRemoved = (songId) => {
     const updatedSelection = [...selectedSongs]; // Create a copy of the array
@@ -189,7 +191,7 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
                   onChange={(e) => setStatusAlbum(e.target.value)}
                 > {
                     statusList.map((item, index) => (
-                      <option key={index} value={item.status}  disabled={isReadOnly && item.status === 1}>
+                      <option key={index} value={item.status}  disabled={ item.status === 1}>
                         {item.ten}
                       </option>
                     ))

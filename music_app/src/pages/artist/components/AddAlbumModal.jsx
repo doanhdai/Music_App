@@ -84,21 +84,7 @@ const AlbumUpLoad = ({closeModal,}) => {
     e.preventDefault();
     const formFileImage = new FormData();
     formFileImage.append('image', file);
-    const checkMaAlbumNotNull =  selectedSongs.some(item => item.ma_album !== null); // Kiểm tra nếu có phần tử có ma_album là null
-    if (checkMaAlbumNotNull) {
-      toast.error('🦄 Lỗi tồn tại bài hát đã có album', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        
-        });
-      throw new Error("Lỗi tồn tại bài hát đã có album");  
-     }
+    
     
     try {
       
@@ -297,7 +283,20 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
         updatedSelection.splice(index, 1);
       } else {
         // Add the item to the array
+        if (item.ma_album === null){
         updatedSelection.push(item);
+      } else{
+        toast.error('🦄 Lỗi tồn tại bài hát đã có album', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",   
+          });
+      }
       }
     
       setSelectedSongs(updatedSelection);
