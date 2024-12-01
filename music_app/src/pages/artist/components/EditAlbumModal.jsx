@@ -4,7 +4,8 @@ import { uploadImage } from "../../../services/UserServices";
 import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { PlayerContext } from "../../../context/PlayerContext";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   if (editAlbumModalState === false || selectedAlbum === null) return null;
   
@@ -27,11 +28,16 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
       try {
         const response = await fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum.ma_album}`);
         const data = await response.json();
-        console.log(data.album)
-        setSelectedSongs(data.data.songs);
+        const fetchSelectedSong = () =>{
+          if (data.data.songs === undefined || data.data.songs === null) {
+            return [];
+          }
+          else return data.data.songs
+        }
+        setSelectedSongs(fetchSelectedSong);
         setOriginAlbumData(data.data);
         setStatusAlbum(data.data.trang_thai);
-        setAvatarPreview(data.data.hinh_anh);
+        setAvatarPreview(data.data.hinh_anh);       
         console.log(data.data)
       } catch (error) {
         console.error('Error fetching songs:', error);
@@ -42,7 +48,8 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
       fetchSongs();
     }
   }
-  ,[selectedAlbum?.ma_album])
+  ,[selectedAlbum.ma_album])
+  
 
   const statusList = [
     { status: 0, ten: "Ẩn"},
@@ -72,21 +79,58 @@ const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   };
 
   const handleSubmit =async (e) => {
-    e.preventDefault();
-    
+
     e.preventDefault();
     const formFileImage = new FormData();
     formFileImage.append('image', file);
     
-    const avatar = await uploadImage(formFileImage);
-      const formData = {
-        "ten_album": albumName,
-        "hinh_anh": avatar,
-        "songs": selectedSongs
-      
+    const avatar = file === null ? avatarPreview : await uploadImage(formFileImage);
+    const formData = {
+      "ten_album": albumName,
+      "hinh_anh": avatar,
+      "trang_thai": 1,
+      "songs": selectedSongs
       }
     // Handle the form submission logic here
-    console.log(formData);
+    console.log("submit",formData);
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body:  JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        // Attempt to parse the error message from the backend
+        const errorData = await response.json();
+        throw new Error(errorData.message || "An error occurred while processing your request.");
+      }
+
+      //Parse the successful response
+      const data = await response.json();
+      console.log("Form submitted successfully:", data);
+      toast.success('Tạo album thành công', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        });
+        onClose()
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error('Sửa album thất bại', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        });
+    }
   };
 
   return (
@@ -179,8 +223,8 @@ export default EditAlbumModal;
 
 
 const AlbumSongList = ({selectedSongs,removeSong}) => {
-  if (selectedSongs== null) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
-
+  if (selectedSongs == null) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
+    console.log('l',selectedSongs);
     const songsArray = Object.values(selectedSongs);
     return (
       <div className="flex my-5 flex-col gap-2 h-60 overflow-y-auto ">
@@ -294,3 +338,20 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
       </div>
     );
   };
+
+//   {
+//     "ten_album": "song a",
+//     "hinh_anh": "http://127.0.0.1:8000/storage/images/SjpY6xQTgqrx7tEwncKB3TigzpL2fRcTTFQFa39q.jpg",
+//     "trang_thai": 1,
+//     "songs": [
+//         {
+//             "ma_bai_hat": "BH0004",
+//             "ten_bai_hat": "Bóng Phù Hoa",
+//             "ma_album": null,
+//             "artist": "Phương Mỹ Chi",
+//             "thoi_luong": 4.35, 
+//             "ngay_phat_hanh": "2024-12-01 02:09:09" ,
+//             "trang_thai": 1
+//         }
+//     ]
+// }

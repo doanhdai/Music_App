@@ -56,10 +56,28 @@ const ArtistAlbumPage = () => {
     // status include details,edit,delete
     if (actionType === currentActionType) {
       setCurrentActionType("details");
-      alert(`Thoát trạng thái ${actionList[actionType]}`);
+      toast.info(`Thoát trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } else {
       setCurrentActionType(actionType);
-      alert(`Đang ở trạng thái ${actionList[actionType]}`);
+      toast.info(`Đang ở trạng thái ${actionList[actionType]}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
 
@@ -163,7 +181,12 @@ const AlbumList = ({ albumsData, currentActionType, setCurrentActionType }) => {
     setDetailsAlbumModalState(false);
     setEditAlbumModalState(false);
   };
-
+  const handleCloseEditModal = () => {
+    setSelectedAlbum(null);
+    setDetailsAlbumModalState(false);
+    setEditAlbumModalState(false);
+    setCurrentActionType("details");
+  };
   function deleteAlbum(album) {
     if (confirm(`Bạn có chắc muốn xóa album ${album.ten_album} không?`)) {
       fetch(`http://127.0.0.1:8000/api/albums/${album.ma_album}`, {
@@ -275,7 +298,7 @@ const AlbumList = ({ albumsData, currentActionType, setCurrentActionType }) => {
         className="float-start"
         selectedAlbum={selectedAlbum}
         editAlbumModalState={editAlbumModalState}
-        onClose={handleCloseDetailModal}
+        onClose={handleCloseEditModal}
       />
     </div>
   );
