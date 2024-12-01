@@ -19,7 +19,7 @@ const pageTitles = {
 };
 
 const HeaderAdmin = () => {
-    const { thongbaoList } = useContext(AdminContext);
+    const { thongbaoList, account } = useContext(AdminContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [isOpenn, setIsOpenn] = useState(false);

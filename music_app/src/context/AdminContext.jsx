@@ -21,7 +21,8 @@ const AdminContextProvider = (props) => {
   const [isGettingAdvertisementsData, setIsGettingAdvertisementsData] =
     useState(true);
   const [isGettingContractsData, setIsGettingContractsData] = useState(true);
-
+  const [thongbaoList, setThongbaoList] = useState([]);
+  const account = JSON.parse(localStorage.getItem("account")) || "";
   useEffect(() => {
     getAccountsData();
     getAdvertisersData();
@@ -33,6 +34,7 @@ const AdminContextProvider = (props) => {
     fetchTheLoaiList();
     fetchPhiluotnghe();
     fetchDangkyPremium();
+    getThongbaoList();
   }, []);
 
   const getAccountsData = async () => {
@@ -171,7 +173,14 @@ const AdminContextProvider = (props) => {
       console.log("Lỗi khi gọi API:", error);
     }
   };
-
+  const getThongbaoList = async () => {
+    try {
+      const response = await axios.get(`${url}/api/notifications`);
+      setThongbaoList(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const contextValue = {
     openNotification,
     url,
@@ -199,6 +208,8 @@ const AdminContextProvider = (props) => {
     philuotnghe,
     setPhiluotnghe,
     dangkyPremium,
+    thongbaoList, setThongbaoList,
+    account
   };
 
   return (
