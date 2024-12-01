@@ -31,10 +31,13 @@ const ManagerSong = () => {
   const [detailsSongModalState, setDetailsSongModalState] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All_status");
 
-  useEffect(() =>{
-    //api chua xong
-    fetch(``)
-  },[editSongModalState]);
+  // useEffect(() =>{
+  //   fetch(`http://127.0.0.1:8000/api/songs`)
+  //   .then(res => res.json())
+  //   .then(res => {
+  //     setSong(res.data)
+  //     setSongsData(res.data)})
+  // },[editSongModalState,]);
   const actionList = {
     delete: " xóa",
     edit: "chỉnh sửa",
@@ -104,10 +107,10 @@ const ManagerSong = () => {
     edit: () => handleShowEditModal(),
     delete: () => deleteSong(),
   };
-  const fetchSongDetailData = async (ma_bai_hat) => {
+  const fetchSongDetailData = async (song) => {
     try {
-
-      const response = await fetch(`http://127.0.0.1:8000/api/song/${ma_bai_hat}`);
+      //lay chi tiet bai hat nhung co loi tam thoi chua dung
+      const response = await fetch(`http://127.0.0.1:8000/api/song/${song.ma_bai_hat}`);
       const data = await response.json();
       console.log(data.data);
       setSelectedSong(data.data);
@@ -118,7 +121,7 @@ const ManagerSong = () => {
   function handleClickedSongItem(actionType, songInformation) {
     const action = clickedAction[actionType];
     console.log(songInformation);
-    fetchSongDetailData(songInformation.ma_bai_hat)
+    fetchSongDetailData(songInformation)
     if (action) {
       return clickedAction[actionType]();
     } else {
