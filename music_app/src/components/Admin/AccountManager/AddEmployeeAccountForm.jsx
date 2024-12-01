@@ -45,6 +45,7 @@ const AddEmployeeAccountForm = ({ isModal, onCancel, onAccountAdded }) => {
         "http://localhost:8000/api/accounts/admin",
         payload
       );
+      console.log(response.data)
       Modal.success({
         title: "Thành công",
         content: "Tài khoản đã được thêm thành công!",

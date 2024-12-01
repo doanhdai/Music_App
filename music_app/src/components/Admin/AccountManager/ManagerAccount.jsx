@@ -100,8 +100,8 @@ const ManagerAccount = () => {
 
   const handleAddCancel = () => {
     setIsAddModalVisible(false);
-    resetFields();
-    onCancel();
+    // resetFields();
+    // onCancel();
   };
 
   //hàm sử lí khi sửa tài khoản

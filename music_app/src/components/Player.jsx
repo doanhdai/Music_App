@@ -90,6 +90,8 @@ const Player = () => {
       updateListen();
     }
   }, [realPlayTime]);
+
+
   const updateListen = async () => {
     try {
       await axios.post(`${url}/api/song/listens/${track.ma_bai_hat}`);
@@ -114,6 +116,7 @@ const Player = () => {
     setShowAd(false);
     play();
   };
+
   return (
     <>
       {/* Modal Quảng cáo */}
@@ -226,7 +229,7 @@ const Player = () => {
             onChange={handleVolumeChange}
             className="w-20 bg-white h-1 rounded"
           />
-          <Link to="/song/2">
+          <Link to={`/song/${track?.ma_bai_hat}`}>
             <img className="w-3" src={assets.zoom_icon} alt="Zoom Icon" />
           </Link>
         </div>
