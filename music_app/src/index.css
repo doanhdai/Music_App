@@ -25,18 +25,18 @@
   color: white;
 }
 
-.custom-input {
+/* .custom-input {
   background-color: #4b4b4b;
   color: white;
   border: none;
-}
+} */
 
 /* .absolute {
   z-index: 50;
 } */
 
 
-
+/* 
 .custom-input {
   background-color: #4b4b4b;
   color: white;
@@ -58,19 +58,16 @@
   background-color: #4b4b4b !important;
   color: white !important;
   border-color: #ff4d4f !important;
-  /* Maintain the error border color */
 }
 
 .custom-modal .ant-form-item-has-error .ant-select-selector {
   background-color: #4b4b4b !important;
   color: white !important;
   border-color: #ff4d4f !important;
-  /* Maintain the error border color */
 }
 
 .custom-modal .ant-form-item-explain-error {
   color: #ff4d4f !important;
-  /* Maintain the error message color */
 }
 
 .custom-modal .ant-modal-content {
@@ -110,7 +107,7 @@
 
 .custom-modal .ant-modal-close:hover {
   color: white;
-}
+} */
 
 .wrap-loader {
   width: 100%;

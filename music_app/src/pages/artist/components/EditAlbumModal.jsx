@@ -1,70 +1,203 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useRef, useEffect, useContext } from "react";
-import ImageUpload from "./ImageUpload";
+import { uploadImage } from "../../../services/UserServices";
 import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { PlayerContext } from "../../../context/PlayerContext";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const EditAlbumModal = ({ onClose, editAlbumModalState, selectedAlbum }) => {
   if (editAlbumModalState === false || selectedAlbum === null) return null;
   
-  
+  console.log(selectedAlbum)
   const { songsData } = useContext(PlayerContext);
   const [albumName, setAlbumName] = useState(selectedAlbum.ten_album);
   const [selectedSongs,setSelectedSongs] = useState([]);
   const [originAlbumData, setOriginAlbumData] = useState()
-  const ImgRef = useRef(null);
-  const imgData = ImgRef.current?.getData()
+  
+  const [file, setFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const fileInputRef = useRef(null);
+  const [statusAlbum, setStatusAlbum] = useState(null);
 
+  const account = JSON.parse(localStorage.getItem('account')) || {};
+  const currentMaQuyen = account.ma_quyen;
+  const isAdmin = currentMaQuyen === 'AUTH0001' ? true: false;
+  
   useEffect(() => {
-    const fetchSongs = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/albums${selectedAlbum.ma_album}/songs`);
-        const data = await response.json();
-        setSelectedSongs(data.album.songs);
-        setOriginAlbumData(data.album);
-      } catch (error) {
-        console.error('Error fetching songs:', error);
-      }
-    };
+        fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum.ma_album}/songs`)
+          .then(res=>res.json())
+          .then(res => {
+            setOriginAlbumData(res.album);
+            setStatusAlbum(res.album.trang_thai);
+            setAvatarPreview(res.album.hinh_anh); 
+            setSelectedSongs(res.album.songs);  
+            console.log(res.album);
+          })
+        
+             
   
-    if (selectedAlbum.ma_album) {
-      fetchSongs();
-    }
-  }
-  ,[selectedAlbum.ma_album])
-  console.log(originAlbumData)
+  },[selectedAlbum.ma_album])
+  
 
+  const statusList = [
+    { status: 0, ten: "Ẩn"},
+    { status: 1, ten: 'Công khai' },
+    { status: 2, ten: 'Chờ duyệt'},
+    { status: 3, ten: 'Không duyệt'}
+  ]
   const handleSongRemoved = (songId) => {
-    const selectedItems = selectedSongs;
-    delete selectedItems[songId];
-    setSelectedSongs({...selectedItems });
+    const updatedSelection = [...selectedSongs]; // Create a copy of the array
+      // Find the index of the item in the array
+      const index = updatedSelection.findIndex(song => song.ma_bai_hat === songId);
+      if (index !== -1) {
+        // Remove the item if it's already in the array
+        updatedSelection.splice(index, 1);
+      } else {
+        // Add the item to the array
+        updatedSelection.push(item);
+      }
+      setSelectedSongs(updatedSelection);
   };
   
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Handle the form submission logic here
-    console.log({
-      albumName,
-      selectedSongs
-    });
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setAvatarPreview(URL.createObjectURL(selectedFile));
+    }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+        // Prepare the image file for upload
+        const formFileImage = new FormData();
+        if (file) {
+            formFileImage.append('image', file);
+        }
+
+        // Upload the image if a file is provided, otherwise use the preview
+        const avatar = file ? await uploadImage(formFileImage) : avatarPreview;
+
+        // Construct the form data
+        const formData = {
+            "ten_album": albumName,
+            "hinh_anh": avatar,
+            "trang_thai": statusAlbum,
+            "songs": selectedSongs || []
+        };
+
+        console.log("Submitting form data:", formData);
+
+        // Submit the form data to the server
+        const response = await fetch(`http://127.0.0.1:8000/api/albums/${selectedAlbum?.ma_album}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData),
+        });
+
+        // Check if the response is successful
+        if (!response.ok) {
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch {
+                errorData = { message: "Unknown error occurred." };
+            }
+            throw new Error(errorData.message || "An error occurred while processing your request.");
+        }
+
+        // Parse and log the successful response
+        const data = await response.json();
+        console.log("Form submitted successfully:", data);
+
+        // Display success notification
+        toast.success('Sửa album thành công', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+        });
+
+        // Call the onClose handler if defined
+        if (onClose) onClose();
+
+    } catch (error) {
+        console.error("Error submitting form:", error);
+
+        // Display error notification
+        toast.error('Sửa album thất bại', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+        });
+    }
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="max-w-xl mx-auto bg-[#1E1E1E] p-6 rounded-lg shadow-md relative ">
         <FaXmark className="absolute right-5 text-2xl cursor-pointer " onClick={onClose}/>
         <h2 className="text-2xl font-bold mb-5 text-center">
-            Tạo album mới
+            Sửa album
         </h2>
       {/*  submit form */}
         <form  id="albumForm" onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} initialImage={selectedAlbum.hinh_anh} className="w-56 flex-none" />
+            {/* Image Upload Section */}
+            <div className="rounded-lg mr-5 max-w-sm">
+              <h2 className="text-lg font-semibold text-gray-400 mb-2">Chèn ảnh</h2>
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              <div
+                className="flex bg-white aspect-square items-center justify-center w-40 border-2 rounded-lg cursor-pointer"
+                onClick={() => fileInputRef.current.click()}
+              >
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Uploaded"
+                    className="aspect-square object-cover rounded-lg"
+                  />
+                ) : (
+                  <span className="text-gray-400">Click để tải ảnh</span>
+                )}
+              </div>
+            </div>
 
             <div className="w-sm">
+            <div className="mb-4 relative">
+                <label className="block text-lg font-semibold text-gray-400">
+                  Trạng thái
+                </label>
+                <select
+                  className="rounded-md px-2 py-1 ml-3 text-white bg-black "
+                  value={statusAlbum}
+                  onChange={(e) => setStatusAlbum(e.target.value)}
+                > {
+                    statusList.map((item, index) => (
+                      <option key={index} value={item.status}  disabled={ item.status === 1}>
+                        {item.ten}
+                      </option>
+                    ))
+                  }      
+                </select>
+            </div> 
             <div className="mb-4">
                 <label className="text-lg font-semibold text-gray-400" >
                     Tên album
@@ -101,8 +234,7 @@ export default EditAlbumModal;
 
 
 const AlbumSongList = ({selectedSongs,removeSong}) => {
-  if (Object.keys(selectedSongs).length === 0) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
-
+  if (selectedSongs == null) return <div className="flex my-5 text-b flex-col gap-2 h-60 overflow-y-auto "><h3 >Album rỗng</h3> </div> 
     const songsArray = Object.values(selectedSongs);
     return (
       <div className="flex my-5 flex-col gap-2 h-60 overflow-y-auto ">
@@ -216,3 +348,20 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
       </div>
     );
   };
+
+//   {
+//     "ten_album": "song a",
+//     "hinh_anh": "http://127.0.0.1:8000/storage/images/SjpY6xQTgqrx7tEwncKB3TigzpL2fRcTTFQFa39q.jpg",
+//     "trang_thai": 1,
+//     "songs": [
+//         {
+//             "ma_bai_hat": "BH0004",
+//             "ten_bai_hat": "Bóng Phù Hoa",
+//             "ma_album": null,
+//             "artist": "Phương Mỹ Chi",
+//             "thoi_luong": 4.35, 
+//             "ngay_phat_hanh": "2024-12-01 02:09:09" ,
+//             "trang_thai": 1
+//         }
+//     ]
+// }

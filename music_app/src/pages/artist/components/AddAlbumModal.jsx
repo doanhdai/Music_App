@@ -3,25 +3,32 @@ import ImageUpload from "./ImageUpload";
 import { FaXmark } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { songData2 } from "../../../assets/assets";
+import { uploadImage } from "../../../services/UserServices";
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const AddAlbumModal = ({ onClose, modalState }) => {
+const AddAlbumModal = ({ handleCloseAddAlbumModal, modalState }) => {
   if (modalState === false) return null;
-  return <AlbumUpLoad closeModal= {onClose}/>;
+  return <AlbumUpLoad closeModal= {handleCloseAddAlbumModal}/>;
 };
 export default AddAlbumModal;
 
 
 
-const AlbumUpLoad = ({closeModal}) => {
+const AlbumUpLoad = ({closeModal,}) => {
 
-  const ImgRef = useRef(null);
+
   const [albumName, setAlbumName] = useState("");
   const [songsData, setSongsData] = useState(null)
   const [selectedSongs,setSelectedSongs] = useState([]);
   
-
-  const currentArtistId = "ACC0006";
-  //http://127.0.0.1:8000/api/songs/artist/ACC0003
+  const [file, setFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const fileInputRef = useRef(null);
+  const account = JSON.parse(localStorage.getItem('account')) || {};
+  const currentArtistId = account.ma_artist || "ACC0006"; 
+  //http://127.0.0.1:8000/api/songs/artist/ACC0003 
+  // lay bai hat dang cong khai theo nghe si
   useEffect(() => {
     const fetchSongs = async () => {
 
@@ -44,31 +51,52 @@ const AlbumUpLoad = ({closeModal}) => {
   }, [currentArtistId]);
 
   const handleSongRemoved = (songId) => {
-    const selectedItems = selectedSongs;
-    delete selectedItems[songId];
-    setSelectedSongs({...selectedItems });
+    const updatedSelection = [...selectedSongs]; // Create a copy of the array
+      // Find the index of the item in the array
+      const index = updatedSelection.findIndex(song => song.ma_bai_hat === songId);
+      if (index !== -1) {
+        // Remove the item if it's already in the array
+        updatedSelection.splice(index, 1);
+      } else {
+        // Add the item to the array
+        updatedSelection.push(item);
+      }
+      setSelectedSongs(updatedSelection);
   };
-  const imgData = ImgRef.current?.getData()
+ 
   
-  if (imgData){console.log("co anh") }else {console.log("no img data")}
-  
-  const formData = {
-    "ten_album": albumName,
-    "hinh_anh": "https://media.istockphoto.com/id/2160972981/vi/anh/hai-con-ong-thu-th%E1%BA%ADp-m%E1%BA%ADt-hoa-t%E1%BB%AB-m%E1%BB%99t-b%C3%B4ng-hoa-m%C3%A0u-v%C3%A0ng.jpg?s=1024x1024&w=is&k=20&c=Jr_JjNJSSUsxVoCDKN_EB2d8rvTXYSRjRkTG4CxOB3A=",
-    "songs": selectedSongs
-    // "songs" : [{
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setAvatarPreview(URL.createObjectURL(selectedFile));
+    }
+  };
+  // "songs" : [{
     //   "ma_bai_hat": "BH0003",
     //   "ten_bai_hat": "Những ngôi sao xa xôi",
     //   "thoi_luong": 3.5,
     //   "ngay_phat_hanh": "2023-09-18 00:00:00",
     //   "ma_album": null
     // }]
-  }
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const formFileImage = new FormData();
+    formFileImage.append('image', file);
+    
+    
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/albums/${currentArtistId}`, {
+      
+      const avatar = await uploadImage(formFileImage);
+      const formData = {
+        "ten_album": albumName,
+        "hinh_anh": avatar,
+        "songs": selectedSongs    
+      }
+      
+      console.log(formData);
+      const response = await fetch(`http://127.0.0.1:8000/api/albums/artist/${currentArtistId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -81,15 +109,49 @@ const AlbumUpLoad = ({closeModal}) => {
         const errorData = await response.json();
         throw new Error(errorData.message || "An error occurred while processing your request.");
       }
+      //gui thong bao
+      const notificationData = {
+          ten_tb: 'Xét duyệt album',
+          noi_dung_tb: `Yêu cầu xét duyệt album ${albumName}`,
+          ma_tk: currentArtistId,
+      };
 
-      // Parse the successful response
+      fetch(`http://127.0.0.1:8000/api/notifications`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(notificationData)
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log('Success:', 1 , data);
+      })
+      .catch(error => {
+          console.error('Error:', error);
+      });
+
+      //Parse the successful response
       const data = await response.json();
       console.log("Form submitted successfully:", data);
-      alert("Form submitted successfully!");
+      toast.success('Tạo album thành công', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        });
+      closeModal();
+      
     } catch (error) {
       // Handle errors
-      console.error("Error submitting form:", error);
-      alert(`Error: ${error.message}`);
+      console.error("Error submitting form:", error);  
     }
   };
   return (
@@ -102,7 +164,31 @@ const AlbumUpLoad = ({closeModal}) => {
       {/*  submit form */}
         <form  id="albumForm" onSubmit={handleSubmit}>
           <div className="flex flex-row">
-            <ImageUpload ref={ImgRef} className="w-56 flex-none" />
+             {/* Image Upload Section */}
+             <div className="rounded-lg mr-5 max-w-sm">
+              <h2 className="text-lg font-semibold text-gray-400 mb-2">Chèn ảnh</h2>
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              <div
+                className="flex bg-white aspect-square items-center justify-center w-40 border-2 rounded-lg cursor-pointer"
+                onClick={() => fileInputRef.current.click()}
+              >
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Uploaded"
+                    className="aspect-square object-cover rounded-lg"
+                  />
+                ) : (
+                  <span className="text-gray-400">Click để tải ảnh</span>
+                )}
+              </div>
+            </div>
 
             <div className="w-sm">
             <div className="mb-4">
@@ -158,7 +244,9 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
            
             <p className="text-wrap max-w-80 flex-1 ">{song.ten_bai_hat}</p>
             <p className="flex-none">{song.thoi_luong}</p>
-            <button type="button" className="p-2 hover:bg-slate-500" onClick={() => removeSong(song.ma_bai_hat) }>X</button>
+            <button type="button" className="p-2 hover:bg-slate-500" onClick={() => removeSong(song.ma_bai_hat) }>
+              <FaXmark />
+            </button>
           </div>
         ))}
       </div>
@@ -169,7 +257,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
     // dataKey is the key of data when api return result ex: { songs: [....]}
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    let count = 0;
+
     
     const toggleDropdown = () => {
       setDropdownOpen(!isDropdownOpen);
@@ -195,7 +283,20 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
         updatedSelection.splice(index, 1);
       } else {
         // Add the item to the array
+        if (item.ma_album === null){
         updatedSelection.push(item);
+      } else{
+        toast.error('🦄 Lỗi tồn tại bài hát đã có album', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",   
+          });
+      }
       }
     
       setSelectedSongs(updatedSelection);
@@ -234,7 +335,7 @@ const AlbumSongList = ({selectedSongs,removeSong}) => {
                   >
                     <input
                       type="checkbox"
-                      checked={selectedSongs.some(song => song.ma_bai_hat === item.ma_bai_hat)}
+                      checked={selectedSongs?.some(song => song.ma_bai_hat === item.ma_bai_hat)}
                       onChange={() => handleCheckboxChange(item)}
                       className="mr-2"
                     />

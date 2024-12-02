@@ -1,10 +1,9 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import Index from "../pages/NotFound";
 
 export const PlayerContext = createContext();
-let playedSongData = []; //biến này lưu mã 3 bài gần nhất theo thứ tự đã nghe, để phục vụ cho back song nút previous
+let playedSongData = []; //biến này lưu mã 10 bài gần nhất theo thứ tự đã nghe, để phục vụ cho back song nút previous
 const PlayerContextProvider = (props) => {
   const audioRef = useRef();
   const seekBg = useRef();
@@ -28,17 +27,17 @@ const PlayerContextProvider = (props) => {
   const [volume, setVolume] = useState(1);
   const [songLiked, setSongLiked] = useState([]);
   const [thongbaoList, setThongbaoList] = useState([]);
+  const [isShuffle, setIsShuffle] = useState(false); // Trạng thái có đang trộn bài hát hay không
+  const [shuffledSongs, setShuffledSongs] = useState([]); // Danh sách bài hát đã trộn
+  const [isRepeat, setIsRepeat] = useState(false);
   const [time, setTime] = useState({
     currentTime: { second: 0, minute: 0 },
     totalTime: { second: 0, minute: 0 },
   });
   const [isCallingAPISongArtist, setIsCallingAPISongArtist] = useState(true);
   const [isGettingPlaylistData, setIsGettingPlaylistData] = useState(true);
-  const getLastNumberFromCode = (code) => {
-    // cái này sẽ sai khi mã bài hát không liên tục: có 19 bài hát nhưng có mã bài hát BH029 thì sẽ sai
-    const match = code.match(/\d+$/);
-    return match ? parseInt(match[0], 10) : null;
-  };
+  const [isGettingSongLike, setIsGettingSongLike] = useState(true);
+
 
   const getCurrentIndexInSongData = (ma_bai_hat, songList) => {
     return songList.findIndex((element) => element.ma_bai_hat == ma_bai_hat);
@@ -75,6 +74,27 @@ const PlayerContextProvider = (props) => {
       console.error(error);
     }
   };
+
+  // Tự động chuyển sang bài hát tiếp theo
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.onended = () => {
+        if (isRepeat) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play();
+        } else {
+          next();
+        }
+      };
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.onended = null;
+      }
+    };
+  }, [isRepeat, track, songsData, songDataById]);
+
   const getLikesData = async () => {
     try {
       const response = await axios.get(
@@ -83,8 +103,6 @@ const PlayerContextProvider = (props) => {
       const filteredSongs = response.data.data.filter(
         (song) => song.trang_thai === 1
       );
-      console.log('danh sach yeu thich');
-      console.log(filteredSongs);
       setSongLiked(filteredSongs);
     } catch (error) {
       console.log(error);
@@ -123,8 +141,6 @@ const PlayerContextProvider = (props) => {
         `${url_api}/api/playlist/${currentAccount}`
       );
       setPlaylistsData(response.data.data);
-      console.log('danh sách playlist');
-      console.log(response.data.data);
     } catch (error) {
       // console.error(error);
       // console.log(currentAccount);
@@ -232,42 +248,44 @@ const PlayerContextProvider = (props) => {
     };
   }, []);
   const next = async () => {
-    let songsList = songDataById.length === 0 ? songsData : songDataById;
-    let currentIndex = getCurrentIndexInSongData(track.ma_bai_hat, songsList);
-    if (currentIndex == songsList.length - 1) {
-      setSongDataById([]);
-      currentIndex = -1;
-      songsList = songsData;
-    }
-    if (currentIndex < songsList.length - 1) {
-      const nextTrack = songsList[currentIndex + 1];
-      setLoadingTrack(true);
-      setRealPlayTime(0);
-      setTrack(nextTrack);
-      saveToPlayedSongData(nextTrack.ma_bai_hat);
-
-      // Xóa dữ liệu bài hát cũ và set dữ liệu mới
-      localStorage.removeItem("musicPlayerState");
-      localStorage.setItem(
-        "musicPlayerState",
-        JSON.stringify({
-          track: nextTrack,
-          currentTime: 0,
-        })
-      );
-
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = nextTrack.link_bai_hat;
-
-        // Lắng nghe sự kiện oncanplay để phát nhạc
-        audioRef.current.oncanplay = () => {
-          audioRef.current.play();
-          setPlayStatus(true);
-        };
+    if (isShuffle) {
+      playRandomSong();
+    } else {
+      let songsList = songDataById.length === 0 ? songsData : songDataById;
+      let currentIndex = getCurrentIndexInSongData(track.ma_bai_hat, songsList);
+      if (currentIndex == songsList.length - 1) {
+        setSongDataById([]);
+        currentIndex = -1;
+        songsList = songsData;
       }
+      if (currentIndex < songsList.length - 1) {
+        const nextTrack = songsList[currentIndex + 1];
+        setLoadingTrack(true);
+        setRealPlayTime(0);
+        setTrack(nextTrack);
+        saveToPlayedSongData(nextTrack.ma_bai_hat);
 
-      setLoadingTrack(false);
+        // Xóa dữ liệu bài hát cũ và set dữ liệu mới
+        localStorage.removeItem("musicPlayerState");
+        localStorage.setItem(
+          "musicPlayerState",
+          JSON.stringify({
+            track: nextTrack,
+            currentTime: 0,
+          })
+        );
+
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.src = nextTrack.link_bai_hat;
+          audioRef.current.oncanplay = () => {
+            audioRef.current.play();
+            setPlayStatus(true);
+          };
+        }
+
+        setLoadingTrack(false);
+      }
     }
   };
 
@@ -309,36 +327,6 @@ const PlayerContextProvider = (props) => {
 
       setLoadingTrack(false);
     }
-    // const songsList = playedSongData
-    // const currentIndex = getCurrentIndexInSongData(track.ma_bai_hat, songsList);
-    // if (currentIndex > 0) {
-    //   const previousTrack = songsList[currentIndex - 1];
-
-    //   setLoadingTrack(true);
-    //   setRealPlayTime(0)
-    //   setTrack(previousTrack);
-
-    //   // Xóa dữ liệu bài hát cũ và set dữ liệu mới
-    //   localStorage.removeItem("musicPlayerState");
-    //   localStorage.setItem(
-    //     "musicPlayerState",
-    //     JSON.stringify({
-    //       track: previousTrack,
-    //       currentTime: 0,
-    //     })
-    //   );
-
-    //   if (audioRef.current) {
-    //     audioRef.current.pause();
-    //     audioRef.current.src = previousTrack.link_bai_hat;
-    //     audioRef.current.oncanplay = () => {
-    //       audioRef.current.play();
-    //       setPlayStatus(true);
-    //     };
-    //   }
-
-    //   setLoadingTrack(false);
-    // }
   };
 
   const seekSong = (e) => {
@@ -476,17 +464,56 @@ const PlayerContextProvider = (props) => {
       console.error(error);
     }
   };
-  const handleClickLikeUpdateGUI = (like, ma_bai_hat) => { //like == true, like == false == hết like
+  const handleClickLikeUpdateGUI = (like, ma_bai_hat) => {
+    //like == true, like == false == hết like
     if (like) {
       const song = songsData.find((item) => item.ma_bai_hat == ma_bai_hat);
       setSongLiked((prev) => [...prev, song]);
     } else {
-      setSongLiked((prev) => prev.filter((item) => item.ma_bai_hat != ma_bai_hat));
+      setSongLiked((prev) =>
+        prev.filter((item) => item.ma_bai_hat != ma_bai_hat)
+      );
     }
+  };
+  const toggleRepeat = () => {
+    setIsRepeat((prev) => !prev);
+  };
 
 
-  }
+  const playRandomSong = () => {
+    if (songsData.length > 1) {
+      let randomIndex;
+      let currentIndex = getCurrentIndexInSongData(
+        track?.ma_bai_hat,
+        songsData
+      );
 
+      do {
+        randomIndex = Math.floor(Math.random() * songsData.length);
+      } while (randomIndex === currentIndex); // Đảm bảo bài hát mới không trùng bài hiện tại
+
+      const randomTrack = songsData[randomIndex];
+      setTrack(randomTrack);
+      setRealPlayTime(0);
+
+      localStorage.setItem(
+        "musicPlayerState",
+        JSON.stringify({
+          track: randomTrack,
+          currentTime: 0,
+        })
+      );
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = randomTrack.link_bai_hat;
+        audioRef.current.oncanplay = () => {
+          audioRef.current.play();
+          setPlayStatus(true);
+        };
+      }
+    }
+  };
   const contextValue = {
     audioRef,
     scrollHomeRef,
@@ -519,7 +546,7 @@ const PlayerContextProvider = (props) => {
     thongbaoList,
     songDataById,
     setSongDataById,
-
+    account,
     songLiked,
     setSongLiked,
 
@@ -529,7 +556,12 @@ const PlayerContextProvider = (props) => {
     playlistId,
     setPlaylistId,
     isGettingPlaylistData,
-    setIsGettingPlaylistData
+    setIsGettingPlaylistData,
+    isRepeat,
+    toggleRepeat,
+    // toggleShuffle,
+    isShuffle,
+    setIsShuffle
   };
 
   return (

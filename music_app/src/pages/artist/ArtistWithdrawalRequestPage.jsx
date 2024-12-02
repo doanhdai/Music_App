@@ -8,11 +8,12 @@ const ArtistWidthdrawalRequestPage = () => {
   const [isOpenWithdrawal, setIsOpenWithdrawal] = useState(false);
   const [withdrawalData, setWithdrawalData] = useState([]);
   const [songStatistic, setSongStatistic] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [filteredData,setFilteredData] = useState(null);
   const account = JSON.parse(localStorage.getItem("account")) || {};
-  const currentArtistId = account.ma_artist || "ACC0006";
-  let filteredData = withdrawalData;
+  const currentArtistId = account.ma_tk ;
+ 
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/artist-slip")
@@ -21,14 +22,21 @@ const ArtistWidthdrawalRequestPage = () => {
       .then((res) =>
         res.filter((item) => item.ma_tk_artist === currentArtistId)
       )
-      .then((res) => setWithdrawalData(res.reverse()));
+      .then((res) =>{
+        setWithdrawalData(res.reverse())
+        setFilteredData(res)
+       } );
+    
+    fetch(`http://127.0.0.1:8000/api/song/admin/statistic/${currentArtistId}`)
+      .then((res) => res.json())
+      .then((res) => setSongStatistic(res.data) );
   }, []);
 
   let tongTienDaRut = withdrawalData.reduce(
     (sum, item) => sum + Number(item.tong_tien_rut_ra),  0);
   // Remove leading zeros
 
-  const tongTienCoTheRut = 5000000;
+  const tongTienCoTheRut = songStatistic.reduce((sum,item) => sum + Number(item.doanh_thu), 0) - tongTienDaRut;
 
   const handleOpenWithdrawal = () => {
     setIsOpenWithdrawal(true);
@@ -54,20 +62,18 @@ const ArtistWidthdrawalRequestPage = () => {
       return itemDate >= start && itemDate <= end;
     });
   }
+  
   function handleFilterClick() {
-    if (!startDate && !endDate) {
-        alert("Please enter both Start Date and End Date.");
-        return;
+    console.log(startDate, endDate);
+    if (startDate ==null || endDate == null) {
+      setFilteredData(withdrawalData);
+    } else {
+      const results = filterByDateRange(withdrawalData,startDate,endDate);
+      setFilteredData(results);
+      setEndDate(null)
+      
     }
-    if (!startDate) {
-        alert("Please enter a Start Date.");
-        return;
-    }
-    if (!endDate) {
-        alert("Please enter an End Date.");
-        return;
-    }
-    filteredData  = filterByDateRange(withdrawalData, startDate, endDate);
+    
 }
   return (
     <div className="h-screen mt-8 overflow-y-scroll">
@@ -123,10 +129,9 @@ const ArtistWidthdrawalRequestPage = () => {
           </div>
         </div>
         <button
-          className="w-30 my-auto h-fit rounded-lg p-3 bg-[#EB2272]"
+          className="w-30 my-auto h-fit rounded-lg p-3 bg-[#EB2272] "
           onClick={handleFilterClick}
         >
-          {" "}
           Tìm kiếm
         </button>
       </div>
@@ -158,8 +163,8 @@ const ArtistWidthdrawalRequestPage = () => {
                   <p className="text-lg ">
                     {formatNumberWithCommas(item.tong_tien_rut_ra)}
                   </p>
-                  <p className="text-lg ">{item.ten_bank}</p>
-                  <p className="text-lg ">102349a09</p>
+                  <p className="text-lg ">{item.bank_name}</p>
+                  <p className="text-lg ">{item.bank_id}</p>
                 </div>
               ))
             : ""}

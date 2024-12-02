@@ -39,6 +39,11 @@ const Player = () => {
     previous,
     seekSong,
     realPlayTime,
+    toggleShuffle,
+    isShuffle,
+    setIsShuffle,
+    isRepeat,
+    toggleRepeat,
     setVolume: setAudioVolume,
   } = useContext(PlayerContext);
 
@@ -46,7 +51,6 @@ const Player = () => {
     try {
       const response = await axios.get(`${url}/api/advertisements`);
       setAdvertisements(response.data.advertisements);
-
     } catch (err) {
       console.error(err);
     }
@@ -83,16 +87,18 @@ const Player = () => {
         pause();
       }
     } else if (realPlayTime === 5) {
-      updateListen()
+      updateListen();
     }
   }, [realPlayTime]);
+
+
   const updateListen = async () => {
     try {
-      await axios.post(`${url}/api/song/listens/${track.ma_bai_hat}`)
+      await axios.post(`${url}/api/song/listens/${track.ma_bai_hat}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const updateAdPlayCount = async (maQuangCao) => {
     try {
       await axios.put(`${url}/api/advertisements/${maQuangCao}/use`);
@@ -110,6 +116,7 @@ const Player = () => {
     setShowAd(false);
     play();
   };
+
   return (
     <>
       {/* Modal Quảng cáo */}
@@ -137,8 +144,15 @@ const Player = () => {
 
         <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1">
           <div className="flex gap-4 items-center">
-            <div className="w-6 h-6 flex justify-center items-center">
-              <IoShuffle size={20} />
+            <div
+              onClick={() => setIsShuffle(!isShuffle)}
+              className="w-6 h-6 flex justify-center items-center"
+            >
+              {!isShuffle ? (
+                <IoShuffle size={20} />
+              ) : (
+                <IoShuffle color="#00FF00" size={20} />
+              )}
             </div>
             <div
               onClick={previous}
@@ -167,8 +181,16 @@ const Player = () => {
             >
               <MdSkipNext size={25} />
             </div>
-            <div className="w-6 h-6 flex justify-center items-center">
-              <SlLoop size={20} />
+            <div
+              onClick={toggleRepeat}
+              className="w-6 h-6 flex justify-center items-center"
+            >
+              {" "}
+              {!isRepeat ? (
+                <SlLoop size={20} />
+              ) : (
+                <SlLoop color="#00FF00" size={20} />
+              )}
             </div>
           </div>
           <div className="flex items-center gap-5 ">
@@ -207,7 +229,7 @@ const Player = () => {
             onChange={handleVolumeChange}
             className="w-20 bg-white h-1 rounded"
           />
-          <Link to="/song/2">
+          <Link to={`/song/${track?.ma_bai_hat}`}>
             <img className="w-3" src={assets.zoom_icon} alt="Zoom Icon" />
           </Link>
         </div>

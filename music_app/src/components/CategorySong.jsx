@@ -20,8 +20,6 @@ const CategorySong = () => {
             Bài hát thuộc: {genreName}
           </h1>
         </div>
-
-        {/* Kiểm tra nếu không có bài hát */}
         {filteredSongs.length === 0 ? (
           <p className="text-center flex h-[300px] items-center justify-center text-white">
             Không có bài hát nào thuộc thể loại này.

@@ -24,7 +24,7 @@ const DisplayPlaylist = () => {
     playlistId,
     setPlaylistId,
     isGettingPlaylistData,
-    setIsGettingPlaylistData
+    setIsGettingPlaylistData,
   } = useContext(PlayerContext);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -34,28 +34,29 @@ const DisplayPlaylist = () => {
   const [accLikeSong, setAccLikeSong] = useState([]);
   const [songsPlaylist, setSongsPlaylist] = useState([]);
   const url_api = "http://localhost:8000";
+
   const getSongPlaylistsData = async () => {
     try {
       const response = await axios.get(
         `${url_api}/api/playlist/${currentAccount}/${id}`
       );
+      const playlistData = response.data.data || [];
 
-      setSongsPlaylist(response.data.data);
+      setSongsPlaylist(playlistData);
       setIsGettingPlaylistData(false);
+
       setSongDataById(
         songsData.filter((item) =>
-          response.data.data.some(
-            (item1) => item.ma_bai_hat == item1.ma_bai_hat
-          )
+          playlistData.some((item1) => item.ma_bai_hat === item1.ma_bai_hat)
         )
       );
-
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
+      setSongsPlaylist([]);
+      setIsGettingPlaylistData(false);
+      setSongDataById([]);
     }
   };
-
   useEffect(() => {
     getSongPlaylistsData();
     getAccLikesData();
@@ -81,7 +82,10 @@ const DisplayPlaylist = () => {
   };
   const handleLikeSong = async (ma_bai_hat) => {
     const isLikedSong = likedSongs[ma_bai_hat];
-    handleClickLikeUpdateGUI(isLikedSong == undefined ? true : (isLikedSong ? false : true), ma_bai_hat);
+    handleClickLikeUpdateGUI(
+      isLikedSong == undefined ? true : isLikedSong ? false : true,
+      ma_bai_hat
+    );
     if (!isLikedSong) {
       setLikedSongs((prev) => ({ ...prev, [ma_bai_hat]: true }));
 
@@ -149,6 +153,7 @@ const DisplayPlaylist = () => {
       }
     }
   };
+  console.log(songsPlaylist)
   return (
     <>
       {detailPlaylist && !isGettingPlaylistData ? (
@@ -171,91 +176,102 @@ const DisplayPlaylist = () => {
                   alt="Spotify logo"
                 />
                 <b className="pl-2">Đài -</b>
-                <b className="pl-2">{songsPlaylist.length} bài hát</b>
+                <b className="pl-2">
+                  {songsPlaylist.length === 0 || songsPlaylist[0].ma_bai_hat === null 
+                    ? 0
+                    : songsPlaylist.length}{" "}
+                  bài hát
+                </b>
               </p>
             </div>
           </div>
 
-          <div>
-            <div className="mt-10">
-              <div className="flex gap-10 items-center">
-                <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center">
-                  {playStatus ? (
-                    <IoMdPause onClick={pause} size={20} />
-                  ) : (
-                    <FaPlay onClick={() => handleClickBtnPlay()} />
-                  )}
-                </button>
-              </div>
+          {  songsPlaylist.length === 0 ||songsPlaylist[0].ma_bai_hat === null ? (
+            <div className="h-60 flex justify-center items-center text-center">
+              <p>Playlist chưa có bài hát nào!</p>
             </div>
-            <h1 className="font-bold text-2xl mt-7 mb-5">Danh sách phát</h1>
-            <div className="grid grid-cols-5 sm:grid-cols-[0.2fr_2.8fr_2fr_0.5fr_0.5fr] mb-4 pl-2 text-[#fff]">
-              <b className="mr-4">#</b>
-              <p> Title</p>
-              <p>Album</p>
-              <p></p>
-              <p className="flex justify-center">Thích</p>
-            </div>
-
-            <hr />
-
-            {songsPlaylist.map((item, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-5 sm:grid-cols-[0.2fr_2.8fr_2fr_0.5fr_0.5fr] mt-10 mb-4 pl-2 text-[#fff] items-center hover:bg-[#ffffff2b] cursor-pointer"
-                onMouseEnter={() => setHoveredSong(index)}
-                onMouseLeave={() => setHoveredSong(null)}
-              >
-                {playStatus && track.ma_bai_hat === item.ma_bai_hat ? (
-                  <p>
-                    {hoveredSong === index ? (
-                      <IoMdPause onClick={pause} size={13} />
+          ) : (
+            <>
+              <div className="mt-10">
+                <div className="flex gap-10 items-center">
+                  <button className="w-[60px] h-[60px] rounded-full bg-[#E0066F] flex justify-center items-center">
+                    {playStatus ? (
+                      <IoMdPause onClick={pause} size={20} />
                     ) : (
-                      index + 1
-                    )}
-                  </p>
-                ) : (
-                  <p>
-                    {hoveredSong === index ? (
-                      <FaPlay
-                        onClick={() => playWithId(item.ma_bai_hat)}
-                        size={13}
-                      />
-                    ) : (
-                      index + 1
-                    )}
-                  </p>
-                )}
-                <Link
-                  to={`/song/${item.ma_bai_hat}`}
-                  className={`${track.ma_bai_hat === item.ma_bai_hat
-                    ? "text-[#E0066F]"
-                    : "text-[#fff]"
-                    }`}
-                >
-                  <img
-                    className="inline w-10 mr-4"
-                    src={assets.mck}
-                    alt="Song cover"
-                  />
-                  {item.ten_bai_hat}
-                </Link>
-                <p className="text-[15px]">{item.album.ten_album}</p>
-                <p onClick={() => handleDeleteSong(item.ma_bai_hat)}>
-                  <CiCircleMinus size={20} />
-                </p>
-                <div className="text-[15px] flex justify-center relative">
-                  <button onClick={() => handleLikeSong(item.ma_bai_hat)}>
-                    {!likedSongs[item.ma_bai_hat] ? (
-                      <FaRegHeart size={20} />
-                    ) : (
-                      <FaHeart color="red" size={20} />
+                      <FaPlay onClick={() => handleClickBtnPlay()} />
                     )}
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+              <h1 className="font-bold text-2xl mt-7 mb-5">Danh sách phát</h1>
+              <div className="grid grid-cols-5 sm:grid-cols-[0.2fr_2.8fr_2fr_0.5fr_0.5fr] mb-4 pl-2 text-[#fff]">
+                <b className="mr-4">#</b>
+                <p>Title</p>
+                <p>Album</p>
+                <p></p>
+                <p className="flex justify-center">Thích</p>
+              </div>
+
+              <hr />
+              {songsPlaylist.map((item, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-5 sm:grid-cols-[0.2fr_2.8fr_2fr_0.5fr_0.5fr] mt-10 mb-4 pl-2 text-[#fff] items-center hover:bg-[#ffffff2b] cursor-pointer"
+                  onMouseEnter={() => setHoveredSong(index)}
+                  onMouseLeave={() => setHoveredSong(null)}
+                >
+                  {playStatus && track.ma_bai_hat === item.ma_bai_hat ? (
+                    <p>
+                      {hoveredSong === index ? (
+                        <IoMdPause onClick={pause} size={13} />
+                      ) : (
+                        index + 1
+                      )}
+                    </p>
+                  ) : (
+                    <p>
+                      {hoveredSong === index ? (
+                        <FaPlay
+                          onClick={() => playWithId(item.ma_bai_hat)}
+                          size={13}
+                        />
+                      ) : (
+                        index + 1
+                      )}
+                    </p>
+                  )}
+                  <Link
+                    to={`/song/${item.ma_bai_hat}`}
+                    className={`${
+                      track.ma_bai_hat === item.ma_bai_hat
+                        ? "text-[#E0066F]"
+                        : "text-[#fff]"
+                    }`}
+                  >
+                    <img
+                      className="inline w-10 mr-4"
+                      src={assets.mck}
+                      alt="Song cover"
+                    />
+                    {item.ten_bai_hat}
+                  </Link>
+                  <p className="text-[15px]">{item.album.ten_album}</p>
+                  <p onClick={() => handleDeleteSong(item.ma_bai_hat)}>
+                    <CiCircleMinus size={20} />
+                  </p>
+                  <div className="text-[15px] flex justify-center relative">
+                    <button onClick={() => handleLikeSong(item.ma_bai_hat)}>
+                      {!likedSongs[item.ma_bai_hat] ? (
+                        <FaRegHeart size={20} />
+                      ) : (
+                        <FaHeart color="red" size={20} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       ) : (
         <div className="wrap-loader">

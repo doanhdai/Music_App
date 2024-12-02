@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { uploadImageAPI } from "../../../services/UserServices";
 
-const ImageUpload = ({initialImage}, ref) => {
+const ImageUpload = ({ initialImage }, ref) => {
   const [file, setFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(initialImage);
   const uploadImage = async (formData) => {
@@ -18,8 +18,8 @@ const ImageUpload = ({initialImage}, ref) => {
     setFile(e.target.files[0]);
     const imageUrl = URL.createObjectURL(e.target.files[0]);
     setAvatarPreview(imageUrl);
-};
-  
+  };
+
 
   return (
     <div className=" rounded-lg  mr-5 max-w-sm  ">
@@ -35,7 +35,7 @@ const ImageUpload = ({initialImage}, ref) => {
         onClick={() => document.getElementById("file-input").click()} // Trigger file input on click
       >
         {avatarPreview ? (
-          
+
           <img
             src={avatarPreview}
             alt="Uploaded"

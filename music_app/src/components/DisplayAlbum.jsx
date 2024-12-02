@@ -19,15 +19,12 @@ const DisplayAlbum = () => {
     playlistsData,
     currentAccount,
     setPlaylistsData,
-    songsData,
     songDataById,
-    setSongDataById,
     handleClickLikeUpdateGUI,
     setSongLiked,
     play,
   } = useContext(PlayerContext);
   const url_api = "http://localhost:8000";
-  // console.log(currentAccount);
   const { id } = useParams();
   const [hoveredSong, setHoveredSong] = useState(null);
   const [menuSongId, setMenuSongId] = useState(null);
@@ -47,7 +44,6 @@ const DisplayAlbum = () => {
       return;
     }
     setMenuSongId(menuSongId === songId ? null : songId);
-    // console.log(songId);
   };
 
   const closeMenu = () => setMenuSongId(null);

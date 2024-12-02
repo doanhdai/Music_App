@@ -7,7 +7,13 @@ import { extractDayMonthYear } from "../../../assets/assets";
 
 const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
   if (!detailsSongModalState ) return null;
-  //console.log(songData)
+  console.log('d',songData)
+  const statusSong= {
+    1:"Công khai",
+    0:"Ẩn",
+    2:"Chờ duyệt",
+    3:"Từ chối duyệt"
+  }
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
@@ -24,7 +30,7 @@ const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
 
             <div className="flex flex-col justify-between ml-4 gap-5 text-white">
               <h5 className="text-sm text-gray-400">
-                {songData?.trang_thai === 1 ? "Công khai" : "Ẩn"}
+               { statusSong[songData?.trang_thai]}
               </h5>
               <h3 className="text-lg text-wrap font-semibold">
                 {songData?.ten_bai_hat}
@@ -49,14 +55,14 @@ const SongDetailModal = ({ detailsSongModalState, songData, onClose }) => {
               </h5>
               <h5 className="text-sm text-gray-400">
                 Nghệ sĩ:
-                <span className="text-white">{songData?.ma_artist}</span>
+                <span className="text-white">{songData?.artist}</span>
               </h5>
             </div>
           </div>
           <div className="flex flex-col  gap-3 justify-between w-[60] ml-2">
             <div className="flex flex-row items-center text-gray-400 gap-2">
               <FaHeart className="" />
-              <span>{songData?.luot_yeu_thich}</span>
+              <span>{songData?.luot_yeu_thich ? songData?.luot_yeu_thich : 0}</span>
             </div>
             <div className="flex flex-row items-center text-gray-400 gap-2">
               <FaHeadphones />
