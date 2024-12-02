@@ -53,28 +53,26 @@ const ArtistWidthdrawalRequestPage = () => {
       ?.join(".");
     return formattedNumberString?.split("").reverse()?.join("");
   }
-  function filterByDateRange(data, startDate, endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    return data.filter((item) => {
-      const itemDate = new Date(item.date);
-      return itemDate >= start && itemDate <= end;
-    });
-  }
-  
-  function handleFilterClick() {
-    console.log(startDate, endDate);
-    if (startDate ==null || endDate == null) {
-      setFilteredData(withdrawalData);
-    } else {
-      const results = filterByDateRange(withdrawalData,startDate,endDate);
-      setFilteredData(results);
-      setEndDate(null)
-      
+  const handleFilterAndReset = () => {
+    if (!startDate && !endDate) {
+      setFilteredData(withdrawalData); // Reset nếu cả 2 ngày đều rỗng
+      return;
     }
-    
-}
+
+    const filtered = withdrawalData.filter((item) => {
+      const ngayRutTien = new Date(item.ngay_rut_tien);
+      const start = startDate ? new Date(startDate) : null;
+      const end = endDate ? new Date(endDate) : null;
+
+      return (
+        (!start || ngayRutTien >= start) &&
+        (!end || ngayRutTien <= end)
+      );
+    });
+
+    setFilteredData(filtered);
+  };
+
   return (
     <div className="h-screen mt-8 overflow-y-scroll">
       <div className="ml-5 inline-flex gap-5">
@@ -130,7 +128,7 @@ const ArtistWidthdrawalRequestPage = () => {
         </div>
         <button
           className="w-30 my-auto h-fit rounded-lg p-3 bg-[#EB2272] "
-          onClick={handleFilterClick}
+          onClick={handleFilterAndReset}
         >
           Tìm kiếm
         </button>
@@ -161,7 +159,7 @@ const ArtistWidthdrawalRequestPage = () => {
                     {getTimeHourMinute(item.ngay_rut_tien)}
                   </p>
                   <p className="text-lg ">
-                    {formatNumberWithCommas(item.tong_tien_rut_ra)}
+                    {formatNumberWithCommas(Number(item.tong_tien_rut_ra)) }
                   </p>
                   <p className="text-lg ">{item.bank_name}</p>
                   <p className="text-lg ">{item.bank_id}</p>
