@@ -161,7 +161,7 @@ const ArtistWidthdrawalRequestPage = () => {
                     {getTimeHourMinute(item.ngay_rut_tien)}
                   </p>
                   <p className="text-lg ">
-                    {formatNumberWithCommas(item.tong_tien_rut_ra)}
+                    {formatNumberWithCommas(Number(item.tong_tien_rut_ra)) }
                   </p>
                   <p className="text-lg ">{item.bank_name}</p>
                   <p className="text-lg ">{item.bank_id}</p>

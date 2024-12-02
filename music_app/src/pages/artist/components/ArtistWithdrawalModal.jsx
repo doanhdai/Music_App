@@ -33,7 +33,7 @@ const ArtistWithdrawalModal = ({ isOpen, onClose ,tongTienCoTheRut}) => {
   const [stkBank, setStkBank] = useState('');
 
   const account = JSON.parse(localStorage.getItem('account')) || {};
-  const currentArtistId = account.ma_artist || "ACC0006";
+  const currentArtistId = account.ma_tk || "ACC0006";
 
  
 
@@ -57,13 +57,14 @@ function validateFormData(data) {
     if (validationErrors.length > 0) {
       alert("Lỗi  tk 6 ký tự", validationErrors);
   } else {
-    const response = await createWithdraw(formData);
-    if (response.success){
-      alert('Rút tiền thành công!');
-      onclose();
-    } else {
-      alert('Lỗi rút tiền!');
-    }
+    console.log(formData);
+    // const response = await createWithdraw(formData);
+    // if (response.success){
+    //   alert('Rút tiền thành công!');
+    //   onclose();
+    // } else {
+    //   alert('Lỗi rút tiền!');
+    // }
   }
     
   }
