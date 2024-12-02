@@ -4,75 +4,77 @@ import AccountProfileEdit from "./AccountProfileEdit";
 import UserProfile from "./UserProfile";
 import AccountProfile from "./AccountProfile";
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 
 const ManagerUserInfo = () => {
   const navigate = useNavigate();
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    
-    if (!isLoggedIn) {
-      // Nếu chưa đăng nhập, chuyển hướng về trang chủ
-      navigate('/'); // hoặc `navigate(config.routes.Home);`
-    }
-  }, [navigate]);
+  const [acc, setAcc] = useState("");
+  const account = JSON.parse(localStorage.getItem('account'));
+
   const [isEditingUser, setIsEditingUser] = useState(false);
   const [isEditingAccount, setIsEditingAccount] = useState(false);
 
-  const accountData = localStorage.getItem('account');
-  
+  // Hàm gọi API để lấy thông tin tài khoản
+  const getAccount = async (ma_tk) => {
+    try {
+      const { data } = await axios.get(`http://127.0.0.1:8000/api/accounts/${ma_tk}`);
+      setAcc(data); // Cập nhật state với dữ liệu tài khoản
+    } catch ({ response }) {
+      console.error(response?.status === 404 ? "Account not found" : "Error fetching account");
+    }
+  };
 
-// Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+  useEffect(() => {
+    getAccount(account.ma_tk); // Lấy tài khoản lần đầu khi component mount
+  }, []);
 
-  const account = JSON.parse(accountData);
-    const handleEditUserClick = () => {
-        setIsEditingUser(true);
-    };
+  // useEffect để theo dõi khi `isEditingUser` hoặc `isEditingAccount` thay đổi
+  useEffect(() => {
+    if (!isEditingUser && !isEditingAccount) {
+      getAccount(account.ma_tk); // Gọi lại API khi cả hai trạng thái đều là false
+    }
+  }, [isEditingUser, isEditingAccount]);
 
-    const handleCancelUserClick = () => {
-        setIsEditingUser(false);
-    };
+  const handleEditUserClick = () => {
+    setIsEditingUser(true);
+  };
 
-    
+  const handleCancelUserClick = () => {
+    setIsEditingUser(false);
+  };
 
-    const handleEditAccountClick = () => {
-        setIsEditingAccount(true);
-    };
+  const handleEditAccountClick = () => {
+    setIsEditingAccount(true);
+  };
 
-    const handleCancelAccountClick = () => {
-        setIsEditingAccount(false);
-    };
-
-    // const token = localStorage.getItem('token');
+  const handleCancelAccountClick = () => {
+    setIsEditingAccount(false);
+  };
 
   return (
     <div className="pt-3 mx-[38px] flex space-x-4">
       <div className="w-1/2">
-        {/* <UserProfile />
-        <UserProfileEdit /> */}
         {isEditingUser ? (
-                <UserProfileEdit onCancel={handleCancelUserClick} />
-            ) : (
-                <UserProfile onEdit={handleEditUserClick} 
-                  name={account.ten_user}
-                  image={account.avatar}
-                  quyen={account.quyen}
-                />
-            )}
+          <UserProfileEdit onCancel={handleCancelUserClick} />
+        ) : (
+          <UserProfile
+            onEdit={handleEditUserClick}
+            name={acc.user?.ten_user}
+            image={acc.user?.anh_dai_dien}
+            quyen={acc.phan_quyen?.ten_quyen_han}
+          />
+        )}
       </div>
       <div className="w-1/2">
-      {isEditingAccount ? (
-                <AccountProfileEdit onCancel={handleCancelAccountClick} />
-            ) : (
-                <AccountProfile onEdit={handleEditAccountClick}
-                  email = {account.email}
-                  datetime = {account.ngay_tao}
-                  password = {account.password}
-                 />
-            )}
-        {/* <AccountProfile />
-        <AccountProfileEdit /> */}
-        
+        {isEditingAccount ? (
+          <AccountProfileEdit onCancel={handleCancelAccountClick} />
+        ) : (
+          <AccountProfile
+            onEdit={handleEditAccountClick}
+            email={acc.email}
+            datetime={acc.ngay_tao}
+          />
+        )}
       </div>
     </div>
   );

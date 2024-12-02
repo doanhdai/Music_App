@@ -3,7 +3,10 @@ import ManagerUserInfo from '../UserInfo/ManagerUserInfo'
 
 const AccountAdmin = () => {
   return (
-    <ManagerUserInfo />
+    <>
+      <ManagerUserInfo />
+    </>
+    
   )
 }
 

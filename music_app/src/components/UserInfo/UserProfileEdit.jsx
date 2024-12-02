@@ -32,6 +32,7 @@ const UserProfileEdit = ({onCancel}) => {
       account.ten_user = useName;
       account.avatar = avatar;
       localStorage.setItem('account', JSON.stringify(account));
+      if (onCancel) onCancel();
     } catch (error) {
       if (error.response?.status === 404) {
         alert('User not found');
@@ -41,10 +42,20 @@ const UserProfileEdit = ({onCancel}) => {
     }
   };
   return (
-    <form className="bg-[#141414] text-white rounded-lg p-6 w-96 relative" onSubmit={handleSubmit}>
+    <form className="bg-[#141414] text-white rounded-lg p-6 w-96 relative z-0" onSubmit={handleSubmit}>
       <h2 className="text-pink-500 font-bold mb-6">Thông tin cá nhân</h2>
+      <button
+        type="submit" // Đảm bảo nút này có thể submit form
+        className="absolute top-4 right-4 bg-gray-800 px-4 py-1 rounded-md"
+        onClick={(e) => {
+          // Ngăn sự kiện mặc định của nút để tránh xung đột
+          e.preventDefault();
 
-      <button className="absolute top-4 right-4 bg-gray-800 px-4 py-1 rounded-md" onClick={onCancel}>
+          // Submit form thủ công
+          const form = e.target.closest("form");
+          if (form) form.requestSubmit(); // Gửi form thủ công
+        }}
+      >
         Thoát
       </button>
 
@@ -64,7 +75,7 @@ const UserProfileEdit = ({onCancel}) => {
         onChange={(e) => setUseName(e.target.value)}
         className="bg-gray-800 text-white text-center w-full rounded-md px-4 py-2"
       />
-      <AuthBtn title="Xác nhận" />
+      {/* <AuthBtn title="Xác nhận" /> */}
     </form>
   );
 };
