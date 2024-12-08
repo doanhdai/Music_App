@@ -67,7 +67,7 @@ const ArtistSongPage = () => {
   };
   // fetch data from server
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/song/admin/artist/${currentArtistId}`)
+    fetch(`http://127.0.0.1:8000/api/songs/artist/${currentArtistId}`)
       .then(res=> res.json())
       .then(res => {
         console.log(res.data[0].bai_hat);
